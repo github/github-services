@@ -1,0 +1,40 @@
+# example payload hash
+
+payload = { "payload" => {
+  "repository" => {
+    "name"=>"grit",
+    "url"=>"http://github.com/mojombo/grit",
+    "owner"=>{"name"=>"mojombo", "email"=>"tom@mojombo.com"}
+  }, 
+  "commits"=>{
+    "06f63b43050935962f84fe54473a7c5de7977325"=>{
+      "added"=>[],
+      "removed"=>[], 
+      "message"=>"stub git call for Grit#heads test", 
+      "timestamp"=>"2007-10-10T00:11:02-07:00", 
+      "modified"=>["lib/grit/grit.rb", "test/helper.rb", "test/test_grit.rb"], 
+      "author"=>{"name"=>"Tom Preston-Werner",
+      "email"=>"tom@mojombo.com"}, "url"=>"http://github.com/mojombo/grit/commit/06f63b43050935962f84fe54473a7c5de7977325"
+    }, 
+    "5057e76a11abd02e83b7d3d3171c4b68d9c88480"=>{
+      "added"=>[],
+      "removed"=>[],
+      "message"=>"clean up heads test",
+      "timestamp"=>"2007-10-10T00:18:20-07:00",
+      "modified"=>["test/test_grit.rb"],
+      "author"=>{"name"=>"Tom Preston-Werner", "email"=>"tom@mojombo.com"}, "url"=>"http://github.com/mojombo/grit/commit/5057e76a11abd02e83b7d3d3171c4b68d9c88480"
+    },
+    "a47fd41f3aa4610ea527dcc1669dfdb9c15c5425"=>{
+      "added"=>["lib/grit/commit.rb"],
+      "removed"=>[],
+      "message"=>"add more comments throughout",
+      "timestamp"=>"2007-10-10T00:50:39-07:00",
+      "modified"=>["lib/grit.rb", "lib/grit/grit.rb"],
+      "author"=>{"name"=>"Tom Preston-Werner", "email"=>"tom@mojombo.com"}, "url"=>"http://github.com/mojombo/grit/commit/a47fd41f3aa4610ea527dcc1669dfdb9c15c5425"}
+    }, 
+    "after"=>"a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
+    "ref"=>"refs/heads/master",
+    "before"=>"4c8124ffcf4039d292442eeccabdeca5af5c5017"
+  }.to_json
+}
+

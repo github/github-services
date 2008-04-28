@@ -1,0 +1,9 @@
+CHANGELOG.txt
+Manifest.txt
+README.txt
+Rakefile
+init.rb
+lib/tinder.rb
+lib/tinder/campfire.rb
+lib/tinder/room.rb
+lib/tinder/version.rb
