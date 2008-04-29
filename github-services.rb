@@ -52,7 +52,7 @@ post '/fogbugz/' do
         conn.use_ssl = true
         conn.verify_mode = OpenSSL::SSL::VERIFY_NONE
         conn.start do |http| 
-          puts http.get(url.to_s)
+          http.get(url.to_s)
         end
 
       end
