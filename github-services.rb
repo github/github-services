@@ -37,28 +37,6 @@ post '/irc/' do
   irc.puts "QUIT"
 end
 
-post '/twitter/' do
-  data       = JSON.parse(params[:data])
-  payload    = JSON.parse(params[:payload])
-
-  repository = payload['repository']['name']
-  branch     = payload['ref'].split('/').last
-  twitter    = Twitter::Base.new(data['username'], data['password'])
-  begin
-    Timeout::timeout(2) do
-      url = Net::HTTP.get "tinyurl.com", "/api-create.php?url=#{commit['url']}"
-    end
-  rescue
-  end
-  url ||= commit['url']
-
-  payload['commits'].each do |commit|
-    commit = commit.last
-    text   = "[#{repository}] #{url} #{commit['author']['name']} - #{commit['message']}"
-    twitter.post text
-  end
-end
-
 post '/lighthouse/' do
   data       = JSON.parse(params[:data])
   payload    = JSON.parse(params[:payload])
@@ -88,5 +66,27 @@ post '/lighthouse/' do
     req.body = changeset_xml
     req.set_content_type('application/xml')
     Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
+  end
+end
+
+post '/twitter/' do
+  data       = JSON.parse(params[:data])
+  payload    = JSON.parse(params[:payload])
+
+  repository = payload['repository']['name']
+  branch     = payload['ref'].split('/').last
+  twitter    = Twitter::Base.new(data['username'], data['password'])
+  begin
+    Timeout::timeout(2) do
+      url = Net::HTTP.get "tinyurl.com", "/api-create.php?url=#{commit['url']}"
+    end
+  rescue
+  end
+  url ||= commit['url']
+
+  payload['commits'].each do |commit|
+    commit = commit.last
+    text   = "[#{repository}] #{url} #{commit['author']['name']} - #{commit['message']}"
+    twitter.post text
   end
 end
