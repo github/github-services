@@ -12,4 +12,4 @@ module GitHub
 end
 include GitHub
 
-Dir['services/**/*.rb'].each { |service| load service }
+Dir['services/**/*.rb'].each { |service| require service }
