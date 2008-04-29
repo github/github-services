@@ -1,10 +1,18 @@
 $:.unshift *Dir["#{File.dirname(__FILE__)}/vendor/**/lib"]
 %w( rack sinatra tinder twitter json net/http socket timeout ).each { |f| require f }
 
-post '/campfire/' do
-  data       = JSON.parse(params[:data])
-  payload    = JSON.parse(params[:payload])
+module GitHub
+  def service(name, &block)
+    post "/#{name}/" do
+      data = JSON.parse(params[:data])
+      payload = JSON.parse(params[:payload])
+      yield data, payload, params
+    end
+  end
+end
+include GitHub
 
+service :campfire do |data, payload|
   repository = payload['repository']['name']
   branch     = payload['ref'].split('/').last
   campfire   = Tinder::Campfire.new(data['subdomain'], :ssl => data['ssl'].to_i == 1)
@@ -17,10 +25,7 @@ post '/campfire/' do
   end
 end
 
-post '/irc/' do
-  data       = JSON.parse(params[:data])
-  payload    = JSON.parse(params[:payload])
-
+service :irc do |data, payload|
   repository = payload['repository']['name']
   branch     = payload['ref'].split('/').last
   room       = data['room']
@@ -37,10 +42,7 @@ post '/irc/' do
   irc.puts "QUIT"
 end
 
-post '/lighthouse/' do
-  data       = JSON.parse(params[:data])
-  payload    = JSON.parse(params[:payload])
-
+service :lighthouse do |data, payload|
   payload['commits'].each do |commit_id, commit|
     added    = commit['added'].map    { |f| ['A', f] }
     removed  = commit['removed'].map  { |f| ['R', f] }
@@ -69,10 +71,7 @@ post '/lighthouse/' do
   end
 end
 
-post '/twitter/' do
-  data       = JSON.parse(params[:data])
-  payload    = JSON.parse(params[:payload])
-
+service :twitter do |data, payload|
   repository = payload['repository']['name']
   branch     = payload['ref'].split('/').last
   twitter    = Twitter::Base.new(data['username'], data['password'])
