@@ -11,7 +11,12 @@ How the services work:
 
 Steps to contributing:
 1) Fork the project
-2) Put your code in alphabetical order based on the request path in github-services.rb
+2) Create a new file in /services/ called service_name.rb, using the following template:
+  
+  service :service_name do |data, payload|
+  
+  end
+  
 3) Vendor any external gems your code relies on, and make sure to include it in the requires at the top of github-services.rb
 4) Add documentation to docs/service_name (refer to the others for guidance)
 5) Send us a pull request
@@ -28,3 +33,4 @@ Thanks to the following people for making this possible:
 * Christian Neukirchen
 * Florian Frank
 * John Nunemaker
+* Luke Redpath
