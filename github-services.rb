@@ -31,8 +31,9 @@ post '/irc/' do
   irc.puts "JOIN #{room}"
   payload['commits'].each do |commit|
     commit = commit.last
-    text   = "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} (#{commit['url']})"
-    irc.puts "PRIVMSG #{room} :#{text}"
+    irc.puts "PRIVMSG #{room} :[#{repository}/#{branch}] #{commit['author']['name']}"
+    irc.puts "PRIVMSG #{room} :#{commit['message']}"
+    irc.puts "PRIVMSG #{room} :#{commit['url']}"
   end
   irc.puts "QUIT"
 end
