@@ -31,7 +31,7 @@ post '/irc/' do
   irc.puts "JOIN #{room}"
   payload['commits'].each do |commit|
     commit = commit.last
-    irc.puts "PRIVMSG #{room} :[#{repository}/#{branch}] #{commit['author']['name']}"
+    irc.puts "PRIVMSG #{room} :\002\00311#{repository}\002 \0037#{branch} \0033#{commit['author']['name']}"
     irc.puts "PRIVMSG #{room} :#{commit['message']}"
     irc.puts "PRIVMSG #{room} :#{commit['url']}"
   end
