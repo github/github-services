@@ -1,0 +1,18 @@
+FogBugz
+========
+
+payload
+-------
+  refer to docs/github_payload
+
+data
+----
+  - cvssubmit_url (The url to the cvsSubmit.[php|asp] file on your FogBugz server. Example: https://server.com/fogbugz/cvsSubmit.php)
+  
+  
+notes
+-----
+Be sure to set up your FogBugz installation to handle multiple repositories/multiple source control systems as described in http://www.fogcreek.com/FogBugz/KB/howto/MultipleRepositories-Mult.html
+
+The "sRepo" field will be set to the name of the github repo.
+
