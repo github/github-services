@@ -1,0 +1,11 @@
+Twitter
+========
+
+payload
+-------
+  refer to docs/github_payload
+
+data
+----
+  - username
+  - password

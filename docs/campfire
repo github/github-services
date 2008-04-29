@@ -1,0 +1,14 @@
+Campfire
+========
+
+payload
+-------
+  refer to docs/github_payload
+
+data
+----
+  - subdomain
+  - email
+  - password
+  - room
+  - ssl

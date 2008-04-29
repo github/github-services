@@ -1,0 +1,12 @@
+IRC
+========
+
+payload
+-------
+  refer to docs/github_payload
+
+data
+----
+  - server
+  - port
+  - room

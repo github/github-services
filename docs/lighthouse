@@ -1,0 +1,12 @@
+Lighthouse
+========
+
+payload
+-------
+  refer to docs/github_payload
+
+data
+----
+  - subdomain
+  - project_id
+  - token
