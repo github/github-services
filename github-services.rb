@@ -6,7 +6,7 @@ module GitHub
     post "/#{name}/" do
       data = JSON.parse(params[:data])
       payload = JSON.parse(params[:payload])
-      yield data, payload, params
+      yield data, payload
     end
   end
 end
