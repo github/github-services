@@ -1,10 +1,13 @@
 GitHub Services
 ===============
 
-There are three main pieces to this service:
-1) Sinatra server that handles all of the requests (github-services.rb)
-2) JSON payload containing all of the commit data (the same one you get using the API)
-3) JSON payload containing the service data (username, password, room, etc)
+How the services work:
+1) The post-receive background job is run when someone pushes their commits to GitHub
+2) If the repository the commits belong to has any "Service Hooks" setup, the task makes a request to 'http://localhost:4567/service_name/' with the following data:
+  - params[:payload] containing all of the commit data (the same data you get using the API)
+  - params[:data] containing the service data (username, password, room, etc)
+3) The server (github-services.rb) processes the request (twitters your data, says something in campfire, posts it to lighthouse, etc)
+4) Rinse and repeat
 
 Steps to contributing:
 1) Fork the project
