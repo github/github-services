@@ -7,9 +7,8 @@ service :irc do |data, payload|
   irc.puts "USER blah blah blah :blah blah"
   irc.puts "NICK hubbub"
   irc.puts "JOIN #{room}"
-  payload['commits'].each do |commit|
-    commit = commit.last
-    irc.puts "PRIVMSG #{room} :\002\00311#{repository}\002 \0037#{branch} \0033#{commit['author']['name']}"
+  payload['commits'].each do |sha1, commit|
+    irc.puts "PRIVMSG #{room} :\002\00311#{repository}\002 \0037#{branch}\0030 SHA1-#{sha1[0..6]} \0033#{commit['author']['name']}"
     irc.puts "PRIVMSG #{room} :#{commit['message']}"
     irc.puts "PRIVMSG #{room} :#{commit['url']}"
   end
