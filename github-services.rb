@@ -1,5 +1,5 @@
 $:.unshift *Dir["#{File.dirname(__FILE__)}/vendor/**/lib"]
-%w( sinatra tinder twitter json net/http socket timeout ).each { |f| require f }
+%w( rack sinatra tinder twitter json net/http socket timeout ).each { |f| require f }
 
 post '/campfire/' do
   data       = JSON.parse(params[:data])

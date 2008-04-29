@@ -137,12 +137,95 @@ context "Haml" do
 
     end
     
+    specify "can render with no layout" do
+      layout do
+        "X\n= yield\nX"
+      end
+      
+      get '/' do
+        haml 'blake', :layout => false
+      end
+      
+      get_it '/'
+      
+      body.should.equal "blake\n"
+    end
+    
     specify "raises error if template not found" do
       get '/' do
         haml :not_found
       end
 
       lambda { get_it '/' }.should.raise(Errno::ENOENT)
+    end
+
+    specify "use layout.ext by default if available" do
+
+      template :foo do
+        'asdf'
+      end
+
+      get '/' do
+        haml :foo, :layout => false,
+                   :views_directory => File.dirname(__FILE__) + "/views/layout_test"
+      end
+
+      get_it '/'
+      should.be.ok
+      body.should.equal "asdf\n"
+
+    end
+    
+  end
+
+  describe 'Options passed to the HAML interpreter' do
+    setup do
+      Sinatra.application = nil
+    end
+
+    specify 'are empty be default' do
+
+      get '/' do
+        haml 'foo'
+      end
+
+      Haml::Engine.expects(:new).with('foo', {}).returns(stub(:render => 'foo'))
+
+      get_it '/'
+      should.be.ok
+
+    end
+
+    specify 'can be configured by passing :options to haml' do
+
+      get '/' do
+        haml 'foo', :options => {:format => :html4}
+      end
+
+      Haml::Engine.expects(:new).with('foo', {:format => :html4}).returns(stub(:render => 'foo'))
+
+      get_it '/'
+      should.be.ok
+
+    end
+
+    specify 'can be configured using set_option :haml' do
+
+      configure do
+        set_option :haml, :format       => :html4,
+                          :escape_html  => true
+      end
+
+      get '/' do
+        haml 'foo'
+      end
+
+      Haml::Engine.expects(:new).with('foo', {:format => :html4,
+        :escape_html => true}).returns(stub(:render => 'foo'))
+
+      get_it '/'
+      should.be.ok
+
     end
 
   end

@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/helper'
 
+require 'uri'
+
 class TesterWithEach
   def each
     yield 'foo'
@@ -19,8 +21,10 @@ context "Looking up a request" do
     get '/', &block
     
     result = Sinatra.application.lookup(
-      'REQUEST_METHOD' => 'GET',
-      'PATH_INFO' => '/'
+      Rack::Request.new(
+        'REQUEST_METHOD' => 'GET',
+        'PATH_INFO' => '/'
+      )
     )
     
     result.should.not.be.nil
@@ -32,13 +36,15 @@ context "Looking up a request" do
     get '/:foo', &block
     
     result = Sinatra.application.lookup(
-      'REQUEST_METHOD' => 'GET',
-      'PATH_INFO' => '/bar'
+      Rack::Request.new(
+        'REQUEST_METHOD' => 'GET',
+        'PATH_INFO' => '/bar'
+      )
     )
     
     result.should.not.be.nil
     result.block.should.be block
-    result.params.should.equal :foo => 'bar'
+    result.params.should.equal "foo" => 'bar'
   end
               
 end
@@ -116,7 +122,7 @@ context "Events in an app" do
   
   specify "get access to request, response, and params" do
     get '/:foo' do
-      params[:foo] + params[:bar]
+      params["foo"] + params["bar"]
     end
     
     get_it '/foo?bar=baz'
@@ -129,14 +135,39 @@ context "Events in an app" do
     get '/', :agent => /Windows/ do
       request.env['HTTP_USER_AGENT']
     end
-    
-    get_it '/', :agent => 'Windows'
+        
+    get_it '/', :env => { :agent => 'Windows' }
     should.be.ok
     body.should.equal 'Windows'
 
-    get_it '/', :agent => 'Mac'
+    get_it '/', :env => { :agent => 'Mac' }
     should.not.be.ok
 
+  end
+
+  specify "can use regex to get parts of user-agent" do
+    
+    get '/', :agent => /Windows (NT)/ do
+      params[:agent].first
+    end
+    
+    get_it '/', :env => { :agent => 'Windows NT' }
+
+    body.should.equal 'NT'
+
+  end
+  
+  specify "can deal with spaces in paths" do
+    
+    path = '/path with spaces'
+    
+    get path do
+      "Look ma, a path with spaces!"
+    end
+    
+    get_it URI.encode(path)
+    
+    body.should.equal "Look ma, a path with spaces!"
   end
   
 end

@@ -6,10 +6,10 @@ require 'test/spec'
 context "Simple Events" do
 
   def simple_request_hash(method, path)
-    {
+    Rack::Request.new({
       'REQUEST_METHOD' => method.to_s.upcase,
       'PATH_INFO' => path
-    }
+    })
   end
 
   def invoke_simple(path, request_path, &b)
@@ -28,12 +28,12 @@ context "Simple Events" do
   specify "takes params in path" do
     result = invoke_simple('/:foo/:bar', '/a/b')
     result.should.not.be.nil
-    result.params.should.equal :foo => 'a', :bar => 'b'
+    result.params.should.equal "foo" => 'a', "bar" => 'b'
     
     # unscapes
     result = invoke_simple('/:foo/:bar', '/a/blake%20mizerany')
     result.should.not.be.nil
-    result.params.should.equal :foo => 'a', :bar => 'blake mizerany'
+    result.params.should.equal "foo" => 'a', "bar" => 'blake mizerany'
   end
   
   specify "ignores to many /'s" do

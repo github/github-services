@@ -1,5 +1,13 @@
+Dir[File.dirname(__FILE__) + "/../vendor/*"].each do |l|
+  $:.unshift "#{File.expand_path(l)}/lib"
+end
+
+require 'rack'
+
 require 'rubygems'
-require 'metaid'
+require 'time'
+require 'ostruct'
+require "uri"
 
 if ENV['SWIFT']
  require 'swiftcore/swiftiplied_mongrel'
@@ -9,11 +17,8 @@ elsif ENV['EVENT']
   puts "Using Evented Mongrel"
 end
 
-require 'rack'
-require 'ostruct'
-
 class Class
-  def dslify_writter(*syms)
+  def dslify_writer(*syms)
     syms.each do |sym|
       class_eval <<-end_eval
         def #{sym}(v=nil)
@@ -25,13 +30,72 @@ class Class
   end
 end
 
+module Rack #:nodoc:
+  
+  class Request #:nodoc:
+
+    # Set of request method names allowed via the _method parameter hack. By default,
+    # all request methods defined in RFC2616 are included, with the exception of
+    # TRACE and CONNECT.
+    POST_TUNNEL_METHODS_ALLOWED = %w( PUT DELETE OPTIONS HEAD )
+
+    # Return the HTTP request method with support for method tunneling using the POST
+    # _method parameter hack.  If the real request method is POST and a _method param is
+    # given and the value is one defined in +POST_TUNNEL_METHODS_ALLOWED+, return the value
+    # of the _method param instead.
+    def request_method
+      if post_tunnel_method_hack?
+        params['_method'].upcase
+      else
+        @env['REQUEST_METHOD']
+      end
+    end
+
+    def user_agent
+      @env['HTTP_USER_AGENT']
+    end
+
+    private
+
+      # Return truthfully if and only if the following conditions are met: 1.) the
+      # *actual* request method is POST, 2.) the request content-type is one of
+      # 'application/x-www-form-urlencoded' or 'multipart/form-data', 3.) there is a 
+      # "_method" parameter in the POST body (not in the query string), and 4.) the 
+      # method parameter is one of the verbs listed in the POST_TUNNEL_METHODS_ALLOWED
+      # list.
+      def post_tunnel_method_hack?
+        @env['REQUEST_METHOD'] == 'POST' &&
+          POST_TUNNEL_METHODS_ALLOWED.include?(self.POST.fetch('_method', '').upcase)
+      end
+
+  end
+  
+  module Utils
+    extend self
+  end
+
+end
+
 module Sinatra
   extend self
+
+  module Version
+    MAJOR = '0'
+    MINOR = '2'
+    REVISION = '1'
+    def self.combined
+      [MAJOR, MINOR, REVISION].join('.')
+    end
+  end
 
   class NotFound < RuntimeError; end
   class ServerError < RuntimeError; end
 
   Result = Struct.new(:block, :params, :status) unless defined?(Result)
+
+  def options
+    application.options
+  end
   
   def application
     unless @app 
@@ -54,15 +118,38 @@ module Sinatra
   end
   
   def build_application
-    Rack::CommonLogger.new(application)
+    app = application
+    app = Rack::Session::Cookie.new(app) if Sinatra.options.sessions == true
+    app = Rack::CommonLogger.new(app) if Sinatra.options.logging == true
+    app
+  end
+  
+  def server
+    @server ||= case options.server
+    when "mongrel"
+      Rack::Handler::Mongrel
+    when "webrick"
+      Rack::Handler::WEBrick
+    when "cgi"
+      Rack::Handler::CGI
+    when "fastcgi"
+      Rack::Handler::FastCGI
+    else
+      if defined?(Rack::Handler::Thin)
+        Rack::Handler::Thin
+      else
+        options.server ||= "mongrel"
+        eval("Rack::Handler::#{options.server.capitalize}")
+      end
+    end
   end
   
   def run
     
     begin
-      puts "== Sinatra has taken the stage on port #{port} for #{env}"
+      puts "== Sinatra has taken the stage on port #{port} for #{env} with backup by #{server.name}"
       require 'pp'
-      Rack::Handler::Mongrel.run(build_application, :Port => port) do |server|
+      server.run(build_application, :Port => port) do |server|
         trap(:INT) do
           server.stop
           puts "\n== Sinatra has ended his set (crowd applauds)"
@@ -77,31 +164,46 @@ module Sinatra
   class Event
 
     URI_CHAR = '[^/?:,&#\.]'.freeze unless defined?(URI_CHAR)
-    PARAM = /:(#{URI_CHAR}+)/.freeze unless defined?(PARAM)
+    PARAM = /(:(#{URI_CHAR}+)|\*)/.freeze unless defined?(PARAM)
     SPLAT = /(.*?)/
     attr_reader :path, :block, :param_keys, :pattern, :options
     
     def initialize(path, options = {}, &b)
-      @path = path
+      @path = URI.encode(path)
       @block = b
       @param_keys = []
       @options = options
-      regex = @path.to_s.gsub(PARAM) do
-        @param_keys << $1.intern
-        "(#{URI_CHAR}+)"
+      splats = 0
+      regex = @path.to_s.gsub(PARAM) do |match|
+        if match == "*"
+          @param_keys << "_splat_#{splats}"
+          splats += 1
+          SPLAT.to_s
+        else
+          @param_keys << $2
+          "(#{URI_CHAR}+)"
+        end
       end
-      
-      regex.gsub!('*', SPLAT.to_s)
-      
+
       @pattern = /^#{regex}$/
     end
         
-    def invoke(env)
-      if options[:agent] 
-        return unless env['HTTP_USER_AGENT'] =~ options[:agent]
+    def invoke(request)
+      params = {}
+      if agent = options[:agent] 
+        return unless request.user_agent =~ agent
+        params[:agent] = $~[1..-1]
       end
-      return unless pattern =~ env['PATH_INFO'].squeeze('/')
-      params = param_keys.zip($~.captures.map(&:from_param)).to_hash
+      if host = options[:host] 
+        return unless host === request.host
+      end
+      return unless pattern =~ request.path_info.squeeze('/')
+      params.merge!(param_keys.zip($~.captures.map(&:from_param)).to_hash)
+      splats = params.select { |k, v| k =~ /^_splat_\d+$/ }.sort.map(&:last)
+      unless splats.empty?
+        params.delete_if { |k, v| k =~ /^_splat_\d+$/ }
+        params["splat"] = splats
+      end
       Result.new(block, params, 200)
     end
     
@@ -115,7 +217,7 @@ module Sinatra
       @code, @block = code, b
     end
     
-    def invoke(env)
+    def invoke(request)
       Result.new(block, {}, 404)
     end
     
@@ -123,17 +225,17 @@ module Sinatra
   
   class Static
             
-    def invoke(env)
+    def invoke(request)
       return unless File.file?(
-        Sinatra.application.options.public + env['PATH_INFO']
+        Sinatra.application.options.public + request.path_info.http_unescape
       )
       Result.new(block, {}, 200)
     end
     
     def block
       Proc.new do
-        send_file Sinatra.application.options.public + 
-          request.env['PATH_INFO']
+        send_file Sinatra.application.options.public + request.path_info.http_unescape,
+          :disposition => nil
       end
     end
     
@@ -149,6 +251,8 @@ module Sinatra
       :buffer_size  => 4096
     }.freeze
 
+    class MissingFile < RuntimeError; end
+
     class FileStreamer
       
       attr_reader :path, :options
@@ -157,8 +261,8 @@ module Sinatra
         @path, @options = path, options
       end
       
-      def to_result(cx)
-        cx.body = self
+      def to_result(cx, *args)
+        self
       end
       
       def each
@@ -186,12 +290,18 @@ module Sinatra
       # * <tt>:type</tt> - specifies an HTTP content type.
       #   Defaults to 'application/octet-stream'.
       # * <tt>:disposition</tt> - specifies whether the file will be shown inline or downloaded.  
-      #   Valid values are 'inline' and 'attachment' (default).
+      #   Valid values are 'inline' and 'attachment' (default). When set to nil, the
+      #   Content-Disposition and Content-Transfer-Encoding headers are omitted entirely.
       # * <tt>:stream</tt> - whether to send the file to the user agent as it is read (true)
       #   or to read the entire file before sending (false). Defaults to true.
       # * <tt>:buffer_size</tt> - specifies size (in bytes) of the buffer used to stream the file.
       #   Defaults to 4096.
       # * <tt>:status</tt> - specifies the status code to send with the response. Defaults to '200 OK'.
+      # * <tt>:last_modified</tt> - an optional RFC 2616 formatted date value (See Time#httpdate)
+      #   indicating the last modified time of the file. If the request includes an
+      #   If-Modified-Since header that matches this value exactly, a 304 Not Modified response
+      #   is sent instead of the file. Defaults to the file's last modified
+      #   time.
       #
       # The default Content-Type and Content-Disposition headers are
       # set to download arbitrary binary files in as many browsers as
@@ -224,6 +334,7 @@ module Sinatra
         options[:length]   ||= File.size(path)
         options[:filename] ||= File.basename(path)
         options[:type] ||= Rack::File::MIME_TYPES[File.extname(options[:filename])[1..-1]] || 'text/plain'
+        options[:last_modified] ||= File.mtime(path).httpdate
         send_file_headers! options
 
         if options[:stream]
@@ -243,6 +354,10 @@ module Sinatra
       # * <tt>:disposition</tt> - specifies whether the file will be shown inline or downloaded.  
       #   Valid values are 'inline' and 'attachment' (default).
       # * <tt>:status</tt> - specifies the status code to send with the response. Defaults to '200 OK'.
+      # * <tt>:last_modified</tt> - an optional RFC 2616 formatted date value (See Time#httpdate)
+      #   indicating the last modified time of the response entity. If the request includes an
+      #   If-Modified-Since header that matches this value exactly, a 304 Not Modified response
+      #   is sent instead of the data.
       #
       # Generic data download:
       #   send_data buffer
@@ -261,21 +376,30 @@ module Sinatra
 
     private
       def send_file_headers!(options)
-        options.update(DEFAULT_SEND_FILE_OPTIONS.merge(options))
+        options = DEFAULT_SEND_FILE_OPTIONS.merge(options)
         [:length, :type, :disposition].each do |arg|
-          raise ArgumentError, ":#{arg} option required" if options[arg].nil?
+          raise ArgumentError, ":#{arg} option required" unless options.key?(arg)
         end
 
-        disposition = options[:disposition].dup || 'attachment'
-
-        disposition <<= %(; filename="#{options[:filename]}") if options[:filename]
+        # Send a "304 Not Modified" if the last_modified option is provided and matches
+        # the If-Modified-Since request header value.
+        if last_modified = options[:last_modified]
+          header 'Last-Modified' => last_modified
+          throw :halt, [ 304, '' ] if last_modified == request.env['HTTP_IF_MODIFIED_SINCE']
+        end
 
         headers(
           'Content-Length'            => options[:length].to_s,
-          'Content-Type'              => options[:type].strip,  # fixes a problem with extra '\r' with some browsers
-          'Content-Disposition'       => disposition,
-          'Content-Transfer-Encoding' => 'binary'
+          'Content-Type'              => options[:type].strip  # fixes a problem with extra '\r' with some browsers
         )
+
+        # Omit Content-Disposition and Content-Transfer-Encoding headers if
+        # the :disposition option set to nil.
+        if !options[:disposition].nil?
+          disposition = options[:disposition].dup || 'attachment'
+          disposition <<= %(; filename="#{options[:filename]}") if options[:filename]
+          headers 'Content-Disposition' => disposition, 'Content-Transfer-Encoding' => 'binary'
+        end
 
         # Fix a problem with IE 6.0 on opening downloaded files:
         # If Cache-Control: no-cache is set (which Rails does by default), 
@@ -286,39 +410,145 @@ module Sinatra
         header('Cache-Control' => 'private') if headers['Cache-Control'] == 'no-cache'
       end
   end
-  
+
+
+  # Helper methods for building various aspects of the HTTP response.
   module ResponseHelpers
 
+    # Immediately halt response execution by redirecting to the resource
+    # specified. The +path+ argument may be an absolute URL or a path
+    # relative to the site root. Additional arguments are passed to the
+    # halt.
+    #
+    # With no integer status code, a '302 Temporary Redirect' response is
+    # sent. To send a permanent redirect, pass an explicit status code of
+    # 301:
+    #
+    #   redirect '/somewhere/else', 301
+    #
+    # NOTE: No attempt is made to rewrite the path based on application
+    # context. The 'Location' response header is set verbatim to the value
+    # provided.
     def redirect(path, *args)
       status(302)
-      headers 'Location' => path
+      header 'Location' => path
       throw :halt, *args
     end
-    
+
+    # Access or modify response headers. With no argument, return the
+    # underlying headers Hash. With a Hash argument, add or overwrite
+    # existing response headers with the values provided:
+    #
+    #    headers 'Content-Type' => "text/html;charset=utf-8",
+    #      'Last-Modified' => Time.now.httpdate,
+    #      'X-UA-Compatible' => 'IE=edge'
+    #
+    # This method also available in singular form (#header).
     def headers(header = nil)
       @response.headers.merge!(header) if header
       @response.headers
     end
     alias :header :headers
 
+    # Set the content type of the response body (HTTP 'Content-Type' header).
+    #
+    # The +type+ argument may be an internet media type (e.g., 'text/html',
+    # 'application/xml+atom', 'image/png') or a Symbol key into the
+    # Rack::File::MIME_TYPES table.
+    #
+    # Media type parameters, such as "charset", may also be specified using the
+    # optional hash argument:
+    #
+    #   get '/foo.html' do
+    #     content_type 'text/html', :charset => 'utf-8'
+    #     "<h1>Hello World</h1>"
+    #   end
+    #
+    def content_type(type, params={})
+      type = Rack::File::MIME_TYPES[type.to_s] if type.kind_of?(Symbol)
+      fail "Invalid or undefined media_type: #{type}" if type.nil?
+      if params.any?
+        params = params.collect { |kv| "%s=%s" % kv }.join(', ')
+        type = [ type, params ].join(";")
+      end
+      response.header['Content-Type'] = type
+    end
+
+    # Set the last modified time of the resource (HTTP 'Last-Modified' header)
+    # and halt if conditional GET matches. The +time+ argument is a Time,
+    # DateTime, or other object that responds to +to_time+.
+    #
+    # When the current request includes an 'If-Modified-Since' header that
+    # matches the time specified, execution is immediately halted with a
+    # '304 Not Modified' response.
+    #
+    # Calling this method before perfoming heavy processing (e.g., lengthy
+    # database queries, template rendering, complex logic) can dramatically
+    # increase overall throughput with caching clients.
+    def last_modified(time)
+      time = time.to_time if time.respond_to?(:to_time)
+      time = time.httpdate if time.respond_to?(:httpdate)
+      response.header['Last-Modified'] = time
+      throw :halt, 304 if time == request.env['HTTP_IF_MODIFIED_SINCE']
+      time
+    end
+
+    # Set the response entity tag (HTTP 'ETag' header) and halt if conditional
+    # GET matches. The +value+ argument is an identifier that uniquely
+    # identifies the current version of the resource. The +strength+ argument
+    # indicates whether the etag should be used as a :strong (default) or :weak
+    # cache validator.
+    #
+    # When the current request includes an 'If-None-Match' header with a
+    # matching etag, execution is immediately halted. If the request method is
+    # GET or HEAD, a '304 Not Modified' response is sent. For all other request
+    # methods, a '412 Precondition Failed' response is sent.
+    #
+    # Calling this method before perfoming heavy processing (e.g., lengthy
+    # database queries, template rendering, complex logic) can dramatically
+    # increase overall throughput with caching clients.
+    #
+    # === See Also
+    # http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19[RFC2616: ETag],
+    # ResponseHelpers#last_modified
+    def entity_tag(value, strength=:strong)
+      value =
+        case strength
+        when :strong then '"%s"' % value
+        when :weak   then 'W/"%s"' % value
+        else         raise TypeError, "strength must be one of :strong or :weak"
+        end
+      response.header['ETag'] = value
+
+      # Check for If-None-Match request header and halt if match is found.
+      etags = (request.env['HTTP_IF_NONE_MATCH'] || '').split(/\s*,\s*/)
+      if etags.include?(value) || etags.include?('*')
+        # GET/HEAD requests: send Not Modified response
+        throw :halt, 304 if request.get? || request.head?
+        # Other requests: send Precondition Failed response
+        throw :halt, 412
+      end
+    end
+
+    alias :etag :entity_tag
+
   end
-  
+
   module RenderingHelpers
 
     def render(renderer, template, options={})
       m = method("render_#{renderer}")
-      result = m.call(resolve_template(renderer, template, options))
+      result = m.call(resolve_template(renderer, template, options), options)
       if layout = determine_layout(renderer, template, options)
-        result = m.call(resolve_template(renderer, layout, options)) { result }
+        result = m.call(resolve_template(renderer, layout, options), options) { result }
       end
       result
     end
     
     def determine_layout(renderer, template, options)
+      return if options[:layout] == false
       layout_from_options = options[:layout] || :layout
-      layout = layouts[layout_from_options]
-      layout ||= resolve_template(renderer, layout_from_options, options, false)
-      layout
+      resolve_template(renderer, layout_from_options, options, false)
     end
 
     private
@@ -330,23 +560,31 @@ module Sinatra
         when Proc
           template.call
         when Symbol
-          path = File.join(
-            options[:views_directory] || Sinatra.application.options.views,
-            "#{template}.#{renderer}"
-          )
-          unless File.exists?(path)
-            raise Errno::ENOENT.new(path) if scream
-            nil
-          else  
-            File.read(path)
+          if proc = templates[template]
+            resolve_template(renderer, proc, options, scream)
+          else
+            read_template_file(renderer, template, options, scream)
           end
         else
           nil
         end
       end
       
-      def layouts
-        Sinatra.application.layouts
+      def read_template_file(renderer, template, options, scream = true)
+        path = File.join(
+          options[:views_directory] || Sinatra.application.options.views,
+          "#{template}.#{renderer}"
+        )
+        unless File.exists?(path)
+          raise Errno::ENOENT.new(path) if scream
+          nil
+        else  
+          File.read(path)
+        end
+      end
+      
+      def templates
+        Sinatra.application.templates
       end
     
   end
@@ -360,7 +598,7 @@ module Sinatra
     
     private 
     
-      def render_erb(content)
+      def render_erb(content, options = {})
         ::ERB.new(content).result(binding)
       end
       
@@ -375,12 +613,172 @@ module Sinatra
     
     private
     
-      def render_haml(content, &b)
-        ::Haml::Engine.new(content).render(self, &b)
+      def render_haml(content, options = {}, &b)
+        haml_options = (options[:options] || {}).merge(Sinatra.options.haml || {})
+        ::Haml::Engine.new(content, haml_options).render(options[:scope] || self, options[:locals] || {}, &b)
       end
         
   end
+
+  # Generate valid CSS using Sass (part of Haml)
+  #
+  # Sass templates can be in external files with <tt>.sass</tt> extension or can use Sinatra's
+  # in_file_templates.  In either case, the file can be rendered by passing the name of
+  # the template to the +sass+ method as a symbol.
+  #
+  # Unlike Haml, Sass does not support a layout file, so the +sass+ method will ignore both
+  # the default <tt>layout.sass</tt> file and any parameters passed in as <tt>:layout</tt> in
+  # the options hash.
+  #
+  # === Sass Template Files
+  #
+  # Sass templates can be stored in separate files with a <tt>.sass</tt>
+  # extension under the view path.
+  #
+  # Example:
+  #   get '/stylesheet.css' do
+  #     header 'Content-Type' => 'text/css; charset=utf-8'
+  #     sass :stylesheet
+  #   end
+  #
+  # The "views/stylesheet.sass" file might contain the following:
+  #  
+  #  body
+  #    #admin
+  #      :background-color #CCC
+  #    #main
+  #      :background-color #000
+  #  #form
+  #    :border-color #AAA
+  #    :border-width 10px
+  #
+  # And yields the following output:
+  #
+  #   body #admin {
+  #     background-color: #CCC; }
+  #   body #main {
+  #     background-color: #000; }
+  #   
+  #   #form {
+  #     border-color: #AAA;
+  #     border-width: 10px; }
+  #   
+  #
+  # NOTE: Haml must be installed or a LoadError will be raised the first time an
+  # attempt is made to render a Sass template.
+  #
+  # See http://haml.hamptoncatlin.com/docs/rdoc/classes/Sass.html for comprehensive documentation on Sass.
+
   
+  module Sass
+    
+    def sass(content, options = {})
+      require 'sass'
+      
+      # Sass doesn't support a layout, so we override any possible layout here
+      options[:layout] = false
+      
+      render(:sass, content, options)
+    end
+    
+    private
+      
+      def render_sass(content, options = {})
+        ::Sass::Engine.new(content).render
+      end
+  end
+
+  # Generating conservative XML content using Builder templates.
+  #
+  # Builder templates can be inline by passing a block to the builder method, or in
+  # external files with +.builder+ extension by passing the name of the template
+  # to the +builder+ method as a Symbol.
+  #
+  # === Inline Rendering
+  #
+  # If the builder method is given a block, the block is called directly with an 
+  # +XmlMarkup+ instance and the result is returned as String:
+  #   get '/who.xml' do
+  #     builder do |xml|
+  #       xml.instruct!
+  #       xml.person do
+  #         xml.name "Francis Albert Sinatra", 
+  #           :aka => "Frank Sinatra"
+  #         xml.email 'frank@capitolrecords.com'
+  #       end
+  #     end
+  #   end
+  #
+  # Yields the following XML:
+  #   <?xml version='1.0' encoding='UTF-8'?>
+  #   <person>
+  #     <name aka='Frank Sinatra'>Francis Albert Sinatra</name>
+  #     <email>Frank Sinatra</email>
+  #   </person>
+  #
+  # === Builder Template Files
+  #
+  # Builder templates can be stored in separate files with a +.builder+ 
+  # extension under the view path. An +XmlMarkup+ object named +xml+ is automatically
+  # made available to template.
+  #
+  # Example:
+  #   get '/bio.xml' do
+  #     builder :bio
+  #   end
+  #
+  # The "views/bio.builder" file might contain the following:
+  #   xml.instruct! :xml, :version => '1.1'
+  #   xml.person do
+  #     xml.name "Francis Albert Sinatra"
+  #     xml.aka "Frank Sinatra"
+  #     xml.aka "Ol' Blue Eyes"
+  #     xml.aka "The Chairman of the Board"
+  #     xml.born 'date' => '1915-12-12' do
+  #       xml.text! "Hoboken, New Jersey, U.S.A."
+  #     end
+  #     xml.died 'age' => 82
+  #   end
+  #
+  # And yields the following output:
+  #   <?xml version='1.1' encoding='UTF-8'?>
+  #   <person>
+  #     <name>Francis Albert Sinatra</name>
+  #     <aka>Frank Sinatra</aka>
+  #     <aka>Ol&apos; Blue Eyes</aka>
+  #     <aka>The Chairman of the Board</aka>
+  #     <born date='1915-12-12'>Hoboken, New Jersey, U.S.A.</born>
+  #     <died age='82' />
+  #   </person>
+  #
+  # NOTE: Builder must be installed or a LoadError will be raised the first time an
+  # attempt is made to render a builder template.
+  #
+  # See http://builder.rubyforge.org/ for comprehensive documentation on Builder.
+  module Builder
+
+    def builder(content=nil, options={}, &block)
+      options, content = content, nil if content.is_a?(Hash)
+      content = Proc.new { block } if content.nil?
+      render(:builder, content, options)
+    end
+
+    private
+
+      def render_builder(content, options = {}, &b)
+        require 'builder'
+        xml = ::Builder::XmlMarkup.new(:indent => 2)
+        case content
+        when String
+          eval(content, binding, '<BUILDER>', 1)
+        when Proc
+          content.call(xml)
+        end
+        xml.target!
+      end
+
+  end
+
   class EventContext
     
     include ResponseHelpers
@@ -388,10 +786,12 @@ module Sinatra
     include RenderingHelpers
     include Erb
     include Haml
+    include Builder
+    include Sass
     
     attr_accessor :request, :response
     
-    dslify_writter :status, :body
+    dslify_writer :status, :body
     
     def initialize(request, response, route_params)
       @request = request
@@ -401,15 +801,26 @@ module Sinatra
     end
     
     def params
-      @params ||= @route_params.merge(@request.params).symbolize_keys
+      @params ||= begin 
+        h = Hash.new {|h,k| h[k.to_s] if Symbol === k}
+        h.merge(@route_params.merge(@request.params))
+      end
+    end
+
+    def data
+      @data ||= params.keys.first
     end
     
-    def stop(content)
-      throw :halt, content
+    def stop(*args)
+      throw :halt, args
     end
     
     def complete(returned)
       @response.body || returned
+    end
+    
+    def session
+      request.env['rack.session'] ||= {}
     end
     
     private
@@ -422,17 +833,22 @@ module Sinatra
   
   class Application
     
-    attr_reader :events, :errors, :layouts, :default_options, :filters, :clearables, :reloading
+    attr_reader :events, :errors, :templates, :filters
+    attr_reader :clearables, :reloading
+    
     attr_writer :options
     
     def self.default_options
+      root = File.expand_path(File.dirname($0))
       @@default_options ||= {
         :run => true,
         :port => 4567,
         :env => :development,
-        :root => Dir.pwd,
-        :views => Dir.pwd + '/views',
-        :public => Dir.pwd + '/public'
+        :root => root,
+        :views => root + '/views',
+        :public => root + '/public',
+        :sessions => false,
+        :logging => true
       }
     end
     
@@ -440,31 +856,45 @@ module Sinatra
       self.class.default_options
     end
 
+    
+    ##
+    # Load all options given on the command line
+    # NOTE:  Ignores --name so unit/spec tests can run individually
     def load_options!
       require 'optparse'
       OptionParser.new do |op|
         op.on('-p port') { |port| default_options[:port] = port }
         op.on('-e env') { |env| default_options[:env] = env }
+        op.on('-x') { default_options[:mutex] = true }
+        op.on('-s server') { |server| default_options[:server] = server }
       end.parse!(ARGV.dup.select { |o| o !~ /--name/ })
     end
-        
+
+    # Called immediately after the application is initialized or reloaded to
+    # register default events. Events added here have dibs on requests since
+    # they appear first in the list.
+    def load_default_events!
+      events[:get] << Static.new
+    end
+
     def initialize
       @clearables = [
         @events = Hash.new { |hash, key| hash[key] = [] },
         @errors = Hash.new,
         @filters = Hash.new { |hash, key| hash[key] = [] },
-        @layouts = Hash.new
+        @templates = Hash.new
       ]
       load_options!
+      load_default_events!
     end
-    
+
     def define_event(method, path, options = {}, &b)
       events[method] << event = Event.new(path, options, &b)
       event
     end
     
-    def define_layout(name=:layout, &b)
-      layouts[name] = b
+    def define_template(name=:layout, &b)
+      templates[name] = b
     end
     
     def define_error(code, options = {}, &b)
@@ -474,17 +904,20 @@ module Sinatra
     def define_filter(type, &b)
       filters[:before] << b
     end
-    
-    def static
-      @static ||= Static.new
-    end
-    
-    def lookup(env)
-      method = env['REQUEST_METHOD'].downcase.to_sym
-      e = static.invoke(env) 
-      e ||= events[method].eject(&[:invoke, env])
-      e ||= (errors[NotFound]).invoke(env)
-      e
+
+    # Visits and invokes each handler registered for the +request_method+ in
+    # definition order until a Result response is produced. If no handler
+    # responds with a Result, the NotFound error handler is invoked.
+    #
+    # When the request_method is "HEAD" and no valid Result is produced by
+    # the set of handlers registered for HEAD requests, an attempt is made to
+    # invoke the GET handlers to generate the response before resorting to the
+    # default error handler.
+    def lookup(request)
+      method = request.request_method.downcase.to_sym
+      events[method].eject(&[:invoke, request]) ||
+        (events[:get].eject(&[:invoke, request]) if method == :head) ||
+        errors[NotFound].invoke(request)
     end
 
     def options
@@ -498,37 +931,55 @@ module Sinatra
     def reload!
       @reloading = true
       clearables.each(&:clear)
+      load_default_events!
       Kernel.load $0
       @reloading = false
       Environment.setup!
     end
-        
+    
+    def mutex
+      @@mutex ||= Mutex.new
+    end
+    
+    def run_safely
+      if options.mutex
+        mutex.synchronize { yield }
+      else
+        yield
+      end
+    end
+    
     def call(env)
       reload! if development?
-      result = lookup(env)
+      request = Rack::Request.new(env)
+      result = lookup(request)
       context = EventContext.new(
-        Rack::Request.new(env), 
+        request, 
         Rack::Response.new,
         result.params
       )
       context.status(result.status)
       begin
-        returned = catch(:halt) do
-          filters[:before].each { |f| context.instance_eval(&f) }
-          [:complete, context.instance_eval(&result.block)]
+        returned = run_safely do
+          catch(:halt) do
+            filters[:before].each { |f| context.instance_eval(&f) }
+            [:complete, context.instance_eval(&result.block)]
+          end
         end
         body = returned.to_result(context)
       rescue => e
-        raise e if options.raise_errors
-        env['sinatra.error'] = e
+        request.env['sinatra.error'] = e
         context.status(500)
-        result = (errors[e.class] || errors[ServerError]).invoke(env)
-        returned = catch(:halt) do
-          [:complete, context.instance_eval(&result.block)]
+        result = (errors[e.class] || errors[ServerError]).invoke(request)
+        returned = run_safely do
+          catch(:halt) do
+            [:complete, context.instance_eval(&result.block)]
+          end
         end
         body = returned.to_result(context)
       end
       body = '' unless body.respond_to?(:each)
+      body = '' if request.request_method.upcase == 'HEAD'
       context.body = body.kind_of?(String) ? [*body] : body
       context.finish
     end
@@ -541,7 +992,10 @@ module Sinatra
     
     def setup!
       configure do
-        error { '<h1>Internal Server Error</h1>'}
+        error do
+          raise request.env['sinatra.error'] if Sinatra.options.raise_errors
+          '<h1>Internal Server Error</h1>'
+        end
         not_found { '<h1>Not Found</h1>'}
       end
       
@@ -553,10 +1007,30 @@ module Sinatra
 
         not_found do
           %Q(
+          <style>
+          body {
+            text-align: center; 
+            color: #888;
+            font-family: Arial; 
+            font-size: 22px; 
+            margin: 20px;
+          }
+          #content {
+            margin: 0 auto;
+            width: 500px;
+            text-align: left;
+          }
+          </style>
           <html>
-            <body style='text-align: center; color: #888; font-family: Arial; font-size: 22px; margin: 20px'>
-            <h2>Sinatra doesn't know this diddy.</h2>
-            <img src='/sinatra_custom_images/404.png'></img>
+            <body>
+              <h2>Sinatra doesn't know this diddy.</h2>
+              <img src='/sinatra_custom_images/404.png'></img>
+              <div id="content">
+                Try this:
+<pre>#{request.request_method.downcase} "#{request.path_info}" do
+  .. do something ..
+end<pre>
+              </div>
             </body>
           </html>
           )
@@ -600,9 +1074,12 @@ module Sinatra
           		</style>
           		<div id="content">
             		<img src="/sinatra_custom_images/500.png" />
+            		<div class="info">
+                  Params: <pre>#{params.inspect}
+            		</div>
           			<div id="stacktrace">
-          				<h1>#{@error.message}</h1>
-          				<pre><code>#{@error.backtrace.join("\n")}</code></pre>
+          				<h1>#{Rack::Utils.escape_html(@error.class.name + ' - ' + @error.message)}</h1>
+          				<pre><code>#{Rack::Utils.escape_html(@error.backtrace.join("\n"))}</code></pre>
           		</div>
           	</body>
           </html>
@@ -647,7 +1124,26 @@ def not_found(options = {}, &b)
 end
 
 def layout(name = :layout, &b)
-  Sinatra.application.define_layout(name, &b)
+  Sinatra.application.define_template(name, &b)
+end
+
+def template(name, &b)
+  Sinatra.application.define_template(name, &b)
+end
+
+def use_in_file_templates!
+  require 'stringio'
+  templates = IO.read(caller.first.split(':').first).split('__FILE__').last
+  data = StringIO.new(templates)
+  current_template = nil
+  data.each do |line|
+    if line =~ /^@@\s?(.*)/
+      current_template = $1.to_sym
+      Sinatra.application.templates[current_template] = ''
+    elsif current_template
+      Sinatra.application.templates[current_template] << line
+    end
+  end
 end
 
 def configures(*envs, &b)
@@ -656,6 +1152,15 @@ def configures(*envs, &b)
             envs.empty?)
 end
 alias :configure :configures
+
+def set_options(opts)
+  Sinatra::Application.default_options.merge!(opts)
+  Sinatra.application.options = nil
+end
+
+def set_option(key, value)
+  set_options(key => value)
+end
 
 def mime(ext, type)
   Rack::File::MIME_TYPES[ext.to_s] = type
@@ -679,14 +1184,16 @@ class String
   # Converts +self+ to an escaped URI parameter value
   #   'Foo Bar'.to_param # => 'Foo%20Bar'
   def to_param
-    URI.escape(self)
+    Rack::Utils.escape(self)
   end
+  alias :http_escape :to_param
   
   # Converts +self+ from an escaped URI parameter value
   #   'Foo%20Bar'.from_param # => 'Foo Bar'
   def from_param
-    URI.unescape(self)
+    Rack::Utils.unescape(self)
   end
+  alias :http_unescape :from_param
   
 end
 
@@ -739,12 +1246,14 @@ end
 class Proc
   def to_result(cx, *args)
     cx.instance_eval(&self)
+    args.shift.to_result(cx, *args)
   end
 end
 
 class String
   def to_result(cx, *args)
-    cx.body = self
+    args.shift.to_result(cx, *args)
+    self
   end
 end
 
@@ -763,14 +1272,13 @@ end
 class Fixnum
   def to_result(cx, *args)
     cx.status self
-    cx.body args.first
+    args.shift.to_result(cx, *args)
   end
 end
 
 class NilClass
   def to_result(cx, *args)
-    cx.body = ''
-    # log warning here
+    ''
   end
 end
 
