@@ -1,0 +1,42 @@
+GitHub Services
+===============
+
+How the services work
+---------------------
+
+1. A post-receive background job is submitted when someone pushes their commits to GitHub
+2. If the repository the commits belong to has any "Service Hooks" setup, the job makes a request to `http://services-server/service_name/` with the following data:
+    - `params[:payload]` containing all of the commit data (the same data you get using the API)
+    - `params[:data]` containing the service data (username, password, room, etc)
+3. Sinatra (github-services.rb) processes the request (twitters your data, says something in campfire, posts it to lighthouse, etc)
+4. Rinse and repeat
+
+Steps to contributing
+---------------------
+
+1. Fork the project
+2. Create a new file in /services/ called `service_name.rb`, using the following template:
+
+        service :service_name do |data, payload|
+        end
+
+3. Vendor any external gems your code relies on, and make sure to include it in the requires at the top of github-services.rb
+4. Add documentation to `docs/service_name` (refer to the others for guidance)
+5. Send us a pull request
+6. Once it's accepted, we'll add any new necessary data fields to the GitHub front-end so people can start using your addition.
+
+If you're interested in setting up an interesting test framework to manage the services, that would also be greatly appreciated.
+
+Bugs can be filed here: [Lighthouse](http://logicalawesome.lighthouseapp.com/projects/8570-github/tickets)
+
+
+Thanks to the following people for making this possible
+-------------------------------------------------------
+
+- Blake Mizerany
+- Brandon Keepers
+- Christian Neukirchen
+- Florian Frank
+- John Nunemaker
+- Luke Redpath
+- Tekkub Stoutwrithe
