@@ -2,9 +2,10 @@ service :irc do |data, payload|
   repository = payload['repository']['name']
   branch     = payload['ref'].split('/').last
   rooms      = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
+  botname    = "github_updater#{rand(200)}"
   irc        = TCPSocket.open(data['server'], data['port'])
-  irc.puts "USER blah blah blah :blah blah"
-  irc.puts "NICK hubbub"
+  irc.puts "USER #{botname} #{botname} #{botname} :GitHub IRCBot"
+  irc.puts "NICK #{botname}"
   rooms.each do |room|
     irc.puts "JOIN #{room}"
     payload['commits'].each do |sha1, commit|
