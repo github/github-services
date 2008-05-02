@@ -1,14 +1,22 @@
 Campfire
 ========
 
-payload
--------
-  refer to docs/github_payload
+Install Notes
+-------------
+
+  1. subdomain is http://your-subdomain.campfirenow.com
+  2. room is the actual room name, not the id
+
+
+Developer Notes
+---------------
 
 data
-----
   - subdomain
   - email
   - password
   - room
   - ssl
+
+payload
+  - refer to docs/github_payload

@@ -1,11 +1,18 @@
 Twitter
 ========
 
-payload
--------
-  refer to docs/github_payload
+Install Notes
+-------------
+
+  1. email or username will work in username field
+
+
+Developer Notes
+---------------
 
 data
-----
   - username
   - password
+
+payload
+  - refer to docs/github_payload

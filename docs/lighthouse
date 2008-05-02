@@ -1,12 +1,25 @@
 Lighthouse
 ========
 
-payload
--------
-  refer to docs/github_payload
+Install Notes
+-------------
+
+Using the following url as an example:
+http://logicalawesome.lighthouseapp.com/projects/8570-github/overview
+
+  1. subdomain is logicalawesome
+  2. project_id is 8570
+  3. this service only supports project tokens
+     (accepting patches for user-based tokens)
+
+
+Developer Notes
+---------------
 
 data
-----
   - subdomain
   - project_id
   - token
+
+payload
+  - refer to docs/github_payload
