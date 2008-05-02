@@ -38,5 +38,7 @@ Thanks to the following people for making this possible
 - Christian Neukirchen
 - Florian Frank
 - John Nunemaker
+- John Reilly
 - Luke Redpath
+- Noah (ngage)
 - Tekkub Stoutwrithe
