@@ -5,7 +5,7 @@ Install Notes
 -------------
 
   1. server (ie. irc.freenode.net)
-  2. port is normally 6667
+  2. port is normally 6667 / 9999 for ssl
   3. the room field can support multiple rooms (comma separated)
 
 
@@ -17,6 +17,7 @@ data
   - port
   - room
   - password
+  - ssl
 
 payload
   - refer to docs/github_payload
