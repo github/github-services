@@ -41,4 +41,5 @@ Thanks to the following people for making this possible
 - John Reilly
 - Luke Redpath
 - Noah (ngage)
+- Sean O'Brien
 - Tekkub Stoutwrithe
