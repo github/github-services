@@ -16,6 +16,7 @@ data
   - server
   - port
   - room
+  - password
 
 payload
   - refer to docs/github_payload

@@ -4,6 +4,7 @@ service :irc do |data, payload|
   rooms      = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
   botname    = "GitHub#{rand(200)}"
   irc        = TCPSocket.open(data['server'], data['port'])
+  irc.puts "PASS #{data['password']}" unless data['password'].empty?
   irc.puts "USER #{botname} #{botname} #{botname} :GitHub IRCBot"
   irc.puts "NICK #{botname}"
   rooms.each do |room|
