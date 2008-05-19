@@ -1,0 +1,57 @@
+What is this?
+
+This is an example of what you can do with XMPP4R. It is a conferencing
+component in which you can walk around, travel to various places, look
+at things and talk to other visitors on the same places. If you like
+Multi-User Dungeons (MUDs) this is for you!
+
+---
+
+How does it work?
+
+The component loads a few worlds from a few XML files. Each world is a
+component. Once joined the chat will tell you what you can do. Remember
+that you can get a command listing anytime by saying '?'.
+
+Reading 'You can go north, west' you may say 'go north' to go in the
+northern direction and 'go west' to go in the western direction. You'll
+then find yourself at some other place but still in the same MUC
+conference. Your groupchat roster will change as you'll notice different
+people and things that are just in the same place, not other places.
+
+Before starting to hack the scripts you may want to take a look at
+tower.xml. Note that users are <thing/>s, too and the whole world could
+be serialized back to XML by just issuing "world.to_s".
+
+Please note that the code, especially the error handling, is of extreme
+poor quality and was mostly written in one afternoon. If I'm going to
+develop this further everything should be rewritten...
+
+---
+
+How to try?
+
+Because this is a component you are going to need your own Jabber
+Daemon - which you'll need anyways if you're going to experiment with
+XMPP4R. ;-)
+
+Syntax:
+./adventure.rb <JID> <Password> <Host>
+
+Example:
+./adventure.rb mud.example.com geheimnis localhost
+
+---
+
+Messages seem to have random order?
+
+I don't know any solution for this. One may add short delays between
+messages, but that would only be a very dirty hack.
+
+RFC3920:
+
+"10.  Server Rules for Handling XML Stanzas
+
+Compliant server implementations MUST ensure in-order processing of
+XML stanzas between any two entities."
+

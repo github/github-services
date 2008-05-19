@@ -1,0 +1,15 @@
+<world node='cube' name='Cube - the movie' start='Room'>
+
+  <place name='Room'>
+    This is a big white room.
+    There are doors up, down, left, right, in the back and in front of you.
+    There's nothing else.
+    <go spec='up' place='Room'/>
+    <go spec='down' place='Room'/>
+    <go spec='left' place='Room'/>
+    <go spec='right' place='Room'/>
+    <go spec='back' place='Room'/>
+    <go spec='forward' place='Room'/>
+  </place>
+
+</world>

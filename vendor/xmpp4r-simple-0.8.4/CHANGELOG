@@ -1,0 +1,40 @@
+xmpp4r-simple (0.8.3)
+
+  [ Blaine Cook ]
+  * Catch broken connections and attempt to reconnect 3 times.
+
+-- Blaine Cook <blaine@obvious.com>  Fri, 23 Dec 2006 00:12:09 -0800
+
+
+xmpp4r-simple (0.8.3)
+
+  [ Blaine Cook ]
+  * Update presence_updates to only store one presence_update per user.
+		Changes methods, will break code that uses presence_updates if not updated
+		correspondingly, check the documenation for the new semantics.
+
+-- Blaine Cook <blaine@obvious.com>  Thu, 07 Dec 2006 12:45:52 -0800
+
+
+xmpp4r-simple (0.8.2)
+
+  [ Blaine Cook ]
+  * Add presence_updates?, received_messages?, and new_subscriptions? methods.
+
+-- Blaine Cook <blaine@obvious.com>  Wed, 06 Dec 2006 09:40:28 -0800
+
+
+xmpp4r-simple (0.8.1)
+
+  [ Blaine Cook ]
+  * Make the deferred_delivery method public
+
+-- Blaine Cook <blaine@obvious.com>  Tue, 05 Dec 2006 17:39:14 -0800
+
+
+xmpp4r-simple (0.8.0)
+
+  [ Blaine Cook ]
+  * initial import
+
+-- Blaine Cook <blaine@obvious.com>  Wed,  08 Nov 2006 20:42:42 -0800

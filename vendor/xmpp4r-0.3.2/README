@@ -1,0 +1,28 @@
+  XMPP4R
+----------
+by:
+  Lucas Nussbaum <lucas@lucas-nussbaum.net>
+  Stephan Maka <stephan@spaceboyz.net>
+  Kirill A. Shutemov <k.shutemov@gmail.com>
+  Yuki Mitsui
+  Peter Schrammel
+  Olli
+  Vojtech Vobr
+  Andreas Wiese
+
+Currently, all the information is provided on
+
+       http://home.gna.org/xmpp4r/
+
+The integrated HTML documentation can be built with
+
+       rake rdoc
+
+If you need to ask questions, feel free to ask them on the
+xmpp4r-devel@gna.org mailing list. When reporting problems,
+please include a protocol dump which can be enabled with:
+  Jabber::debug = true
+
+XMPP4R is released under the Ruby license (see the LICENSE file), which is
+compatible with the GNU GPL (see the COPYING file) via an explicit
+dual-licensing clause.

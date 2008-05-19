@@ -1,0 +1,69 @@
+<world node='tower' name='The mysterious tower' start='the garden'>
+
+  <place name='the garden'>
+    You are in a beautiful garden.
+    There's an impressive tower beneath. Its door is open.
+    <go spec='door' place='lower room'/>
+    <go spec='east' place='the well'/>
+  </place>
+
+  <place name='lower room'>
+    Welcome to the tower's lower room.
+    There's a ladder to upstairs.
+    <go spec='door' place='the garden'/>
+    <go spec='ladder' place='upper room'/>
+  </place>
+
+  <place name='upper room'>
+    This is the upper room.
+    There's only a bed here. A wizard is currently sleeping in it.
+    <go spec='ladder' place='lower room'/>
+  </place>
+
+  <place name='the well'>
+    There's a very beautiful well in the middle of this place.
+    A frog sits on the well's edge. It looks frightening happy.
+    <go spec='west' place='the garden'/>
+  </place>
+
+
+  <thing name='Frog' place='the well'>
+    <on-enter>
+      <say>Hello great hero!</say>
+      <say>Welcome to %place%</say>
+    </on-enter>
+    <on-leave>
+      <tell>The %self% waves towards %actor%</tell>
+    </on-leave>
+    <on-command command='talk'>
+      <say>I would love to come with you, great hero. But I'm immobile due to the simple nature of this game. Would *YOU* like to /code/ me movable? So we could enjoy great adventures together...</say>
+    </on-command>
+    <on-command command='touch'>
+      <tell to='all'>%actor% touches the %self%</tell>
+      <say to='all'>Quaaack! That feels good.</say>
+    </on-command>
+    <presence>
+      <show>chat</show>
+      <status>Happy</status>
+    </presence>
+  </thing>
+
+  <thing name='Sleeping Wizard' place='upper room'>
+    <on-enter>
+      <say>*snork*</say>
+    </on-enter>
+    <presence>
+      <show>dnd</show>
+      <status>Sleeping... go bother my assistant, the frog.</status>
+    </presence>
+  </thing>
+
+  <thing name='Tower window' command-name='window' place='upper room'>
+    <on-command command='look'>
+      <say>You see a beautiful garden. There's a well behind the garden. But a huge green monster is sitting on it's edge.</say>
+    </on-command>
+    <presence>
+      <status>There's a great view from up here</status>
+    </presence>
+  </thing>
+</world>

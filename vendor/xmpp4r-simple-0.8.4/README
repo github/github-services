@@ -1,0 +1,59 @@
+= Name
+
+Jabber::Simple - An extremely easy-to-use Jabber client library.
+
+= Synopsis
+
+  # Send a message to a friend, asking for authorization if necessary:
+  im = Jabber::Simple.new("user@example.com", "password")
+  im.deliver("friend@example.com", "Hey there friend!")
+
+  # Get received messages and print them out to the console:
+  im.received_messages { |msg| puts msg.body if msg.type == :chat }
+
+  # Send an authorization request to a user:
+  im.add("friend@example.com")
+
+  # Get presence updates from your friends, and print them out to the console:
+  # (admittedly, this one needs some work)
+  im.presence_updates { |update|
+    from     = update[0].jid.strip.to_s
+    status   = update[2].status
+    presence = update[2].show
+    puts "#{from} went #{presence}: #{status}"
+  end
+
+  # Remove a user from your contact list:
+  im.remove("unfriendly@example.com")
+
+  # See the Jabber::Simple documentation for more information.
+
+= Description
+
+Jabber::Simple is intended to make Jabber client programming dead simple. XMPP,
+the Jabber protocol, is extremely powerful but also carries a steep learning
+curve. This library exposes only the most common tasks, and does so in a way
+that is familiar to users of traditional instant messenger clients.
+
+= Known Issues
+
+* None. If you'd like additional functionality, please contact the developer!
+
+= Copyright
+
+Jabber::Simple - An extremely easy-to-use Jabber client library.
+Copyright 2006 Blaine Cook <blaine@obvious.com>, Obvious Corp.
+
+Jabber::Simple is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+Jabber::Simple is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Jabber::Simple; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA

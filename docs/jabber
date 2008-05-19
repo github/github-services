@@ -1,0 +1,16 @@
+Jabber
+======
+
+Install Notes
+-------------
+
+  1. user is the Jabber ID (e.g.: myusername@gmail.com)
+
+Developer Notes
+---------------
+
+data
+  - user
+
+payload
+  - refer to docs/github_payload
