@@ -1,3 +1,4 @@
+# Inspired by: http://github.com/adamhjk/github-commit-email/tree
 service :email do |data, payload|
   
   body = <<-EOH
