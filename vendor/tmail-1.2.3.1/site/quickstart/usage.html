@@ -1,0 +1,193 @@
+<h1>General Usage</h1>
+
+<h2>Abstraction</h2>
+
+<p>
+TMail is designed to be an RFC compatible library.  The goal of TMail
+is to allow you to create emails programatically without having to know
+about the RFCs or how they work, or what their standards are.
+</p>
+
+<h2>Getting information from e-mail</h2>
+
+<h3>class TMail::Mail</h3>
+
+<p>
+When you use TMail, you need to create a TMail object.  There are
+three ways you can do this, the first is by parsing a string supplied
+to TMail, the second is by loading the mail object from a file, and
+the third is by opening up a port to whatever mail source you want.
+<br />
+<br />
+For example:
+</p>
+
+<h4>Loading from string:</h4>
+
+<pre class="ruby">
+  require 'tmail'
+
+  mail = TMail::Mail.parse(string)    # from String
+</pre>
+
+<h4>Loading from a file:</h4>
+
+<pre class="ruby">
+  require 'tmail'
+
+	mail = TMail::Mail.load(filename)   # from file
+</pre>
+
+<h4>Using the Port abstraction</h4>
+
+<p>
+The third way to get TMail::Mail object is using the "port".
+"port" is the abstruction of mail sources, e.g. strings or file names.
+You can get ports by using mail loaders (TMail::*Loader classes).
+<br />
+<br />
+Here's simple example:
+</p>
+
+<pre class="ruby">
+  require 'tmail'
+
+  loader = TMail::MhLoader.new( '/home/aamine/Mail/inbox' )
+  loader.each_port do |port|
+    mail = TMail::Mail.new(port)
+    # ....
+  end
+</pre>
+
+<p>This lets you cycle through your messages in the inbox</p>
+
+<h3>Accessing EMail Attributes via TMail::Mail object</h3>
+
+<p>
+Once you have the Email loaded, you can now access the various parts
+of the email, using various methods on the now instantiated TMail::Mail
+object.
+<br />
+<br />
+For example...
+</p>
+
+<h4>
+To get who the email is to:
+</h4>
+
+<pre class="ruby">
+  require 'tmail'
+
+  mail = TMail::Mail.parse( 'To: Minero Aoki &lt;aamine@loveruby.net&gt;' )
+  p mail.to   # =&gt; ["aamine@loveruby.net"]
+</pre>
+
+<h4>
+To get the subject:
+</h4>
+
+<pre class="ruby">
+  p mail.subject
+</pre class="ruby">
+
+<h4>
+To get the body of the email:
+</h4>
+
+<pre class="ruby">
+  p mail.body
+</pre>
+
+<p>
+For more information, see the RDoc index and the TMail::Mail class specifically.
+</p>
+
+<h3>MIME multipart emails</h3>
+
+<p>
+TMail also supports MIME multipart mails.
+<br />
+<br />
+If mail is multipart mail, Mail#multipart? returns true,
+and Mail#parts contains an array of parts (TMail::Mail object).
+</p>
+
+<pre class="ruby">
+  require 'tmail'
+
+  mail = TMail::Mail.parse( multipart_mail_string )
+  if mail.multipart? then
+    mail.parts.each do |m|
+      puts m.main_type
+    end
+  end
+</pre>
+
+<h2>Creating New Mail</h2>
+
+<p>Creating an email is just as easy:</p>
+
+<pre class="ruby">
+  require 'tmail'
+
+  # Example 1: create mail only in memory
+  mail = TMail::Mail.new
+
+  # Example 2: create mail on mailbox (on disk)
+  loader = TMail::MhLoader.new('/home/aamine/Mail/drafts')
+  mail = TMail::Mail.new( loader.new_port )
+</pre>
+
+<p>
+Then fill headers and body.
+</p>
+
+<pre class="ruby">
+  mail.to = 'test@loveruby.net'
+  mail.from = 'Minero Aoki &lt;aamine@loveruby.net&gt;'
+  mail.subject = 'test mail'
+  mail.date = Time.now
+  mail.mime_version = '1.0'
+  mail.set_content_type 'text', 'plain', {'charset'=&gt;'iso-2022-jp'}
+  mail.body = 'This is test mail.'
+</pre>
+
+<p>
+At last, convert mail object to string.
+</p>
+
+<pre class="ruby">
+  str = mail.to_s
+</pre>
+
+<p>
+If you want to write mails against files directly
+(without intermediate string), use Mail#write_back.
+</p>
+
+<pre class="ruby">
+  mail.write_back
+</pre>
+
+
+<h3>What TMail is NOT</h3>
+
+<p>
+Right now, TMail does not touch the body of the mail message,
+for example, it doesn't encode, decode, handle character sets 
+etc.  It only handles the message and headers and gives you 
+access to read and write the mail body.
+</p>
+
+<p>
+Plans for future versions are to allow better handling of the mail
+body, auto decode Base64 and handling attachments in a better way.
+</p>
+
+<h2>Now what?</h2>
+
+<p>Go to the <a href="../manual/index.html">online manual</a> to find out
+how to use it all, or if you are stuck you can join the 
+<a href="http://rubyforge.org/mailman/listinfo/tmail-talk">TMail-Talk</a>
+mailing list and ask your question there.</p>

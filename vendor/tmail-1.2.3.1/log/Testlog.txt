@@ -1,0 +1,2340 @@
+= Solo Test @ Sun Feb 10 17:10:47 -0500 2008
+
+TEST FILE                        TESTS    ASSERTIONS  FAILURES    ERRORS   
+test/test_utils.rb                 3          3          0          0        [PASS]
+test/test_attachments.rb           3          4          0          0        [PASS]
+test/test_encode.rb                1         26          0          0        [PASS]
+test/test_mbox.rb                  9         59          0          0        [PASS]
+test/test_helper.rb                0          0          0          0        [PASS]
+test/test_header.rb               67        312          1          0        [FAIL]
+test/test_base64.rb                3       1430          0          0        [PASS]
+test/test_address.rb              29       1686          0          1        [FAIL]
+test/test_mail.rb                 44        209          0          0        [PASS]
+test/test_scanner.rb               3        117          0          0        [PASS]
+test/test_port.rb                 31        118          0          0        [PASS]
+test/test_quote.rb                11         11          0          0        [PASS]
+TOTAL                            204       3975          1          1
+
+-- Failures and Errors --
+
+Loaded suite test/test_header
+Started
+..F................................................................
+Finished in 0.065895 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [test/test_header.rb:825:in `_test_raw_iso2022jp'
+     test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+67 tests, 312 assertions, 1 failures, 0 errors
+Loaded suite test/test_address
+Started
+...............E.............
+Finished in 0.120607 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:44:in `parse'
+    test/test_address.rb:90:in `validate_case__address'
+    test/test_address.rb:248:in `_test_parse__euc'
+    test/test_address.rb:237:in `test_parse__rawjp'
+
+29 tests, 1686 assertions, 0 failures, 1 errors
+
+
+= Solo Test @ Sat Feb 23 02:29:09 +1100 2008
+
+TEST FILE                        TESTS    ASSERTIONS  FAILURES    ERRORS   
+test/test_address.rb              29       1686          0          1        [FAIL]
+test/test_attachments.rb           3          4          0          0        [PASS]
+test/test_base64.rb                3       1430          0          0        [PASS]
+test/test_encode.rb                1         26          0          0        [PASS]
+test/test_header.rb               67        312          1          0        [FAIL]
+test/test_helper.rb                0          0          0          0        [PASS]
+test/test_mail.rb                 44        212          0          0        [PASS]
+test/test_mbox.rb                 12         63          0          0        [PASS]
+test/test_port.rb                 31        118          0          0        [PASS]
+test/test_quote.rb                11         11          0          0        [PASS]
+test/test_scanner.rb               3        117          0          0        [PASS]
+test/test_utils.rb                 3          3          0          0        [PASS]
+TOTAL                            207       3982          1          1
+
+-- Failures and Errors --
+
+Loaded suite test/test_address
+Started
+...............E.............
+Finished in 0.092597 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    test/test_address.rb:90:in `validate_case__address'
+    test/test_address.rb:248:in `_test_parse__euc'
+    test/test_address.rb:237:in `test_parse__rawjp'
+
+29 tests, 1686 assertions, 0 failures, 1 errors
+Loaded suite test/test_header
+Started
+..F................................................................
+Finished in 0.045103 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [test/test_header.rb:825:in `_test_raw_iso2022jp'
+     test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+67 tests, 312 assertions, 1 failures, 0 errors
+
+
+= Solo Test @ Fri Mar 14 22:59:26 +1100 2008
+
+TEST FILE                        TESTS    ASSERTIONS  FAILURES    ERRORS   
+test/test_address.rb              29       1686          0          1        [FAIL]
+test/test_attachments.rb           3          4          0          0        [PASS]
+test/test_base64.rb                3       1430          0          0        [PASS]
+test/test_encode.rb                1         26          0          0        [PASS]
+test/test_header.rb               67        312          1          0        [FAIL]
+test/test_helper.rb                0          0          0          0        [PASS]
+test/test_mail.rb                 47        215          0          0        [PASS]
+test/test_mbox.rb                 12         63          0          0        [PASS]
+test/test_port.rb                 31        118          0          0        [PASS]
+test/test_quote.rb                11         11          0          0        [PASS]
+test/test_scanner.rb               3        117          0          0        [PASS]
+test/test_utils.rb                 3          3          0          0        [PASS]
+TOTAL                            210       3985          1          1
+
+-- Failures and Errors --
+
+Loaded suite test/test_address
+Started
+...............E.............
+Finished in 0.09372 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    test/test_address.rb:90:in `validate_case__address'
+    test/test_address.rb:248:in `_test_parse__euc'
+    test/test_address.rb:237:in `test_parse__rawjp'
+
+29 tests, 1686 assertions, 0 failures, 1 errors
+Loaded suite test/test_header
+Started
+..F................................................................
+Finished in 0.044237 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [test/test_header.rb:825:in `_test_raw_iso2022jp'
+     test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+67 tests, 312 assertions, 1 failures, 0 errors
+
+
+= Cross Test @ Fri Mar 14 23:00:58 +1100 2008
+
+TEST FILE                                                 TESTS    ASSERTIONS  FAILURES    ERRORS   
+test/test_address.rb     test/test_address.rb              29       1686          0          1        [FAIL]
+test/test_address.rb     test/test_attachments.rb          32       1690          0          1        [FAIL]
+test/test_address.rb     test/test_base64.rb               32       3116          0          1        [FAIL]
+test/test_address.rb     test/test_encode.rb               30       1712          0          1        [FAIL]
+test/test_address.rb     test/test_header.rb               96       1998          1          1        [FAIL]
+test/test_address.rb     test/test_helper.rb               29       1686          0          1        [FAIL]
+test/test_address.rb     test/test_mail.rb                 76       1901          0          1        [FAIL]
+test/test_address.rb     test/test_mbox.rb                 41       1749          0          1        [FAIL]
+test/test_address.rb     test/test_port.rb                 60       1804          0          1        [FAIL]
+test/test_address.rb     test/test_quote.rb                40       1697          0          1        [FAIL]
+test/test_address.rb     test/test_scanner.rb              32       1803          0          1        [FAIL]
+test/test_address.rb     test/test_utils.rb                32       1689          0          1        [FAIL]
+test/test_attachments.rb test/test_address.rb              32       1690          0          1        [FAIL]
+test/test_attachments.rb test/test_attachments.rb           3          4          0          0        [PASS]
+test/test_attachments.rb test/test_base64.rb                6       1434          0          0        [PASS]
+test/test_attachments.rb test/test_encode.rb                4         30          0          0        [PASS]
+test/test_attachments.rb test/test_header.rb               70        316          1          0        [FAIL]
+test/test_attachments.rb test/test_helper.rb                3          4          0          0        [PASS]
+test/test_attachments.rb test/test_mail.rb                 50        219          0          0        [PASS]
+test/test_attachments.rb test/test_mbox.rb                 15         67          0          0        [PASS]
+test/test_attachments.rb test/test_port.rb                 34        122          0          0        [PASS]
+test/test_attachments.rb test/test_quote.rb                14         15          0          0        [PASS]
+test/test_attachments.rb test/test_scanner.rb               6        121          0          0        [PASS]
+test/test_attachments.rb test/test_utils.rb                 6          7          0          0        [PASS]
+test/test_base64.rb      test/test_address.rb              32       3116          0          1        [FAIL]
+test/test_base64.rb      test/test_attachments.rb           6       1434          0          0        [PASS]
+test/test_base64.rb      test/test_base64.rb                3       1430          0          0        [PASS]
+test/test_base64.rb      test/test_encode.rb                4       1456          0          0        [PASS]
+test/test_base64.rb      test/test_header.rb               70       1742          1          0        [FAIL]
+test/test_base64.rb      test/test_helper.rb                3       1430          0          0        [PASS]
+test/test_base64.rb      test/test_mail.rb                 50       1645          0          0        [PASS]
+test/test_base64.rb      test/test_mbox.rb                 15       1493          0          0        [PASS]
+test/test_base64.rb      test/test_port.rb                 34       1548          0          0        [PASS]
+test/test_base64.rb      test/test_quote.rb                14       1441          0          0        [PASS]
+test/test_base64.rb      test/test_scanner.rb               6       1547          0          0        [PASS]
+test/test_base64.rb      test/test_utils.rb                 6       1433          0          0        [PASS]
+test/test_encode.rb      test/test_address.rb              30       1712          0          1        [FAIL]
+test/test_encode.rb      test/test_attachments.rb           4         30          0          0        [PASS]
+test/test_encode.rb      test/test_base64.rb                4       1456          0          0        [PASS]
+test/test_encode.rb      test/test_encode.rb                1         26          0          0        [PASS]
+test/test_encode.rb      test/test_header.rb               68        338          1          0        [FAIL]
+test/test_encode.rb      test/test_helper.rb                1         26          0          0        [PASS]
+test/test_encode.rb      test/test_mail.rb                 48        241          0          0        [PASS]
+test/test_encode.rb      test/test_mbox.rb                 13         89          0          0        [PASS]
+test/test_encode.rb      test/test_port.rb                 32        144          0          0        [PASS]
+test/test_encode.rb      test/test_quote.rb                12         37          0          0        [PASS]
+test/test_encode.rb      test/test_scanner.rb               4        143          0          0        [PASS]
+test/test_encode.rb      test/test_utils.rb                 4         29          0          0        [PASS]
+test/test_header.rb      test/test_address.rb              96       1998          1          1        [FAIL]
+test/test_header.rb      test/test_attachments.rb          70        316          1          0        [FAIL]
+test/test_header.rb      test/test_base64.rb               70       1742          1          0        [FAIL]
+test/test_header.rb      test/test_encode.rb               68        338          1          0        [FAIL]
+test/test_header.rb      test/test_header.rb               67        312          1          0        [FAIL]
+test/test_header.rb      test/test_helper.rb               67        312          1          0        [FAIL]
+test/test_header.rb      test/test_mail.rb                114        527          1          0        [FAIL]
+test/test_header.rb      test/test_mbox.rb                 79        375          1          0        [FAIL]
+test/test_header.rb      test/test_port.rb                 98        430          1          0        [FAIL]
+test/test_header.rb      test/test_quote.rb                78        323          1          0        [FAIL]
+test/test_header.rb      test/test_scanner.rb              70        429          1          0        [FAIL]
+test/test_header.rb      test/test_utils.rb                70        315          1          0        [FAIL]
+test/test_helper.rb      test/test_address.rb              29       1686          0          1        [FAIL]
+test/test_helper.rb      test/test_attachments.rb           3          4          0          0        [PASS]
+test/test_helper.rb      test/test_base64.rb                3       1430          0          0        [PASS]
+test/test_helper.rb      test/test_encode.rb                1         26          0          0        [PASS]
+test/test_helper.rb      test/test_header.rb               67        312          1          0        [FAIL]
+test/test_helper.rb      test/test_helper.rb              210       3985          1          1        [FAIL]
+test/test_helper.rb      test/test_mail.rb                 47        215          0          0        [PASS]
+test/test_helper.rb      test/test_mbox.rb                 12         63          0          0        [PASS]
+test/test_helper.rb      test/test_port.rb                 31        118          0          0        [PASS]
+test/test_helper.rb      test/test_quote.rb                11         11          0          0        [PASS]
+test/test_helper.rb      test/test_scanner.rb               3        117          0          0        [PASS]
+test/test_helper.rb      test/test_utils.rb                 3          3          0          0        [PASS]
+test/test_mail.rb        test/test_address.rb              76       1901          0          1        [FAIL]
+test/test_mail.rb        test/test_attachments.rb          50        219          0          0        [PASS]
+test/test_mail.rb        test/test_base64.rb               50       1645          0          0        [PASS]
+test/test_mail.rb        test/test_encode.rb               48        241          0          0        [PASS]
+test/test_mail.rb        test/test_header.rb              114        527          1          0        [FAIL]
+test/test_mail.rb        test/test_helper.rb               47        215          0          0        [PASS]
+test/test_mail.rb        test/test_mail.rb                 47        215          0          0        [PASS]
+test/test_mail.rb        test/test_mbox.rb                 59        278          0          0        [PASS]
+test/test_mail.rb        test/test_port.rb                 78        333          0          0        [PASS]
+test/test_mail.rb        test/test_quote.rb                58        226          0          0        [PASS]
+test/test_mail.rb        test/test_scanner.rb              50        332          0          0        [PASS]
+test/test_mail.rb        test/test_utils.rb                50        218          0          0        [PASS]
+test/test_mbox.rb        test/test_address.rb              41       1749          0          1        [FAIL]
+test/test_mbox.rb        test/test_attachments.rb          15         67          0          0        [PASS]
+test/test_mbox.rb        test/test_base64.rb               15       1493          0          0        [PASS]
+test/test_mbox.rb        test/test_encode.rb               13         89          0          0        [PASS]
+test/test_mbox.rb        test/test_header.rb               79        375          1          0        [FAIL]
+test/test_mbox.rb        test/test_helper.rb               12         63          0          0        [PASS]
+test/test_mbox.rb        test/test_mail.rb                 59        278          0          0        [PASS]
+test/test_mbox.rb        test/test_mbox.rb                 12         63          0          0        [PASS]
+test/test_mbox.rb        test/test_port.rb                 43        181          0          0        [PASS]
+test/test_mbox.rb        test/test_quote.rb                23         74          0          0        [PASS]
+test/test_mbox.rb        test/test_scanner.rb              15        180          0          0        [PASS]
+test/test_mbox.rb        test/test_utils.rb                15         66          0          0        [PASS]
+test/test_port.rb        test/test_address.rb              60       1804          0          1        [FAIL]
+test/test_port.rb        test/test_attachments.rb          34        122          0          0        [PASS]
+test/test_port.rb        test/test_base64.rb               34       1548          0          0        [PASS]
+test/test_port.rb        test/test_encode.rb               32        144          0          0        [PASS]
+test/test_port.rb        test/test_header.rb               98        430          1          0        [FAIL]
+test/test_port.rb        test/test_helper.rb               31        118          0          0        [PASS]
+test/test_port.rb        test/test_mail.rb                 78        333          0          0        [PASS]
+test/test_port.rb        test/test_mbox.rb                 43        181          0          0        [PASS]
+test/test_port.rb        test/test_port.rb                 31        118          0          0        [PASS]
+test/test_port.rb        test/test_quote.rb                42        129          0          0        [PASS]
+test/test_port.rb        test/test_scanner.rb              34        235          0          0        [PASS]
+test/test_port.rb        test/test_utils.rb                34        121          0          0        [PASS]
+test/test_quote.rb       test/test_address.rb              40       1697          0          1        [FAIL]
+test/test_quote.rb       test/test_attachments.rb          14         15          0          0        [PASS]
+test/test_quote.rb       test/test_base64.rb               14       1441          0          0        [PASS]
+test/test_quote.rb       test/test_encode.rb               12         37          0          0        [PASS]
+test/test_quote.rb       test/test_header.rb               78        323          1          0        [FAIL]
+test/test_quote.rb       test/test_helper.rb               11         11          0          0        [PASS]
+test/test_quote.rb       test/test_mail.rb                 58        226          0          0        [PASS]
+test/test_quote.rb       test/test_mbox.rb                 23         74          0          0        [PASS]
+test/test_quote.rb       test/test_port.rb                 42        129          0          0        [PASS]
+test/test_quote.rb       test/test_quote.rb                11         11          0          0        [PASS]
+test/test_quote.rb       test/test_scanner.rb              14        128          0          0        [PASS]
+test/test_quote.rb       test/test_utils.rb                14         14          0          0        [PASS]
+test/test_scanner.rb     test/test_address.rb              32       1803          0          1        [FAIL]
+test/test_scanner.rb     test/test_attachments.rb           6        121          0          0        [PASS]
+test/test_scanner.rb     test/test_base64.rb                6       1547          0          0        [PASS]
+test/test_scanner.rb     test/test_encode.rb                4        143          0          0        [PASS]
+test/test_scanner.rb     test/test_header.rb               70        429          1          0        [FAIL]
+test/test_scanner.rb     test/test_helper.rb                3        117          0          0        [PASS]
+test/test_scanner.rb     test/test_mail.rb                 50        332          0          0        [PASS]
+test/test_scanner.rb     test/test_mbox.rb                 15        180          0          0        [PASS]
+test/test_scanner.rb     test/test_port.rb                 34        235          0          0        [PASS]
+test/test_scanner.rb     test/test_quote.rb                14        128          0          0        [PASS]
+test/test_scanner.rb     test/test_scanner.rb               3        117          0          0        [PASS]
+test/test_scanner.rb     test/test_utils.rb                 6        120          0          0        [PASS]
+test/test_utils.rb       test/test_address.rb              32       1689          0          1        [FAIL]
+test/test_utils.rb       test/test_attachments.rb           6          7          0          0        [PASS]
+test/test_utils.rb       test/test_base64.rb                6       1433          0          0        [PASS]
+test/test_utils.rb       test/test_encode.rb                4         29          0          0        [PASS]
+test/test_utils.rb       test/test_header.rb               70        315          1          0        [FAIL]
+test/test_utils.rb       test/test_helper.rb                3          3          0          0        [PASS]
+test/test_utils.rb       test/test_mail.rb                 50        218          0          0        [PASS]
+test/test_utils.rb       test/test_mbox.rb                 15         66          0          0        [PASS]
+test/test_utils.rb       test/test_port.rb                 34        121          0          0        [PASS]
+test/test_utils.rb       test/test_quote.rb                14         14          0          0        [PASS]
+test/test_utils.rb       test/test_scanner.rb               6        120          0          0        [PASS]
+test/test_utils.rb       test/test_utils.rb                 3          3          0          0        [PASS]
+TOTAL                                                    5040      95640         24         24
+
+-- Failures and Errors --
+
+Loaded suite -e
+Started
+...............E.............
+Finished in 0.09302 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+29 tests, 1686 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E................
+Finished in 0.104716 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 1690 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E................
+Finished in 0.179128 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 3116 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E..............
+Finished in 0.102972 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+30 tests, 1712 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F.............................................................................E...............
+Finished in 0.125127 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+  2) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+96 tests, 1998 assertions, 1 failures, 1 errors
+Loaded suite -e
+Started
+...............E.............
+Finished in 0.092103 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+29 tests, 1686 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E............................................................
+Finished in 0.145643 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+76 tests, 1901 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...........................E.............
+Finished in 0.155874 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+41 tests, 1749 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..............................................E.............
+Finished in 0.18006 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+60 tests, 1804 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E........................
+Finished in 0.101734 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+40 tests, 1697 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..................E.............
+Finished in 0.100893 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 1803 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E................
+Finished in 0.092059 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 1689 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E................
+Finished in 0.096896 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 1690 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.050509 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 316 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+...............E................
+Finished in 0.177225 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 3116 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.122517 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 1742 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+...............E..............
+Finished in 0.102566 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+30 tests, 1712 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F.................................................................
+Finished in 0.048416 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+68 tests, 338 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F.............................................................................E...............
+Finished in 0.124603 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+  2) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+96 tests, 1998 assertions, 1 failures, 1 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.050084 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 316 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.122198 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 1742 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F.................................................................
+Finished in 0.048844 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+68 tests, 338 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F................................................................
+Finished in 0.042681 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+67 tests, 312 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F................................................................
+Finished in 0.044667 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+67 tests, 312 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F...............................................................................................................
+Finished in 0.081823 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+114 tests, 527 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F............................................................................
+Finished in 0.086606 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+79 tests, 375 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F...............................................................................................
+Finished in 0.106947 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+98 tests, 430 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F...........................................................................
+Finished in 0.047306 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+78 tests, 323 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.047525 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 429 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.045308 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 315 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+...............E.............
+Finished in 0.09224 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+29 tests, 1686 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F................................................................
+Finished in 0.044664 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+67 tests, 312 assertions, 1 failures, 0 errors
+Loaded suite .
+Started
+..F...........................................................................................................................E...................................................................................
+Finished in 0.431701 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+  2) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+210 tests, 3985 assertions, 1 failures, 1 errors
+Loaded suite -e
+Started
+...............E............................................................
+Finished in 0.138379 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+76 tests, 1901 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...............................................................................................................
+Finished in 0.082695 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+114 tests, 527 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+...........................E.............
+Finished in 0.160588 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+41 tests, 1749 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F............................................................................
+Finished in 0.097336 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+79 tests, 375 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..............................................E.............
+Finished in 0.168924 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+60 tests, 1804 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...............................................................................................
+Finished in 0.104936 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+98 tests, 430 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+...............E........................
+Finished in 0.100879 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+40 tests, 1697 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...........................................................................
+Finished in 0.047438 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+78 tests, 323 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..................E.............
+Finished in 0.100312 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 1803 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.047378 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 429 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+...............E................
+Finished in 0.0925590000000001 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:248:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 1689 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.045748 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:825:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 315 assertions, 1 failures, 0 errors
+
+
+= Solo Test @ Fri Mar 14 23:01:10 +1100 2008
+
+TEST FILE                        TESTS    ASSERTIONS  FAILURES    ERRORS   
+test/test_address.rb              29       1686          0          1        [FAIL]
+test/test_attachments.rb           3          4          0          0        [PASS]
+test/test_base64.rb                3       1430          0          0        [PASS]
+test/test_encode.rb                1         26          0          0        [PASS]
+test/test_header.rb               67        312          1          0        [FAIL]
+test/test_helper.rb                0          0          0          0        [PASS]
+test/test_mail.rb                 47        215          0          0        [PASS]
+test/test_mbox.rb                 12         63          0          0        [PASS]
+test/test_port.rb                 31        118          0          0        [PASS]
+test/test_quote.rb                11         11          0          0        [PASS]
+test/test_scanner.rb               3        117          0          0        [PASS]
+test/test_utils.rb                 3          3          0          0        [PASS]
+TOTAL                            210       3985          1          1
+
+-- Failures and Errors --
+
+Loaded suite test/test_address
+Started
+...............E.............
+Finished in 0.090869 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    test/test_address.rb:90:in `validate_case__address'
+    test/test_address.rb:248:in `_test_parse__euc'
+    test/test_address.rb:237:in `test_parse__rawjp'
+
+29 tests, 1686 assertions, 0 failures, 1 errors
+Loaded suite test/test_header
+Started
+..F................................................................
+Finished in 0.044878 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [test/test_header.rb:825:in `_test_raw_iso2022jp'
+     test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+67 tests, 312 assertions, 1 failures, 0 errors
+
+
+= Solo Test @ Sat Mar 15 01:21:40 +1100 2008
+
+TEST FILE                        TESTS    ASSERTIONS  FAILURES    ERRORS   
+test/test_address.rb              29       1686          0          1        [FAIL]
+test/test_attachments.rb           3          4          0          0        [PASS]
+test/test_base64.rb                3       1430          0          0        [PASS]
+test/test_encode.rb                1         26          0          0        [PASS]
+test/test_header.rb               67        312          1          0        [FAIL]
+test/test_helper.rb                0          0          0          0        [PASS]
+test/test_mail.rb                 47        215          0          0        [PASS]
+test/test_mbox.rb                 12         63          0          0        [PASS]
+test/test_port.rb                 31        118          0          0        [PASS]
+test/test_quote.rb                11         11          0          0        [PASS]
+test/test_scanner.rb               3        117          0          0        [PASS]
+test/test_utils.rb                 3          3          0          0        [PASS]
+TOTAL                            210       3985          1          1
+
+-- Failures and Errors --
+
+Loaded suite test/test_address
+Started
+...............E.............
+Finished in 0.092228 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    test/test_address.rb:90:in `validate_case__address'
+    test/test_address.rb:248:in `_test_parse__euc'
+    test/test_address.rb:237:in `test_parse__rawjp'
+
+29 tests, 1686 assertions, 0 failures, 1 errors
+Loaded suite test/test_header
+Started
+..F................................................................
+Finished in 0.045673 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [test/test_header.rb:825:in `_test_raw_iso2022jp'
+     test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+67 tests, 312 assertions, 1 failures, 0 errors
+
+
+= Solo Test @ Mon Apr 07 09:47:05 +1000 2008
+
+TEST FILE                        TESTS    ASSERTIONS  FAILURES    ERRORS   
+test/test_address.rb              29       1686          0          1        [FAIL]
+test/test_attachments.rb           3          4          0          0        [PASS]
+test/test_base64.rb                3       1430          0          0        [PASS]
+test/test_encode.rb                2         27          0          0        [PASS]
+test/test_header.rb               67        312          1          0        [FAIL]
+test/test_helper.rb                0          0          0          0        [PASS]
+test/test_mail.rb                 47        215          0          0        [PASS]
+test/test_mbox.rb                 12         63          0          0        [PASS]
+test/test_port.rb                 31        118          0          0        [PASS]
+test/test_quote.rb                11         11          0          0        [PASS]
+test/test_scanner.rb               3        117          0          0        [PASS]
+test/test_utils.rb                 3          3          0          0        [PASS]
+TOTAL                            211       3986          1          1
+
+-- Failures and Errors --
+
+Loaded suite test/test_address
+Started
+...............E.............
+Finished in 0.0950920000000001 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    test/test_address.rb:90:in `validate_case__address'
+    test/test_address.rb:247:in `_test_parse__euc'
+    test/test_address.rb:237:in `test_parse__rawjp'
+
+29 tests, 1686 assertions, 0 failures, 1 errors
+Loaded suite test/test_header
+Started
+..F................................................................
+Finished in 0.073639 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [test/test_header.rb:824:in `_test_raw_iso2022jp'
+     test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+67 tests, 312 assertions, 1 failures, 0 errors
+
+
+= Cross Test @ Mon Apr 07 09:47:45 +1000 2008
+
+TEST FILE                                                 TESTS    ASSERTIONS  FAILURES    ERRORS   
+test/test_address.rb     test/test_address.rb              29       1686          0          1        [FAIL]
+test/test_address.rb     test/test_attachments.rb          32       1690          0          1        [FAIL]
+test/test_address.rb     test/test_base64.rb               32       3116          0          1        [FAIL]
+test/test_address.rb     test/test_encode.rb               31       1713          0          1        [FAIL]
+test/test_address.rb     test/test_header.rb               96       1998          1          1        [FAIL]
+test/test_address.rb     test/test_helper.rb               29       1686          0          1        [FAIL]
+test/test_address.rb     test/test_mail.rb                 76       1901          0          1        [FAIL]
+test/test_address.rb     test/test_mbox.rb                 41       1749          0          1        [FAIL]
+test/test_address.rb     test/test_port.rb                 60       1804          0          1        [FAIL]
+test/test_address.rb     test/test_quote.rb                40       1697          0          1        [FAIL]
+test/test_address.rb     test/test_scanner.rb              32       1803          0          1        [FAIL]
+test/test_address.rb     test/test_utils.rb                32       1689          0          1        [FAIL]
+test/test_attachments.rb test/test_address.rb              32       1690          0          1        [FAIL]
+test/test_attachments.rb test/test_attachments.rb           3          4          0          0        [PASS]
+test/test_attachments.rb test/test_base64.rb                6       1434          0          0        [PASS]
+test/test_attachments.rb test/test_encode.rb                5         31          0          0        [PASS]
+test/test_attachments.rb test/test_header.rb               70        316          1          0        [FAIL]
+test/test_attachments.rb test/test_helper.rb                3          4          0          0        [PASS]
+test/test_attachments.rb test/test_mail.rb                 50        219          0          0        [PASS]
+test/test_attachments.rb test/test_mbox.rb                 15         67          0          0        [PASS]
+test/test_attachments.rb test/test_port.rb                 34        122          0          0        [PASS]
+test/test_attachments.rb test/test_quote.rb                14         15          0          0        [PASS]
+test/test_attachments.rb test/test_scanner.rb               6        121          0          0        [PASS]
+test/test_attachments.rb test/test_utils.rb                 6          7          0          0        [PASS]
+test/test_base64.rb      test/test_address.rb              32       3116          0          1        [FAIL]
+test/test_base64.rb      test/test_attachments.rb           6       1434          0          0        [PASS]
+test/test_base64.rb      test/test_base64.rb                3       1430          0          0        [PASS]
+test/test_base64.rb      test/test_encode.rb                5       1457          0          0        [PASS]
+test/test_base64.rb      test/test_header.rb               70       1742          1          0        [FAIL]
+test/test_base64.rb      test/test_helper.rb                3       1430          0          0        [PASS]
+test/test_base64.rb      test/test_mail.rb                 50       1645          0          0        [PASS]
+test/test_base64.rb      test/test_mbox.rb                 15       1493          0          0        [PASS]
+test/test_base64.rb      test/test_port.rb                 34       1548          0          0        [PASS]
+test/test_base64.rb      test/test_quote.rb                14       1441          0          0        [PASS]
+test/test_base64.rb      test/test_scanner.rb               6       1547          0          0        [PASS]
+test/test_base64.rb      test/test_utils.rb                 6       1433          0          0        [PASS]
+test/test_encode.rb      test/test_address.rb              31       1713          0          1        [FAIL]
+test/test_encode.rb      test/test_attachments.rb           5         31          0          0        [PASS]
+test/test_encode.rb      test/test_base64.rb                5       1457          0          0        [PASS]
+test/test_encode.rb      test/test_encode.rb                2         27          0          0        [PASS]
+test/test_encode.rb      test/test_header.rb               69        339          1          0        [FAIL]
+test/test_encode.rb      test/test_helper.rb                2         27          0          0        [PASS]
+test/test_encode.rb      test/test_mail.rb                 49        242          0          0        [PASS]
+test/test_encode.rb      test/test_mbox.rb                 14         90          0          0        [PASS]
+test/test_encode.rb      test/test_port.rb                 33        145          0          0        [PASS]
+test/test_encode.rb      test/test_quote.rb                13         38          0          0        [PASS]
+test/test_encode.rb      test/test_scanner.rb               5        144          0          0        [PASS]
+test/test_encode.rb      test/test_utils.rb                 5         30          0          0        [PASS]
+test/test_header.rb      test/test_address.rb              96       1998          1          1        [FAIL]
+test/test_header.rb      test/test_attachments.rb          70        316          1          0        [FAIL]
+test/test_header.rb      test/test_base64.rb               70       1742          1          0        [FAIL]
+test/test_header.rb      test/test_encode.rb               69        339          1          0        [FAIL]
+test/test_header.rb      test/test_header.rb               67        312          1          0        [FAIL]
+test/test_header.rb      test/test_helper.rb               67        312          1          0        [FAIL]
+test/test_header.rb      test/test_mail.rb                114        527          1          0        [FAIL]
+test/test_header.rb      test/test_mbox.rb                 79        375          1          0        [FAIL]
+test/test_header.rb      test/test_port.rb                 98        430          1          0        [FAIL]
+test/test_header.rb      test/test_quote.rb                78        323          1          0        [FAIL]
+test/test_header.rb      test/test_scanner.rb              70        429          1          0        [FAIL]
+test/test_header.rb      test/test_utils.rb                70        315          1          0        [FAIL]
+test/test_helper.rb      test/test_address.rb              29       1686          0          1        [FAIL]
+test/test_helper.rb      test/test_attachments.rb           3          4          0          0        [PASS]
+test/test_helper.rb      test/test_base64.rb                3       1430          0          0        [PASS]
+test/test_helper.rb      test/test_encode.rb                2         27          0          0        [PASS]
+test/test_helper.rb      test/test_header.rb               67        312          1          0        [FAIL]
+test/test_helper.rb      test/test_helper.rb              211       3986          1          1        [FAIL]
+test/test_helper.rb      test/test_mail.rb                 47        215          0          0        [PASS]
+test/test_helper.rb      test/test_mbox.rb                 12         63          0          0        [PASS]
+test/test_helper.rb      test/test_port.rb                 31        118          0          0        [PASS]
+test/test_helper.rb      test/test_quote.rb                11         11          0          0        [PASS]
+test/test_helper.rb      test/test_scanner.rb               3        117          0          0        [PASS]
+test/test_helper.rb      test/test_utils.rb                 3          3          0          0        [PASS]
+test/test_mail.rb        test/test_address.rb              76       1901          0          1        [FAIL]
+test/test_mail.rb        test/test_attachments.rb          50        219          0          0        [PASS]
+test/test_mail.rb        test/test_base64.rb               50       1645          0          0        [PASS]
+test/test_mail.rb        test/test_encode.rb               49        242          0          0        [PASS]
+test/test_mail.rb        test/test_header.rb              114        527          1          0        [FAIL]
+test/test_mail.rb        test/test_helper.rb               47        215          0          0        [PASS]
+test/test_mail.rb        test/test_mail.rb                 47        215          0          0        [PASS]
+test/test_mail.rb        test/test_mbox.rb                 59        278          0          0        [PASS]
+test/test_mail.rb        test/test_port.rb                 78        333          0          0        [PASS]
+test/test_mail.rb        test/test_quote.rb                58        226          0          0        [PASS]
+test/test_mail.rb        test/test_scanner.rb              50        332          0          0        [PASS]
+test/test_mail.rb        test/test_utils.rb                50        218          0          0        [PASS]
+test/test_mbox.rb        test/test_address.rb              41       1749          0          1        [FAIL]
+test/test_mbox.rb        test/test_attachments.rb          15         67          0          0        [PASS]
+test/test_mbox.rb        test/test_base64.rb               15       1493          0          0        [PASS]
+test/test_mbox.rb        test/test_encode.rb               14         90          0          0        [PASS]
+test/test_mbox.rb        test/test_header.rb               79        375          1          0        [FAIL]
+test/test_mbox.rb        test/test_helper.rb               12         63          0          0        [PASS]
+test/test_mbox.rb        test/test_mail.rb                 59        278          0          0        [PASS]
+test/test_mbox.rb        test/test_mbox.rb                 12         63          0          0        [PASS]
+test/test_mbox.rb        test/test_port.rb                 43        181          0          0        [PASS]
+test/test_mbox.rb        test/test_quote.rb                23         74          0          0        [PASS]
+test/test_mbox.rb        test/test_scanner.rb              15        180          0          0        [PASS]
+test/test_mbox.rb        test/test_utils.rb                15         66          0          0        [PASS]
+test/test_port.rb        test/test_address.rb              60       1804          0          1        [FAIL]
+test/test_port.rb        test/test_attachments.rb          34        122          0          0        [PASS]
+test/test_port.rb        test/test_base64.rb               34       1548          0          0        [PASS]
+test/test_port.rb        test/test_encode.rb               33        145          0          0        [PASS]
+test/test_port.rb        test/test_header.rb               98        430          1          0        [FAIL]
+test/test_port.rb        test/test_helper.rb               31        118          0          0        [PASS]
+test/test_port.rb        test/test_mail.rb                 78        333          0          0        [PASS]
+test/test_port.rb        test/test_mbox.rb                 43        181          0          0        [PASS]
+test/test_port.rb        test/test_port.rb                 31        118          0          0        [PASS]
+test/test_port.rb        test/test_quote.rb                42        129          0          0        [PASS]
+test/test_port.rb        test/test_scanner.rb              34        235          0          0        [PASS]
+test/test_port.rb        test/test_utils.rb                34        121          0          0        [PASS]
+test/test_quote.rb       test/test_address.rb              40       1697          0          1        [FAIL]
+test/test_quote.rb       test/test_attachments.rb          14         15          0          0        [PASS]
+test/test_quote.rb       test/test_base64.rb               14       1441          0          0        [PASS]
+test/test_quote.rb       test/test_encode.rb               13         38          0          0        [PASS]
+test/test_quote.rb       test/test_header.rb               78        323          1          0        [FAIL]
+test/test_quote.rb       test/test_helper.rb               11         11          0          0        [PASS]
+test/test_quote.rb       test/test_mail.rb                 58        226          0          0        [PASS]
+test/test_quote.rb       test/test_mbox.rb                 23         74          0          0        [PASS]
+test/test_quote.rb       test/test_port.rb                 42        129          0          0        [PASS]
+test/test_quote.rb       test/test_quote.rb                11         11          0          0        [PASS]
+test/test_quote.rb       test/test_scanner.rb              14        128          0          0        [PASS]
+test/test_quote.rb       test/test_utils.rb                14         14          0          0        [PASS]
+test/test_scanner.rb     test/test_address.rb              32       1803          0          1        [FAIL]
+test/test_scanner.rb     test/test_attachments.rb           6        121          0          0        [PASS]
+test/test_scanner.rb     test/test_base64.rb                6       1547          0          0        [PASS]
+test/test_scanner.rb     test/test_encode.rb                5        144          0          0        [PASS]
+test/test_scanner.rb     test/test_header.rb               70        429          1          0        [FAIL]
+test/test_scanner.rb     test/test_helper.rb                3        117          0          0        [PASS]
+test/test_scanner.rb     test/test_mail.rb                 50        332          0          0        [PASS]
+test/test_scanner.rb     test/test_mbox.rb                 15        180          0          0        [PASS]
+test/test_scanner.rb     test/test_port.rb                 34        235          0          0        [PASS]
+test/test_scanner.rb     test/test_quote.rb                14        128          0          0        [PASS]
+test/test_scanner.rb     test/test_scanner.rb               3        117          0          0        [PASS]
+test/test_scanner.rb     test/test_utils.rb                 6        120          0          0        [PASS]
+test/test_utils.rb       test/test_address.rb              32       1689          0          1        [FAIL]
+test/test_utils.rb       test/test_attachments.rb           6          7          0          0        [PASS]
+test/test_utils.rb       test/test_base64.rb                6       1433          0          0        [PASS]
+test/test_utils.rb       test/test_encode.rb                5         30          0          0        [PASS]
+test/test_utils.rb       test/test_header.rb               70        315          1          0        [FAIL]
+test/test_utils.rb       test/test_helper.rb                3          3          0          0        [PASS]
+test/test_utils.rb       test/test_mail.rb                 50        218          0          0        [PASS]
+test/test_utils.rb       test/test_mbox.rb                 15         66          0          0        [PASS]
+test/test_utils.rb       test/test_port.rb                 34        121          0          0        [PASS]
+test/test_utils.rb       test/test_quote.rb                14         14          0          0        [PASS]
+test/test_utils.rb       test/test_scanner.rb               6        120          0          0        [PASS]
+test/test_utils.rb       test/test_utils.rb                 3          3          0          0        [PASS]
+TOTAL                                                    5064      95664         24         24
+
+-- Failures and Errors --
+
+Loaded suite -e
+Started
+...............E.............
+Finished in 0.095256 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+29 tests, 1686 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E................
+Finished in 0.105752 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 1690 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E................
+Finished in 0.186971 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 3116 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E...............
+Finished in 0.107076 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+31 tests, 1713 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F.............................................................................E...............
+Finished in 0.127074 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+  2) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+96 tests, 1998 assertions, 1 failures, 1 errors
+Loaded suite -e
+Started
+...............E.............
+Finished in 0.094599 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+29 tests, 1686 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E............................................................
+Finished in 0.142425 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+76 tests, 1901 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...........................E.............
+Finished in 0.164831 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+41 tests, 1749 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..............................................E.............
+Finished in 0.167203 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+60 tests, 1804 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E........................
+Finished in 0.102978 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+40 tests, 1697 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..................E.............
+Finished in 0.103419 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 1803 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E................
+Finished in 0.094892 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 1689 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+...............E................
+Finished in 0.107364 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 1690 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.050516 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 316 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+...............E................
+Finished in 0.181623 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 3116 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.123416 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 1742 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+...............E...............
+Finished in 0.108171 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+31 tests, 1713 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F..................................................................
+Finished in 0.051321 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+69 tests, 339 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F.............................................................................E...............
+Finished in 0.127828 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+  2) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+96 tests, 1998 assertions, 1 failures, 1 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.050633 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 316 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.123302 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 1742 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F..................................................................
+Finished in 0.051097 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+69 tests, 339 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F................................................................
+Finished in 0.042483 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+67 tests, 312 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F................................................................
+Finished in 0.045175 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+67 tests, 312 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F...............................................................................................................
+Finished in 0.082539 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+114 tests, 527 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F............................................................................
+Finished in 0.08958 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+79 tests, 375 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F...............................................................................................
+Finished in 0.08739 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+98 tests, 430 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F...........................................................................
+Finished in 0.047858 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+78 tests, 323 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.047838 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 429 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.045607 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 315 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+...............E.............
+Finished in 0.094401 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+29 tests, 1686 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F................................................................
+Finished in 0.04508 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+67 tests, 312 assertions, 1 failures, 0 errors
+Loaded suite .
+Started
+..F...........................................................................................................................E....................................................................................
+Finished in 0.425147 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+  2) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+211 tests, 3986 assertions, 1 failures, 1 errors
+Loaded suite -e
+Started
+...............E............................................................
+Finished in 0.142091 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+76 tests, 1901 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...............................................................................................................
+Finished in 0.083532 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+114 tests, 527 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+...........................E.............
+Finished in 0.154959 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+41 tests, 1749 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F............................................................................
+Finished in 0.086501 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+79 tests, 375 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..............................................E.............
+Finished in 0.172243 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+60 tests, 1804 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...............................................................................................
+Finished in 0.105874 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+98 tests, 430 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+...............E........................
+Finished in 0.103469 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+40 tests, 1697 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...........................................................................
+Finished in 0.047818 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+78 tests, 323 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+..................E.............
+Finished in 0.103414 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 1803 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.04758 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 429 assertions, 1 failures, 0 errors
+Loaded suite -e
+Started
+...............E................
+Finished in 0.104814 seconds.
+
+  1) Error:
+test_parse__rawjp(TestAddress):
+TMail::SyntaxError: parse error on token error
+    parser.y:379:in `on_error'
+    parser.y:379:in `_racc_yyparse_c'
+    parser.y:375:in `scan'
+    parser.y:375:in `parse_in'
+    racc/parser.rb:152:in `_racc_yyparse_c'
+    racc/parser.rb:152:in `__send__'
+    racc/parser.rb:152:in `yyparse'
+    parser.y:366:in `parse'
+    parser.y:344:in `parse'
+    ./test/../lib/tmail/address.rb:84:in `parse'
+    ./test/test_address.rb:90:in `validate_case__address'
+    ./test/test_address.rb:247:in `_test_parse__euc'
+    ./test/test_address.rb:237:in `test_parse__rawjp'
+
+32 tests, 1689 assertions, 0 failures, 1 errors
+Loaded suite -e
+Started
+..F...................................................................
+Finished in 0.045485 seconds.
+
+  1) Failure:
+test_ATTRS(ContentDispositionHeaderTester)
+    [./test/test_header.rb:824:in `_test_raw_iso2022jp'
+     ./test/test_header.rb:756:in `test_ATTRS']:
+<"attachment"> expected but was
+<nil>.
+
+70 tests, 315 assertions, 1 failures, 0 errors
+
+

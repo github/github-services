@@ -1,0 +1,31 @@
+
+.container{
+  width: 800px;
+  margin: 0 auto;
+  padding: 10px 20px 10px 20px;
+}
+
+.logo {
+  float: right;
+  width: 150px;
+  padding: 0 0 10px 0;
+  text-align: right;
+}
+
+.menu {
+  margin-top: 30px;
+  width: 650px;
+}
+
+.menu a {
+  text-decoration: none;
+}
+
+.main {
+  clear: both;
+  padding: 10px 20px;
+}
+
+.footer {
+  margin: 30px 0 10px 0;
+}

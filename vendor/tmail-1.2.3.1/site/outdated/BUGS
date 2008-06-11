@@ -1,0 +1,3 @@
+* mails may be deleted if other precesses are touching mailbox.
+* mails may be corrupted if other precesses are touching mailbox.
+* not thread safe

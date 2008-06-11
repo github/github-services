@@ -1,0 +1,247 @@
+<h1>Address Classes</h1>
+
+<h2><code>class <a name="TMail%3a%3aAddress">TMail::Address</a> </code></h2>
+
+<h3>Class Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aAddress-parse"><code>parse(str)</code></a> -&gt; <code><a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a></code></dt>
+<dd>
+<p>
+str: String<br>
+</p>
+
+<p>
+parses the string and creates a new <code>TMail::Address</code> object.
+If the string does not follow the standard internet address format, a
+<code>TMail::SyntaxError</code> exception is raised.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-new"><code>new(locals, <var>domains</var>)</code></a> -&gt; <code><a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a></code></dt>
+<dd>
+<p>
+locals: [String]<br>
+domains: [String]<br>
+</p>
+
+<p>
+creates a new <code>TMail::Address</code> object consisting of the local part,
+LOCALS and domain part <var>domains</var>.
+</p>
+
+</dd>
+</dl>
+<h3>Instance Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aAddress-address_group%3f"><code>address_group?</code></a> -&gt; <code>true | false</code></dt>
+<dd>
+<p>
+returns false.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-spec"><code>spec</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+an address spec ("....@....").
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-routes"><code>routes</code></a> -&gt; <code>[String]</code></dt>
+<dd>
+<p>
+delivery routes. Strings do not include character "@".
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-name"><code>name</code></a> -&gt; <code>String</code></dt>
+<dt><a name="TMail%3a%3aAddress-phrase"><code>phrase</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+short description for this address (e.g. real name).
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-encoded"><code>encoded(eol = "\r\n", <var>encoding</var> = 'j')</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+converts this object into MIME-encoded string.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-to_s"><code>to_s(eol = "\n", <var>encoding</var> = 'e')</code></a> -&gt; <code>String</code></dt>
+<dt><a name="TMail%3a%3aAddress-decoded"><code>decoded(eol = "\n", <var>encoding</var> = 'e')</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+converts this object into decoded string.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-%3d%3d"><code>==(other)</code></a> -&gt; <code>true | false</code></dt>
+<dd>
+<p>
+other: Object<br>
+</p>
+
+<p>
+judge if self equals to other by inspecting addr-spec string (#spec).
+#name and #routes never affects the return value.
+</p>
+
+
+</dd>
+</dl>
+<h2><code>class <a name="TMail%3a%3aAddressGroup">TMail::AddressGroup</a> </code></h2>
+
+<h3>Class Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aAddressGroup-new"><code>new(name, <var>addrs</var>)</code></a> -&gt; <code><a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a></code></dt>
+<dd>
+<p>
+name: String<br>
+addrs: [<a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a>]<br>
+</p>
+
+<p>
+creates new <code>TMail::AddressGroup</code> object.
+NAME is the name of this group, <var>addrs</var> is addresses
+which belongs to this group.
+</p>
+
+</dd>
+</dl>
+<h3>Instance Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aAddressGroup-address_group%3f"><code>address_group?</code></a> -&gt; <code>true | false</code></dt>
+<dd>
+<p>
+returns true.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-name"><code>name</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+the human readable name of this group.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-addresses"><code>addresses</code></a> -&gt; <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a>]</code></dt>
+<dd>
+<p>
+addresses which belongs to this group.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-to_a"><code>to_a</code></a> -&gt; <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a>]</code></dt>
+<dt><a name="TMail%3a%3aAddressGroup-to_ary"><code>to_ary</code></a> -&gt; <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a>]</code></dt>
+<dd>
+<p>
+equals to <code>addresses.dup</code>.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-flatten"><code>flatten</code></a> -&gt; <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dd>
+<p>
+flatten this group into one level of array of <code>TMail::Address</code>.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-add"><code>add(addr)</code></a></dt>
+<dt><a name="TMail%3a%3aAddressGroup-push"><code>push(addr)</code></a></dt>
+<dd>
+<p>
+addr: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a><br>
+</p>
+
+<p>
+adds an address or an address group to this group.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-delete"><code>delete(addr)</code></a></dt>
+<dd>
+<p>
+addr: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a><br>
+</p>
+
+<p>
+removes ADDR from this group.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-each%20%7b%7ca%7c%20%2e%2e%2e%2e%20%7d"><code>each {|a| .... }</code></a></dt>
+<dd>
+<p>
+a: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a><br>
+</p>
+
+<p>
+equals to <code>addresses.each {|a| .... }</code>.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-each_address%20%7b%7ca%7c%20%2e%2e%2e%2e%20%7d"><code>each_address {|a| .... }</code></a></dt>
+<dd>
+<p>
+a: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a><br>
+</p>
+
+<p>
+equals to <code>flatten.each {|a| .... }</code>
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-encoded"><code>encoded(eol = "\r\n", <var>encoding</var> = 'j')</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+converts this object into MIME-encoded string.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-decoded"><code>decoded(eol = "\n", <var>encoding</var> = 'e')</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+converts this object into decoded string.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-%3d%3d"><code>==(other)</code></a> -&gt; <code>true | false</code></dt>
+<dt><a name="TMail%3a%3aAddressGroup-eql%3f"><code>eql?(other)</code></a> -&gt; <code>true | false</code></dt>
+<dd>
+<p>
+other: Object<br>
+</p>
+
+<p>
+judges if self is equal to OTHER, by comparing <code>self.addresses</code> and
+<code>other.addresses</code>. (<code>self.name</code> is meanless)
+</p>
+</dd>
+</dl>
+

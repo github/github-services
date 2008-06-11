@@ -1,0 +1,52 @@
+    <h1>TMail Quick Start Guide</h1>
+
+    <div class="guide">
+      <p>TMail is an E-Mail handling library.  It provides you with access to
+      any email you wrap it around as an object.</p>
+
+      <h2>Unix like OSes</h2>
+
+      <ol>
+        <li>
+          Download the <a href="../download/index.html">
+          latest release</a> gem from the RubyForge TMail project. 
+        </li>
+        <li>
+          Run gem install from the directory where you saved the gem:
+
+<pre class="shell">
+  $ gem install tmail
+</pre>
+
+        </li>
+        <li>
+          That's it!
+          <br />
+          <br />
+          TMail installs into the ruby_lib_path/gems/ folder just like any other
+          well behaved gem and allows you to require it thusly:<br />
+        </li>
+
+<pre class="shell">
+  irb(main):001:0> require 'rubygems'
+  irb(main):002:0> require 'tmail'
+  irb(main):003:0> email = TMail::Mail.load("my_raw_email.txt")
+  irb(main):004:0> puts email.to
+  => mikel@example.com
+  irb(main):005:0> email.to = 'mikel@somewhere.else.com'
+  => "mikel@somewhere.else.com"
+  irb(main):006:0> email.cc = 'mikel@another.place.com'
+  => mikel@another.place.com
+  irb(main):007:0> email.destinations
+  => ["mikel@somewhere.else.com", "mikel@another.place.com"]
+</pre>
+
+      </ol>
+
+      <h2>UnUnix like OSes (Windows etc)</h2>
+
+      <p>Just do the same as the above... just gem install tmail.  If TMail can
+        find a compiler on your system, it will compile the native C extensions,
+        if it can't find a compiler, it will just install the Ruby version. Easy
+        hey?</p>
+		</div>

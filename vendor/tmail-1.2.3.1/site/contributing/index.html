@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf8">
+  <meta http-equiv="Content-Language" content="en">
+
+  <link rel="stylesheet" href="../css/clean.css" type="text/css" media="screen, projection, print"/>
+  <link rel="stylesheet" href="../css/layout.css" type="text/css" media="screen, projection, print"/>
+  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen, projection, print"/>
+
+  <link rel="icon" href="../img/tfire.jpg" type="image/x-icon"/>
+
+  <title>TMail &mdash; Contributing to the best Ruby email handler ever!</title>
+
+ <script type="text/javascript" src="../js/jquery.js"></script>
+
+</head>
+<body>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+  _uacct = "UA-2871747-1";
+  urchinTracker();
+  </script>
+
+<div class="container">
+
+  <div class="logo">
+    <img src="../img/stamp-sm.jpg"/>
+  </div>
+
+  <div class="title">
+    <h1>TMail</h1>
+    <h2>Ruby on Mail</h2>
+  </div>
+
+  <div class="menu">
+    &nbsp;
+    <a href="../index.html">Home</a> &nbsp;&nbsp;
+    <a href="../quickstart/index.html">Quickstart</a> &nbsp;&nbsp;
+    <a href="http://lindsaar.net/tmail/" onClick="javascript:urchinTracker('/outgoing/rubyforge.org/blog_page');">Blog</a> &nbsp;&nbsp;
+    <a href="http://rubyforge.org/frs/?group_id=4512" onClick="javascript:urchinTracker('/outgoing/rubyforge.org/download_page');">Download</a> &nbsp;&nbsp;
+    <a href="http://rubyforge.org/mailman/listinfo/tmail-talk">Mailing List</a> &nbsp;&nbsp;
+    <a href="../reference/index.html">Reference</a> &nbsp;&nbsp;
+    <a href="../rdoc/index.html">RDocs</a> &nbsp;&nbsp;
+    <a href="http://rubyforge.org/projects/tmail/" onClick="javascript:urchinTracker('/outgoing/rubyforge.org/project_page');">Project</a> &nbsp;&nbsp;
+    <a href="../contributing/index.html">Contributing</a>
+  </div>
+  
+  <div class="main">
+    <h1>Contributing to TMail</h1>
+    
+    <p>
+      Here is a blunt truth, TMail is what we (that is you and me) make it.
+    </p>
+    
+    <p>
+      I have had a few people asking how to contribute to TMail, so I thought I
+      would quickly do a write up on how to go about it.
+    </p>
+      
+    <p>
+      First things first, go to the <a href="http://rubyforge.org/mailman/listinfo/tmail-talk" 
+      title="Tmail-talk Info Page">TMail Mailing list</a> and subscribe and let us
+      know what you want to attack, while this is definitely not a requirement to
+      writing a patch, maybe someone else has the same problem and / or is mid
+      fixing it, plus, we're basically a nice bunch of people ;)
+    </p>
+      
+    <p>
+      Then, if you are new to this sort of thing you should go and read this great write up
+      by <a href="http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/" 
+      title="Dr Nic    &raquo; 8 steps for fixing other people&#8217;s code">Dr Nic</a>
+      which covers the basic steps on how to check out, patch and submit fixes to 
+      code.  This also applied very well to TMail.
+    </p>
+      
+    <p>
+      Then, you need to get a copy of the latest TMail trunk code.  You do this like so:
+    </p>
+
+<pre class="shell">
+baci:~ mikel$ svn checkout http://tmail.rubyforge.org/svn/trunk tmail
+</pre>
+
+    <p>
+      This will check out the most recent version of TMail from the source tree at
+      RubyForge.  Once you have this, the first thing you should do is run the test
+      suite.  There are over 4000 assertions run by the test suite to make sure all
+      is OK.  This also gives you a stable datum of "When I got it, it was working
+      so I just have to make sure it stays working...".  To run the tests, do this:
+    </p>
+    
+
+<pre class="shell">
+baci:~ mikel$ cd tmail
+baci:~/tmail mikel$ rake test
+(in /Users/mikel/tmail)
+/usr/local/bin/ruby -Ilib:test ((SNIP))
+Loaded suite /usr/local/lib/ruby/gems/1.8/gems/rake-0.8.1/lib/rake/rake_test_loader
+Started
+........................................................................
+........................................................................
+............................................................
+Finished in 0.456426 seconds.
+
+204 tests, 4014 assertions, 0 failures, 0 errors
+</pre>
+
+    <p>
+      If you get any errors at this point, post to the TMail Mailing list and let us
+      know, tell us what version of Ruby you are running, and what platform you are on
+      as well as any error output from the tests.  If you can fix it, go ahead!
+    </p>
+    
+    <p>
+      Now that you have the trunk version, you need to write your patch and submit it.
+      If you are making a code change, you should write a test driven change, if you 
+      are new to this, you can find a great screen cast by James Edward Gray II on
+      <a href="http://macromates.com/screencast/ruby_quiz_screencast.mov">TDD with Textmate.</a>
+      This will give you the basics of what a test drive change is and how to go about it.
+      For all you RSpec fans, I am seriously considering moving the testing framework over
+      to BDD and RSpec, if you want to get on board and help out, that would be great!
+    </p>
+    
+    <p>
+      Once you have written your test, run rake test again and watch it fail. This is a
+      key part of Test Driven Development.  Then write your change in the code.
+    </p>
+    
+    <p>
+      Once you have written your code, run rake test again, and your test should now pass
+      and every OTHER test should also pass.  If this is the case, then well done!  You
+      have just made a test driven change to the TMail library.
+    </p>
+    
+    <p>
+      Now you need to make the diff file of what you have done against the library.  You
+      do this using the svn diff command.  First however, you should update your code, just
+      in case someone else has updated the source tree between you checking it out and
+      writing your patch.  So, you do both like this:
+    </p>
+    
+<pre class="shell">
+baci:~/tmail mikel$ svn up
+At revision 206.
+baci:~/tmail mikel$ svn diff > my_well_named_patch_file.diff
+baci:~/tmail mikel$ 
+</pre>
+
+    <p>
+      Note: If while doing the SVN UP anything was updated, you should re-run your
+      tests using rake test to make sure your patch didn't just go stale :)
+    </p>
+    
+    <p>
+      Next step is peer review.  Go open a patch ticket on the 
+      <a href="http://rubyforge.org/tracker/?group_id=4512" title="RubyForge: TMail:">
+      RubyForge tracker</a>, in it, select the right category and group for the patch
+      you have made (if there isn't one that matches, leave it as none and then mention
+      this in the description field).  Give your ticket a name, and then attach your file.
+    </p>
+    
+    <p>
+      It is a good idea to then go to the TMail Talk list and let everyone know about your
+      patch.  Then we can check it out, suggest changes or commit it if all is good.
+    </p>
+    
+    <p>
+      That's it!  Easy hey?  Once you have submitted patches, it gets easier and you get
+      to bask in the glory of being a committer to Ruby's most popular mail handling
+      library.
+    </p>
+
+  </div>
+
+  <div class="footer">
+    Copyright (c) 2007 TMail Project &reg; All Rights Reserved
+  </div>
+
+</div>
+</body>
+</html>

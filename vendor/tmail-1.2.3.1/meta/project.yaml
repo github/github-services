@@ -1,0 +1,30 @@
+---
+project : tmail
+version : 1.2.3.1
+status  : production
+title   : TMail
+brief   : Ruby Mail Handler
+contact : Mikel Lindsaar <raasdnil AT gmail.com>
+email   : tmail-talk@rubyforge.org
+homepage: http://tmail.rubyforge.org
+authors :
+  - Minero Aoki
+  - Mikel Lindsaar
+
+description:
+  TMail is a Ruby-based mail handler. It allows you
+  to compose stadards compliant emails in a
+  very Ruby-way.
+
+loadpath:
+  - lib
+  - ext/tmailscanner
+
+exclude: [doc,work]
+
+hosts:
+  rubyforge:
+    type: rubyforge
+  rubytalk:
+    type: rubytalk
+

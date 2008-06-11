@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+  <title>TMail &mdash; A Ruby Email Handler</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf8">
+  <meta http-equiv="Content-Language" content="en">
+
+  <link rel="stylesheet" href="css/clean.css" type="text/css" media="screen, projection, print"/>
+  <link rel="stylesheet" href="css/layout.css" type="text/css" media="screen, projection, print"/>
+  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen, projection, print"/>
+
+  <link rel="icon" href="img/tfire.jpg" type="image/x-icon"/>
+
+  <script type="text/javascript" src="js/jquery.js"></script>
+
+  <script>
+    $(document).ready(function(){
+      $("#logo_img").hover(function () {
+        $(this).fadeOut('normal', function() {
+          $(this).attr('src', 'img/mailman.gif');
+          $(this).fadeIn('normal');
+        });
+      }, function () {
+        $(this).fadeOut('normal', function() {
+          $(this).attr('src', 'img/stamp-sm.jpg');
+          $(this).fadeIn('normal');
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+  _uacct = "UA-2871747-1";
+  urchinTracker();
+  </script>
+
+<div class="container">
+
+  <div style="height: 155px;">
+    <div class="logo">
+      <img id="logo_img" src="img/stamp-sm.jpg"/>
+    </div>
+
+    <div class="title">
+      <h1>TMail</h1>
+      <h2>Ruby on Mail</h2>
+    </div>
+
+    <div class="menu">
+      &nbsp;
+      <a href="index.html">Home</a> &nbsp;&nbsp;
+	    <a href="/quickstart/index.html">Quickstart</a> &nbsp;&nbsp;
+	    <a href="http://lindsaar.net/tmail/" onClick="javascript:urchinTracker('/outgoing/rubyforge.org/blog_page');">Blog</a> &nbsp;&nbsp;
+	    <a href="http://rubyforge.org/frs/?group_id=4512" onClick="javascript:urchinTracker('/outgoing/rubyforge.org/download_page');">Download</a> &nbsp;&nbsp;
+	    <a href="http://rubyforge.org/mailman/listinfo/tmail-talk">Mailing List</a> &nbsp;&nbsp;
+	    <a href="./reference/index.html">Reference</a> &nbsp;&nbsp;
+	    <a href="./rdoc/index.html">RDocs</a> &nbsp;&nbsp;
+	    <a href="http://rubyforge.org/projects/tmail/" onClick="javascript:urchinTracker('/outgoing/rubyforge.org/project_page');">Project</a> &nbsp;&nbsp;
+			<a href="./contributing/index.html">Contributing</a>
+    </div>
+  </div>
+
+  <div class="main">
+    <h1>Ruby Email Handler</h1>
+
+    <div class="about">
+      <p>TMail is an email handler library for Ruby. TMail can
+      extract data from mail, and write data to mail following
+      the relevant RFCs on the subject.</p>
+
+      <p>You can get the latest version of TMail from the TMail
+      <a href="http://rubyforge.org/frs/?group_id=4512&amp;release_id=15889"
+      title="RubyForge: TMail: Project Filelist">RubyForge</a> project
+      or via Ruby Gems "tmail"</p>
+
+      <p>TMail is written in Ruby and a (very) small bit of supporting C
+      that has pure ruby replacements if you can't compile on your computer.
+      This means TMail will work, out of the box, on any platform that
+      can run Ruby 1.8 or Ruby 1.9.</p>
+
+      <p>TMail is a commonly used library and is production ready. The 
+      ActionMailer component of Ruby on Rails uses it as well as the the
+      Nitro web framework and many and others - including the Ruby-Talk mail gateway.</p>
+
+      <p>What TMail does is allow you to play with Emails like you would
+      any Ruby object.  So to change the To address of an email, instead
+      of something like:</p>
+
+<pre class="ruby">
+  my_message = "From mikel@example.org\nReceived by.... etc"
+  my_message.sub(/^To: .*?@.*?$/, "To: mikel@elsewhere.org")
+</pre>
+
+      <p>Which (a) will break easily and (b) is just not the Ruby-Way&trade; You can do:</p>
+
+<pre class="ruby">
+  email = TMail::Mail.parse("From mikel@example.org\nReceived by.... etc")
+  email['to'] = 'mikel@elsewhere.org'
+</pre>
+
+      <p>And TMail will take care of the details.  Isn't that nicer?</p>
+
+      <p>TMail was created by Minero Aoki. It is currently maintained 
+      by <a href="http://lindsaar.net/">Mikel</a> and Trans as 
+      a <a href="http://rubyforge.org/projects/tmail/"
+      title="RubyForge: TMail: Project Info">RubyForge Project</a> &nbsp;&nbsp;.</p>
+
+      <p>For the impatient there is a <a href="quickstart/index.html">
+      quickstart</a> guide that will get you up and running with TMail
+      in a few minutes, for the rest, there is the full documentation by
+      <a href="rdoc/index.html">RDoc</a> (comming soon) as well as an online 
+      <a href="manual/index.html">user manual</a> (needs updating).</p>
+    </div>
+
+    <div class="important_note">
+      <h2>Important Note For Rails and Nitro Users</h2>
+			
+			<p>If you are using the Rails or the Nitro Web Framework, and are reading this
+			page, you probably know that your framework of choice uses TMail as it's email
+			handler library already.</p>
+			
+			<p>What you may not know, is that if you install the latest TMail gem, your 
+			library will use the latest Gem version. Nitro does this because it lists 
+			TMail as a dependency, Rails does this because since 2.0RC1, the ActionMailer
+			section of Rails checks for a newer version of the TMail gem as it is loading 
+			up and if it finds a Gem version newer than 1.1.0, it will load the Gem version
+			instead of the bundled version.</p>
+			
+			<p>So to take advantage of the bug fixes, you can do:</p>
+			
+<pre class="shell">
+$ sudo gem install tmail
+</pre>
+			
+			<p>And get the latest version installed (1.2) and your web framework will 
+			automatically update.</p>
+			
+			<p>Rails 1.2 can not do this directly, but if you go to the 
+			<a href="http://lindsaar.net/2007/12/11/using-tmail-gem-in-rails-1-2-6"
+			title="lindsaar.net  Using TMail Gem in Rails 1.2.6">TMail blog</a>, I have
+			written up how to patch ActionMailer 1.2.x to load the gem version of TMail
+			in preference to the bundled version.</p>
+
+		</div>
+
+    <div class="news">
+      <h2>News</h2>
+
+      <ul>
+        <li>15th of January, 2007
+          <a href="http://rubyforge.org/forum/forum.php?forum_id=20747">
+            TMail Trunk is now compatible with Ruby 1.9</a> - Next release (1.2.2) will include this 1.9 compatibility, if you need this now, you can get it by getting the source code with 'svn checkout -r 197 http://tmail.rubyforge.org/svn/trunk/ TMail'
+        </li>
+        <li>11th of January, 2007
+          <a href="http://rubyforge.org/frs/?group_id=4512&release_id=18049">
+            New Release - 1.2.1</a> - Bug fixes on address handling as well as unix mailbox handling. More documentation and tests as well.
+        </li>
+        <li>14th of December, 2007
+          <a href="http://tmail.rubyforge.org/rdoc/index.html">
+            New RDoc Put online</a> - Fixed up and released a lot more examples and comments for the TMail::Mail class.
+        </li>
+        <li>2nd of December, 2007
+          <a href="https://rubyforge.org/frs/?group_id=4512&release_id=16737">
+            New Release - 1.2.0</a> - bug fixes for Attachments and the pure Ruby version of Scanner
+        </li>
+        <li>19th of November, 2007
+          <a href="http://rubyforge.org/tracker/index.php?func=detail&aid=15445&group_id=4512&atid=17370">
+            Create forward now returns a mail object in trunk</a>
+        </li>
+        <li>8th of November, 2007
+          <a href="http://rubyforge.org/forum/forum.php?forum_id=18816">
+            New Release - 1.1.1</a> - bug fixes &amp; Windows/Unix in one Gem
+        </li>
+        <li> 30th of October, 2007
+          <a href="http://rubyforge.org/forum/forum.php?forum_id=18551">
+            New Release - 1.1.0</a> - Now a Gem!
+        </li>
+        <li> 24th of October, 2007
+          <a href="http://rubyforge.org/frs/?group_id=4512&amp;release_id=15695">
+            New Release - 0.11.0
+          </a>
+        </li>
+        <li> 23rd of October, 2007
+          <a href="http://rubyforge.org/forum/forum.php?forum_id=18391">
+            TMail Talk Mailing List Created
+          </a>
+        </li>
+      </ul>
+
+      <br />
+      <a href="http://rubyforge.org/news/?group_id=4512">More TMail News...</a>
+    </div>
+
+    <br />
+
+    <div class="docs">
+      <h2>Documentation</h2>
+
+			<p>Documentation is the focus of development right now, so be sure to check
+				back with what is happening.  Each new release adds some more documentation
+				to the mix.  If you want to help out, please let us know!</p>
+				
+			<p>In the mean time, you can select from below, you can also always ask questions
+				to the <a href="http://rubyforge.org/mailman/listinfo/tmail-talk">TMail-Talk</a>
+				Mailing list and we will do our best to answer.</p>
+
+      <ul>
+      <li><a href="quickstart/index.html">Quick Start Guide</a></li>
+      <li><a href="manual/index.html">User Manual - needs updating</a></li>
+      <li><a href="rdoc/index.html">RDocs - now online!</a></li>
+      </ul>
+    </div>
+
+    <br />
+
+    <div class="development">
+      <h2>Developement</h2>
+
+      <p>
+        If you want to help with the TMail project, please see our
+        <a href="http://tmail.rubyforge.org/contributing/index.html" 
+        title="TMail &mdash; Contributing to the best Ruby email handler ever!">
+        contributing to TMail</a> page.
+      </p>
+      
+      <p>Right now we could do with a lot of documentation work, dive in and send
+        your patches!</p>
+      
+      <p>For the impatient, anonymous subversion repository is accessable via:</p>
+
+<pre class="shell">
+$ svn checkout http://tmail.rubyforge.org/svn/trunk/ tmail
+</pre>
+
+      <p>Use the following links to view or sumbit Bugs, Patches and Feature Requests:</p>
+      <ul>
+      <li>
+        <a href="http://rubyforge.org/tracker/?group_id=4512">
+          Review All
+        </a>
+      </li>
+      <li>
+        <a href="http://rubyforge.org/tracker/?func=add&amp;group_id=4512&amp;atid=17370">
+         Report a Bug
+        </a>
+      </li>
+      <li>
+        <a href="http://rubyforge.org/tracker/?func=add&amp;group_id=4512&amp;atid=17373">
+         Request a Feature
+        </a>
+      </li>
+      <li>
+        <a href="http://rubyforge.org/tracker/?func=add&amp;group_id=4512&amp;atid=17372">
+         Submit a Patch
+        </a>
+      </li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="footer">
+    Copyright (c) 2007 TMail Project &reg; All Rights Reserved
+  </div>
+</div>
+</body>
+</html>

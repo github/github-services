@@ -1,0 +1,14 @@
+To: これはデコード済 <aamine@dp.u-netsurf.ne.jp>
+From: =?iso-2022-jp?B?GyRCJDMkbCRPJSglcyUzITwlSSQ1JGwkRiQkJD8bKEI=?=
+ <myself@softica.or.jp>
+Received: from fromdom.fromdom by bydom.bydom
+ via VIAPATH with SMTP id <msgid@tmail> for addr@spec
+ ; 23 Mar 1999 22:05:33 +0900
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-2022-jp
+Content-Transfer-Encoding: 7bit
+Subject: this is a test subject
+
+body line 1
+body line 2
+body line 3

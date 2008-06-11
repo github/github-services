@@ -1,0 +1,89 @@
+= Incompatibilities from version 0.9 to 0.10
+
+The biggest change is that return value of some
+TMail::Mail methods have been changed. In TMail 0.10,
+ALL "<headername>" methods return an array of address
+spec strings, and ALL "<HeaderName>_addrs" methods
+return an array of TMail::Address objects.
+For example:
+
+    # mail header
+    To: Minero Aoki <aamine@loveruby.net>
+
+    # from ruby
+    TMail::Mail#to        ==  ["aamine@loveruby.net"]
+    TMail::Mail#to_addrs  ==  [#<TMail::Address>]
+
+In 0.9, this rule has not been thoroughed.
+
+== Incompatible Changes
+
+* TMail::Mail#from  (return value)
+    0.9    first friendly-from or address spec string
+    0.10   an array of address spec string for From:.
+           (use friendly_from for 0.9 action)
+
+* TMail::Mail#to  (return value) 
+    0.9    first Address object for To:
+    0.10   an array of address spec string for To:
+
+* TMail::Mail#fetch  (number of argument)
+    0.9    fetch(header_name, init_string, &block)
+    0.10   fetch(header_name)
+
+* TMail's mail parser raises TMail::SyntaxError
+  instead of ::ParseError in ALL situations.
+
+* TMail::StringPort.new  (number of argument)
+    0.9    new(str, eol, unifyeol)
+    0.10   new(str='')
+
+* TMail::HeaderField#*
+    Any methods of HeaderField (and its subclasses) are
+    subject to change without notice. Simply do not use them,
+    use TMail::Mail interface methods instead.
+
+== Compatible Changes
+
+These methods are compatible NOW, but is not in 1.0.
+
+* TMail::Mail.new  (argument semantic)
+    0.9    new(port, strict=false)
+    0.10   new(port, configuration=TMail::DEFAULT_CONFIG)
+           (use TMail::DEFAULT_CONFIG.strict_parse=true instead)
+
+* TMail::MhLoader -> TMail::MhMailbox
+* TMail::MboxLoader -> TMail::UNIXMbox
+* TMail::MaildirLoader -> TMail::Maildir
+    You can use old names as alias.
+
+
+== Obsolete Methods
+
+These methods are defined in tmail/obsolete.rb.
+Currently TMail requires it by default, but in 1.0, it does not.
+
+* TMail::Mail#from_addr
+* TMail::Mail#from_address
+* TMail::Mail#from_address=
+* TMail::Mail#from_phrase        (is #friendly_from)
+* TMail::Mail#msgid              (is #message_id)
+* TMail::Mail#msgid=             (is #message_id)
+* TMail::Mail#each_dest          (is #each_destination)
+* TMail::Mail#has_key?           (is #key?)
+* TMail::Mail#include?           (is #key?)
+* TMail::Mail#value?
+* TMail::Mail#has_value?
+* TMail::Mail#values
+* TMail::Loader#new_mail         (is #new_port)
+* TMail::Loader#each_mail        (is #each_port)
+* TMail::Loader#each_newmail     (is #each_new_port)
+* TMail.boundary                 (is .new_boundary)
+* TMail.msgid                    (is .new_message_id)
+* TMail.new_msgid                (is .new_message_id)
+* TMail::Mail.boundary           (is TMail.new_boundary)
+* TMail::Mail.msgid              (is TMail.new_message_id)
+* TMail::Mail.new_msgid          (is TMail.new_message_id)
+* TMail.loadfrom                 (is .load)
+* TMail.load_from                (is .load)
+* TMail::Address#route           (is #routes)

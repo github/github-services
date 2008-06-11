@@ -1,0 +1,169 @@
+= TMail
+
+    http://tmail.rubyforge.org/
+
+    Mikel Lindsaar   maintainer
+    Trans            assitant developer
+    Minero Aoki      original developer   
+
+== DESCRIPTION:
+
+TMail is a mail handling library for Ruby.  It abstracts a mail message into a usable object allowing you to read, set, add and delete headers and the mail body.
+
+TMail is used by the Ruby on Rails web framework as the Email abstraction layer for their ActionMailer module.  It is also used by the Nitro framework and many other applications on and off the web.
+
+The goal of the TMail handling library is to be able to parse and handle raw Email sources and produce RFC compliant Emails as a result.  If you find something that TMail does that violates an RFC, we want to know and we'll get it fixed fast.
+
+== DOCUMENTATION:
+
+The place you will want to look first is the TMail::Mail class.  This has the vast majority of methods you will be using to talk to your TMail object.
+
+== FEATURES/PROBLEMS:
+
+TMail is fairly RFC compliant on the handling of emails.
+
+There are also some problems in the header handling, but for 99.9% of email, you will be fine.  Usually, the problems revolve around parsing incomming emails and making sense of them.
+
+I really welcome any examples of Emails that "didn't work" with TMail so I can use them as test cases.
+
+== SYNOPSIS:
+
+TMail is very easy to use.  You simply require the library and then pass a raw email text message into the TMail::Mail.parse method.  This returns a TMail::Mail object which you can now query and run methods against to modify, inspect or add to the Email.
+
+You can find almost all of the methods that you will use to talk to and update a TMail instance in the TMail::Mail class.  I am constantly updating this code, with comments, added a fair bit and have a lot more to go!.
+
+=== Short Version:
+
+  irb(main):001:0> require 'tmail'
+  irb(main):002:0> raw_email = File.open("my_raw_email", 'r') { |f| @mail = f.read }
+  irb(main):003:0> email = TMail::Mail.parse(raw_email)
+  irb(main):004:0> puts email['to']
+  mikel@example.com
+  => nil
+  irb(main):005:0> email['to'] = 'mikel@somewhere.else.com'
+  => "mikel@somewhere.else.com"
+  irb(main):006:0> puts email['to']
+  mikel@somewhere.else.com
+  => nil
+
+=== Longer Version:
+
+Assuming you have a single raw email in the variable my_message, you can do the following:
+
+  require 'tmail'
+  email = TMail::Mail.parse(my_message)
+  
+This will give you a TMail::Mail class containing your parsed message.  There are other methods of opening emails through Ports.
+
+You can view this email by a simple puts:
+
+  puts email
+
+  Return-Path: <mikel@nowhere.com>
+  Date: Sun, 21 Oct 2007 19:38:13 +1000
+  From: Mikel Lindsaar <mikel@nowhere.com>
+  To: mikel@somewhere.com
+  Message-Id: <009601c813c6$19df3510$0437d30a@mikel091a>
+  Subject: Testing Email
+
+  Hello Mikel
+  
+Easy right?
+
+=== Adding a header to the EMail:
+
+Say now that you have opened your message, you want to put in a Reply-To field.  You do this like so:
+
+  email['reply-to'] = "My Email Address <my_address@anotherplace.com>"
+
+Is it really there?  Well, find out with a puts:
+
+  puts email
+
+  Return-Path: <mikel@nowhere.com>
+  Date: Sun, 21 Oct 2007 19:38:13 +1000
+  From: Mikel Lindsaar <mikel@nowhere.com>
+  Reply-To: My Email Address <my_address@anotherplace.com>
+  To: mikel@somewhere.com
+  Message-Id: <009601c813c6$19df3510$0437d30a@mikel091a>
+  Subject: Testing Email
+
+  Hello Mikel
+
+Yup looks good.
+
+=== Inspecting a header:
+
+You can then inspect your added header by doing:
+
+  email['reply-to'] # => #<TMail::AddressHeader "My Email Address <my_address@anotherplace.com>">
+
+If you just want to the actual value, not the AddressHeader object, pass to_s to this.
+
+  email['reply-to'].to_s # => "My Email Address <my_address@anotherplace.com>"
+
+=== Deleting a header:
+
+One way of deleting a header from an Email is just assigning it nil like so:
+
+  email['reply-to'] = nil # => nil
+  
+If you now puts the email again, it will not be included:
+
+  puts email
+  
+  Return-Path: <mikel@nowhere.com>
+  Date: Sun, 21 Oct 2007 19:38:13 +1000
+  From: Mikel Lindsaar <mikel@nowhere.com>
+  To: mikel@somewhere.com
+  Message-Id: <009601c813c6$19df3510$0437d30a@mikel091a>
+  Subject: Testing Email
+
+  Hello Mikel
+
+=== Writing out an Email:
+
+You can just call to_s on any email to have it serialized out as a single string with the right number of line breaks and encodings.
+
+== CONTRIBUTING:
+
+You can visit the {Contributing to TMail}[link:http://tmail.rubyforge.org/contributing/] to find out how to contribute to TMail, developers are welcome and wanted!
+
+== REQUIREMENTS:
+
+* C compiler if you want the Ruby extension for Scanner
+* Ruby 1.8 or later
+
+== INSTALLATION:
+
+* sudo gem install tmail
+
+Or manually,
+
+* sudo script/setup
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2007 FIX
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+

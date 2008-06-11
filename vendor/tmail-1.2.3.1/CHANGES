@@ -1,0 +1,74 @@
+=== 1.2.3.1 / 2008-04-11
+
+* Closed #19429 - Installing TMail on Windows with the gem
+
+=== 1.2.3 / 2008-04-11
+
+* Closed #18881 - TMail goes into an endless loop if sent an crafted email
+* Closed #19203 - TMail errors in Ruby 1.9.1 on invalid multibyte chars.
+* Closed #18814 - Fixed attchment.rb failing on mail part that had a nil content-type
+* Closed #18516 - Fix TMail::Mail#preamble, and add #preamble= (Charles Lowe) (233)
+* Applied patch #18515 to remove ftools from test case (Charles Lowe) (232)
+* A lot of documentation patches to the mail and utils and net files.  Also added "log/BugTrackingLog.txt" for myself as my bug log got clobbered by the new changelog.txt format. (231)
+
+=== 1.2.2 / 2008-03-07
+
+* Fixed install bug with gem pacakge (1.2.1 was not compiling on gem install)
+* A _LOT_ more documentation...!
+* More documentation - (Mikel)
+* Applied Ruby 1.9 patches to the library - All tests passing now - (Mikel)
+* Closed #17719 - Fixed UNIXMbox code - readonly was not working and raising an exception.  Now works.
+* Closed #18038 - Multiple froms not being parsed correctly, added a test case to cover this and show the correct handling - (Mikel)
+
+=== 1.2.1 / 2008-01-11
+
+* More documentation (Mikel)
+* Added 15 test cases from the Rails ActionMailer to TMail
+* Changed mailscanner to tmailscanner (mailscanner is copyrighted)
+* Closed Bug -  Handled quote boundary being gready on content-type header (M. Mondragon)
+* Closed #16025 - Fixed scanner.rb so it passes same tests as scanner.c
+* Closed #16283 - Handled incorrect decoding of attachments (M. Aoki - garyo)
+* Closed #16899 - HeaderField.new_from_port and added test cases to cover this code (Maarten O.)
+* Closed #16900 - UNIXMbox.fromaddr missing port param and does not return Envelope Sender (Maarten O.)
+
+=== 1.2.0 / 2007-11-29
+
+* 5 major enhancements:
+  * Extensive documentation work. (mikel)
+  * Renamed scanner_c.c to mailscanner.c. (trans)
+  * Removed base64 c extension. It's speed benefit was negligable (only 0.2 sec over 10000 sizable encode/decode runs) (trans)
+  * Closed 15445 - TMail::Mail#create_forward now returns a new Mail object that has the original mail as an encoded 7 bit multipart attachment.  Also moved create_forward and create_reply from tmail/net into tmail/interface as it makes more sense to have it there. (mikel)
+  * Closed 15643 - TMail::Mail#reply_addresses was returning an empty array if reply_to was set to nil (ie, the header field existed but was empty) instead of returning the from address or default. (mikel)
+  * Closed 16025 - TMail scanner.rb would not parse ATOM chars correctly making it fail tests where the C version passed them.  Fixed this by updating the Scanner.rb version to be in step with the C version (there was an extra @ symbol in the ATOM CHARS definition that was not in the C version.) (mikel)
+  * Fixed scanner.rb so that it would pass the same tests that the C version does - had a sundry @ symbol inside of the ATOM CHARS
+* 3 minor enhancements:
+  * Renamed scanner_c.c to tmailscanner.c (trans)
+  * Changed TMail::Mail#sender to have a default "default" value of nil to be in alignment with all the other interface methods (mikel)
+  * Made base64_decode and base64_encode into ! versions as they are destructive on the mail body (encodes the body to base64 or decodes it), made aliases for base64_decode and base64_encode to point back to the bang versions.  Doing this with a view to change base64_encode to a non destructive version (returns the encoded body) in future versions. (mikel)
+
+=== 1.1.1 / 2007-11-05
+
+* 3 major enhancement:
+  * Created unified package, for installation in any platform.
+  * Added require_arch.rb to facilitate multi-platform support.
+  * If compilation fails, set NORUBYEXT="true" and reinstall.
+* 3 minor enhancement:
+  * Fixed line wrapping of long header fields so that they wrap at the correct whitespace points.
+  * Fixed bug where re-assigning the mail.body to existing mail object that already had a parsed body would not re-parse the body.
+  * Started documenting the source code... lots more to do.
+
+=== 1.1.0 / 2007-10-28
+
+* 1 minor enhancements:
+  * Changed the quoting of paramaters in the header fields to wrap double quotes around fields that are needed to be quoted.
+  * Removed keeping double quotes around a filename that does not need double quotes per RFC 1521
+  * More clean up and getting tests passing.  Now standing at 2 failures out of 3366 assertions.  One is the incorrect handling of "@"@test.com (returns @@test.com) and the other is a japanese encoding issue.
+
+=== 1.0.0 / 2007-10-28
+
+* 1 major enhancement:
+  * TMail is now released as a GEM!
+* 2 minor enhancements:
+  * Fixed bug 15077 - TMail now recognizes attachments as soon as they are added to the body.
+  * Refactored handling of quotations in header fields - now cleaner
+

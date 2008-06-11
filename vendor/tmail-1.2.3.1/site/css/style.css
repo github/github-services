@@ -1,0 +1,60 @@
+body {
+  background: #FFFFFF;
+}
+
+.container {
+  background: white;
+}
+
+.title h1 {
+  color: red;
+  font-size: 72px;
+  font-family: Times New Roman;
+  font-weight: bold;
+  margin: 0;
+  padding: 0px;
+}
+
+.title h2 {
+  color: #cc5500;
+  font-size: 16px;
+  font-family: Times New Roman;
+  font-weight: bold;
+  margin: 0;
+  padding: 0 12px;
+  letter-spacing: 8px;
+}
+
+.menu {
+  text-align: left;
+  color: red;
+  font-size: 14px;
+}
+
+.main {
+  border: 1px solid orange;
+}
+
+.footer {
+  color: gray;
+  font-size: .9em;
+}
+
+pre {
+  border: 1px solid #dddddd;
+  font-family: monospace;
+  font-size: 0.8em;
+  line-height: 1.6em;
+}
+
+pre.ruby {
+  color: red;
+  background: #eeeeee;
+  padding: 10px;
+}
+
+pre.shell {
+  color: green;
+  background: #eeeeee;
+  padding: 10px;
+}

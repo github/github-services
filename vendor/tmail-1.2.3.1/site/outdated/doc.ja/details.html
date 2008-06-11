@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja-JP">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+  <meta http-equiv="Content-Language" content="ja-JP">
+<title>仕様の詳細</title>
+</head>
+<body>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+  _uacct = "UA-2871747-1";
+  urchinTracker();
+  </script>
+
+
+<h1>仕様の詳細</h1>
+
+<h2>文字コードの扱いについて</h2>
+
+<h3>入力</h3>
+
+<p>
+基本的には、パーサへの入力は RFC に沿って正しいエンコードが
+なされているものと想定しています。ですが現実にはそうでない
+メールも多いので、ある程度の規格外メールは許容しています。
+たとえば以下のようなヘッダは <code>TMail</code> のサポート対象です。
+(ただし $KCODE が適切にセットされていなければいけません)
+</p>
+<pre>
+To: 日本語 &lt;aamine@loveruby.net&gt;
+Content-Disposition: attached; filename=日本語.doc
+</pre>
+
+<p>
+また $KCODE=EUC/SJIS の場合は以下のようなヘッダもパース
+します。<code>('</code>日本語<code>'</code> は生の <code>iso-2022-jp)</code>
+</p>
+<pre>
+To: 日本語 &lt;aamine@loveruby.net&gt;
+To: "日本語" &lt;aamine@loveruby.net&gt;
+To: Minero Aoki &lt;aamine@loveruby.net&gt; (日本語)
+Content-Disposition: attached; filename=日本語.doc
+Content-Disposition: attached; filename="日本語.doc"
+</pre>
+<p>
+クオートやコメント内に EUC や <code>SJIS</code>、<code>UTF8</code> を生で入れている
+ヘッダはあまりに邪悪すぎるのでサポートしません。
+</p>
+
+<p>
+いわゆる半角文字および機種依存文字はとりあえず考慮していません。
+が、近くない将来ならば多少はなんとかできるかもしれません。
+</p>
+
+<p>
+日本語以外のエンコーディングには、M17N Ruby が安定版として
+リリースされるまでは対応しません。
+</p>
+
+<h3>デコード出力</h3>
+
+<p>
+<code>TMail</code> の大部分のメソッドは特に断りがない限りデコードした
+文字列を返します。文字列の中に日本語文字列が存在する場合は、
+$KCODE に従いエンコードを変換して返します。ただしサポート
+するのは $KCODE=EUC/SJIS の場合のみで、それ以外 (つまり <code>NONE</code> か <code>UTF8)</code>
+のときはエンコーディングは一切変換されません。
+Ruby 1.6 以降では $KCODE=NONE がデフォルトなので注意してください。
+</p>
+
+<h3>エンコード出力</h3>
+
+<p>
+<code>encoded</code> メソッドを代表としたエンコード出力メソッドはすべて
+RFC 的に正しいエンコードを行います (と思います)。出力側で
+サポートする文字エンコーディングは <code>iso-2022-jp</code>、MIME エン
+コーディングは <code>Base64/B</code> のみです。これは将来に渡って変えません。
+</p>
+
+
+<h2>コメント</h2>
+
+<p>
+ヘッダにはコメントを含められます。たとえば以下のうち括弧で
+くくられた部分がコメントです。
+</p>
+<pre>
+To: aamine@loveruby.net (This is comment.)
+</pre>
+<p>
+<code>TMail</code> のパーサはコメントをパースしてヘッダオブジェクトの
+<code>comments</code> に格納しますが、再文字列化するときはすべて捨てる
+ようになっています。なぜかというと、メールヘッダのコメントは
+本当にどこにでも置けるようになっているので、パースした後から
+ではコメントがどの場所にあったのか判断できないからです。
+たとえば以下のようなヘッダはよく見かけます。
+</p>
+<pre>
+Received: from mail.loveruby.net (mail.loveruby.net [192.168.1.1])
+        by doraemon.edit.ne.jp (8.12.1/8.12.0) with ESMTP id g0CGj4bo035
+        for &lt;aamine@mx.edit.ne.jp&gt;; Sun, 13 Jan 2002 01:45:05 +0900 (JST)
+</pre>
+<p>
+こういう場合、各コメントをどの要素に所属させるかは人間で
+なければ判断できません。ある程度ヒューリスティックにやることは
+可能ですが、いったん外れたら完璧に失敗してしまうでしょう。
+元のヘッダを再生できるように見せかけておいて時々失敗すると
+いうのはあまりに有害ですから、それよりは潔く全部捨てる、
+というのがいまのところの結論です。どうせコメントはコメントで
+あって本質には関係ないのですから、もうコメントに頼るのは
+やめましょう。
+</p>
+
+<p>
+特に、アドレスフィールドにおいて本名をコメントに入れたりする
+のは最低です。ちゃんと文法的に名前を格納する場所があるのに、
+わざわざコメントを使う理由は全くありません。そういうヘッダ
+設定をしている人はすぐにメーラか設定かどちらかを変えましょう。
+</p>
+
+<p>
+もっとも、大抵の場合にはこれで問題ないのですが、メールの内容を
+フィルタリングするような場合は致命傷になりえます。たとえば ML
+ドライバでは <code>Subject</code> を加工したりしたいでしょうから、次のような
+コードを書きたくなります。
+</p>
+<pre>
+mail = TMail::Mail.load(filename)
+mail.subject = "[my-list:#{number}] " + mail.subject
+mail.write_back
+</pre>
+<p>
+しかしこれではコメントが失われてしまいます。消えてもいい
+コメントもありますが、<code>Received:</code> のコメントなどは非常に
+重要です。
+</p>
+
+<p>
+これを避けるには、ひとつの <code>TMail::Mail</code> オブジェクトは常に
+情報取得か出力のどちらかだけに限定して使うことです。将来は
+もう少しいい方法を考えます。
+</p>
+
+</body>
+</html>

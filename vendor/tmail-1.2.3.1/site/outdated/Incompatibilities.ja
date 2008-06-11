@@ -1,0 +1,102 @@
+= バージョン 0.9 から 0.10 移行時の非互換について
+
+ほとんどはマイナーメソッドの変更なのでたいしたことは
+ないと思いますが、Mail#from #to の返り値の変更だけは
+かなり致命的です。ですが、これはメソッド命名に明確な
+統一ルールを与えるためには避けられない変更なので強行
+することにします。
+
+
+== 0.10 で導入した Mail クラスのメソッドの統一ルール
+
+「Mail#アドレスヘッダ名」はアドレススペック (...@...)
+文字列の配列を返す。
+「Mail#アドレスヘッダ名_addrs」は TMail::Address
+オブジェクトの配列を返す。
+
+例
+    # ヘッダの文字列
+    To: Minero Aoki <aamine@loveruby.net>
+
+    # コードでは
+    TMail::Mail#to        ==  ["aamine@loveruby.net"]
+    TMail::Mail#to_addrs  ==  [#<TMail::Address>]
+
+
+== 変更リスト
+
+* TMail::Mail#from の返り値
+    0.9    From: の最初のアドレスの "friendly from"
+           それがなければアドレススペック文字列
+           (0.10 では Mail#friendly_from を使ってください)
+    0.10   From: のアドレススペック文字列の配列
+
+* TMail::Mail#to の返り値
+    0.9    To: の最初のアドレスの Address オブジェクト
+    0.10   To: のアドレススペック文字列の配列
+
+* TMail::Mail#fetch の引数の数
+    0.9    fetch(header_name, init_string, &block)
+    0.10   fetch(header_name)
+
+* TMail のパーサが例外を投げるとき、::ParseError では
+  なく TMail::SyntaxError を発生させます。
+
+* TMail::StringPort.new の引数の数
+    0.9    new(str, eol, unifyeol)
+    0.10   new(str='')
+
+* TMail::HeaderField およびその下位クラスの全メソッド
+    メソッド名その他、予告なしに変更されることがあります
+    (すでにいくつか変更しました)。0.10 以降ではできる限り
+    TMail::Mail のインターフェイスメソッドを使ってください。
+
+
+== いまは互換性のある変更
+
+* TMail::Mail.new の第二引数
+    TMail::Config オブジェクトを受けるようになりました。
+    true/false は同等の Config オブジェクトに変換されます。
+
+* TMail::MhLoader -> TMail::MhMailbox
+* TMail::MboxLoader -> TMail::UNIXMbox
+* TMail::MaildirLoader -> TMail::Maildir
+    元のクラス名も別名として残してあります。
+    1.0 で消すかどうかはまだ考え中ですが、これは修正が
+    かなり面倒なので残すことになると思います。
+
+
+== 非推奨メソッドリスト
+
+tmail/obsolete.rb に分離しました。現在はデフォルトで require して
+いますが、次のバージョン (1.0 の予定) では require しないように
+なります。ただしファイルは残すので、自分で require 'tmail/obsolete'
+すれば使い続けることもできます。
+
+かっこ内は同じ効果のメソッドです。またドキュメントには非推奨
+メソッドは最初から載せていません。
+
+* TMail::Mail#from_addr
+* TMail::Mail#from_address
+* TMail::Mail#from_address=
+* TMail::Mail#from_phrase        (#friendly_from)
+* TMail::Mail#msgid              (#message_id)
+* TMail::Mail#msgid=             (#message_id)
+* TMail::Mail#each_dest          (#each_destination)
+* TMail::Mail#has_key?           (#key?)
+* TMail::Mail#include?           (#key?)
+* TMail::Mail#value?
+* TMail::Mail#has_value?
+* TMail::Mail#values
+* TMail::Loader#new_mail         (#new_port)
+* TMail::Loader#each_mail        (#each_port)
+* TMail::Loader#each_newmail     (#each_new_port)
+* TMail.boundary                 (.new_boundary)
+* TMail.msgid                    (.new_message_id)
+* TMail.new_msgid                (.new_message_id)
+* TMail::Mail.boundary           (TMail.new_boundary)
+* TMail::Mail.msgid              (TMail.new_message_id)
+* TMail::Mail.new_msgid          (TMail.new_message_id)
+* TMail.loadfrom                 (.load)
+* TMail.load_from                (.load)
+* TMail::Address#route           (#routes)

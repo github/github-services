@@ -1,0 +1,29 @@
+Received: from hoyogw.netlab.co.jp (daemon@hoyogw.netlab.co.jp [202.218.249.220])
+  by serv1.u-netsurf.ne.jp (8.8.8/3.6W-2.66(99/03/09)) with ESMTP id RAA10692
+  for <aamine@dp.u-netsurf.ne.jp>; Thu, 18 Mar 1999 17:35:23 +0900 (JST)
+Received: from hoyogw.netlab.co.jp (matz@localhost [127.0.0.1])
+  by hoyogw.netlab.co.jp (8.9.1a+3.1W/3.7W/1.3) with SMTP id RAA13204;
+  Thu, 18 Mar 1999 17:21:58 +0900
+Received: from blade.nagaokaut.ac.jp (sinara@blade.nagaokaut.ac.jp [133.44.36.60])
+  by hoyogw.netlab.co.jp (8.9.1a+3.1W/3.7W/1.3) with ESMTP id RAA13036
+  for <ruby-list@netlab.co.jp>; Thu, 18 Mar 1999 17:20:28 +0900
+Received: (from sinara@localhost)
+  by blade.nagaokaut.ac.jp (8.8.8/8.8.8/Debian/GNU) id RAA22078;
+  Thu, 18 Mar 1999 17:20:49 +0900
+Posted: Thu, 18 Mar 1999 17:20:49 +0900
+Reply-To: ruby-list@netlab.co.jp
+Subject: [ruby-list:12994] Re: Sieve of Eratosthenes (Re: [ruby-dev:6094])
+Message-Id: <199903180820.RAA22078@blade.nagaokaut.ac.jp>
+In-Reply-To: message of "Wed, 17 Mar 1999 18:42:07 +0900"
+  <199903170941.SAA12014@blade.nagaokaut.ac.jp>
+Mime-Version: 1.0
+Content-Type: text/plain; charset = iso-2022-jp
+Content-Transfer-Encoding: 7bit
+Date: Thu, 18 Mar 1999 17:21:54 +0900
+To: ruby-list@netlab.co.jp (ruby mailing list)
+From: (this is comment) local@dom1.dom2
+Subject: this is a test subject
+
+line 1
+line 2
+line 3

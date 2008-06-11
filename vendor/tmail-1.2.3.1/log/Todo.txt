@@ -1,0 +1,30 @@
+== TODO List
+
+* NORUBYEXT should probbly be renamed to TMAIL_NORUBYEXT or something to that effect.
+
+This is the original list left over from the 2004 version.
+
+Please refer to the website (http://tmail.rubyforge.org/) for the current TODO list.
+
+* RFC2231 decode
+* delete File*Stream
+* simplify field.rb
+* allow raw JIS string in quoted word
+* unify character encoding of japanese strings in header
+* Loader -> Mailbox
+* RFC2231 encode
+* allow illegal MIME param value encoding (key="=?iso-2022-jp?B?....")
+* purpose-oriented policy switching
+* rewrite samples.
+* address/address-group common handling scheme
+* correct handling of Content-Type: message/*
+* methods for mail creation, replying, forwarding
+* tmail/net
+* mail thread generator
+
+=== Bugs
+
+* mails may be deleted if other precesses are touching mailbox.
+* mails may be corrupted if other precesses are touching mailbox.
+* not thread safe
+
