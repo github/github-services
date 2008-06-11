@@ -1,5 +1,24 @@
 $:.unshift *Dir["#{File.dirname(__FILE__)}/vendor/**/lib"]
-%w( rack sinatra tinder json net/http net/https socket timeout xmlrpc/client openssl basecamp xmpp4r xmpp4r-simple tmail net/smtp ).each { |f| require f }
+
+# stdlib
+require 'net/http'
+require 'net/https'
+require 'net/smtp'
+require 'socket'
+require 'timeout'
+require 'xmlrpc/client'
+require 'openssl'
+
+# vendor
+require 'rack'
+require 'sinatra'
+require 'tinder'
+require 'json'
+require 'tinder'
+require 'basecamp'
+require 'tmail'
+require 'xmpp4r'
+require 'xmpp4r-simple'
 
 module GitHub
   def service(name, &block)
