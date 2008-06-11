@@ -25,7 +25,7 @@ Steps to contributing
 5. Send us a pull request
 6. Once it's accepted, we'll add any new necessary data fields to the GitHub front-end so people can start using your addition.
 
-If you're interested in setting up an interesting test framework to manage the services, that would also be greatly appreciated.
+- Patches including tests are greatly appreciated.
 
 Bugs can be filed here: [Lighthouse](http://logicalawesome.lighthouseapp.com/projects/8570-github/tickets)
 
