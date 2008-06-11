@@ -1,0 +1,405 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja-JP">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+  <meta http-equiv="Content-Language" content="ja-JP">
+<title>インターネットメールの基礎</title>
+</head>
+<body>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+  _uacct = "UA-2871747-1";
+  urchinTracker();
+  </script>
+
+
+<h1>インターネットメールの基礎</h1>
+
+<h2>メールシステムを構成する要素</h2>
+
+<h3>メール</h3>
+
+<p>
+まずメールそれ自体です。
+メールは基本的にはテキストファイルであり、ヘッダ <code>(header)</code> と
+ボディに分かれています。ヘッダの書式は規格がありかなり厳密に
+決められていますが、ボディにはありません。たとえば以下が生の
+メールの例です。
+</p>
+
+<pre>
+Return-Path: &lt;ruby-list-admin@ruby-lang.org&gt;
+Received: from helium.ruby-lang.org (localhost [127.0.0.1])
+	by helium.ruby-lang.org (Postfix) with ESMTP
+	id 4EEF9165; Wed, 12 Dec 2001 07:05:58 +0900 (JST)
+Received: from doraemon.edit.ne.jp (doraemon.edit.ne.jp [210.141.234.1])
+	by helium.ruby-lang.org (Postfix) with ESMTP id 7AFAB126
+	for &lt;ruby-list@ruby-lang.org&gt;; Wed, 12 Dec 2001 07:05:57 +0900 (JST)
+Date: Wed, 12 Dec 2001 07:05:58 +0900
+Posted: Wed, 12 Dec 2001 07:14:16 +0900
+From: Minero Aoki &lt;aamine@mx.edit.ne.jp&gt;
+Reply-To: ruby-list@ruby-lang.org
+Subject: [ruby-list:32880] Re: RAA update
+To: ruby-list@ruby-lang.org (ruby mailing list)
+Message-Id: &lt;20011212071416N.aamine@mx.edit.ne.jp&gt;
+In-Reply-To: &lt;20011210141226.DTUM11600.femail11.im.home.ne.jp@witch&gt;
+References: &lt;20011210141226.DTUM11600.femail11.im.home.ne.jp@witch&gt;
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=iso-2022-jp
+Content-Transfer-Encoding: 7bit
+Precedence: bulk
+Lines: 79
+X-UIDL: b8b1b7f1d28ee02af1df6f8612b5b8c4
+
+あおきです。ここからボディです。
+   ：
+(以下略)
+</pre>
+
+<p>
+ヘッダとボディは空行で区切られます。ヘッダではだいたい一行が
+ひとつのヘッダに相当しますが、空白で始まる行は上の行の続きです。
+たとえばこのメールの <code>Received:</code> は二つとも 3 行でひとつのヘッダ行を
+構成しています。各ヘッダには最初にヘッダ名があり、コロン(：)を
+置いてそのあとが「ヘッダフィールド」(ヘッダの内容)です。
+</p>
+
+<p>
+ヘッダにはそれぞれ役割があります。たとえば <code>To:</code> ヘッダには
+メールの宛先を書きます。<code>From:</code> にはメールの送り元を書きます。
+<code>Subject:</code> はいわゆる題名です。<code>Date:</code> はメールを送信した日時、
+<code>Received:</code> が配送記録などなど。詳しくはあとで説明します。
+</p>
+
+<h3>メールの送受信</h3>
+
+<p>
+細かく追求すれば送信にもいろいろな方法があるのですが、普通に
+生きていく限り関係しなくてはいけないのは <code>SMTP (Simple Mail Transfer Protocol)</code>
+だけです。これは、とあるホストから別のホストにメールを転送する
+ためのプロトコル (約束事の集合) です。とにかくこれを使えば
+メールを転送できます。<code>SMTP</code> ではメールの中身には基本的に関与
+しません。少なくとも、メールの中身を変えてしまうような働き
+かけは行いません。
+</p>
+
+<p>
+またメールには本来「受信」というものはありませんでした。
+基本的にメールシステムは常時接続が基本で、メールを送ったら
+即座に送り先まで <code>(SMTP</code> で) 配送されることになっていたからです。
+いまで言えば携帯メールみたいなものです。
+</p>
+
+<p>
+ところがそのうち常時接続でないところが出てきて、解決方法を
+考えはじめました。そこで出てきた解決法のひとつが最近使ってる
+「受信」なわけです。これには普通は <code>POP3 (Post Office Protocol version 3)</code>
+というプロトコルを使います。
+</p>
+
+<p>
+<code>POP3</code> では、配送されたメールを <code>POP</code> サーバに保存しておき、それを
+<code>(PPP</code> でつないだパソコンとかから) リクエストされたら渡し、その
+あと消します。つまり本当は「送信待機」とでも言うほうがより正確
+でしょう。
+</p>
+
+<p>
+他の解決法としては IMAP (Internet Messsage Access Protocol) と
+いうプロトコルが代表格です。<code>POP</code> はメールの送信を介助するだけですが、
+IMAP では普通のメールクライアントの機能の一部までがサーバに取り
+こまれたような感じになります。たとえば IMAP サーバ上でメールの
+検索をしたり、メールボックスの分類ができたりします。携帯メール
+なんかは実は IMAP に類似の構造です。携帯は CPU パワーがないので、
+サーバ上でメールを加工して携帯に渡しているのです。
+</p>
+
+<h3>メールボックス</h3>
+
+<p>
+届いたメールを最終的に保存しておくところがメールボックスです。
+きっとどこかで聞いたことがあるであろう <code>INBOX</code> とか「受信箱」とか
+「郵便受け」がそれです。
+</p>
+
+<p>
+メールボックスは、メーラ次第でいくらでも変えることができてしまう
+ので相当にたくさん種類があります。超有名なのだけでも UNIX mbox
+(さらにマイナーバージョンがいくつかある)、MH、<code>Maildir</code> なんてのが
+あります。
+</p>
+
+<p>
+なんにしてもメールボックスはメールをとっておければいいのです。
+形式については深く追求しないことにしましょう。
+</p>
+
+
+<h2>メールシステムの抱える問題</h2>
+
+<p>
+メールは現在あるなかではほとんど最古参の古いシステムですから、
+特有の問題が死ぬほどあります。以下いくつか挙げましょう。まず
+送受信から。
+</p>
+
+<ul>
+<li>8 ビット透過でない</li>
+<li>ASCII 文字以外を送ると危険</li>
+<li>メールの <code>To:</code> と <code>SMTP</code> の To (RCPT TO) は無関係</li>
+<li>メールの <code>From:</code> と <code>SMTP</code> の <code>From (MAIL FROM)</code> も無関係</li>
+</ul>
+<p>
+メール自体について。
+</p>
+
+<ul>
+<li>ASCII 文字以外を入れるとバグるメーラが (いっぱい) ある</li>
+<li>ヘッダの書式が超複雑</li>
+<li>しかも国際化の過程でさらに複雑になった</li>
+<li>某社のメーラが規格を無視したメールばっかり生成するのでもはやどうにもならないくらい複雑になった</li>
+</ul>
+<p>
+メールボックスについて。
+</p>
+
+<ul>
+<li>種類がありすぎてどれを使えばいいのかわからない</li>
+<li>種類がありすぎて全部対応なんてできない</li>
+<li>種類がありすぎて互換性に問題が (よく) 出る</li>
+<li>やっぱり 8 ビット透過でない</li>
+</ul>
+<p>
+そんなわけで、<code>TMail</code> が数千行あるのにはそれなりの理由が
+あるのです。多少ロードが遅くても目をつぶってください。
+</p>
+
+
+<h2>メールの持つ情報</h2>
+
+<p>
+メールヘッダに格納されている情報について少し詳しく解説します。
+もっと詳しく内容や書式について知りたい人は
+<a href="http://www.ietf.org/rfc/rfc2822.txt">RFC2822</a>
+などを見るとよいでしょう。
+</p>
+
+<dl>
+<dt><code>To:</code></dt>
+<dd>
+<p>
+宛先。複数アドレスを格納。
+</p>
+</dd>
+<dt><code>From:</code></dt>
+<dd>
+<p>
+送り主。複数アドレスを格納。
+(ただし通常ひとつで複数のときは <code>Sender:</code> をつけなければいけない)
+</p>
+</dd>
+<dt><code>Subject:</code></dt>
+<dd>
+<p>
+主題。メールに書いた内容を一言で凝縮したもの。
+「題名」とはちょっと違う。
+</p>
+</dd>
+<dt><code>Date:</code></dt>
+<dd>
+<p>
+メールを送った日時。受け取った時間でも書いた時間でもない。
+</p>
+
+</dd>
+<dt><code>Message-Id:</code></dt>
+<dd>
+<p>
+全世界においてメールと一対一に対応する (させなければならない)
+文字列。メールを作成したホストの <code>FQDN (</code>正式ホスト名) と時刻、
+プロセス／スレッド <code>ID</code>、ランダム文字列などを使って作るのだが、
+<code>PPP</code> 接続なパソコンだったりすると <code>FQDN</code> がないので困る。そういう
+ときは、危険なのを承知でプロバイダのメールサーバの <code>FQDN</code> に適当な
+文字列をくっつけて使うしかないと思う。
+</p>
+
+<p>
+ちなみに <code>sendmail (</code>一番有名な <code>SMTP</code> サーバ) は勝手にメッセージ <code>ID</code>
+をつけてくれるので、それを期待するのもよいかもしれない。が、
+<code>qmail</code> なんかはつけてくれないし、規格に正確に従うならばメーラが
+付けるのが正しい。
+</p>
+</dd>
+<dt><code>In-Reply-To:</code></dt>
+<dd>
+<p>
+このメール、が返信した対象のメール、のメッセージ <code>ID</code>。
+この情報を使って返信関係をツリーにするとよく見る
+「スレッド表示」になる。
+</p>
+</dd>
+<dt><code>References:</code></dt>
+<dd>
+<p>
+このメールが返信したメール、が返信したメール、が返信したメール……
+と再帰的にたどって集めたメールのメッセージ <code>ID</code> の集合。
+<code>In-Reply-To</code> と同じように、メールスレッドを作るのに使える。
+</p>
+
+<p>
+基本的には関係あるメールの <code>ID</code> は全部入れるが、さすがに
+多すぎるときは古いものから省略してよい。たとえば 12 個とか。
+</p>
+
+</dd>
+<dt><code>Reply-To:</code></dt>
+<dd>
+<p>
+メールに返信するときに使うアドレス。このヘッダがある場合は
+絶対に <code>From:</code> にメールを返してはいけない。
+</p>
+</dd>
+<dt><code>Received:</code></dt>
+<dd>
+<p>
+配送経路情報。メールシステムのデバッグや <code>SPAM</code> の発送元の
+特定とかに使える。こともある。簡単に偽造できるから信用
+しすぎてはならない。
+</p>
+
+</dd>
+<dt><code>X-*:</code></dt>
+<dd>
+<p>
+<code>X-</code> が頭についているヘッダは規格で決められたのではない。
+つまり解釈は自由。有名なとこでは <code>X-Mailer (</code>メーラ名)とか。
+</p>
+
+</dd>
+<dt><code>Mime-Version:</code></dt>
+<dd>
+<p>
+Content-* ヘッダをつけるなら必ずつけなければいけない。
+いまのところ常に <code>"1.0"</code>。
+</p>
+
+<p>
+MIME とは <code>Multipurpose Internet Mail Extentions</code> の略だが
+いまは同じ技術がメールに関係なくいろんなところに使われている。
+</p>
+</dd>
+<dt>Content-Type:</dt>
+<dd>
+<p>
+メールの中身がなんであるか示す。なんであるか、とは、
+たとえば「プレーンテキストである」とか「<code>JPEG</code> である」とか。
+俗に言うところの「MIME タイプ」。Content Type の種類に関しては
+次のセクションで詳述。
+</p>
+</dd>
+<dt>Content-Disposition:</dt>
+<dd>
+<p>
+メールの位置付け。というとわけわかんない。ありていに
+言うと、マルチパートメールのときにパートが他のパートと
+どういう関係にあるかを示すもの。たとえば HTML とそこに
+入ってる絵とか、そういうこと。やりかたは……やってほしく
+ないから、言わない。どうしてもやりたければ自分で調べて。
+</p>
+</dd>
+<dt>Content-Transfer-Encoding</dt>
+<dd>
+<p>
+前述したように <code>SMTP</code> は 8 ビット透過でないので、8 ビットめが
+立ってるときはなにかエンコードして送る。そういうときに
+このヘッダに <code>Base64</code> とか書いたりする。
+</p>
+
+
+</dd>
+</dl>
+<h2>Content Type</h2>
+
+<p>
+有名な Content Type には以下のようなものがある。
+</p>
+
+<ul>
+<li><code>text/plain</code></li>
+<li><code>text/html</code></li>
+<li><code>image/gif</code></li>
+<li><code>image/png</code></li>
+<li><code>image/jpeg</code></li>
+<li><code>application/octet-stream</code></li>
+<li><code>multipart/mixed</code>  (次のセクションを参照)</li>
+</ul>
+<p>
+ま、だいたいわかるでしょ。また <code>text</code> には <code>charset</code> という
+パラメータがつきもので、文字コードのエンコーディングを
+指示する。もちろん <code>charset</code> とエンコーディングは別物であるのだが
+いったん規格で決まってしまった以上はそう簡単に変えられないのだ。
+我々に関係ある <code>charset</code> 値は次のもんくらい。
+</p>
+
+<ul>
+<li><code>us-ascii</code></li>
+<li><code>iso-2022-jp</code></li>
+<li><code>iso-2022-jp-2</code>   <code>(iso-2022-jp</code> を韓国語とかにも対応させて拡張したもの)</li>
+<li><code>euc-jp</code></li>
+<li><code>shift_jis</code></li>
+<li><code>utf-8</code></li>
+</ul>
+<p>
+普通の日本語使いならば <code>iso-2022-jp (JIS)</code> を使っておけばよい。というか
+そうすべき。(もちろんちゃんと <code>NKF.nkf('-j',str)</code> でボディを変換すること)
+</p>
+
+
+<h2>マルチパートメール</h2>
+
+<p>
+Content-Type: multipart/* のとき、メールはマルチパートメール
+というのになっている。一言で言うと、メールボディの中にまたメールが
+入っているのである。俗に言う「添付ファイル」はこれを使って
+テキストのメールと画像のメールをひとつのメールに含めているわけだ。
+つまり添付とは言っても形式上ではテキストと画像は並列に並んでいる。
+</p>
+
+
+<h2>比較的マイナーな MIME 拡張</h2>
+
+<h3>分割メール</h3>
+
+<p>
+ひとつのメールを複数のメールに分割して送ることができる。
+このとき Content-Type: message/partial。作りかたは
+RFC2046 を参照。
+</p>
+
+<p>
+メールがでかくなりすぎると途中のファイアウォールとかが
+勝手にこれを使ってぶったぎることがあるのでときたま見かける。
+しかし相手が分割メールを再生できることが保証されるならばいいが、
+そうでないならそういう勝手なことをしてはいけない。送り元に
+エラーを返すべきである。
+</p>
+
+<h3>外部エンティティ</h3>
+
+<p>
+メールの本体は別のところに置いてあるもの。たとえば URL を
+示したりする。Content-Type: message/external-body。作りかたは
+RFC2046 を参照。
+</p>
+
+<p>
+どこで使ってんだろうと思っていたが、<code>IETF</code> のアナウンス ML で
+使っていた。インターネットドラフトとかが出ると、ヘッダだけが
+メールに書いてあって <code>external-body</code> で本体を指し示している。
+なかなか賢い。ていうか <code>IETF</code> が使わなかったら詐欺か。
+<code>(IETF</code> はインターネットで使う規格をまとめてる団体です)
+</p>
+
+</body>
+</html>

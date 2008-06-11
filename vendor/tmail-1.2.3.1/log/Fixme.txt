@@ -1,0 +1,6 @@
+
+= FIXME
+
+file://lib/tmail/encode.rb
+* FIXME: This class can handle only (euc-jp/shift_jis -> iso-2022-jp). (198)
+* FIXME: implement line folding (317)

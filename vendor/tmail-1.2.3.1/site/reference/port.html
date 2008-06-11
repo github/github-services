@@ -1,0 +1,75 @@
+<h1>Port Classes</h1>
+
+<h2><code>class <a name="TMail%3a%3aPort">TMail::Port</a> </code></h2>
+
+<p>
+TMail::Port is the abstruction of mail source.
+</p>
+
+<h3>Instance Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aPort-ropen"><code>ropen</code></a> -&gt; <code>IO</code></dt>
+<dd>
+<p>
+opens stream for read.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aPort-wopen"><code>wopen</code></a> -&gt; <code>IO</code></dt>
+<dd>
+<p>
+opens stream for write.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aPort-aopen"><code>aopen</code></a> -&gt; <code>IO</code></dt>
+<dd>
+<p>
+opens stream for adding.
+</p>
+
+</dd>
+</dl>
+<h2><code>class <a name="TMail%3a%3aFilePort">TMail::FilePort</a> &lt; TMail::Port</code></h2>
+
+<h3>Class Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aFilePort-new"><code>new(filename)</code></a> -&gt; <code><a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a></code></dt>
+<dd>
+<p>
+filename: String<br>
+</p>
+
+<p>
+creates new TMail::FilePort object.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aFilePort-filename"><code>filename</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+returns file name which this port is wrapping.
+</p>
+
+</dd>
+</dl>
+<h2><code>class <a name="TMail%3a%3aStringPort">TMail::StringPort</a> &lt; TMail::Port</code></h2>
+
+<h3>Class Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aStringPort-new"><code>new(src = '')</code></a> -&gt; <code><a href="port.html#TMail%3a%3aStringPort">TMail::StringPort</a></code></dt>
+<dd>
+<p>
+src: String<br>
+</p>
+
+<p>
+creates new TMail::StringPort object from
+mail source string.
+</p>
+</dd>
+</dl>
+

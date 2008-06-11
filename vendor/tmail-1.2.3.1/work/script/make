@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+Dir.chdir("ext/tmailscanner/tmail") do
+  unless File.exist?('Makefile')
+    system "ruby extconf.rb"
+  end
+
+  unless ARGV[0] == 'setup'
+    system "make #{ARGV.join(' ')}"
+  end
+end
+
+
+# Eric Hodel said NOT do this.
+#
+#cp "ext/xml/*.#{dlext}", "lib/xml/#{arch}/"
+#
+#
+#def dlext
+#  Config::CONFIG['DLEXT']
+#end
+#
+#def arch
+#  Config::CONFIG['arch']
+#end
+

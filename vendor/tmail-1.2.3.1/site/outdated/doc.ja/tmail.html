@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja-JP">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+  <meta http-equiv="Content-Language" content="ja-JP">
+<title><code>module <a name="TMail">TMail</a> </code></title>
+</head>
+<body>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+  _uacct = "UA-2871747-1";
+  urchinTracker();
+  </script>
+
+
+<h1><code>module <a name="TMail">TMail</a> </code></h1>
+
+<h2>モジュール関数</h2>
+
+<dl>
+<dt><a name="TMail-new_boundary"><code>new_boundary</code></a> → <code>String</code></dt>
+<dd>
+<p>
+新しいバウンダリを作成して返します。
+</p>
+
+</dd>
+<dt><a name="TMail-new_message_id"><code>new_message_id(fqdn = Socket.gethostname)</code></a> → <code>String</code></dt>
+<dd>
+<p>
+fqdn: String<br>
+</p>
+
+<p>
+新しいメッセージ <code>ID</code> を作成して返します。
+引数 <code>fqdn</code> が省略された場合はローカルホストの名前を使います。
+一方 <code>fqdn</code> を指定する場合はダイヤルアップであるなどの事情により
+ホストの名前を変える必要があるのだとみなし、それに <code>'.tmail'</code> を
+つけたドメインを使用します。これは「本物の」ドメインで作成される
+メッセージ <code>ID</code> との重複を避けるためです。
+</p>
+
+</dd>
+<dt><a name="TMail-message_id%3f"><code>message_id?(str)</code></a> → <code>true | false</code></dt>
+<dd>
+<p>
+str: String<br>
+</p>
+
+<p>
+<code>str</code> がメッセージ <code>ID</code> を含むとき真。
+</p>
+</dd>
+</dl>
+
+</body>
+</html>

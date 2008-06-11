@@ -1,0 +1,7 @@
+[ANN] TMail 1.2.3.1 - Minor Fix to Installer
+
+This release just handles a bug with installing the gem on a Windows platform.
+
+It is otherwise identical to 1.2.3
+
+Mikel

@@ -1,0 +1,793 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja-JP">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+  <meta http-equiv="Content-Language" content="ja-JP">
+<title><code>class <a name="TMail%3a%3aMail">TMail::Mail</a> </code></title>
+</head>
+<body>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+  _uacct = "UA-2871747-1";
+  urchinTracker();
+  </script>
+
+
+<h1><code>class <a name="TMail%3a%3aMail">TMail::Mail</a> </code></h1>
+
+<h2>クラスメソッド</h2>
+
+<dl>
+<dt><a name="TMail%3a%3aMail-new"><code>new(port = TMail::StringPort.new, <var>config</var> = DEFAULT_CONFIG)</code></a> → <code><a href="mail.html#TMail%3a%3aMail">TMail::Mail</a></code></dt>
+<dd>
+<p>
+port: <a href="port.html#TMail%3a%3aPort">TMail::Port</a><br>
+config: <a href="config.html#TMail%3a%3aConfig">TMail::Config</a><br>
+</p>
+
+<p>
+<code>port</code> から <code>Mail</code> オブジェクトを作成します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-load"><code>load(filename)</code></a> → <code><a href="mail.html#TMail%3a%3aMail">TMail::Mail</a></code></dt>
+<dd>
+<p>
+filename: String<br>
+</p>
+
+<p>
+ファイル <code>filename</code> からメールをロードして <code>Mail</code> オブジェクトを作成します。
+ロードするファイルは MH のメールのようにメール一通がファイルひとつに
+対応していなければいけません。
+</p>
+
+<p>
+UNIX mbox のような形式は単独では対応していません。
+<a href="mbox.html">メールボックスクラス</a>を使ってください。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-parse"><code>parse(str)</code></a> → <code><a href="mail.html#TMail%3a%3aMail">TMail::Mail</a></code></dt>
+<dd>
+<p>
+str: String<br>
+</p>
+
+<p>
+文字列 <code>str</code> をパースして <code>TMail::Mail</code> オブジェクトを作成します。
+<code>str</code> はメール一通分でなければいけません。
+</p>
+
+</dd>
+</dl>
+<h2>インスタンスメソッド</h2>
+
+<dl>
+<dt><a name="TMail%3a%3aMail-port"><code>port</code></a> → <code><a href="port.html#TMail%3a%3aPort">TMail::Port</a></code></dt>
+<dd>
+<p>
+このメールオブジェクトの生成元のポートです。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-body_port"><code>body_port</code></a> → <code><a href="port.html#TMail%3a%3aPort">TMail::Port</a></code></dt>
+<dd>
+<p>
+メール本文を保存しているポートを返します。
+</p>
+
+<p>
+ただしここに書きこんでもロード元のファイル(や文字列)は変更されません。
+実際に変更するためにはこのポートに書きこんだ後 <code><a href="mail.html#TMail%3a%3aMail-write_back">#write_back</a></code> を呼ぶ
+必要があります。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-each%20%7b%7cline%7c%20%2e%2e%2e%2e%20%7d"><code>each {|line| .... }</code></a></dt>
+<dd>
+<p>
+line: String<br>
+</p>
+
+<p>
+本文文字列の各行に対する繰り返し。
+<code>body_port.ropen {|f| f.each }</code> と同じです。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-body"><code>body</code></a> → <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-preamble"><code>preamble</code></a> → <code>String</code></dt>
+<dd>
+<p>
+メールボディ(本文)全てを文字列として返します。
+MIME マルチパートメールのときは <code>preamble</code> に相当します。
+この返り値を変更してもオリジナルは変更されません。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-parts"><code>parts</code></a> → <code>[<a href="mail.html#TMail%3a%3aMail">TMail::Mail</a>]</code></dt>
+<dd>
+<p>
+メールが MIME マルチパートメールの時、各パートが <code>TMail::Mail</code> の配列として
+格納されています。マルチパートメールでないときは空の配列です。
+</p>
+
+<p>
+ただしここに書きこんでもロード元のファイル(や文字列)は変更されません。
+実際に変更するためにはこのオブジェクトに書きこんだあと <code><a href="mail.html#TMail%3a%3aMail-write_back">#write_back</a></code> を
+呼ぶ必要があります。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-epilogue"><code>epilogue</code></a> → <code>String</code></dt>
+<dd>
+<p>
+MIME マルチパートメールでの <code>epilogue</code> に相当する文字列です。
+通常のメールのときは空文字列が入っています。
+</p>
+
+<p>
+ただしここに書きこんでもロード元のファイル(や文字列)は変更されません。
+実際に変更するためには書きこんだ後 <code><a href="mail.html#TMail%3a%3aMail-write_back">#write_back</a></code> を呼ぶ必要があります。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-multipart%3f"><code>multipart?</code></a></dt>
+<dd>
+<p>
+メールが MIME マルチパートのとき真。
+このメソッドは <code>Content-Type</code> ヘッダの内容で真偽を判断します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-encoded"><code>encoded(eol = "\n", <var>encoding</var> = 'j')</code></a> → <code>String</code></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+メールを <code>RFC2822</code> 形式にエンコードした文字列に変換します。
+その際、ヘッダの行末コードを <code>eol</code> に、ヘッダ内のエンコード前の
+日本語文字列の文字コードを <code><var>encoding</var></code> に変換します。
+ただし現在 <code><var>encoding</var></code> は <code>"j" (JIS)</code> しか正常に動作しません。
+</p>
+
+<p>
+バージョン <code>0.9</code> からは <code><a href="mail.html#TMail%3a%3aMail-to_s">#to_s</a></code> は <code><a href="mail.html#TMail%3a%3aMail-decoded">#decoded</a></code> の別名になったので、この
+メソッドとは違うはたらきをします。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-decoded"><code>decoded(eol = "\n", <var>encoding</var> = 'e')</code></a> → <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-to_s"><code>to_s(eol = "\n", <var>encoding</var> = 'e')</code></a> → <code>String</code></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+メールをデコードされた文字列に変換します。その際、ヘッダの行末
+コードを <code>eol</code> に、ヘッダ内のエンコード前の日本語文字列の文字コードを
+<code><var>encoding</var></code> に変換します。
+</p>
+
+<p>
+バージョン <code>0.9</code> 以降は <code><a href="mail.html#TMail%3a%3aMail-to_s">#to_s</a></code> はこのメソッドの別名になりました。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-inspect"><code>inspect</code></a> → <code>String</code></dt>
+<dd>
+<p>
+以前は <code><a href="mail.html#TMail%3a%3aMail-decoded">#decoded</a></code> の別名でしたがバージョン <code>0.9</code> からは
+<code>"#&lt;TMail::Mail port=&lt;StringPort:str=...&gt;&gt;"</code>
+のような簡潔な文字列化を行います。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-write_back"><code>write_back(eol = "\n", <var>encoding</var> = 'e')</code></a></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+メール全体を文字列化し <code>body_port</code> に書き戻します。その際、ヘッダの
+行末コードを <code>eol</code> に、ヘッダ内の日本語文字列の文字コードを <code><var>encoding</var></code> に
+変換します。
+</p>
+
+</dd>
+</dl>
+<h3>属性アクセスのためのメソッド</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aMail-date"><code>date(default = nil)</code></a> → <code>Time</code></dt>
+<dt><a name="TMail%3a%3aMail-date%3d"><code>date=(datetime)</code></a></dt>
+<dd>
+<p>
+datetime: Time<br>
+default: Object<br>
+</p>
+
+<p>
+<code>Date:</code> ヘッダに対応する <code>Time</code> オブジェクト。
+常にローカルタイムに変換されます。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-strftime"><code>strftime(format, <var>default</var> = nil)</code></a> → <code>String</code></dt>
+<dd>
+<p>
+format: String<br>
+default: Object<br>
+</p>
+
+<p>
+<code>Date:</code> ヘッダに表現された時刻と対応する <code>Time</code> オブジェクトに対し
+<code>strftime</code> を呼びます。<code>Date:</code> ヘッダが存在しない場合は <code><var>default</var></code> を
+返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-to"><code>to(default = nil)</code></a> → <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-to%3d"><code>to=(specs)</code></a></dt>
+<dd>
+<p>
+specs: String | [String]<br>
+default: Object<br>
+</p>
+
+<p>
+<code>To:</code> アドレスの <code>spec</code> の配列。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-to_addrs"><code>to_addrs(default = nil)</code></a> → <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a>]</code></dt>
+<dt><a name="TMail%3a%3aMail-to_addrs%3d"><code>to_addrs=(addrs)</code></a></dt>
+<dd>
+<p>
+addrs: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | [<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]<br>
+default: Object<br>
+</p>
+
+<p>
+<code>To:</code> アドレスの配列。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-cc"><code>cc(default = nil)</code></a> → <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-cc%3d"><code>cc=(specs)</code></a></dt>
+<dd>
+<p>
+specs: String | [String]<br>
+default: Object<br>
+</p>
+
+<p>
+<code>Cc:</code> アドレスの <code>spec</code> の配列。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-cc_addrs"><code>cc_addrs(default = nil)</code></a> → <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dt><a name="TMail%3a%3aMail-cc_addrs%3d"><code>cc_addrs=(addrs)</code></a></dt>
+<dd>
+<p>
+addrs: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | [<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]<br>
+default: Object<br>
+</p>
+
+<p>
+<code>Cc:</code> アドレスの配列。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-bcc"><code>bcc(default = nil)</code></a> → <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-bcc%3d"><code>bcc=(specs)</code></a></dt>
+<dd>
+<p>
+specs: String | [String]<br>
+default: Object<br>
+</p>
+
+<p>
+<code>Bcc:</code> アドレスの <code>spec</code> の配列。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-bcc_addrs"><code>bcc_addrs(default = nil)</code></a> → <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dt><a name="TMail%3a%3aMail-bcc_addrs%3d"><code>bcc_addrs=(addrs)</code></a></dt>
+<dd>
+<p>
+addrs: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | [<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]<br>
+default: Object<br>
+</p>
+
+<p>
+<code>Bcc:</code> アドレスの配列。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-from"><code>from(default = nil)</code></a> → <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-from%3d"><code>from=(specs)</code></a></dt>
+<dd>
+<p>
+specs: String | [String]<br>
+default: Object<br>
+</p>
+
+<p>
+<code>From:</code> アドレスの <code>spec</code> の配列。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-from_addrs"><code>from_addrs(default = nil)</code></a> → <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dt><a name="TMail%3a%3aMail-from_addrs%3d"><code>from_addrs=(addrs)</code></a></dt>
+<dd>
+<p>
+addrs: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | [<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]<br>
+default: Object<br>
+</p>
+
+<p>
+<code>From:</code> アドレスの配列。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-friendly_from"><code>friendly_from(default = nil)</code></a> → <code>String</code></dt>
+<dd>
+<p>
+default: Object<br>
+</p>
+
+<p>
+<code>From:</code> の最初のアドレスの <code>phrase</code> または <code>spec</code>。
+<code>From:</code> が存在しないときは <code>default</code> を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-reply_to"><code>reply_to(default = nil)</code></a> → <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-reply_to%3d"><code>reply_to=(specs)</code></a></dt>
+<dd>
+<p>
+specs: String | [String]<br>
+default: Object<br>
+</p>
+
+<p>
+<code>Reply-To:</code> アドレスの <code>spec</code> の配列。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-reply_to_addrs"><code>reply_to_addrs(default = nil)</code></a> → <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dt><a name="TMail%3a%3aMail-reply_to_addrs%3d"><code>reply_to_addrs=(addrs)</code></a></dt>
+<dd>
+<p>
+addrs: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | [<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]<br>
+default: Object<br>
+</p>
+
+<p>
+<code>Reply-To:</code> アドレスの配列。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-sender"><code>sender(default = nil)</code></a> → <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-sender%3d"><code>sender=(spec)</code></a></dt>
+<dd>
+<p>
+spec: String<br>
+</p>
+
+<p>
+<code>Sender:</code> アドレスの <code>spec</code>
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-sender_addr"><code>sender_addr(default = nil)</code></a> → <code><a href="address.html#TMail%3a%3aAddress">TMail::Address</a></code></dt>
+<dt><a name="TMail%3a%3aMail-sender_addr%3d"><code>sender_addr=(addr)</code></a></dt>
+<dd>
+<p>
+addr: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a><br>
+</p>
+
+<p>
+<code>Sender:</code> アドレス
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-subject"><code>subject(default = nil)</code></a> → <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-subject%3d"><code>subject=(sbj)</code></a></dt>
+<dd>
+<p>
+sbj: String<br>
+</p>
+
+<p>
+<code>Subject:</code> の内容。
+<code>Subject:</code> が存在しないときは <code>default</code> を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-message_id"><code>message_id(default = nil)</code></a> → <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-message_id%3d"><code>message_id=(id)</code></a></dt>
+<dd>
+<p>
+id: String<br>
+</p>
+
+<p>
+メールのメッセージ <code>ID</code>。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-in_reply_to"><code>in_reply_to(default = nil)</code></a> → <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-in_reply_to%3d"><code>in_reply_to=(ids)</code></a></dt>
+<dd>
+<p>
+ids: String | [String]<br>
+</p>
+
+<p>
+<code>In-Reply-To:</code> に含まれるメッセージ <code>ID</code> のリスト。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-references"><code>references(default = nil)</code></a> → <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-references%3d"><code>references=(ids)</code></a></dt>
+<dd>
+<p>
+ids: String | [String]<br>
+</p>
+
+<p>
+<code>References:</code> に含まれるメッセージ <code>ID</code> のリスト。
+現在は <code>References:</code> にはメッセージ <code>ID</code> 以外は
+含められません。<code>(RFC2822)</code>
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-mime_version"><code>mime_version(default = nil)</code></a> → <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-mime_version%3d"><code>mime_version=(ver)</code></a></dt>
+<dd>
+<p>
+ver: String<br>
+</p>
+
+<p>
+MIME バージョン。現在は常に <code>"1.0"</code> です。
+ヘッダが存在しない場合は <code>default</code> を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-set_mime_version"><code>set_mime_version(major, <var>minor</var>)</code></a></dt>
+<dd>
+<p>
+major: Integer<br>
+minor: Integer<br>
+</p>
+
+<p>
+MIME バージョンをセットします。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-content_type"><code>content_type(default = nil)</code></a> → <code>String</code></dt>
+<dd>
+<p>
+メール本体のファイルタイプを示す文字列。例えば <code>"text/plain"</code>。
+ヘッダが存在しない場合は <code>default</code> を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-main_type"><code>main_type(default = nil)</code></a> → <code>String</code></dt>
+<dd>
+<p>
+メール本体のメインタイプ (例：<code>"text")</code>。
+常に小文字に統一されます。
+ヘッダが存在しない場合は <code>default</code> を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-sub_type"><code>sub_type(default = nil)</code></a> → <code>String</code></dt>
+<dd>
+<p>
+メール本体のサブタイプ (例：<code>"plain")</code>。
+常に小文字に統一されます。
+ヘッダが存在しない場合は <code>default</code> を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-content_type%3d"><code>content_type=(ctype)</code></a></dt>
+<dd>
+<p>
+ctype: String<br>
+</p>
+
+<p>
+<code>Content-Type</code> のメインタイプ・サブタイプを <code>main_sub</code> からセット
+します。<code>main_sub</code> は例えば <code>"text/plain"</code> のような形式でなければ
+いけません。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-set_content_type"><code>set_content_type(main, <var>sub</var>, <var>params</var> = nil)</code></a></dt>
+<dd>
+<p>
+main: String<br>
+sub: String<br>
+params: {String => String}<br>
+</p>
+
+<p>
+コンテントタイプを <code>main/sub; param; param; ...</code> のように設定します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-type_param"><code>type_param(name, <var>default</var> = nil)</code></a> → <code>String</code></dt>
+<dd>
+<p>
+name: String<br>
+</p>
+
+<p>
+<code>Content-Type</code> の <code>name</code> パラメータの値を返します。
+<code>name</code> に対応する値やヘッダそのものが存在しない場合は <code><var>default</var></code> を
+返します。
+</p>
+<pre>
+# example
+mail['Content-Type'] = 'text/plain; charset=iso-2022-jp'
+p mail.type_param('charset')   # "iso-2022-jp"
+</pre>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-multipart%3f"><code>multipart?</code></a> → <code>true | false</code></dt>
+<dd>
+<p>
+<code>Content-Type</code> が MIME マルチパートメールであることを
+示す内容ならば真。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-transfer_encoding"><code>transfer_encoding(default = nil)</code></a> → <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-transfer_encoding%3d"><code>transfer_encoding=(encoding)</code></a></dt>
+<dd>
+<p>
+encoding: String<br>
+</p>
+<p>
+転送時に適用したエンコーディング <code>(Content-Transfer-Encoding)</code>。
+<code>'7bit' '8bit' 'Base64' 'Binary'</code> など。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-disposition"><code>disposition(default = nil)</code></a> → <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-disposition%3d"><code>disposition=(pos)</code></a></dt>
+<dd>
+<p>
+pos: String<br>
+</p>
+
+<p>
+<code>Content-Disposition</code> の主値 (文字列)。返り値は常に小文字に統一されます。
+<code>name</code> に対応する値やヘッダそのものが存在しない場合は <code>default</code> を
+返します。
+</p>
+<pre>
+# example
+mail['Content-Disposition'] = 'attachement; filename="test.rb"'
+p mail.disposition   # "attachment"
+</pre>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-set_content_disposition"><code>set_content_disposition(pos, <var>params</var> = nil)</code></a></dt>
+<dd>
+<p>
+pos: String<br>
+params: {String => String}<br>
+</p>
+
+<p>
+<code>disposition</code> 文字列とパラメータのハッシュから <code>Content-Disposition</code> を
+セットします。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-disposition_param"><code>disposition_param(key, <var>default</var> = nil)</code></a> → <code>String</code></dt>
+<dd>
+<p>
+key: String<br>
+</p>
+
+<p>
+<code>Content-Disposition</code> の付加パラメータの <code>name</code> の値を取得します。
+<code>name</code> に対応する値やヘッダそのものが存在しない場合は <code><var>default</var></code> を
+返します。
+</p>
+<pre>
+# example
+mail.disposition_param('filename')
+</pre>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-destinations"><code>destinations(default = nil)</code></a> → <code>[String]</code></dt>
+<dd>
+<p>
+<code>To</code>、<code>Cc</code>、<code>Bcc</code> すべてのアドレススペック文字列の配列を
+返します。ひとつも存在しなければ <code>default</code> を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-reply_addresses"><code>reply_addresses(default = nil)</code></a> → <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dd>
+<p>
+返信すべきアドレスを判断し、<code>Address</code> オブジェクトの
+配列で返します。返信すべきアドレスがみつからなければ
+<code>DEFAULT</code> を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-error_reply_addresses"><code>error_reply_addresses(default = nil)</code></a> → <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dd>
+<p>
+エラーメールを返送すべきアドレスを判断し、<code>Address</code> オブジェクトの
+配列で返します。返送すべきアドレスがみつからなければ <code>default</code> を返します。
+</p>
+
+</dd>
+</dl>
+<h3>ヘッダフィールド直接操作用メソッド</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aMail-clear"><code>clear</code></a></dt>
+<dd>
+<p>
+ヘッダを全て消去します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-keys"><code>keys</code></a> → <code>[TMail::HeaderField]</code></dt>
+<dd>
+<p>
+ヘッダ名の配列を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-%5b%5d"><code>[](name)</code></a> → <code>TMail::HeaderField</code></dt>
+<dd>
+<p>
+name: String<br>
+</p>
+
+<p>
+ヘッダ名からヘッダオブジェクトを返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-%5b%5d%3d"><code>[]=(name, <var>field</var>)</code></a></dt>
+<dd>
+<p>
+name: String<br>
+field: TMail::HeaderField<br>
+</p>
+
+<p>
+<code>name</code> ヘッダに <code><var>field</var></code> を設定します。<code><var>field</var></code> は文字列か <code>TMail::HeaderField</code> オブジェクトです。
+<code>Received</code> など一部のヘッダに対してはさらにその配列も与えることができます。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-delete"><code>delete(name)</code></a></dt>
+<dd>
+<p>
+name: String<br>
+</p>
+<p>
+<code>name</code> ヘッダを消します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-delete_if%20%7b%7cname%2c%20field%7c%20%2e%2e%2e%2e%20%7d"><code>delete_if {|name, <var>field</var>| .... }</code></a></dt>
+<dd>
+<p>
+name: String<br>
+field: TMail::HeaderField<br>
+</p>
+
+<p>
+ヘッダ名とヘッダを与えてブロックを評価し、真ならその関連づけを消します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-each_header%20%7b%7cname%2c%20field%7c%20%2e%2e%2e%2e%20%7d"><code>each_header {|name, <var>field</var>| .... }</code></a></dt>
+<dt><a name="TMail%3a%3aMail-each_pair%20%7b%7cname%2c%20field%7c%20%2e%2e%2e%2e%20%7d"><code>each_pair {|name, <var>field</var>| .... }</code></a></dt>
+<dd>
+<p>
+name: String<br>
+field: TMail::HeaderField<br>
+</p>
+
+<p>
+全てのヘッダ名とヘッダオブジェクトに対するくりかえし。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-each_header_name%20%7b%7cname%7c%20%2e%2e%2e%2e%20%7d"><code>each_header_name {|name| .... }</code></a></dt>
+<dt><a name="TMail%3a%3aMail-each_key%20%7b%7cname%7c%20%2e%2e%2e%2e%20%7d"><code>each_key {|name| .... }</code></a></dt>
+<dd>
+<p>
+name: String<br>
+</p>
+
+<p>
+全てのヘッダ名に対するくりかえし。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-each_field%20%7b%7cfield%7c%20%2e%2e%2e%2e%20%7d"><code>each_field {|field| .... }</code></a></dt>
+<dt><a name="TMail%3a%3aMail-each_value%20%7b%7cfield%7c%20%2e%2e%2e%2e%20%7d"><code>each_value {|field| .... }</code></a></dt>
+<dd>
+<p>
+field: TMail::HeaderField<br>
+</p>
+
+<p>
+全てのヘッダオブジェクトに対するくりかえし。
+ヘッダの順序指定付きの <code>each_header</code> です。最初に指定したものが指定した
+順番で並び、その他のヘッダがランダムに続きます。順序は文字列の配列
+<code>TMail::Mail::FIELD_ORDER</code> で設定してください(詳細はソースコードを参照)。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-key%3f"><code>key?(name)</code></a></dt>
+<dd>
+<p>
+name: String<br>
+</p>
+
+<p>
+<code>name</code> ヘッダがあれば真。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-value%3f"><code>value?(field)</code></a></dt>
+<dd>
+<p>
+field: TMail::HeaderField<br>
+</p>
+
+<p>
+<code>field</code> ヘッダオブジェクトがあれば真。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-values_at"><code>values_at(*names)</code></a> → <code>[TMail::HeaderField]</code></dt>
+<dt><a name="TMail%3a%3aMail-indexes"><code>indexes(*names)</code></a> → <code>[TMail::HeaderField]</code></dt>
+<dt><a name="TMail%3a%3aMail-indices"><code>indices(*names)</code></a> → <code>[TMail::HeaderField]</code></dt>
+<dd>
+<p>
+names: [String]<br>
+</p>
+
+<p>
+全ての <code>names</code> について <code>fetch</code> した結果の配列を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-values"><code>values</code></a> → <code>[TMail::HeaderField]</code></dt>
+<dd>
+<p>
+登録されている全てのヘッダオブジェクトの配列を返します。
+</p>
+</dd>
+</dl>
+
+</body>
+</html>

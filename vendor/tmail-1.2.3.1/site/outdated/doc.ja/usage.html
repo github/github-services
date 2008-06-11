@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja-JP">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+  <meta http-equiv="Content-Language" content="ja-JP">
+<title>TMail の使い方</title>
+</head>
+<body>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+  _uacct = "UA-2871747-1";
+  urchinTracker();
+  </script>
+
+
+<h1>TMail の使い方</h1>
+
+<h2>TMail の概要</h2>
+
+<p>
+<code>TMail</code> は電子メールを扱うための総合ライブラリです。メールとメール
+ボックスのハンドリングを隠蔽します。初期の目的がメーラの作成だった
+ため、主な使い方としては「メールから情報を得る」「新しいメールを作成する」
+の二種類が想定されており、クライアント側の処理に強くなっています。
+</p>
+
+<h2>メールから情報を得る</h2>
+
+<p>
+これは一番最初に実装された部分であり、<code>TMail</code> が最も得意とする処理でも
+あります。
+</p>
+
+<h3>TMail::Mail クラス</h3>
+
+<p>
+<code>TMail::Mail</code> クラスはメール一通を隠蔽するオブジェクトです。まずどうにか
+してこのオブジェクトを作らないといけません。このオブジェクトを作る方法は
+三通りあります。
+</p>
+
+<ol>
+<li>文字列からつくる</li>
+<li>ファイル(名)からつくる</li>
+<li><code>Port</code> からつくる</li>
+</ol>
+
+<p>
+文字列、ファイルはそれぞれメール一通分だけを含んでいなければいけません。
+そのうえで以下のように作成します。
+</p>
+<pre>
+require 'tmail'
+mail = TMail::Mail.parse(string)    # from String
+mail = TMail::Mail.load(filename)   # from file
+</pre>
+<p>
+ここには特に問題はないと思います。
+</p>
+
+<h3>Port と Loader</h3>
+
+<p>
+<code>Port</code> というのは <code>TMail</code> におけるメールソースの抽象表現です。たとえば
+上述した文字列やファイル名もメールソースで、<code>TMail::Mail#parse</code> や <code>load</code> は
+文字列やファイルを一度 <code>Port</code> でラップしたうえで <code>Mail</code> オブジェクトを作成
+しています。この <code>Port</code> でラップすることで文字列、ファイル
+(将来的には IMAP プロトコルも？) の違いを隠蔽しています。
+</p>
+
+<p>
+ただし、<code>Port</code> をユーザが直接作ることはあまりないでしょう。主にユーザが
+<code>Port</code> をさわることになるのは、メールボックスのラッパーである <code>Loader</code> を
+使うときです。たとえば MH メールボックスの中にあるメールを順番に処理する
+ためには以下のようにします。
+</p>
+<pre>
+require 'tmail'
+
+loader = TMail::MhLoader.new( '/home/aamine/Mail/inbox' )
+loader.each_port do |port|
+  mail = TMail::Mail.new(port)
+  # ....
+end
+</pre>
+
+<h3>TMail::Mail オブジェクトから情報を得る</h3>
+
+<p>
+以上のような手段で <code>TMail::Mail</code> オブジェクトを作ったら、あとはそのメソッドを
+呼ぶだけでたいていのことはできます。たとえば <code>To:</code> アドレスを取るなら
+</p>
+<pre>
+require 'tmail'
+mail = TMail::Mail.parse( 'To: Minero Aoki &lt;aamine@loveruby.net&gt;' )
+p mail.to   # =&gt; ["aamine@loveruby.net"]
+</pre>
+<p>
+<code>Subject:</code> ならば
+</p>
+<pre>
+p mail.subject
+</pre>
+<p>
+メール本体ならば
+というように、とても簡単です。
+</p>
+
+<p>
+詳しくは <code>TMail::Mail</code> クラスのリファレンスを、
+より実用的な例としては <code>sample/from-check.rb</code> を見てください。
+</p>
+
+<h3>MIME マルチパートメール</h3>
+
+<p>
+MIME マルチパートメールにも対応しています。マルチパートのときは
+<code>Mail#multipart?</code> が真になり、<code>#parts</code> に <code>TMail::Mail</code> オブジェクトの
+配列が入ります。
+</p>
+<pre>
+require 'tmail'
+mail = TMail::Mail.parse( multipart_mail_string )
+if mail.multipart? then
+  mail.parts.each do |m|
+    puts m.main_type
+  end
+end
+</pre>
+<p>
+より具体的な例としては <code>sample/multipart.rb</code> を見てください。
+</p>
+
+<h3>TMail がやらないこと</h3>
+
+<p>
+<code>TMail</code> は、ヘッダは自動でデコード・エンコードしますが、本体(本文)は
+一切変更しません。ただし近い将来には <code>Base64</code> のデコードは自動でやる
+かもしれません。
+</p>
+
+
+<h2>新しいメールを作成する</h2>
+
+<p>
+こちらも <code>TMail::Mail</code> クラスが主体です。とにかくメールを作ればいい
+場合は空文字列から、メールボックスに作りたい場合はローダを経由して
+ポートを作成してそこから、メールオブジェクトを作ります。
+</p>
+<pre>
+require 'tmail'
+
+# Example 1: create mail on only memory
+mail = TMail::Mail.new
+
+# Example 2: create mail on mailbox (on disk)
+loader = TMail::MhLoader.new('/home/aamine/Mail/drafts')
+mail = TMail::Mail.new( loader.new_port )
+</pre>
+<p>
+作ったら、中身を入れます。
+</p>
+<pre>
+mail.to = 'test@loveruby.net'
+mail.from = 'Minero Aoki &lt;aamine@loveruby.net&gt;'
+mail.subject = 'test mail'
+mail.date = Time.now
+mail.mime_version = '1.0'
+mail.set_content_type 'text', 'plain', {'charset'=&gt;'iso-2022-jp'}
+mail.body = 'This is test mail.'
+</pre>
+<p>
+どのヘッダをセットしたらいいかなど細かい部分ももうちょっとカバー
+したいのですが、まだ実装していません。とりあえず上記のヘッダは
+セットしたほうがよいでしょう。また返信・転送の場合はまたそれぞれ
+規約があります。これもカバーしたいのですがまだ実装していません。
+バージョン <code>1.0</code> に期待してください。
+</p>
+
+<p>
+最後に文字列化します。
+</p>
+<pre>
+str = mail.encoded
+</pre>
+<p>
+作成元ポートに書き戻すなら、かわりに以下のようにします。
+</p>
+<pre>
+mail.write_back
+</pre>
+<p>
+<code>write_back</code> は中間文字列を介することなくファイルに直接書きこみます。
+</p>
+
+<p>
+より実用的な例としては <code>sample/sendmail.rb</code> を見てください。
+</p>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+
+# generate rdocs
+
+def rdoc
+  template = 'html'
+  output   = 'doc/rdoc'
+  FileUtils.rm_r(output) if File.exist?(output)
+  system "rdoc --op #{output} --template #{template} --main README --merge --inline-source [A-Z]* lib/**/*.rb ext/**/*.c"
+  #insert_ads(output)
+end
+
+# Insert an ad if available.
+
+def insert_ads(site)
+  adfile = 'doc/ads/rdoc.html'
+  return unless File.file?(adfile)
+  adtext = File.read(adfile)
+  #puts
+  dirs = Dir.glob(File.join(site,'*/'))
+  dirs.each do |dir|
+    files = Dir.glob(File.join(dir, '**/*.html'))
+    files.each do |file|
+      html = file_read(file)
+      bodi = html.index('<body>')
+      html[bodi + 7] = "\n" + adtext
+      #print "Augmenting #{file}..."
+      file_write(file, html) unless dryrun?
+      #puts "[done]"
+    end
+  end
+end
+
+if $0 == __FILE__
+  rdoc
+end
+

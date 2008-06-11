@@ -1,0 +1,23 @@
+Date: Tue, 26 Jan 1999 23:17:34 +0900
+From: aamine@dp.u-netsurf.ne.jp
+To: ruby-list@netlab.co.jp
+Mime-Version: 1.0
+Content-Type: multipart/mixed;
+  boundary="Multipart_Tue_Jan_26_23:14:41_1999-1"
+Content-Transfer-Encoding: 7bit
+
+this is preamble
+
+--Multipart_Tue_Jan_26_23:14:41_1999-1
+Content-Type: text/plain; charset=iso-2022-jp
+
+this is multi part body 1
+
+--Multipart_Tue_Jan_26_23:14:41_1999-1
+Content-Type: text/plain; charset=iso-2022-jp
+
+multi part body, 2
+
+--Multipart_Tue_Jan_26_23:14:41_1999-1--
+
+epilogue

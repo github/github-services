@@ -1,0 +1,9 @@
+= NEWS
+
+== version 0.10.8 (2004-02-20)
+
+  * TMail::UNIXMbox did not work.
+  * TMail::Mail#encoded did not work when Content-Type: multipart/mixed
+    but that is not multipart mail. [ruby-list:38050]
+  * RFC2231 encoder did not encode 3 characters: *%'
+

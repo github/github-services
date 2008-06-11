@@ -1,0 +1,534 @@
+= Subversion Changelog
+
+== 2008-03-01  mikel
+
+* Closed #18516 - Fix TMail::Mail#preamble, and add #preamble= (Charles Lowe) (233)
+* Applied patch #18515 to remove ftools from test case (Charles Lowe) (232)
+* A lot of documentation patches to the mail and utils and net files.  Also added "log/BugTrackingLog.txt" for myself as my bug log got clobbered by the new changelog.txt format. (231)
+
+== 2008-02-22  transami
+
+* Update the doc feature of setup.rb.
+* installing rdoc labels the directory config.docdir/ruby-{package}/.
+* generateing rdocs places them in doc/rdoc.
+* this was done to prevent potential name clashes with other system docs. (230)
+
+== 2008-02-22  mikel
+
+* Added a lot more documentation, getting there (229)
+
+== 2008-02-21  transami
+
+* Added homepage entry to project file. (228)
+* Fixed missing rake task entry in setup.rb. (227)
+
+== 2008-02-19  transami
+
+* Moved script/ to work/ --as reap and setup.rb should now suffice. (226)
+* Added a work directory. This is a sort of code depot. (225)
+* Add some entries to svn:ignore. (224)
+* Fixed setup.rb uninstaller. (223)
+* Updated Rakefile and setup.rb. (222)
+
+== 2008-02-18  transami
+
+* Update Rakefile fixing test bug. (221)
+* Added new "uber" Rakefile. (220)
+* Moved doc to site. (219)
+
+== 2008-02-14  mikel
+
+* Moving changelog to a capital (218)
+* fixing changelog (217)
+
+== 2008-02-13  mikel
+
+* Removing bad add (SVN is trying to add this twice to my repo) (216)
+
+== 2008-02-10  transami
+
+* Added test log. (215)
+* Update to .reap to add test/ to loadpath when testing. (214)
+* Added xml log and update CHANGES. (213)
+* Touched up changelogs. (212)
+* Add make script and convert others to pure ruby. (211)
+* Remove old ratch scripts. (210)
+* Update metadata. (209)
+
+== 2008-01-17  mikel
+
+* Updated development section (208)
+* Updated website to add "contributing" to the list (207)
+* More website updates (206)
+* Update reference index to take some confusion out (205)
+* Cleaning up the docs more - adding mailing list (204)
+* Cleaning up the docs more - adding quickstart guide (203)
+* Cleaning up the docs more (202)
+* Adding some documentation to the website (201)
+* Added update to the website and an extra test to test_quote taken from the ActionMailer version of TMail (200)
+
+== 2008-01-15  mikel
+
+* Updated index page (199)
+* Updated website for 1.9 compatibility (198)
+* That's 1.9 compatibility done (197)
+* 1.9 Patching - down to two tests failing (196)
+
+== 2008-01-12  mikel
+
+* Updated changelog with latest patches (195)
+* Cleaned up how address.rb handles quoting strings and arrays (194)
+* Updating to handle Ruby 1.9 - Three tests failing at the moment (193)
+* Closed #17044 and #17045  ALL TESTS PASSING!!!! (192)
+
+== 2008-01-11  transami
+
+* Updated pack tasks (note these are now for 0.5 series of ratch) (186)
+* Gems requires author field to be an array (probably a gems bug) (184)
+
+== 2008-01-11  mikel
+
+* Closes #15157 - The email address "@"@test.com does not parse.  It now does (mikel) (191)
+* Added Rakefile for testing only (190)
+* Ready for gem (188)
+* Fixed version (187)
+* Final commit for version 1.2.1 (185)
+* VERSION 1.2.1 (183)
+* VERSION 1.2.1 (182)
+* Updated test_quote.rb to make it copmpatible with Ruby 1.9 (181)
+
+== 2008-01-10  mikel
+
+* Updated logs to reflect recent changes (180)
+* Added tests for UNIXMbox.fromaddr method. Also changed behaviour of HeaderField.new_from_port to return nil if it does not find a matching header in the port provided.  Extended UNIXMbox.fromaddr to also search for EnvelopeSender and also made it a public method, not private - Thanks to Maarten O. for alerting these bugs (179)
+* Fixed TMail::HeaderField.new_from_port to correct typo on "Regep" to "Regexp".  Also added test cases to cover this class method.  Also added ability to scan for the EnvelopeSender explictly as it would not come up on searching for "From" due to Regexp confilct with From: (with the colon).  Thanks to Maarten O. for reporting this. (178)
+
+== 2007-12-25  transami
+
+* Added stamp script. (177)
+* Updated tmail.roll for version 1.2.1. (176)
+* Moved ROLLRC to tmail.roll. (175)
+
+== 2007-12-25  mikel
+
+* Applied Mr Aoki's patch from TMail revision 3674 - Handles the incorrect decoding of attachments (174)
+* Applied patch from Mike Mondragon handling quote boundary being greedy on content-type header fields. (173)
+* Removed the mailscanner directory (172)
+* moved mailscanner.c file to tmailscanner.c (171)
+* Changed name of the mailscanner directory to tmailscanner (170)
+* Change the name of mailscanner to tmailscanner to handle a copyright issue.  MailScanner is a copyrighted name (169)
+* Included a require 'stringio' to hack resolve a load order problem when running autotest (168)
+
+== 2007-12-14  mikel
+
+* Added links into all the pages back to RDoc and also added notes to the index page. (164)
+
+== 2007-12-14  transami
+
+* Added package tasks. Fixe prepare task. (167)
+* Minor enhancement to publish task to make it's usage clearer. (166)
+* Moved script/config.yaml ti meta/ per Ratch 0.4.0. (165)
+
+== 2007-12-02  transami
+
+* Updated release script (require newest release of ratch) (160)
+
+== 2007-12-02  mikel
+
+* Added about 15 test cases from the Rails community.  Added failing test case for an unquoted @ char in the From header field.  Need to check fully if this is needed or not, but it is there anyway - to be resolved.  I have emailed 822 mailing list to check this out. (163)
+* Fixed error in release notes for tag 1.2.0 (162)
+* added news item (159)
+* Updated version number (157)
+
+== 2007-12-01  transami
+
+* Couple more additions. (156)
+* Err.. sorry forgot to add some very importnat files! (155)
+
+== 2007-11-30  mikel
+
+* Updated changelog and history (153)
+* Fixed scanner.rb so that it passes the same tests as scanner.c.  Also fixed up all the tests to require test_helper.rb so that the load path is correct. (152)
+
+== 2007-11-30  transami
+
+* Some task updates. (154)
+
+== 2007-11-29  transami
+
+* Update Hisotry.txt, NOTES, etc. in prep for release. (151)
+* Fixed test script and updated MANIFEST. (150)
+* Renamed scanner_c to mailscanner. (149)
+* Prepare for next release. (148)
+* Adjusted scanner libs for renamed extension. (147)
+* Renamed  scanner_c.c to mailscanner.c. (146)
+* Moved scanner_c/ to mailscanner/. (145)
+* Updated meta/ files. (144)
+
+== 2007-11-22  transami
+
+* Updated history log. (143)
+* Updated scripts to reflect removed base64 lib. (142)
+* Remove base64 c extension, as it's speed benefit was negligable. (141)
+
+== 2007-11-21  transami
+
+* Fixed bug in base64_c.c. (140)
+* update to base64 benchmark (139)
+* Added base64 benchmark. (138)
+* Moved manifest to meta/ --in future this will be auto generated. (137)
+
+== 2007-11-20  mikel
+
+* updated web page css (136)
+* updated style on page (135)
+
+== 2007-11-19  mikel
+
+* Added a bunch of documentation to interface.rb (134)
+
+== 2007-11-18  transami
+
+* Fixed scanner_c load error. (133)
+* Updated Manifest. (132)
+* Adjustments for base64_c. (131)
+* Completed compile rearrangements. (130)
+* Moved ext/ file to proper place. (129)
+* Added needed ext/ dirs. (128)
+* Round about rearrange, sorry. (127)
+* Move Makefile. (126)
+* Rearranged ext/. (125)
+* Working on corect base64 requiring and test passing. (124)
+* Minor add ext/ to test includes (should make an option) (123)
+
+== 2007-11-18  mikel
+
+* Added a log more documentation to the interface.rb file - Mikel (122)
+
+== 2007-11-17  mikel
+
+* Added google analytics urchin to every page as well as adding tracker codes to the outbound links.  Also added blog page. (121)
+
+== 2007-11-16  transami
+
+* Upped version on roll file in anticipation of next release. (120)
+* Quick fix just to make base64 work. (119)
+
+== 2007-11-15  mikel
+
+* Closed ticket 15445 - tmail not returning a mail object on create_forward
+Closed ticket 15643 - tmail not returning from address if reply_to is set to nil when you ask a mail object for reply_addresses
+Added a lot of documentation to the interface.rb file (115)
+* updated index page (114)
+
+== 2007-11-15  transami
+
+* Fixed compile process. (118)
+* Improved test and compile scripts. (116)
+
+== 2007-11-12  transami
+
+* Moved bat/ to script/. (113)
+
+== 2007-11-09  transami
+
+* Additional tasks. (112)
+
+== 2007-11-08  mikel
+
+* Added links to the website and updated the notes file. (108)
+
+== 2007-11-08  transami
+
+* Started versoin 1.1.2. (111)
+* Added zip format to roll file. (110)
+* Fixed pubish and rdoc config settings. (109)
+* Updated Manifest. (107)
+* Added a clobber/distclean batch file. (106)
+* Should be final fine-tuning to extconf.rb (105)
+
+== 2007-11-07  transami
+
+* Finally! Finally! Got Windows to install. (104)
+* Force Windows into no extension mode. (103)
+* Added log/Note.txt (this is the note for release). (102)
+* Added changelog task (still needs one piece). (101)
+* Renamed TODO to Todo.txt (oh, the struggle for consistancy). (100)
+* Added final note to History.txt. (99)
+* Fine-tuning extconf.rb and require_arch.rb. (98)
+* Create fallback gem install. (97)
+* Changed RUBYGEMS_NO_COMPILE to NORUBYEXT. (96)
+* Updated manifest. Capitalized information files (not sure which I like best). (95)
+* Finish organization clean-up. (94)
+* Add clobber subtasks. (93)
+* Updated require_arch and removed linux binaries. (92)
+
+== 2007-11-06  transami
+
+* Updated manifest. (91)
+* Updated extconf.rb files to copy extension to arch directories. (90)
+* Updated version.rb. (89)
+* Added index.rb for Rolls. (88)
+* Added require_arch.rb. (87)
+* Minor organization details (yet to be fully determined). (86)
+* Added config_dir setting to extconf.rb (although it dodn't seem to do any good). (85)
+* Added platform tiers to lib/tmail/. (84)
+* Moved www to doc/ (RDocs go in doc/rdoc). (83)
+* Removed tasks directory. (82)
+* Added tag ans compile batch files. (81)
+* Removed Rakefile. (80)
+* Removed Manifest.txt (will be replaced by new manifest). (79)
+* Removed config/ directory. (78)
+* Removed script/ dir. (77)
+* Added compilation batch script, and require_arch.rb. (76)
+
+== 2007-11-05  transami
+
+* Added platforms to roll file. Alaso remove doc/. (75)
+
+== 2007-11-04  mikel
+
+* Added some documentation to the lib/mail.rb file and also updated the quickstart guide to reflect the fact we are now a gem.
+Also added another test case to make sure a bug that was reported in ruby-talk relating to TMail had nothing to do with TMail. (74)
+
+== 2007-11-01  mikel
+
+* * Closed 1524 - Did another patch on the folding, re-read the RFC's and got clarification on when SHOULD and MUST fold. New folding section at the bottom of encode handles various line lengths which include or do not include whitespace (73)
+
+== 2007-10-31  mikel
+
+* * Put in an escape clause in the def fold method of class Encode to skip folding of any X- header line. (72)
+
+== 2007-10-30  transami
+
+* Added separate MANIFEST file, unfortunately it varies slightly from Hoe's. (71)
+* Minor update to header of README. (70)
+* Added formats to roll file, for packaging with box. (69)
+* Added initial set of build tools in bat/. (68)
+* Updated website, adding rdocs. (67)
+* Up'd version to 1.1.1. (66)
+* Minor update to roll file. (65)
+* Added bat/ folder, which we can use ratch scripts for now. (64)
+* Changed extension or roll file (was index). (63)
+
+== 2007-10-29  transami
+
+* Added meta directory and index file. (61)
+* Removed extraneous lib directory from website. (60)
+* Updates to website.
+  * Cleaned up how ruby code was diplayed.
+  * Cleaned up how shell code was displayed.
+  * Improved toplevel menu. (59)
+
+== 2007-10-29  mikel
+
+* TMail - Index page update the news (62)
+* Updated against the code that is currently on the website (58)
+* Removed an old make file and tagged TMail 1.1.0 (57)
+* * Updated version (56)
+* * Refactored how the package was going to_s - made the handling of quotation marks inside of the header more consistent and in accordance with the RFCs on the matter (ie, a filename in a content-disposition field paramater filename=README.TXT will not be quoted unless it contains special characters per RFC 1521 ) (55)
+
+== 2007-10-28  mikel
+
+* * Made the package into a GEM! (54)
+
+== 2007-10-27  mikel
+
+* * Preparing for export as a GEM, final changes for the 0.12 release (52)
+* * Re-factored the quotation handling - learnt more about how this is implemented by Minero, and re-wrote my handling of it to preserve quotation marks in the headers [Mikel] (50)
+* * Closed 15077 - Assigning the body via mail.body would not reparse the email body text. Changed mail.rb to reparse body if assigned via body= String. (49)
+
+== 2007-10-27  transami
+
+* Update usage.html, changed mail.encoded to mail.to_s. (51)
+
+== 2007-10-26  mikel
+
+* ==== Fri Oct 26 02:21:13 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Deleted incompatabilities from the root folder (it is in www/outdated) (48)
+
+== 2007-10-25  mikel
+
+* ==== Thu Oct 25 05:52:02 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Moved facade.rb to interface.rb - updated mail.rb to reflect this (40)
+* ==== Thu Oct 25 05:39:09 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Totally rewrote the README file to be in RDoc format and provide a beginning place for the RDoc documentation
+
+* Cleaned up the root directory of all the spurious files.
+  
+* Merged the Changelog files and made it into RDoc format.
+
+* Cleaned up the Bugs and TODO files
+
+* Added RDoc headers to each source file.
+
+* Started doing the RDoc on the utils.rb file (39)
+* Thu Oct 25 03:18:18 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Cleaned up the tree some in terms of documents.  Merged the
+    change logs, moved the 0.9 to 0.10 docs into the outdated
+    folder, modified the TODO (38)
+* Mon Oct 25 13:06:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+* Moved doc directory to WWW so that running RDoc by default doesn't
+  overwrite all the files. (37)
+* Mon Oct 25 11:12:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Added quickstart page to WWW as well as applied styling
+    to all existing pages in the site.
+    
+  * Uploaded site to rubyforge (35)
+
+== 2007-10-25  transami
+
+* Adjusted some colors. (47)
+* Moved BUGS and DEPENDS to outdated. (46)
+* Move old doc files (Having trouble with SVN) (45)
+* Moved NEWS to outdated. It's just too old to be of much use. (44)
+* Added jquery.js to website. (43)
+* Uncluttered trunk by moving some documentation files. (42)
+* Contined work on website -- using jQuery to keep DRY. (41)
+
+== 2007-10-24  transami
+
+* Closed div end-tag in index.html. (34)
+* Updated header of index.html and added some new images. (33)
+* Added new website (rough-draft). (32)
+* Moved doc/doc.ja and doc/rdd to outdated/. (31)
+* Added doc/outdated to hold old documentation files. (30)
+* Moved doc/doc.en/ to doc/manual/. (29)
+* Edited manual/index.html. (28)
+* Moved doc.en/, doc.ja/ and rdd/ to new doc/ directory. (27)
+* Moved doc to rdd. (26)
+
+== 2007-10-24  mikel
+
+* Mon Oct 24 22:40:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Updated website to reflect release. (23)
+* ==========================================
+  Version 0.11.0. Released
+Mon Oct 24 21:14:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+========================================== (21)
+* Moving 0.11 branch into trunk (20)
+* Mon Oct 24 17:50:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+	* Remaining failing tests are one encoding problem with
+		relating to RFC 2231 and another problem where special
+		characters are not properly quoted if they are the name
+		portion of an email address (ie, TMail does not handle
+		the address <"@"@example.com> properly)
+
+	* Closed #14964 - The TMail from ActionMailer Preview Release
+		2.0 is now fully merged into TMail branch 0.11.
+		All previous tests and examples relating to TMail that
+		were part of ActionMailer 2.0 Preview Release	now pass.
+
+	* Closed #15008 - Fixed handling of multipart content type
+		headers.  Now tested against many types of email.
+		TMails' behaviour now is to take any boundary type, if
+		it contains illegal characters, it will wrap it in ""
+		when requesting the content type by mail['content-type]
+		you will receive it unquoted, when outputting the email
+		to_s as a whole you will receive the content-type field
+		with the boundary section quoted if it contains illegal
+		characters.
+
+  * Replaced id with object_id line 221 in stringio.rb (18)
+* Fix up on revision 16 - forgot to add in files (17)
+* Mon Oct 24 15:35:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Copied over the TMail/*.rb files from the TRUNK version of Rails
+    ActionMailer (2.0 Preview Release) into branch for 0.11.0
+    
+  * Fixed up many broken tests so that they pass (testing errors, 
+    including wrong paths etc)
+  
+  * Closed #15002 - Fixed error where handling of MIME content-type
+    headers that had quoted parameters due to including RFC 2045
+    special characters were being stripped of their quotation marks
+    when the mail object was sent "to_s".  Now any quotation marks
+    that were in the original are maintained in the result
+    
+  * Closed #14999 - TMail now "fixes" illegal Content-Type bondary= 
+    parameter by wrapping it in double quotation marks per RFC 2045
+    and also produces this in the mail.to_s method
+    
+  * Added in tmail/core_extensions.rb which installs Object.blank?
+    unless Object already responds_to?(:blank?) ie, we are already
+    in a Rails environment.
+    
+  * Updated names of the test files as a start to cleaning up the
+    tests directory. (16)
+
+== 2007-10-23  mikel
+
+* Mon Oct 24 0:40:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Copied over Rails modified TMail into branch for 0.11. (15)
+* Mon Oct 23 17:13:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Applied Rails revisions 965. Protect against nil strings and
+    empty conversion bases.
+
+  * Applied Rails revisions 964. Made the unquoted string and
+    body the default. (14)
+* Mon Oct 23 14:56:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Applied Rails revision 919.  Don't fail on an empty body or
+    empty subject line, default to an empty string body or subject (13)
+* Mon Oct 23 14:56:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Applied Rails revision 918.  Don't include blank attachments
+    in the email (12)
+* Mon Oct 23 14:56:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Applied Rails ticket #916.  Handles better quoting and handling
+    of attachments. (11)
+* Mon Oct 23 14:41:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Merged net.rb - code clean up - Closes Task#1736 (10)
+* Mon Oct 23 14:35:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Merged stringio.rb - code clean up - Closes Task#1742 (9)
+* Mon Oct 23 14:23:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Merged config.rb - code clean up - Closes Task#1726 (8)
+* Mon Oct 23 14:01:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Merged address.rb - code clean up - Closes Task#1723
+
+  * Copied in the Rails test Email fixtures
+  
+  * Added in outlook test email for invalid boundary type (7)
+
+== 2007-10-22  mikel
+
+* Mikel Lindsaar
+Updated version for release (4)
+* Mon Oct 22 22:00:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * General cleanup - converted all files to UTF-8 from the various
+    encodings. (3)
+* Mon Oct 22 22:00:00 2007  Mikel Lindsaar <raasdnil@gmail.com>
+
+  * Fixed all tests so that they now pass - were problems with the times
+    being checked were hard coded for Tokyo time and so would fail in a
+    different time zone.  All of the tests that were failing due to this
+    now pass.
+    
+  * Fixed handling of MIME content-type header handling so that TMail now
+    quotes any content-type it finds to contain invalid characters per 
+    RFC 2045 which are "/", "?" or "=".  Per RFC, handling is to put
+    double quotes are put around it with the quote_boundary method, we
+    now do this.
+
+  * Updated Copyright year for Minero Aoki (2)
+
+== 2007-09-26  transami
+
+* initial import (1)
+

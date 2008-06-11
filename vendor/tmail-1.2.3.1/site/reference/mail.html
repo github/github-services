@@ -1,0 +1,726 @@
+<h1><code>class <a name="TMail%3a%3aMail">TMail::Mail</a> </code></h1>
+
+<h2>Class Methods</h2>
+
+<dl>
+<dt><a name="TMail%3a%3aMail-new"><code>new(port = TMail::StringPort.new, <var>config</var> = DEFAULT_CONFIG)</code></a> -&gt; <code><a href="mail.html#TMail%3a%3aMail">TMail::Mail</a></code></dt>
+<dd>
+<p>
+port: <a href="port.html#TMail%3a%3aPort">TMail::Port</a><br>
+config: <a href="config.html#TMail%3a%3aConfig">TMail::Config</a><br>
+</p>
+
+<p>
+creates a new <code>TMail::Mail</code> object from PORT.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-load"><code>load(filename)</code></a> -&gt; <code><a href="mail.html#TMail%3a%3aMail">TMail::Mail</a></code></dt>
+<dd>
+<p>
+filename: String<br>
+</p>
+
+<p>
+creates a new <code>TMail::Mail</code> object. FILENAME is the name of file
+which contains just one mail (e.g. MH mail file).
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-parse"><code>parse(str)</code></a> -&gt; <code><a href="mail.html#TMail%3a%3aMail">TMail::Mail</a></code></dt>
+<dd>
+<p>
+str: String<br>
+</p>
+
+<p>
+parses STR and creates a new <code>TMail::Mail</code> object.
+</p>
+
+</dd>
+</dl>
+<h2>Instance Methods</h2>
+
+<dl>
+<dt><a name="TMail%3a%3aMail-port"><code>port</code></a> -&gt; <code><a href="port.html#TMail%3a%3aPort">TMail::Port</a></code></dt>
+<dd>
+<p>
+the source port of this mail.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-body_port"><code>body_port</code></a> -&gt; <code><a href="port.html#TMail%3a%3aPort">TMail::Port</a></code></dt>
+<dd>
+<p>
+the port to save body of this mail.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-each%20%7b%7cline%7c%20%2e%2e%2e%2e%20%7d"><code>each {|line| .... }</code></a></dt>
+<dd>
+<p>
+line: String<br>
+</p>
+
+<p>
+iterates for each lines of mail body.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-body"><code>body</code></a> -&gt; <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-preamble"><code>preamble</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+the mail body. If the mail is a MIME multipart mail,
+this attribute represents "preamble".
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-parts"><code>parts</code></a> -&gt; <code>[<a href="mail.html#TMail%3a%3aMail">TMail::Mail</a>]</code></dt>
+<dd>
+<p>
+parts of this mail. (valid only if this mail is a MIME multipart mail)
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-epilogue"><code>epilogue</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+If the mail was MIME multipart mail, this represent "epilogue" string.
+Else, empty string.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-multipart%3f"><code>multipart?</code></a></dt>
+<dd>
+<p>
+true if the message is a multi-part mail.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-encoded"><code>encoded(eol = "\n", <var>encoding</var> = 'j')</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+converts the mail object to a MIME encoded string.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-decoded"><code>decoded(eol = "\n", <var>encoding</var> = 'e')</code></a> -&gt; <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-to_s"><code>to_s(eol = "\n", <var>encoding</var> = 'e')</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+converts the mail object to a decoded string.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-inspect"><code>inspect</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+returns simple string representation like
+<code>"#&lt;TMail::Mail port=&lt;StringPort:str=...&gt;&gt;"</code>
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-write_back"><code>write_back(eol = "\n", <var>encoding</var> = 'e')</code></a></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+converts this mail into string and write back to <code>body_port</code>,
+setting line terminator to EOL.
+</p>
+
+</dd>
+</dl>
+<h3>Property Access Method</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aMail-date"><code>date(default = nil)</code></a> -&gt; <code>Time</code></dt>
+<dt><a name="TMail%3a%3aMail-date%3d"><code>date=(datetime)</code></a></dt>
+<dd>
+<p>
+datetime: Time<br>
+default: Object<br>
+</p>
+
+<p>
+a Time object of Date: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-strftime"><code>strftime(format, <var>default</var> = nil)</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+format: String<br>
+default: Object<br>
+</p>
+
+<p>
+is equals to <code>date.strftime(format)</code>.
+If date is not exist, this method does nothing and
+returns <var>default</var>.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-to"><code>to(default = nil)</code></a> -&gt; <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-to%3d"><code>to=(specs)</code></a></dt>
+<dd>
+<p>
+specs: String | [String]<br>
+default: Object<br>
+</p>
+
+<p>
+address specs for To: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-to_addrs"><code>to_addrs(default = nil)</code></a> -&gt; <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a>]</code></dt>
+<dt><a name="TMail%3a%3aMail-to_addrs%3d"><code>to_addrs=(addrs)</code></a></dt>
+<dd>
+<p>
+addrs: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | [<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]<br>
+default: Object<br>
+</p>
+
+<p>
+adresses which is represented in To: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-cc"><code>cc(default = nil)</code></a> -&gt; <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-cc%3d"><code>cc=(specs)</code></a></dt>
+<dd>
+<p>
+specs: String | [String]<br>
+default: Object<br>
+</p>
+
+<p>
+address specs for Cc: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-cc_addrs"><code>cc_addrs(default = nil)</code></a> -&gt; <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dt><a name="TMail%3a%3aMail-cc_addrs%3d"><code>cc_addrs=(addrs)</code></a></dt>
+<dd>
+<p>
+addrs: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | [<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]<br>
+default: Object<br>
+</p>
+
+<p>
+addresses which is represented in Cc: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-bcc"><code>bcc(default = nil)</code></a> -&gt; <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-bcc%3d"><code>bcc=(specs)</code></a></dt>
+<dd>
+<p>
+specs: String | [String]<br>
+default: Object<br>
+</p>
+
+<p>
+address specs for Bcc: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-bcc_addrs"><code>bcc_addrs(default = nil)</code></a> -&gt; <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dt><a name="TMail%3a%3aMail-bcc_addrs%3d"><code>bcc_addrs=(addrs)</code></a></dt>
+<dd>
+<p>
+addrs: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | [<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]<br>
+default: Object<br>
+</p>
+
+<p>
+adresses which is represented in Bcc: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-from"><code>from(default = nil)</code></a> -&gt; <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-from%3d"><code>from=(specs)</code></a></dt>
+<dd>
+<p>
+specs: String | [String]<br>
+default: Object<br>
+</p>
+
+<p>
+address specs for From: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-from_addrs"><code>from_addrs(default = nil)</code></a> -&gt; <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dt><a name="TMail%3a%3aMail-from_addrs%3d"><code>from_addrs=(addrs)</code></a></dt>
+<dd>
+<p>
+addrs: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | [<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]<br>
+default: Object<br>
+</p>
+
+<p>
+adresses which is represented in From: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-friendly_from"><code>friendly_from(default = nil)</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+default: Object<br>
+</p>
+
+<p>
+a "phrase" part or address spec of the first From: address.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-reply_to"><code>reply_to(default = nil)</code></a> -&gt; <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-reply_to%3d"><code>reply_to=(specs)</code></a></dt>
+<dd>
+<p>
+specs: String | [String]<br>
+default: Object<br>
+</p>
+
+<p>
+address specs of Reply-To: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-reply_to_addrs"><code>reply_to_addrs(default = nil)</code></a> -&gt; <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dt><a name="TMail%3a%3aMail-reply_to_addrs%3d"><code>reply_to_addrs=(addrs)</code></a></dt>
+<dd>
+<p>
+addrs: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | [<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]<br>
+default: Object<br>
+</p>
+
+<p>
+adresses which is represented in Reply-To: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-sender"><code>sender(default = nil)</code></a> -&gt; <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-sender%3d"><code>sender=(spec)</code></a></dt>
+<dd>
+<p>
+spec: String<br>
+</p>
+
+<p>
+address spec for Sender: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-sender_addr"><code>sender_addr(default = nil)</code></a> -&gt; <code><a href="address.html#TMail%3a%3aAddress">TMail::Address</a></code></dt>
+<dt><a name="TMail%3a%3aMail-sender_addr%3d"><code>sender_addr=(addr)</code></a></dt>
+<dd>
+<p>
+addr: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a><br>
+</p>
+
+<p>
+an address which is represented in Sender: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-subject"><code>subject(default = nil)</code></a> -&gt; <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-subject%3d"><code>subject=(sbj)</code></a></dt>
+<dd>
+<p>
+sbj: String<br>
+</p>
+
+<p>
+the subject of the message.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-message_id"><code>message_id(default = nil)</code></a> -&gt; <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-message_id%3d"><code>message_id=(id)</code></a></dt>
+<dd>
+<p>
+id: String<br>
+</p>
+
+<p>
+message ID string.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-in_reply_to"><code>in_reply_to(default = nil)</code></a> -&gt; <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-in_reply_to%3d"><code>in_reply_to=(ids)</code></a></dt>
+<dd>
+<p>
+ids: String | [String]<br>
+</p>
+
+<p>
+message IDs of replying mails.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-references"><code>references(default = nil)</code></a> -&gt; <code>[String]</code></dt>
+<dt><a name="TMail%3a%3aMail-references%3d"><code>references=(ids)</code></a></dt>
+<dd>
+<p>
+ids: String | [String]<br>
+</p>
+
+<p>
+message IDs of all referencing (replying) mails.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-mime_version"><code>mime_version(default = nil)</code></a> -&gt; <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-mime_version%3d"><code>mime_version=(ver)</code></a></dt>
+<dd>
+<p>
+ver: String<br>
+</p>
+
+<p>
+MIME version.
+If it does not exist, returns the DEFAULT.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-set_mime_version"><code>set_mime_version(major, <var>minor</var>)</code></a></dt>
+<dd>
+<p>
+major: Integer<br>
+minor: Integer<br>
+</p>
+
+<p>
+set MIME version from integers.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-content_type"><code>content_type(default = nil)</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+the content type of the mail message (e.g. "text/plain").
+If it does not exist, returns the DEFAULT.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-main_type"><code>main_type(default = nil)</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+the main content type of the mail message. (e.g. "text")
+If it does not exist, returns the DEFAULT.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-sub_type"><code>sub_type(default = nil)</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+the sub content type of the mail message. (e.g. "plain")
+If it does not exist, returns the DEFAULT.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-content_type%3d"><code>content_type=(ctype)</code></a></dt>
+<dd>
+<p>
+ctype: String<br>
+</p>
+
+<p>
+set content type to STR.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-set_content_type"><code>set_content_type(main, <var>sub</var>, <var>params</var> = nil)</code></a></dt>
+<dd>
+<p>
+main: String<br>
+sub: String<br>
+params: {String => String}<br>
+</p>
+
+<p>
+set Content-type: header as "main/sub; param=val; param=val; ...".
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-type_param"><code>type_param(name, <var>default</var> = nil)</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+name: String<br>
+</p>
+
+<p>
+returns the value corresponding to the case-insensitive
+NAME of Content-Type parameter.
+If it does not exist, returns the <var>default</var>.
+</p>
+<pre>
+# example
+mail['Content-Type'] = 'text/plain; charset=iso-2022-jp'
+p mail.type_param('charset')   # "iso-2022-jp"
+</pre>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-multipart%3f"><code>multipart?</code></a> -&gt; <code>true | false</code></dt>
+<dd>
+<p>
+judge if this mail is MIME multi part mail,
+by inspecting Content-Type: header field.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-transfer_encoding"><code>transfer_encoding(default = nil)</code></a> -&gt; <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-transfer_encoding%3d"><code>transfer_encoding=(encoding)</code></a></dt>
+<dd>
+<p>
+encoding: String<br>
+</p>
+<p>
+Content-Transfer-Encoding. (e.g. "7bit" "Base64")
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-disposition"><code>disposition(default = nil)</code></a> -&gt; <code>String</code></dt>
+<dt><a name="TMail%3a%3aMail-disposition%3d"><code>disposition=(pos)</code></a></dt>
+<dd>
+<p>
+pos: String<br>
+</p>
+
+<p>
+Content-Disposition main value (e.g. "attachment").
+If it does not exist, returns the DEFAULT.
+</p>
+<pre>
+# example
+mail['Content-Disposition'] = 'attachement; filename="test.rb"'
+p mail.disposition   # "attachment"
+</pre>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-set_content_disposition"><code>set_content_disposition(pos, <var>params</var> = nil)</code></a></dt>
+<dd>
+<p>
+pos: String<br>
+params: {String => String}<br>
+</p>
+
+<p>
+set content disposition.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-disposition_param"><code>disposition_param(key, <var>default</var> = nil)</code></a> -&gt; <code>String</code></dt>
+<dd>
+<p>
+key: String<br>
+</p>
+
+<p>
+returns a value corresponding to the Content-Disposition
+parameter NAME (e.g. filename).
+If it does not exist, returns the <var>default</var>.
+</p>
+<pre>
+# example
+mail.disposition_param('filename')
+</pre>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-destinations"><code>destinations(default = nil)</code></a> -&gt; <code>[String]</code></dt>
+<dd>
+<p>
+all address specs which are contained in To:, Cc: and
+Bcc: header fields.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-reply_addresses"><code>reply_addresses(default = nil)</code></a> -&gt; <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dd>
+<p>
+addresses to we reply to.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-error_reply_addresses"><code>error_reply_addresses(default = nil)</code></a> -&gt; <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dd>
+<p>
+addresses to use when returning error message.
+</p>
+
+</dd>
+</dl>
+<h3>Direct Header Handling Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aMail-clear"><code>clear</code></a></dt>
+<dd>
+<p>
+clears all header.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-keys"><code>keys</code></a> -&gt; <code>[TMail::HeaderField]</code></dt>
+<dd>
+<p>
+returns an array of contained header names.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-%5b%5d"><code>[](name)</code></a> -&gt; <code>TMail::HeaderField</code></dt>
+<dd>
+<p>
+name: String<br>
+</p>
+
+<p>
+returns a header field object corresponding to the case-insensitive
+key NAME. e.g. mail["To"]
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-%5b%5d%3d"><code>[]=(name, <var>field</var>)</code></a></dt>
+<dd>
+<p>
+name: String<br>
+field: TMail::HeaderField<br>
+</p>
+
+<p>
+set NAME header field to <var>field</var>.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-delete"><code>delete(name)</code></a></dt>
+<dd>
+<p>
+name: String<br>
+</p>
+<p>
+deletes header corresponding to case-insensitive key NAME.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-delete_if%20%7b%7cname%2c%20field%7c%20%2e%2e%2e%2e%20%7d"><code>delete_if {|name, <var>field</var>| .... }</code></a></dt>
+<dd>
+<p>
+name: String<br>
+field: TMail::HeaderField<br>
+</p>
+
+<p>
+evaluates block with a name of header and header field object,
+and delete the header if block returns true.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-each_header%20%7b%7cname%2c%20field%7c%20%2e%2e%2e%2e%20%7d"><code>each_header {|name, <var>field</var>| .... }</code></a></dt>
+<dt><a name="TMail%3a%3aMail-each_pair%20%7b%7cname%2c%20field%7c%20%2e%2e%2e%2e%20%7d"><code>each_pair {|name, <var>field</var>| .... }</code></a></dt>
+<dd>
+<p>
+name: String<br>
+field: TMail::HeaderField<br>
+</p>
+
+<p>
+iterates for each header name and its field object.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-each_header_name%20%7b%7cname%7c%20%2e%2e%2e%2e%20%7d"><code>each_header_name {|name| .... }</code></a></dt>
+<dt><a name="TMail%3a%3aMail-each_key%20%7b%7cname%7c%20%2e%2e%2e%2e%20%7d"><code>each_key {|name| .... }</code></a></dt>
+<dd>
+<p>
+name: String<br>
+</p>
+
+<p>
+iterates for each contained header names.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-each_field%20%7b%7cfield%7c%20%2e%2e%2e%2e%20%7d"><code>each_field {|field| .... }</code></a></dt>
+<dt><a name="TMail%3a%3aMail-each_value%20%7b%7cfield%7c%20%2e%2e%2e%2e%20%7d"><code>each_value {|field| .... }</code></a></dt>
+<dd>
+<p>
+field: TMail::HeaderField<br>
+</p>
+
+<p>
+iterates for each header field objects.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-orderd_each%20%7b%7cname%2c%20field%7c%20%2e%2e%2e%2e%20%7d"><code>orderd_each {|name, <var>field</var>| .... }</code></a></dt>
+<dd>
+<p>
+name: String<br>
+field: TMail::HeaderField<br>
+</p>
+
+<p>
+iterates for each header field objects, in canonical order.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-key%3f"><code>key?(name)</code></a></dt>
+<dd>
+<p>
+name: String<br>
+</p>
+
+<p>
+returns true if the mail has NAME header.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-value%3f"><code>value?(field)</code></a></dt>
+<dd>
+<p>
+field: TMail::HeaderField<br>
+</p>
+
+<p>
+returns true if the mail has FIELD header field object.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-values_at"><code>values_at(*names)</code></a> -&gt; <code>[TMail::HeaderField]</code></dt>
+<dt><a name="TMail%3a%3aMail-indexes"><code>indexes(*names)</code></a> -&gt; <code>[TMail::HeaderField]</code></dt>
+<dt><a name="TMail%3a%3aMail-indices"><code>indices(*names)</code></a> -&gt; <code>[TMail::HeaderField]</code></dt>
+<dd>
+<p>
+names: [String]<br>
+</p>
+
+<p>
+equals to <code>names.collect {|k| mail[k] }</code>.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMail-values"><code>values</code></a> -&gt; <code>[TMail::HeaderField]</code></dt>
+<dd>
+<p>
+returns an array of all header field object.
+</p>
+</dd>
+</dl>
+

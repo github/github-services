@@ -1,0 +1,83 @@
+Delivered-To: raasdnil@gmail.com
+Received: by 10.142.223.20 with SMTP id v20cs111827wfg;
+        Sat, 3 Nov 2007 00:51:28 -0700 (PDT)
+Received: by 10.140.207.2 with SMTP id e2mr1315261rvg.1194076288357;
+        Sat, 03 Nov 2007 00:51:28 -0700 (PDT)
+Return-Path: <ruby-talk-admin@ruby-lang.org>
+Received: from carbon.ruby-lang.org (carbon.ruby-lang.org [221.186.184.68])
+        by mx.google.com with ESMTP id b39si7103251rvf.2007.11.03.00.51.07;
+        Sat, 03 Nov 2007 00:51:28 -0700 (PDT)
+Received-SPF: pass (google.com: domain of ruby-talk-admin@ruby-lang.org designates 221.186.184.68 as permitted sender) client-ip=221.186.184.68;
+Authentication-Results: mx.google.com; spf=pass (google.com: domain of ruby-talk-admin@ruby-lang.org designates 221.186.184.68 as permitted sender) smtp.mail=ruby-talk-admin@ruby-lang.org; dkim=hardfail (test mode) header.i=@gmail.com
+Received: from carbon.ruby-lang.org (beryllium.ruby-lang.org [127.0.0.1])
+	by carbon.ruby-lang.org (Postfix) with ESMTP id F268B3C21F739;
+	Sat,  3 Nov 2007 16:47:55 +0900 (JST)
+Received: from rv-out-0910.google.com (rv-out-0910.google.com [209.85.198.184])
+	by carbon.ruby-lang.org (Postfix) with ESMTP id 561473C21EB7B
+	for <ruby-talk@ruby-lang.org>; Sat,  3 Nov 2007 16:47:47 +0900 (JST)
+Received: by rv-out-0910.google.com with SMTP id c27so918962rvf
+        for <ruby-talk@ruby-lang.org>; Sat, 03 Nov 2007 00:47:46 -0700 (PDT)
+Received: by 10.142.79.15 with SMTP id c15mr740250wfb.1194076066433;
+        Sat, 03 Nov 2007 00:47:46 -0700 (PDT)
+Received: by 10.142.223.20 with HTTP; Sat, 3 Nov 2007 00:47:46 -0700 (PDT)
+Delivered-To: ruby-talk@ruby-lang.org
+Date: Sat, 3 Nov 2007 16:47:50 +0900
+Posted: Sat, 3 Nov 2007 18:47:46 +1100
+From: "Mikel Lindsaar" <raasdnil@gmail.com>
+Reply-To: ruby-talk@ruby-lang.org
+Subject: Re: Gateway Upgraded
+To: ruby-talk@ruby-lang.org (ruby-talk ML)
+Message-Id: <57a815bf0711030047x813fe18r6f6d79c1be251092@mail.gmail.com>
+In-Reply-To: <1194010055.7060.6.camel@sohma>
+References: <11152772-AAFA-4614-95FD-9071A4BDF4A1@grayproductions.net>
+	 <7FEEABA5-474E-4167-8111-0D3E6658082C@grayproductions.net>
+	 <CC14AEC5-F922-4FC7-8068-7F5C2D7013D5@grayproductions.net>
+	 <5D9709D3-3560-4C98-98AA-703319E5E2BD@grayproductions.net>
+	 <1194010055.7060.6.camel@sohma>
+X-ML-Name: ruby-talk
+X-Mail-Count: 277342
+X-MLServer: fml [fml 4.0.3 release (20011202/4.0.3)]; post only (only members can post)
+X-ML-Info: If you have a question, send e-mail with the body
+	"help" (without quotes) to the address ruby-talk-ctl@ruby-lang.org;
+	help=<mailto:ruby-talk-ctl@ruby-lang.org?body=help>
+X-Spam-Checker-Version: SpamAssassin 3.1.7 (2006-10-05) on 
+	carbon.ruby-lang.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.9 required=7.0 tests=ARIN,AWL,BAYES_00,
+	CONTENT_TYPE_PRESENT,MIME_BASE64_NO_NAME,QENCPTR2 autolearn=disabled 
+	version=3.1.7
+X-Original-To: ruby-talk@ruby-lang.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=beta;
+        h=domainkey-signature:received:received:message-id:date:from:to:subject:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
+        bh=DCk9pkpSSuZCiDlu6nRtZRRUxLUWL2BePrHR+hM8/yo=;
+        b=F+vb8p+IhpoNJSWOGS8T8KNwqyqixOxLmLi7+3sbTUb67ndK/OgXkr9w3BeuwOzfyMGO1aePfg23hZUq1x/6h12PTlNnAUXm3VByHhIIzP6J8L2RvjQQeUjNH6sslQS5iwt63YoozMkhRxZeewfvBptsr4m8e3/a0RSC32k/HW8=
+DomainKey-Signature: a=rsa-sha1; c=nofws;
+        d=gmail.com; s=beta;
+        h=received:message-id:date:from:to:subject:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
+        b=ovG4JYVQVDHR93H8giUcJrxcvvyeQgBqBBd/1cUNJwCDgXEPdfv7J0wR5gi+jO0qYb/EwKvB8+rVhDVdd21sONBt+MHNAiMhDOOwGGas/dAwQhOt5zCIOIcL7GczxNR7PlHGIgC+1wqI9L4jKMU5x7d2tr/9lfh9pV1cWMkzgrE=
+Content-Disposition: inline
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+Precedence: bulk
+Lines: 11
+List-Id: ruby-talk.ruby-lang.org
+List-Software: fml [fml 4.0.3 release (20011202/4.0.3)]
+List-Post: <mailto:ruby-talk@ruby-lang.org>
+List-Owner: <mailto:ruby-talk-admin@ruby-lang.org>
+List-Help: <mailto:ruby-talk-ctl@ruby-lang.org?body=help>
+List-Unsubscribe: <mailto:ruby-talk-ctl@ruby-lang.org?body=unsubscribe>
+
+VGhhbmtzIGZvciB5b3VyIHdvcmsgSmFtZXMuCgpNaWtlbAoKT24gMTEvMy8wNywgQXJsZW4gQ2hy
+aXN0aWFuIE1hcnQgQ3VzcyA8Y2VsdGljQHNhaXJ5eC5vcmc+IHdyb3RlOgo+IEhpLAo+Cj4gT24g
+RnJpLCAyMDA3LTExLTAyIGF0IDIxOjQ4ICswOTAwLCBKYW1lcyBFZHdhcmQgR3JheSBJSSB3cm90
+ZToKPiA+IEp1c3QgYSBzbWFsbCB1cGRhdGUgb24gaG93IHRoaXMgd2VudOKApgo+Cj4gVGhhbmsg
+eW91Lgo+Cj4gPgo+ID4gQWNjb3JkaW5nIHRvIG15IHNjYW4gb2YgdGhlIGxvZyB0aGlzIG1vcm5p
+bmcsIGV2ZXJ5IGVtYWlsIHRoZSBnYXRld2F5Cj4gPiBzZW50IHNpbmNlIHllc3RlcmRheSdzIHVw
+Z3JhZGUgd2FzIGFjY2VwdGVkIGJ5IFVzZW5ldC4gIEkgd2FzIGV2ZW4KPiA+IGFibGUgdG8gZmlu
+ZCBtZXNzYWdlcyBtb2RpZmllZCBieSB0aGUgZ2F0ZXdheSBhbmQgdGhleSBsb29rZWQgZ3JlYXQK
+PiA+IG9uIGNvbXAubGFuZy5ydWJ5Lgo+ID4KPiA+IFRoaXMgdHJhbnNpdGlvbiBhcHBlYXJzIHRv
+IGJlIGEgc3VjY2Vzcy4KPiA+Cj4gPiBKYW1lcyBFZHdhcmQgR3JheSBJSQo+ID4KPiA+Cj4KPiBB
+cmxlbgo+Cj4KPgo=
+

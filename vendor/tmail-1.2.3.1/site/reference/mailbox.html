@@ -1,0 +1,245 @@
+<h1>Mailbox Classes</h1>
+
+<h2><code>class <a name="TMail%3a%3aMhMailbox">TMail::MhMailbox</a> </code></h2>
+
+<p>
+The class to handle MH mailboxes.
+</p>
+
+<h3>Class Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aMhMailbox-new"><code>new(dirname)</code></a> -&gt; <code><a href="mailbox.html#TMail%3a%3aMhMailbox">TMail::MhMailbox</a></code></dt>
+<dd>
+<p>
+dirname: String<br>
+</p>
+
+<p>
+creates new MhMailbox object.
+DIRNAME must be valid MH mailbox directory.
+</p>
+
+</dd>
+</dl>
+<h3>Instance Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aMhMailbox-each_port%20%7b%7cport%7c%20%2e%2e%2e%2e%20%7d"><code>each_port {|port| .... }</code></a></dt>
+<dt><a name="TMail%3a%3aMhMailbox-each%20%7b%7cport%7c%20%2e%2e%2e%2e%20%7d"><code>each {|port| .... }</code></a></dt>
+<dd>
+<p>
+port: <a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a><br>
+</p>
+
+<p>
+iterates for each mail in the mailbox,
+in assendant order (older mail first).
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMhMailbox-reverse_each_port%20%7b%7cport%7c%20%2e%2e%2e%2e%20%7d"><code>reverse_each_port {|port| .... }</code></a></dt>
+<dt><a name="TMail%3a%3aMhMailbox-reverse_each%20%7b%7cport%7c%20%2e%2e%2e%2e%20%7d"><code>reverse_each {|port| .... }</code></a></dt>
+<dd>
+<p>
+port: <a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a><br>
+</p>
+
+<p>
+iterates for each mail in the mailbox,
+in descendant order (newer mail first).
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMhMailbox-last_atime"><code>last_atime</code></a> -&gt; <code>Time</code></dt>
+<dt><a name="TMail%3a%3aMhMailbox-last_atime%3d"><code>last_atime=(time)</code></a></dt>
+<dd>
+<p>
+time: Time<br>
+</p>
+
+<p>
+The time which last each_new_port/each_port/reverse_each_port is called.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMhMailbox-each_new_port"><code>each_new_port(time = last_atime()) {|port| .... }</code></a></dt>
+<dd>
+<p>
+time: Time<br>
+port: <a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a><br>
+</p>
+
+<p>
+iterates for each mails in mailbox, which are newer than TIME.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMhMailbox-new_port"><code>new_port</code></a> -&gt; <code><a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a></code></dt>
+<dd>
+<p>
+creates a new file in the mailbox and returns its port.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMhMailbox-close"><code>close</code></a></dt>
+<dd>
+<p>
+does nothing.
+</p>
+
+</dd>
+</dl>
+<h2><code>class <a name="TMail%3a%3aUNIXMbox">TMail::UNIXMbox</a> </code></h2>
+
+<p>
+The class to handle UNIX mbox.
+Current implementation creates temporary MH mbox.
+</p>
+
+<h3>Class Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aUNIXMbox-new"><code>new(filename)</code></a> -&gt; <code><a href="mailbox.html#TMail%3a%3aUNIXMbox">TMail::UNIXMbox</a></code></dt>
+<dd>
+<p>
+filename: String<br>
+</p>
+
+<p>
+creates new TMail::UNIMbox object.
+FILENAME must be valid UNIX mbox file name.
+</p>
+
+</dd>
+</dl>
+<h3>Instance Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aUNIXMbox-each_port%20%7b%7cport%7c%20%2e%2e%2e%2e%20%7d"><code>each_port {|port| .... }</code></a></dt>
+<dt><a name="TMail%3a%3aUNIXMbox-each%20%7b%7cport%7c%20%2e%2e%2e%2e%20%7d"><code>each {|port| .... }</code></a></dt>
+<dd>
+<p>
+port: <a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a><br>
+</p>
+
+<p>
+iterates for each mail in the mailbox,
+in assendant order (older mail first).
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aUNIXMbox-reverse_each_port%20%7b%7cport%7c%20%2e%2e%2e%20%7d"><code>reverse_each_port {|port| ... }</code></a></dt>
+<dt><a name="TMail%3a%3aUNIXMbox-reverse_each%20%7b%7cport%7c%20%2e%2e%2e%20%7d"><code>reverse_each {|port| ... }</code></a></dt>
+<dd>
+<p>
+port: <a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a><br>
+</p>
+
+<p>
+iterates for each mail in the mailbox,
+in descendant order (newer mail first).
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aUNIXMbox-each_new_port"><code>each_new_port(time = @last_loaded_time) {|port| .... }</code></a></dt>
+<dd>
+<p>
+time: Time<br>
+port: <a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a><br>
+</p>
+
+<p>
+iterates for each mails in mailbox, which are newer than TIME.
+@last_loaded_time is updated when each_new_port/each_port is
+called.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aUNIXMbox-new_port"><code>new_port</code></a> -&gt; <code><a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a></code></dt>
+<dd>
+<p>
+creates a new file in the mailbox and returns its port.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aUNIXMbox-close"><code>close</code></a></dt>
+<dd>
+<p>
+forces an UNIXMbox to write back mails to real mbox file.
+Once this method is called, any method calls causes to raise
+IOError exception.
+</p>
+
+</dd>
+</dl>
+<h2><code>class <a name="TMail%3a%3aMaildir">TMail::Maildir</a> </code></h2>
+
+<p>
+The class to handle "maildir" mailbox.
+</p>
+
+<h3>Class Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aMaildir-new"><code>new(dirname)</code></a> -&gt; <code><a href="mailbox.html#TMail%3a%3aMaildir">TMail::Maildir</a></code></dt>
+<dd>
+<p>
+dirname: String<br>
+</p>
+
+<p>
+creates new TMail::Maildir object.
+DIRNAME must be valid maildir.
+</p>
+
+</dd>
+</dl>
+<h3>Instance Methods</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aMaildir-each_port%20%7b%7cport%7c%20%2e%2e%2e%2e%20%7d"><code>each_port {|port| .... }</code></a></dt>
+<dt><a name="TMail%3a%3aMaildir-each%20%7b%7cport%7c%20%2e%2e%2e%2e%20%7d"><code>each {|port| .... }</code></a></dt>
+<dd>
+<p>
+port: <a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a><br>
+</p>
+
+<p>
+iterates for each mail in the mailbox,
+in assendant order (older mail first).
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMaildir-reverse_each_port%20%7b%7cport%7c%20%2e%2e%2e%2e%20%7d"><code>reverse_each_port {|port| .... }</code></a></dt>
+<dt><a name="TMail%3a%3aMaildir-reverse_each%20%7b%7cport%7c%20%2e%2e%2e%2e%20%7d"><code>reverse_each {|port| .... }</code></a></dt>
+<dd>
+<p>
+port: <a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a><br>
+</p>
+
+<p>
+iterates for each mail in the mailbox,
+in descendant order (newer mail first).
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMaildir-each_new_port%20%7b%7cport%7c%20%2e%2e%2e%2e%20%7d"><code>each_new_port {|port| .... }</code></a></dt>
+<dd>
+<p>
+port: <a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a><br>
+</p>
+
+<p>
+iterates for each mails in MAILDIR/new.
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aMaildir-new_port"><code>new_port</code></a> -&gt; <code><a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a></code></dt>
+<dd>
+<p>
+creates a new file in the mailbox and returns its port.
+</p>
+</dd>
+</dl>
+

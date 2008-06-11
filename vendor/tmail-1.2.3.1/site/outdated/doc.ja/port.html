@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja-JP">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+  <meta http-equiv="Content-Language" content="ja-JP">
+<title><code>Port Classes</code></title>
+</head>
+<body>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+  _uacct = "UA-2871747-1";
+  urchinTracker();
+  </script>
+
+
+<h1><code>Port Classes</code></h1>
+
+<h2><code>class <a name="TMail%3a%3aPort">TMail::Port</a> </code></h2>
+
+<p>
+<code>TMail::Port</code> は <code>TMail</code> ライブラリでのファイルや文字列の抽象表現です。
+メール一通分にあたるリソースを隠蔽します。
+</p>
+
+<h3>インスタンスメソッド</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aPort-ropen"><code>ropen</code></a> → <code>IO</code></dt>
+<dd>
+<p>
+読みこみ用ストリームを返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aPort-wopen"><code>wopen</code></a> → <code>IO</code></dt>
+<dd>
+<p>
+書きこみ用ストリームを返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aPort-aopen"><code>aopen</code></a> → <code>IO</code></dt>
+<dd>
+<p>
+追加書きこみ用ストリームを返します。
+</p>
+
+</dd>
+</dl>
+<h2><code>class <a name="TMail%3a%3aFilePort">TMail::FilePort</a> &lt; TMail::Port</code></h2>
+
+<h3>クラスメソッド</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aFilePort-new"><code>new(filename)</code></a> → <code><a href="port.html#TMail%3a%3aFilePort">TMail::FilePort</a></code></dt>
+<dd>
+<p>
+filename: String<br>
+</p>
+
+<p>
+<code>FilePort</code> オブジェクトを生成します。
+<code>filename</code> はメール一通をおさめたファイル名でなければいけません。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aFilePort-filename"><code>filename</code></a> → <code>String</code></dt>
+<dd>
+<p>
+このポートが隠蔽しているファイル名を返します。
+</p>
+
+</dd>
+</dl>
+<h2><code>class <a name="TMail%3a%3aStringPort">TMail::StringPort</a> &lt; TMail::Port</code></h2>
+
+<h3>クラスメソッド</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aStringPort-new"><code>new(src = '')</code></a> → <code><a href="port.html#TMail%3a%3aStringPort">TMail::StringPort</a></code></dt>
+<dd>
+<p>
+src: String<br>
+</p>
+
+<p>
+<code>StringPort</code> オブジェクトを生成します。
+<code>string</code> はメール一通分の文字列でなければいけません。
+</p>
+</dd>
+</dl>
+
+</body>
+</html>

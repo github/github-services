@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+# TODO: Ensure compile first (but only if needed)
+# system "task/make"
+
+# Run unit tests
+
+live = ARGV.include?('--live')
+pure = ARGV.include?('--pure')  # pure won't work if live.
+
+unless live
+  $LOAD_PATH.unshift(File.expand_path('lib'))
+  $LOAD_PATH.unshift(File.expand_path('ext/tmailscanner')) unless pure
+end
+$LOAD_PATH.unshift('test')  # NEEDED?
+
+unless glob = ARGV.select{ |a| a !~ /^[-]/ }[0]
+  glob = 'test/test_*.rb'
+end
+
+Dir[glob].each do |file|
+  next if File.directory?(file)
+  begin
+    puts "Loading: #{file}" if $DEBUG
+    load(file)
+  rescue LoadError
+    puts "Error loading: #{file}"
+  end
+end
+

@@ -1,0 +1,1231 @@
+== Fri Apr 11 12:16:27 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* RELEASE TMAIL 1.2.3.1
+
+* Closed #19429 - Gem will not install in windows
+
+== Fri Apr 10 12:16:13 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* RELEASE TMAIL 1.2.3
+
+== Mon Mar 31 04:26:19 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed #19203 - TMail errors in Ruby 1.9.1 on invalid multibyte chars
+
+== Mon Mar 17 09:08:04 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed #18881 - TMail goes into an endless loop if extra whitespace on a line to be wrapped
+
+== Fri Mar 14 12:01:31 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed #18814 - Fixed attchment.rb failing on mail part that had a nil content-type (Mikel Lindsaar)
+
+== Sat Mar  1 23:34:40 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed #18516 - Fix TMail::Mail#preamble, and add #preamble= (Charles Lowe)
+
+* Closed #18515 - Removed ftools from test case (Charles Lowe)
+
+== Fri Feb 22 15:28:16 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* A _LOT_ more documentation, almost ready for the next release
+
+== Thu Feb 21 10:40:21 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed #18038 - Multiple froms not being parsed correctly, added a test case to cover this and show the correct handling - (Mikel)
+
+== Wed Feb 13 00:40:08 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed #17719 - Reading unix mailbox fails using File.truncate - (Mikel)
+
+* Updated documentation for UNIXMbox.new
+
+== Tue Jan 15 04:09:28 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Added another test case from ActionMailer into test_quote.rb
+
+== Tue Jan 15 01:50:23 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed #17011 - test_quote.rb fails on 1.9 - (Mikel)
+
+* Closed #17007 - test_header.rb fails on 1.9 - (Mikel)
+
+* Closed #17008 - test_mail.rb fails on 1.9 - (Mikel)
+
+== Sat Jan 12 04:13:47 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed #17012 - test_scanner.rb fails on 1.9 - (Mikel and Kornelius Kalnbach)
+
+* Closed #17010 - test_port.rb fails on 1.9 - (Mikel and Kornelius Kalnbach)
+
+* Closed #17009 - test_mbox.rb fails on 1.9 - (Mikel and Kornelius Kalnbach)
+
+* Closed #17006 - test_encode.rb fails on 1.9 - (Mikel and Kornelius Kalnbach)
+
+* Closed #17005 - test_attachments.rb fails on 1.9 - (Mikel and Kornelius Kalnbach)
+
+* Closed #17004 - test_address.rb fails on 1.9 - (Mikel and Kornelius Kalnbach)
+
+== Sat Jan 12 02:07:24 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed #17044 - Fixed Minero's TODO: "allow this type of header: "Minero A. <aamine@loveruby.net>"
+
+* Closed #17045 - Fixed the Address class to pre quote the email address 'mikel@me.com <mikel@me.com>' into '"mikel@me.com" <mikel@me.com>' which handles this problem
+
+== Sat Jan 10 10:13:12 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+=== TMail 1.2.1 Released
+
+== Thu Jan 10 15:09:02 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed #16899 - HeaderField.new_from_port and added test cases to cover this code. Also changed behaviour of HeaderField.new_from_port to return nil if it does not find a matching header in the port provided.  Extended UNIXMbox.fromaddr to also search for EnvelopeSender and also made it a public method, not private - Thanks to Maarten O. for alerting these bugs
+
+* Closed #16900 - UNIXMbox.fromaddr missing port param and does not return Envelope Sender.  This report was initially  to correct typo on "Regep" to "Regexp".  Also added test cases to cover this class method.  Also added ability to scan for the EnvelopeSender explictly as it would not come up on searching for "From" due to Regexp confilct with From: (with the colon).  Thanks to Maarten O. for reporting this.
+
+== Thu Dec 25 23:10:16 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed Bug -  Handled quote boundary being gready on content-type header fields (M. Mondragon)
+
+== Thu Dec 25 20:10:46 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Change the name of mailscanner to tmailscanner to handle a copyright issue.  MailScanner is a copyrighted name.
+
+== Thu Dec 02 11:11:36 GMT 2008 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Added about 15 test cases from the Rails community.  Added failing test case for an unquoted @ char in the From header field.  Need to check fully if this is needed or not, but it is there anyway - to be resolved.  I have emailed 822 mailing list to check this out.
+
+== Fri Nov 30 08:04:09 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed 16025 - TMail scanner.rb would not parse ATOM chars correctly making it fail tests where the C version passed them.  Fixed this by updating the Scanner.rb version to be in step with the C version (there was an extra @ symbol in the ATOM CHARS definition that was not in the C version.) (mikel)
+
+== Fri Nov 25 05:41:15 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed 16283 - TMail would not decode correctly due to bug in text-utils - put in previous patch from old tmail trunk version. Thanks to garyo for spotting this.
+
+== Mon Nov 19 23:15:29 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Added about 500 lines of documentation to the interface.rb file.
+
+* Changed TMail::Mail#sender to have a default "default" value of nil to be in alignment with all the other interface values.
+
+== Thu Nov 15 13:26:45 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed 15445 - TMail::Mail#create_forward now returns a new Mail object that has the original mail as an encoded 7 bit multipart attachment.  Also moved create_forward and create_reply from tmail/net into tmail/interface as it makes more sense to have it there.
+
+* Closed 15643 - TMail::Mail#reply_addresses was returning an empty array if reply_to was set to nil (ie, the header field existed but was empty) instead of returning the from address or default.
+
+* Did a BUNCH of documentation of the tmail/interface.rb file.
+
+* Made base64_decode and base64_encode into ! versions as they are destructive on the mail body (encodes the body to base64 or decodes it), made aliases for base64_decode and base64_encode to point back to the bang versions.  Doing this with a view to change base64_encode to a non destructive version (returns the encoded body) in future versions.
+
+= Version 1.1.1. Released Mon Oct 24 21:14:00 2007 +1100
+
+== Thu Nov  1 10:02:26 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed Did another patch on the folding, re-read the RFC's and got clarification on when SHOULD and MUST fold. New folding section at the bottom of encode handles various line lengths which include or do not include whitespace
+
+== Wed Oct 31 05:10:34 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Put in an escape clause in the def fold method of class Encode to skip folding of any X- header line.
+
+== Sun Oct 28 03:45:16 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Refactored how the package was going to_s - made the handling of quotation marks inside of the header more consistent and in accordance with the RFCs on the matter (ie, a filename in a content-disposition field paramater filename=README.TXT will not be quoted unless it contains special characters per RFC 1521 ) 
+
+== Sun Oct 28 03:45:16 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Made the package into a GEM
+
+== Sat Oct 27 05:43:36 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Re-factored the quotation handling - learnt more about how this is implemented by Minero, and re-wrote my handling of it to preserve quotation marks in the headers
+
+== Sat Oct 27 05:43:36 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Closed 15077 - Assigning the body via mail.body would not reparse the email body text. Changed mail.rb to reparse body if assigned via body= String.
+
+== Thu Oct 25 05:52:02 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Moved facade.rb to interface.rb - updated mail.rb to reflect this
+
+== Thu Oct 25 05:39:09 GMT 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Totally rewrote the README file to be in RDoc format and provide a beginning place for the RDoc documentation
+
+* Cleaned up the root directory of all the spurious files.
+  
+* Merged the Changelog files and made it into RDoc format.
+
+* Cleaned up the Bugs and TODO files
+
+* Added RDoc headers to each source file.
+
+* Started doing the RDoc on the utils.rb file
+
+== Thu Oct 25 11:12:00 2007 +1100 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Added quickstart page to WWW as well as applied styling to all existing pages in the site.
+
+* Uploaded site to rubyforge
+
+== Thu Oct 25 9:00:00 2007 Tom <transfire@gmail.com>
+
+* Added website to trunk, basic styling and templates, logos and general layout.
+
+= Version 0.11.0. Released Mon Oct 24 21:14:00 2007 +1100
+
+== Wed Oct 24 17:50:00 2007 +1100 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Fixed all but two tests which are one encoding problem with relating to RFC 2231 and another problem where special characters are not properly quoted if they are the name portion of an email address (ie, TMail does not handle the address <"@"@example.com> properly)
+
+* Closed #14964 - The TMail from ActionMailer Preview Release 2.0 is now fully merged. All previous tests and examples relating to TMail that were part of ActionMailer 2.0 Preview Release now pass.
+
+* Closed #15008 - Fixed handling of multipart content type headers. Now tested against many types of email. TMails' behaviour now is to take any boundary type, if it contains illegal characters, it will wrap it in "" when requesting the content type by mail['content-type] you will receive it unquoted, when outputting the email to_s as a whole you will receive the content-type field with the boundary section quoted if it contains illegal characters.
+
+* Replaced id with object_id line 221 in stringio.rb
+
+== Wed Oct 24 15:35:00 2007 +1100 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Copied over the TMail/*.rb files from the TRUNK version of Rails ActionMailer (2.0 Preview Release) into branch for 0.11.0
+
+* Fixed up many broken tests so that they pass (testing errors, including wrong paths etc)
+
+* Closed #15002 - Fixed error where handling of MIME content-type headers that had quoted parameters due to including RFC 2045 special characters were being stripped of their quotation marks when the mail object was sent "to_s". Now any quotation marks that were in the original are maintained in the result
+
+* Closed #14999 - TMail now "fixes" illegal Content-Type bondary= parameter by wrapping it in double quotation marks per RFC 2045 and also produces this in the mail.to_s method
+
+* Added in tmail/core_extensions.rb which installs Object.blank? unless Object already responds_to?(:blank?) ie, we are already in a Rails environment.
+
+* Updated names of the test files as a start to cleaning up the tests directory.
+
+= Version 0.10.9. Released Mon Oct 22 00:36:00 2007 +1100
+
+== Mon Oct 22 22:32:00 2007 Mikel Lindsaar <raasdnil@gmail.com>
+
+* General cleanup - converted all files to UTF-8 from the various encodings.
+
+== Mon Oct 22 22:00:00 2007 +1100 Mikel Lindsaar <raasdnil@gmail.com>
+
+* Fixed all tests so that they now pass - were problems with the times being checked were hard coded for Tokyo time and so would fail in a different time zone. All of these now pass
+
+* Fixed handling of MIME content-type header handling so that TMail now quotes any content-type it finds to contain invalid characters per RFC 2045 which are "/", "?" or "=". Per RFC, handling is to put double quotes are put around it with the quote_boundary method, we now do this.
+
+* Updated Copyright year for Minero Aoki
+
+= Version 0.10.8. Released Fri Feb 20 09:37:34 2004
+
+== Fri Feb 20 09:34:40 2004 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/*.rb, ext/.c: Lesser GPL is LGPL 2.1.
+
+* lib/tmail/*.rb, ext/*.c: update Copyright year.
+
+== Fri Feb 20 09:33:42 2004 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: new target `import'.
+
+* Makefile (dist): exectest.rb is useless now because tests do not use runit.
+
+* Makefile (dist): remove web/.
+
+== Fri Feb 20 09:31:58 2004 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/stringio.rb: import amstd/stringio.rb rev 1.12.
+
+== Fri Feb 20 09:16:20 2004 Minero Aoki <aamine@loveruby.net>
+
+* NEWS: new file.
+
+== Fri Feb 20 09:02:35 2004 Minero Aoki <aamine@loveruby.net>
+
+* Makefile (clean): cleans documentation
+
+== Fri Feb 20 09:02:03 2004 Minero Aoki <aamine@loveruby.net>
+
+* doc/* .rrd.m: use 'a|b' to expressing "type a or b".
+
+== Fri Feb 20 08:57:24 2004 Minero Aoki <aamine@loveruby.net>
+
+* doc/* .rrd.m: ( arg ) -> (arg).
+
+== Fri Feb 20 08:49:09 2004 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/mailbox.rb: require 'tmail/textutils' to be independent.
+
+== Fri Feb 20 08:35:00 2004 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: version 0.10.8.
+
+* ext/tmail/scanner_c/scanner_c.c: ditto.
+
+* lib/tmail/info.rb: ditto.
+
+* lib/tmail/scanner_r.rb: ditto.
+
+== Fri Feb 20 08:34:00 2004 Minero Aoki <aamine@loveruby.net>
+
+* test/testbase64.rb: moved from ext/tmail/base64.
+
+== Mon Nov 3 18:37:46 2003 Minero Aoki <aamine@loveruby.net>
+
+* ext/tmail/base64/base64.c: eliminate cc warning.
+
+* ext/tmail/base64/base64.c: use StringValue instead of rb_str2cstr if exists.
+
+== Mon Nov 3 18:36:15 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: replace `make' with $(MAKE) macro.
+
+* Makefile: new target `clean'.
+
+* ext/tmail/Makefile: replace `make' with $(MAKE) macro.
+
+* ext/tmail/Makefile: new target `clean', `distclean'.
+
+* lib/tmail/Makefile: add header.
+
+== Mon Nov 3 18:34:12 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/port.rb: #filename -> #path (alias filename)
+
+* lib/tmail/port.rb: @filename -> @path
+
+* lib/tmail/port.rb (copy_file): simplify.
+
+* lib/tmail/port.rb: apply latest coding style.
+
+== Sun Oct 12 12:50:35 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: new target "test".
+
+== Sun Oct 12 12:46:02 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/textutils.rb: @uniq -> @@uniq, to allow including TextUtils.
+
+* test/testtextutils.rb: new file.
+
+* test/testtextutils.rb: test TextUtils#new_boundary.
+
+== Thu Oct 9 05:10:51 2003 Brian F. Feldman <green@FreeBSD.org>
+
+* mailbox.rb (fromaddr): should take parameter.
+
+* header.rb (new_from_port): modify typo.
+
+== Fri Sep 12 16:54:07 2003 Minero Aoki <aamine@loveruby.net>
+
+* sample/sendmail.rb (setup_mail): small refactoring.
+
+== Fri Sep 12 16:48:49 2003 Minero Aoki <aamine@loveruby.net>
+
+* sample/extract-attachments.rb: new file.
+
+== Fri Sep 12 16:23:46 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/mailbox.rb (UNIXMbox): should be able to trancate mbox file. The patch is contributed
+by Brian Fundakowski.
+
+== Thu Aug 28 16:52:55 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: install.rb -> setup.rb
+
+== Tue Aug 12 09:20:05 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/mail.rb ([]=): raise BadMessage if multiple headers set.
+
+== Thu Aug 7 18:52:10 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/mail.rb (read_multipart): return if the message have not boundary. [ruby-list:38050]
+
+* test/testmail.rb: test it.
+
+== Thu Aug 7 18:50:46 2003 Minero Aoki <aamine@loveruby.net>
+
+* doc/mailbox.rrd.m: adjust header level.
+
+* doc/port.rrd.m: ditto.
+
+== Sat Aug 2 21:43:16 2003 Minero Aoki <aamine@loveruby.net>
+
+* doc/address.rrd.m: use new ReferenceRD type designator.
+
+* doc/config.rrd.m: ditto.
+
+* doc/mail.rrd.m: ditto.
+
+* doc/mailbox.rrd.m: ditto.
+
+* doc/port.rrd.m: ditto.
+
+* doc/tmail.rrd.m: ditto.
+
+== Tue Jun 24 03:12:24 2003 Minero Aoki <aamine@as600.loveruby.net>
+
+* lib/tmail/Makefile: rm -> rm -f.
+
+* lib/tmail/Makefile: BSD make does not accept $<.
+
+== Wed May 21 16:10:56 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/mail.rb (set_disposition): tested.
+
+* lib/tmail/textutils.rb: new const RFC2231_UNSAFE
+
+* lib/tmail/encode.rb (encode_value): use RFC2231_UNSAFE.
+
+* lib/tmail/encode.rb (encode_value): encoded hex must use capital A-F.
+
+* test/testmail.rb: new method #test_set_disposition.
+
+* test/testheader.rb: typo: attached -> attachment
+
+* test/testheader.rb: test RFC2231 decoding.
+
+== Mon May 19 07:34:01 2003 Minero Aoki <aamine@loveruby.net>
+
+* sample/sendmail.rb: rewritten.
+
+== Mon May 19 06:36:41 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/mail.rb: include facade.rb.
+
+* lib/tmail/facade.rb: removed.
+
+* lib/tmail/utils.rb: move TextUtils modules in to tmail/textutils.rb.
+
+* lib/tmail/textutils.rb: new file.
+
+* lib/tmail/encode.rb: tmail/utils -> tmail/textutils
+
+* lib/tmail/header.rb: ditto.
+
+* lib/tmail/parser.y: ditto.
+
+* lib/tmail/scanner.rb: ditto.
+
+* lib/tmail/obsolete.rb: obsolete Mail.loadfrom, load_from.
+
+* lib/tmail/obsolete.rb: Mail#from_address is not obsolete.
+
+== Mon May 19 06:22:06 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/Makefile: new task `clean' and `distclean'. [ruby-list:37687]
+
+* ext/tmail/Makefile: ditto.
+
+== Sun May 18 03:02:57 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/Makefile: change racc log file name.
+
+== Sun May 18 03:01:27 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/parser.y: remove useless (last added) rule `received_spec'.
+
+== Sun May 18 03:00:16 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/parser.y (local): allow "foo.bar." and "foo..bar".
+
+* lib/tmail/address.rb: allow empty "word".
+
+* lib/tmail/address.rb (local): return '""' on empty local.
+
+* test/testaddress.rb (test_parse__dot): test "foo.bar." and "foo..bar".
+
+* test/testaddress.rb (test_parse__outofspec): Now empty local is legal.
+
+== Sun May 18 02:56:07 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile (dist): version tag is like V1-2-3 ('_' -> '-')
+
+== Sun May 18 02:04:34 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/info.rb: update version.
+
+* lib/tmail/scanner_r.rb: ditto.
+
+* ext/tmail/scanner_c/scanner_c.c: ditto.
+
+== Sun May 18 02:03:42 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: new task `update'.
+
+* Makefile (dist): export selected version.
+
+== Sun May 18 01:00:47 2003 Minero Aoki <aamine@loveruby.net>
+
+* lib/tmail/Makefile: fix quoting bug.
+
+== Sun May 18 00:56:24 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: define DEBUG=true on local compilation.
+
+* lib/tmail/Makefile: add debug options if defined(DEBUG)
+
+== Sun May 18 00:47:26 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: put install.rb into packages.
+
+* Makefile: put COPYING into packages.
+
+== Sun May 18 00:44:28 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: create lib/tmail/parser.rb before packing.
+
+* lib/tmail/Makefile: use racc -E.
+
+== Sun May 18 00:36:56 2003 Minero Aoki <aamine@loveruby.net>
+
+* test/kcode.rb: "class RUNIT::TestCase" syntax is 1.8 feature.
+
+== Sun May 18 00:28:22 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: new task `doc'.
+
+* Makefile: new task `site'.
+
+* doc/index.html.m -> doc/index.rhtml.m
+
+== Sat May 17 23:54:22 2003 Minero Aoki <aamine@loveruby.net>
+
+* Remake: removed.
+
+== Sat May 17 20:50:43 2003 Minero Aoki <aamine@loveruby.net>
+
+* doc/address.rrd.m: add 'j' and '.' mark explicitly.
+
+* doc/basics.rd.m: ditto.
+
+* doc/config.rrd.m: ditto.
+
+* doc/details.rd.m: ditto.
+
+* doc/index.html.m: ditto.
+
+* doc/mail.rrd.m: ditto.
+
+* doc/mailbox.rrd.m: ditto.
+
+* doc/port.rrd.m: ditto.
+
+* doc/tmail.rrd.m: ditto.
+
+* doc/usage.rd.m: ditto.
+
+== Sat May 17 20:48:34 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: cvs export option was wrong.
+
+== Sat May 17 20:37:23 2003 Minero Aoki <aamine@loveruby.net>
+
+* rename doc/
+* -> doc/
+* .m
+
+== Sat May 17 20:13:40 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: wrote .PHONY.
+
+* ext/tmail/Makefile: wrote .PHONY.
+
+== Fri May 16 22:55:52 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: remove useless old code.
+
+* lib/tmail/Makefile: new file.
+
+* lib/tmail/stringio.rb: imported from amstd.
+
+* ext/tmail/Makefile: new file.
+
+== Fri May 16 22:27:28 2003 Minero Aoki <aamine@loveruby.net>
+
+* .cvsignore -> lib/tmail/.cvsignore
+
+== Fri May 16 22:23:57 2003 Minero Aoki <aamine@loveruby.net>
+
+* accept setup.rb hierarchy in the repository.
+
+== Fri May 16 21:18:44 2003 Minero Aoki <aamine@loveruby.net>
+
+* encode.rb (concat_E): force to flush @text before process.
+
+* encode.rb: update coding style.
+
+* test/testmail.rb: test if comments are decoded/encoded.
+
+== Fri May 16 21:01:55 2003 Minero Aoki <aamine@loveruby.net>
+
+* test/testkcode.rb: new file.
+
+* test/testmail.rb: use kcode.rb.
+
+* test/testheader.rb: ditto.
+
+== Fri May 16 20:58:01 2003 Minero Aoki <aamine@loveruby.net>
+
+* mailbox.rb (MhMailbox#inspect): fix.
+
+* mailbox.rb (UNIXMbox): new method UNIXMbox.static_new
+
+* mailbox.rb (UNIXMbox): does update check of mail spool.
+
+* mailbox.rb (UNIXMbox): fix temporal directory clean up.
+
+== Fri May 16 20:50:40 2003 Minero Aoki <aamine@loveruby.net>
+
+* facade.rb (Mail#friendly_from): use comments.
+
+== Fri May 16 20:49:58 2003 Minero Aoki <aamine@loveruby.net>
+
+* header.rb: update coding style.
+
+== Fri May 16 20:44:49 2003 Minero Aoki <aamine@loveruby.net>
+
+* parser.y (Parser#parse): decode comments.
+
+* test/testheader.rb: test if comments are decoded.
+
+== Fri May 16 20:42:59 2003 Minero Aoki <aamine@loveruby.net>
+
+* mail.rb: rename method: Mail#select -> values_at
+
+== Mon Apr 28 07:55:52 2003 Minero Aoki <aamine@loveruby.net>
+
+* facade.rb (to, cc, bcc, from, reply_to): support AddressGroup.
+
+* test/testmail.rb (to, cc, bcc, from, reply_to): ditto.
+
+== Mon Apr 28 07:54:31 2003 Minero Aoki <aamine@loveruby.net>
+
+* facade.rb: escape ']' following warning.
+
+* scanner_r.rb: ditto.
+
+== Sat Apr 5 01:40:44 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: implement task `dist'.
+
+== Sat Apr 5 01:24:08 2003 Minero Aoki <aamine@loveruby.net>
+
+* b64 -> base64
+
+* b64/tmbase64.c -> base64/base64.c
+
+* base64/extconf.rb: Shared object name is 'base64.so'.
+
+* encode.rb: require tmail/base64.rb explicitly.
+
+== Sat Apr 5 01:22:40 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: new task 'dist'.
+
+== Sat Apr 5 01:02:40 2003 Minero Aoki <aamine@loveruby.net>
+
+* Makefile: new file.
+
+== Sat Apr 5 01:01:48 2003 Minero Aoki <aamine@loveruby.net>
+
+* mv rmails.rb scanner_r.rb
+
+* mv sc scanner_c
+
+* mv sc/cmails.c scanner_c/scanner_c.c
+
+* mv T test
+
+== Sat Apr 5 00:30:53 2003 Minero Aoki <aamine@loveruby.net>
+
+* mbox.rb: new file. Added for backward compatibility.
+
+== Sat Apr 5 00:30:06 2003 Minero Aoki <aamine@loveruby.net>
+
+* mbox.rb: renamed to mailbox.rb.
+
+* mailbox.rb: new file.
+
+== Sat Apr 5 00:30:06 2003 Minero Aoki <aamine@loveruby.net>
+
+* mp.y -> parser.y
+
+== Fri Nov 15 17:56:01 2002 Minero Aoki <aamine@loveruby.net>
+
+* sc/mails.c: missing prototype.
+
+= Version 0.10.6. Released Sun Nov 10 23:19:45 2002
+
+== Sun Nov 10 23:19:17 2002 Minero Aoki <aamine@loveruby.net>
+
+* doc/mail.rrd: format examples correctly.
+
+== Sun Nov 10 22:59:08 2002 Minero Aoki <aamine@loveruby.net>
+
+* doc/mail.rrd: add Mail#type_param, disposition_param.
+
+== Sun Nov 10 22:37:42 2002 Minero Aoki <aamine@loveruby.net>
+
+* address.rb: adjust to new coding rule.
+
+* encode.rb: ditto.
+
+* header.rb: ditto.
+
+* mail.rb: ditto.
+
+* mbox.rb: ditto.
+
+* mp.y: ditto.
+
+* net.rb: ditto.
+
+* obsolete.rb: ditto.
+
+* port.rb: ditto.
+
+* rmails.rb: ditto.
+
+== Sun Nov 10 22:37:01 2002 Minero Aoki <aamine@loveruby.net>
+
+* T/testmail.rb: test whether the `default' arg is working.
+
+* utils.rb: decode (wrongly encoded) parameters for Content-Disposition.
+
+* T/testmail.rb: test MIME-B decode for disposition parameters.
+
+* facade.rb: set_disposition should overwrites params.
+
+* facade.rb: set_content_type should overwrites params.
+
+== Sun Nov 10 20:46:25 2002 Minero Aoki <aamine@loveruby.net>
+
+* facade.rb (set_content_type): reject wrong text like "text".
+
+== Sun Nov 10 20:15:15 2002 Minero Aoki <aamine@loveruby.net>
+
+* facade.rb: TMail::Mail#message_id, mime_version, content_type, sub_type, transfer_encoding,
+disposition: default value did not work.
+
+* facade.rb: new method TMail::Mail#disposition_params, disposition_param
+
+== Sun Nov 10 20:13:35 2002 Minero Aoki <aamine@loveruby.net>
+
+* mail.rb: new method TMail::Mail#each_port.
+
+== Sun Nov 10 20:12:50 2002 Minero Aoki <aamine@loveruby.net>
+
+* address.rb: type -> self.class
+
+* header.rb: ditto.
+
+* port.rb: ditto.
+
+== Sun Nov 10 20:11:13 2002 Minero Aoki <aamine@loveruby.net>
+
+* T/testmail.rb: check "Content-Type: text" (missing subtype).
+
+== Sun Nov 10 20:10:22 2002 Minero Aoki <aamine@loveruby.net>
+
+* sc/mails.c: Check_Type -> StringValue.
+
+* sc/mails.c: reformat.
+
+== Thu Nov 7 05:11:21 2002 Minero Aoki <aamine@loveruby.net>
+
+* mbox.rb (UNIXMbox): fix typo. (thanks: Brian Fundakowski Feldman)
+
+== Wed Aug 14 18:58:35 2002 Minero Aoki <aamine@loveruby.net>
+
+* mail.rb: does not delay to read message body unless @port.reproducible?
+
+* port.rb: new method Port#reproducible?
+
+ (thanks: Simon Conrad-Armes)
+
+== Wed Aug 14 18:53:52 2002 Minero Aoki <aamine@loveruby.net>
+
+* facade.rb: modify format.
+
+= Version 0.10.5. Released Wed Jul 10 20:47:15 2002
+
+== Wed Jul 10 20:25:16 2002 Minero Aoki <aamine@loveruby.net>
+
+* facade.rb: new method Mail#header_string.
+
+* facade.rb: new method Mail#type_params, type_param.
+
+== Wed Jul 10 20:23:29 2002 Minero Aoki <aamine@loveruby.net>
+
+* port.rb: reduce warnings.
+
+== Wed Jul 10 20:23:03 2002 Minero Aoki <aamine@loveruby.net>
+
+* b64/depend, sc/depend:
+* .o depend on Makefile and
+* .h
+
+== Thu May 30 22:25:11 2002 Minero Aoki <aamine@loveruby.net>
+
+* mbox.rb (Maildir#new_port): use unique sequence number instead of sleep & try. (patched by
+Kikutani, Makoto)
+
+* mbox.rb (Maildir#new_port): takes optional block to initialize mail file.
+
+* port.rb (MaildirPort): new method #move_to_new, #move_to_cur.
+
+== Thu May 30 21:28:52 2002 Minero Aoki <aamine@loveruby.net>
+
+* header.rb: internal_new had not initialized @comment. (reported by Kikutani, Makoto)
+
+* encode.rb (HFdecoder): quote phrase.
+
+== Thu May 30 20:44:27 2002 Minero Aoki <aamine@loveruby.net>
+
+* header.rb (ReturnPathHeader): support null address spec. (reported by Kikutani, Makoto)
+
+== 0.10.4 (2002-05-17)
+
+* Maildir が動いていなかった
+
+* Maildir#each_port の渡すファイルが名前でソートされていたのを 時間順になるようにした (patched by Kukutani, Makoto)
+
+* 空の Return-Path で落ちないようにした (reported by Morikawa-san) English: Maildir did not work correctly.
+
+* Maildir#each_port yields filenames sorted by time, not filename. (patched by Kukutani, Makoto)
+
+* allows empty return path (Return-Path: <>). (reported by Morikawa-san)
+
+== 0.10.3 (2002-05-07)
+
+* バージョン 1.0 で削除する予定のメソッドを obsolete.rb にまとめた。 これを require しないことで 1.0 の挙動をテストできる。(デフォルトでは require する)
+
+* Mail の set 系メソッドほとんどがバグのため動かなかった* 新しいメソッド MhMailbox,UNIXMbox,Maildir#reverse_each_port (suggested by Takabayashi, Satoru)
+
+* ドキュメントにある TMail::Mail#content_type が定義されていなかった (reported by yoshihisa masuda)
+
+* Content-Type の main/sub のあとに ';' を許すようにした (suggested by Lars Christensen)
+
+* Mutt の作る Maildir ファイルをパースできなかった* マルチパートメールが終端されていないとき、to_s で落ちる (reported by Kikutani, Makoto) English: devide obsolete methods into obsolete.rb.* Mail#to=, cc=, bcc=, ... did not work.* new methods MhMailbox,UNIXMbox,Maildir#reverse_each_port (suggested by Takabayashi, Satoru)
+
+* TMail::Mail#content_type is described in document but not defined. (reported by yoshihisa masuda)
+
+* allow ';' after content type. (suggested by Lars Christensen)
+
+* TMail::Maildir fails to parse maildir filename created by Mutt.
+
+* Unterminted multipart mail causes unexpected exception. (reported by Kikutani, Makoto)
+
+== 0.10.2 (2002-02-21)
+
+* UnstructuredHeader#to_s が落ちるバグを修正 (patched by Satoru Takabayashi)
+
+* ReceivedHeader で、via があるのに by がないとき、 またはその逆のときに結果がおかしくなるバグを修正 (patched by Satoru Takabayashi)
+
+* TMail::TextUtils.quote_phrase が落ちるバグを修正 (reported by Matt Armstrong) English: UnstructuredHeader#to_s did not work. (patched by Satoru Takabayashi)
+
+* ReceivedHeader#to_s did not work when h.via exists and h.by not exists (and vice versa). (patched by Satoru Takabayashi)
+
+* TMail::TextUtils.quote_phrase did not work. (reported by Matt Armstrong)
+
+== 0.10.1 (2002-02-03)
+
+* テストスクリプトをパッケージに追加。メールアドレスのパースに 関するテストスクリプトは大部分を RubyMail 0.2 (by Matt Armstrong) からもらいました。
+
+* 新しいクラス TMail::Config
+
+* 細かいパーサのバグをたくさん直した
+
+* クオート中の生 JIS 文字列を許すようにした
+
+* TMail::File
+
+* Stream は削除 (通常の File で置きかえた)。 English: test scripts added. Many test cases are imported from RubyMail 0.2, written by Matt Armstrong.
+
+* new class TMail::Config
+
+* Minor parser bugs are
+eliminated.
+
+* Parser supports raw iso2022jp strings appeared in quoted-words.
+
+* TMail::File
+
+* Stream classes removed.
+
+== 0.10.0 (2002-01-06)
+
+* いくつか非互換の変更を加えた。 詳細はファイル Incompatibilities を参照のこと。
+
+* amstd strscan を使うのをやめた
+
+* mail.so は 1.7 最新では (問題なく動くが) ちょっと危険 English: changes many method features of TMail::Mail. see file Incompatibilities.
+
+* TMail does not depend on amstd/strscan library.
+
+* mails.so was riskful under latest 1.7
+
+== 0.9.9 (2001-11-15)
+
+* typo in tmail_attr_writer (patched by Shirai, Kaoru) English: typo in tmail_attr_writer (patched by Shirai, Kaoru)
+
+== 0.9.8 (2001-09-07)
+
+* 間違って 0.9.7 のアーカイブを上書きして壊してたのでその再修正 (thanks Masahiro Sekiya, Joseph McDonald)
+
+* amstd/futils から fileutils に移行
+
+* インストーラを setup.rb から install.rb (3.0.0) に移行 English: modify 0.9.7(2) pack miss. (thanks Masahiro Sekiya, Joseph McDonald)
+
+* amstd/futils -> fileutils
+
+* setup.rb -> install.rb 3.0.0
+
+== 0.9.7 (2001-07-06)
+
+* HeaderField#body が落ちるバグを修正
+
+* Mail クラスのドキュメントを同期 English: modify bug in HeaderField#body
+
+* sync TMail::Mail class reference manual
+
+== 0.9.6 (2001-06-20)
+
+* 新しいモジュール TMail::Base64
+
+* デフォルトでは本体の改行コード変換を行わない English: new module TMail::Base64
+
+* does not convert line terminator by default.
+
+== 0.9.5 (2001-05-27)
+
+* ヘッダエンコードで fold すると空白が消えるバグを修正 (thanks Akira Yamada)
+
+* RFC2231 に半分対応 (fold に対応してない) (thanks Yasuhiro Arima) English: spaces were too removed when folding (thanks Akira Yamada)
+
+* support RFC2231 (still imcomplete) (reported by Yasuhiro Arima)
+
+== 0.9.4 (2001-04-25)
+
+* インストーラをアップデート
+
+* Mail.load
+
+* Mail#strftime
+
+* Ruby 1.4 に対応 English: update installer
+
+* Mail.load
+
+* Mail#strftime
+
+* supports Ruby 1.4 again
+
+== 0.9.3 (2001-03-10)
+
+* インストーラをアップデート
+
+* TMail::Mail.boundary のドキュメントが残ってた (TMail.new_boundary に移行)
+
+* ヘッダの最後に改行がない場合を考慮 English: update installer
+
+* remove TMail::Mail.boundary,msgid from document (use TMail.new_boundary, new_msgid)
+
+* no need of NL at the tail of header
+
+== 0.9.2 (2001-03-08)
+
+* HF#inspect・Address#inspect の動作を変更
+
+* Ruby バージョンのスキャナを KCODE に動的対応させた
+
+* ライブラリのエントリポイントを 'tmail' に変更 ('tmail/tmail' も使えるが 1.0 あたりでなくすかも) English: HF#inspect, Address#inspect changed
+
+* support SJIS in scanner
+
+* library entry point is 'tmail' again (<- 'tmail/tmail')
+
+== 0.9.1 (2001-03-02)
+
+* マルチパートのパースにバグ English: bug in parsing MIME multipart
+
+== 0.9.0 (2001-02-24)
+
+* to_s, inspect の動作変更
+
+* Mail#to, from などのデフォルト値が '' から nil に変更 English: change Mail#to_s/inspect action
+
+* default value of Mail#to, from is now nil (not '')
+
+== 0.8.18 (2001-01-27)
+
+* push に引数のないところがあった
+
+* Array#filter を使わないようにした (thanks l@kondara) English: modify push without arg
+
+* do not use Array#filter (thanks l@kondara)
+
+== 0.8.17 (2001-01-26)
+
+* 日本語文字のエンコードで落ちるバグを修正 (thanks 小沢さん) English: modify MIME encoding bug
+
+== 0.8.16 (2001-01-22)
+
+* mails.so をスタティックリンクでも大丈夫なように修正 English: modify mails.so for static link
+
+== 0.8.15 (2000-11-28)
+
+* HFencoder のバグを修正 (thanks 前田修吾さん) English: debug HFencoder (thanks Shugo Maeda)
+
+== 0.8.14 (2000-11-18)
+
+* DateH#date= にバグ (thanks 前田修吾さん)
+
+* StringH をデコードする時 EOL を消してから nkf に渡す
+
+* Mail#ordered_each
+
+* eof の時 StringPort#read_all、copy_to が失敗する English: bug in DateH#date= (thanks Shugo Maeda)
+
+* gsub(EOL, '') before nkf
+
+* Mail#ordered_each
+
+* StringPort#read_all, copy_to failed if eof
+
+== 0.8.13 (2000-09-19)
+
+* MboxLoader が動かなかった (thanks 長沢研二さん)
+
+* HeaderField#new_header English: MboxLoader was not work (reported by Kenji Nagasawa)
+
+* HeaderField#new_header
+
+== 0.8.12 (2000-07-13)
+
+* scanner.rb の移動に対応 (thanks やまだあきらさん) English: racc/scanner.rb -> scanner.rb (thanks akira yamada)
+
+== 0.8.11 (2000-05-29)
+
+* HFencoder#value のエンコード部分が間違ってた
+
+* TMail::CONTROL
+
+* 日本語マニュアルが英語になっていた (泣。thanks るびきちさん) English: HFencoder#value encoding was wrong
+
+* TMail::CONTROL
+
+* all doc.ja/
+
+* .html were ENGLISH (reported by rubikitch)
+
+== 0.8.10 (2000-05-18)
+
+* TMail.zonestr2i の返り値が間違っていた (thanks 刀野暢洋さん)
+
+* datetime の秒が捨てられていた English: return values of TMail.zonestr2i was wrong (patched by tachino Nobuhiro)
+
+* seconds in date-time was wrongly discarded
+
+== 0.8.9 (2000-05-16)
+
+* インストーラのアップデートと修正 (thanks rubikitch) English: update installer (thanks rubikitch)
+
+== 0.8.8 (2000-05-12)
+
+* sample/sendmail
+
+* TMail#date=, mime_version=
+
+* phrase のクオートを修正
+
+* amstd アップデート (1.7.0) English: sample/sendmail
+
+* TMail#date=, mime_version=
+
+* modify phrase quoting
+
+* update amstd package (1.7.0)
+
+== 0.8.7 (2000-05-08)
+
+* mails.rb: = じゃなくて == (thanks rubikitch)
+
+* Racc ランタイムアップデート (1.0)
+
+* amstd アップデート (1.6.2) English: mails.rb: not =, == (thanks rubikitch)
+
+* update Racc runtime (1.0)
+
+* update amstd package (1.6.2)
+
+== 0.8.6 (2000-03-17)
+
+* Racc ランタイムアップデート (0.12)
+
+* strscan アップデート (0.5.5) English: update Racc runtime (0.12)
+
+* update strscan package (0.5.5)
+
+== 0.8.5 (2000-03-09)
+
+* accept がマルチパートの時変になるバグ修正
+
+* HeaderField#illegal?, empty?
+
+* 致命的なとこだけスレッドに対応した English: Mail#accept had bug when multipart
+
+* HeaderField#illegal?, empty?
+
+* thread safe (only critical part)
+
+== 0.8.4 (2000-03-09)
+
+* ruby 1.5 での Symbol 導入に対応 English: for Symbol in ruby 1.5
+
+== 0.8.3 (2000-03-04)
+
+* Address#local,domain
+
+* phrase、value などの文字列化の精度を改善した English: Address#local,domain
+
+* better string convertion
+
+== 0.8.2 (2000-02-23)
+
+* FilePort#filename は public English: FilePort#filename is public
+
+== 0.8.1 (2000-02-20)
+
+* アドレスがない時でも Mail#to,from などが落ちないよう修正 English: modify Mail#to, from... for no addresses
+
+== 0.8.0 (2000-02-19)
+
+* 全てのクラスを TMail モジュールの中で定義
+
+* スキャナを拡張モジュールにした
+
+* TMail::Mail#body_port
+
+* TMail::Mail#encoded, decoded
+
+* ヘッダの文字列化システムが大きく変わった English: moves all classes into module TMail
+
+* make scanner ruby extention
+
+* TMail::Mail#body_port
+
+* TMail::Mail#encoded, decoded
+
+== 0.7.5 (2000-01-09)
+
+* Racc の最新バージョンに対応 English: modify for racc 0.10.8
+
+== 0.7.4 (1999-11-10)
+
+* 数字のみのアカウントが変になる
+
+* inspect がまたバグってた
+
+* port.rb の typo
+
+* amstd に対応 (must.rb -> amstd/must.rb) (all modifications are patched by Shugo Maeda) English: digit only account was wrong handled
+
+* TMail#inspect contained bug
+
+* type in port.rb
+
+* amstd (must.rb -> amstd/must.rb) (all modifications are patched by Shugo Maeda)
+
+== 0.7.3 (1999-11-06)
+
+* ホスト名なしのアドレスを通すように修正 (thanks ts さん)
+
+* ファイルをディレクトリに入れた (tmail.rb -> tmail/tmail.rb)
+
+* racc 0.10 に対応
+
+* パッケージングがかなり変化 English: parse error on address without hostname (patched by ts)
+
+* main files are in tmail/ (tmail.rb -> tmail/tmail.rb)
+
+* modified for racc 0.10
+
+* wrote setup.rb
+
+== 0.7.2 (1999-09-29)
+
+* タイムゾーン関連のバグを修正
+
+* Received: がひとつだけになってしまうバグを修正
+
+* to_s がいろいろエンバグしてたのを修正 (thanks 前田修吾さん) English: about timezone
+
+* multi Received: handling was wrong
+
+* to_s contains bugs (patched by Shugo Maeda)
+
+== 0.7.1 (1999-09-28)
+
+* 細かいバグ修正
+
+* ドキュメントの更新を忘れてた
+
+* コメントをとりだせるようにした English: modify little bugs
+
+* update documents
+
+* can handle comments for structured header
+
+== 0.7.0 (1999-09-02)
+
+*  ヘッダオブジェクトの遅延生成
+
+* mailp.y: FROM VIA なども ATOM として評価するようにした。atom 追加 English: lazy header contruction
+
+== 0.6.0 (1999-07-31)
+
+* 入出力を port.rb に一本化 English: use port.rb
+
+== 0.5.2 (1999-06-26)
+
+* strscan に対応
+
+* buffer.rb をやめ extiter.rb を使用 English: use strscan
+
+* use extiter.rb, not buffer.rb
+
+== 0.5.1 (1999-06-14)
+
+* mailp.y を Racc 0.9 に対応
+
+*  死ぬ気で英語マニュアルをつけた English: rewrite mailp.y for racc0.9.x
+
+* wrote English manual
+
+== 0.5.0 (1999-06-03)
+
+* Header クラスを廃止
+
+* recycle.rb buffer.rb を使用 English: now Header class is obsolute
+
+* use recycle.rb, buffer.rb
+
+== 0.4.8 (1999-05-?)
+
+* パーサの精度が向上
+
+* タイプミスなどをいくつか修正 English: modify mail parser
+
+* modify some typos
+
+== 0.3.0 (?)
+
+== 0.2.0 (1998-10-30)
+
+* まだ mail modules と呼ばれていた English: still named "Mail Modules"
+
+== 0.1.0 (1998-10-26) .
+
+* bug fix
+
+== 0.0.0 (1998-10-23) .
+
+* first release

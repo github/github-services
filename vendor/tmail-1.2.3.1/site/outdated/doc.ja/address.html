@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja-JP">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+  <meta http-equiv="Content-Language" content="ja-JP">
+<title><code>Address Classes</code></title>
+</head>
+<body>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+  _uacct = "UA-2871747-1";
+  urchinTracker();
+  </script>
+
+
+<h1><code>Address Classes</code></h1>
+
+<h2><code>class <a name="TMail%3a%3aAddress">TMail::Address</a> </code></h2>
+
+<h3>クラスメソッド</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aAddress-parse"><code>parse(str)</code></a> → <code><a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a></code></dt>
+<dd>
+<p>
+str: String<br>
+</p>
+
+<p>
+文字列 <code>str</code> から <code>TMail::Address</code> または <code>TMail::AddressGroup</code>
+オブジェクトを生成します。<code>str</code> がメールアドレスとみなせない
+ときは例外 <code>TMail::SyntaxError</code> を発生します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-new"><code>new(locals, <var>domains</var>)</code></a> → <code><a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a></code></dt>
+<dd>
+<p>
+locals: [String]<br>
+domains: [String]<br>
+</p>
+
+<p>
+新しい <code>TMail::Address</code> オブジェクトを生成します。<code>locals</code>、<code><var>domains</var></code> はそれぞれ
+アドレススペック <code>(...@...)</code> の、＠の左側と右側をドットで <code>split</code> した
+配列です。このメソッドは内部用であり使いにくくなっています。
+<code>Address.parse</code> を使ってください。
+</p>
+
+</dd>
+</dl>
+<h3>インスタンスメソッド</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aAddress-address_group%3f"><code>address_group?</code></a> → <code>true | false</code></dt>
+<dd>
+<p>
+常に <code>false</code>
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-spec"><code>spec</code></a> → <code>String</code></dt>
+<dd>
+<p>
+アドレススペック文字列 <code>("....@....")</code>。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-routes"><code>routes</code></a> → <code>[String]</code></dt>
+<dd>
+<p>
+配送経路を表す文字列の配列。<code>'@'</code> は含まない。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-name"><code>name</code></a> → <code>String</code></dt>
+<dt><a name="TMail%3a%3aAddress-phrase"><code>phrase</code></a> → <code>String</code></dt>
+<dd>
+<p>
+俗に言うアドレスの「本名」部分。デコードされています。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-encoded"><code>encoded(eol = "\r\n", <var>encoding</var> = 'j')</code></a> → <code>String</code></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+<code>B</code> エンコードされた <code>RFC2822</code> 形式の文字列表現を返します。
+行末コードに <code>eol</code>、文字エンコーディングに <code><var>encoding</var></code> を使います。
+ただし <code><var>encoding</var></code> は <code>j</code> しか実装されていません。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-to_s"><code>to_s(eol = "\n", <var>encoding</var> = 'e')</code></a> → <code>String</code></dt>
+<dt><a name="TMail%3a%3aAddress-decoded"><code>decoded(eol = "\n", <var>encoding</var> = 'e')</code></a> → <code>String</code></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+デコードされた <code>RFC2822</code> 形式の文字列表現を返します。
+行末コードに <code>eol</code>、文字エンコーディングに <code><var>encoding</var></code> を使います。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddress-%3d%3d"><code>==(other)</code></a> → <code>true | false</code></dt>
+<dd>
+<p>
+other: Object<br>
+</p>
+
+<p>
+<code>spec</code> の同値判定によって <code>self</code> と <code>other</code> が等しいか判定します。
+<code>name</code> や <code>routes</code> は影響しません。
+</p>
+
+
+</dd>
+</dl>
+<h2><code>class <a name="TMail%3a%3aAddressGroup">TMail::AddressGroup</a> </code></h2>
+
+<h3>クラスメソッド</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aAddressGroup-new"><code>new(name, <var>addrs</var>)</code></a> → <code><a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a></code></dt>
+<dd>
+<p>
+name: String<br>
+addrs: [<a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a>]<br>
+</p>
+
+<p>
+新しい <code>TMail::AddressGroup</code> オブジェクトを作成します。
+<code>name</code> はグループ名を示す文字列、<code><var>addrs</var></code> は <code>TMail::Address</code> または
+<code>TMail::AddressGroup</code> の配列でなければいけません。
+</p>
+
+</dd>
+</dl>
+<h3>インスタンスメソッド</h3>
+
+<dl>
+<dt><a name="TMail%3a%3aAddressGroup-address_group%3f"><code>address_group?</code></a> → <code>true | false</code></dt>
+<dd>
+<p>
+常に <code>true</code>
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-name"><code>name</code></a> → <code>String</code></dt>
+<dd>
+<p>
+グループ名。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-addresses"><code>addresses</code></a> → <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a>]</code></dt>
+<dd>
+<p>
+<code>TMail::Address</code> または <code>TMail::AddressGroup</code> オブジェクトの配列。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-to_a"><code>to_a</code></a> → <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a>]</code></dt>
+<dt><a name="TMail%3a%3aAddressGroup-to_ary"><code>to_ary</code></a> → <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a>]</code></dt>
+<dd>
+<p>
+<code>addresses.dup</code> と同じです。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-flatten"><code>flatten</code></a> → <code>[<a href="address.html#TMail%3a%3aAddress">TMail::Address</a>]</code></dt>
+<dd>
+<p>
+再帰的に <code>TMail::AddressGroup</code> オブジェクトを平坦化し、
+<code>TMail::Address</code> オブジェクトの配列を得ます。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-add"><code>add(addr)</code></a></dt>
+<dt><a name="TMail%3a%3aAddressGroup-push"><code>push(addr)</code></a></dt>
+<dd>
+<p>
+addr: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a><br>
+</p>
+
+<p>
+<code>TMail::Address</code> または <code>TMail::AddressGroup</code> オブジェクトを
+このグループに追加します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-delete"><code>delete(addr)</code></a></dt>
+<dd>
+<p>
+addr: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a><br>
+</p>
+
+<p>
+<code>TMail::Address</code> または <code>TMail::AddressGroup</code> オブジェクトを
+このグループから削除し、非 <code>nil</code> を返します。もともとこの
+アドレスがグループ内に存在しない場合は無視して <code>nil</code> を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-each%20%7b%7ca%7c%20%2e%2e%2e%2e%20%7d"><code>each {|a| .... }</code></a></dt>
+<dd>
+<p>
+a: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a> | <a href="address.html#TMail%3a%3aAddressGroup">TMail::AddressGroup</a><br>
+</p>
+
+<p>
+<code><a href="address.html#TMail%3a%3aAddressGroup-addresses">#addresses</a></code> に対する繰り返し。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-each_address%20%7b%7ca%7c%20%2e%2e%2e%2e%20%7d"><code>each_address {|a| .... }</code></a></dt>
+<dd>
+<p>
+a: <a href="address.html#TMail%3a%3aAddress">TMail::Address</a><br>
+</p>
+
+<p>
+<code><a href="address.html#TMail%3a%3aAddressGroup-addresses">#addresses</a></code> に対する繰り返し。ただし <code>TMail::AddressGroup</code> オブジェクトに
+対しては内部に入って再帰的に繰り返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-encoded"><code>encoded(eol = "\r\n", <var>encoding</var> = 'j')</code></a> → <code>String</code></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+B エンコードされた RFC2822 形式の文字列表現を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-decoded"><code>decoded(eol = "\n", <var>encoding</var> = 'e')</code></a> → <code>String</code></dt>
+<dd>
+<p>
+eol: String<br>
+encoding: String<br>
+</p>
+
+<p>
+デコードされた <code>RFC2822</code> 形式の文字列表現を返します。
+</p>
+
+</dd>
+<dt><a name="TMail%3a%3aAddressGroup-%3d%3d"><code>==(other)</code></a> → <code>true | false</code></dt>
+<dt><a name="TMail%3a%3aAddressGroup-eql%3f"><code>eql?(other)</code></a> → <code>true | false</code></dt>
+<dd>
+<p>
+other: Object<br>
+</p>
+
+<p>
+<code><a href="address.html#TMail%3a%3aAddressGroup-addresses">#addresses</a></code> の同値判定によって同じ内容かどうかを判断します。
+<code><a href="address.html#TMail%3a%3aAddressGroup-name">#name</a></code> は影響しません。
+</p>
+</dd>
+</dl>
+
+</body>
+</html>
