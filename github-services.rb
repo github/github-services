@@ -1,5 +1,5 @@
 $:.unshift *Dir["#{File.dirname(__FILE__)}/vendor/**/lib"]
-%w( rack sinatra tinder json net/http net/https socket timeout xmlrpc/client openssl basecamp ).each { |f| require f }
+%w( rack sinatra tinder json net/http net/https socket timeout xmlrpc/client openssl basecamp xmpp4r xmpp4r-simple ).each { |f| require f }
 
 module GitHub
   def service(name, &block)

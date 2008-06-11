@@ -1,0 +1,40 @@
+Updating from XMPP4R 0.2 to 0.3
+===============================
+
+
+There has been a redesign process in the development of XMPP4R 0.3. If
+you encounter any problems, read the following instructions.
+
+
+1) All extension libraries have different paths and namespaces:
+
+Roster:
+require 'xmpp4r/roster'
+Jabber::Helpers::Roster -> Jabber::Roster::Helper
+
+Multi-User Chat:
+require 'xmpp4r/muc'
+Jabber::Helpers::MUCBrowser -> Jabber::MUC::MUCBrowser 
+Jabber::Helpers::MUCClient -> Jabber::MUC::MUCClient
+Jabber::Helpers::SimpleMUCClient -> Jabber::MUC::SimpleMUCClient
+
+Software Version:
+require 'xmpp4r/version'
+Jabber::Helpers::Version -> Jabber::Version::SimpleResponder
+
+vCard:
+require 'xmpp4r/vcard'
+Jabber::Helpers::Vcard -> Jabber::Vcard::Helper
+
+Bytestreams:
+require 'xmpp4r/bytestreams'
+Jabber::Helpers::FileTransfer -> Jabber::FileTransfer::Helper
+
+For a complete list of new class names see test/tc_class_names.rb
+
+
+2) add_*_callback methods do not accept procs anymore. procs maybe
+instead passed with the & sign.
+
+Example:  client.add_message_callback(&my_message_handler)
+

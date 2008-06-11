@@ -1,0 +1,50 @@
+XMPP4R 0.3.2 (15/10/2007)
+=========================
+* Serious bug involving Ruby threading fixed (caused exceptions with
+  ruby 1.8.6)
+* vCard helper fixes
+* Jabber RPC (JEP0009) support
+* HTTP Binding (JEP0124) support
+* Publish-Subscribe support
+* XMPPElement: a framework for classes representing XML elements
+* Ad-hoc commands support
+* Improvements to Dataforms: XData, XDataTitle and XDataInstructions
+
+XMPP4R 0.3.1 (23/04/2007)
+=========================
+* SASL fixes
+* Message#x and Presence#x support element selection by namespace
+* Proper XML entity escaping for REXML text nodes
+* Improvements to FileTransfer::Helper and SOCKS5BytestreamsServer
+* Vcard::Helper fixes
+* Update Digest module usage to reflect recent Ruby versions
+* More documentation
+
+XMPP4R 0.3 (20/07/2006)
+=======================
+* SRV lookup capability in Client#connect
+* Stringprep support for JIDs
+* TLS & SASL support
+* Basic Dataforms support
+* Multi-User Chat Helpers
+* Helpers for File-Transfer, SOCKS5 Bytestreams, In-Band Bytestreams
+* Roster helper has modified subscription-request semantics (see Roster#add_subscription_request_callback)
+* A lot of features have renamed namespaces (see UPDATING file)
+
+XMPP4R 0.2 (20/10/2005)
+=======================
+* Workarounds for REXML bugs.
+* Presences are now Comparable according to priority or interest
+* fixed a serious bug in Stream#send which caused some lockups. Reported by
+  chunlinyao@gmail.com.
+* Moved REXML::Element#add to REXML::Element#typed_add to keep add accessible
+* Rewritten Roster helper
+* Added Vcard helper and improved IqVcard
+* XMLStanza id generator
+* Support for Roster Item Exchange (JEP-0093 and JEP-0144)
+* Client#password= to change client's account password
+* Documentation fixes
+
+XMPP4R 0.1 (12/09/2005)
+=======================
+* first public release.
