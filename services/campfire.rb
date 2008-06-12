@@ -9,4 +9,5 @@ service :campfire do |data, payload|
     text   = "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} (#{commit['url']})"
     room.speak text
   end
+  campfire.logout
 end
