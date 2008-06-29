@@ -24,7 +24,7 @@ EOH
   message.body    = body
   message.date    = Time.now
   
-  Net::SMTP.start('localhost', 25, 'github.com') do |smtp|
+  Net::SMTP.start('smtp', 25, 'github.com') do |smtp|
     smtp.send_message message.to_s, 'noreply@github.com', data['address']
   end
 end
