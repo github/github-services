@@ -3,17 +3,20 @@ service :email do |data, payload|
   name_with_owner = File.join(payload['repository']['owner']['name'], payload['repository']['name'])
   
   body = <<-EOH
-Commits to #{name_with_owner} (#{payload['repository']['url']})
-Ref: #{payload['ref']} 
+Commits to #{name_with_owner}
+Ref:  #{payload['ref']}
+Home: #{payload['repository']['url']}
+
 
 EOH
 
   payload['commits'].each do |gitsha, commit|
     body << <<-EOH
-#{gitsha} by #{commit['author']['name']} (#{commit['author']['email']}) @ #{commit['timestamp']}
+#{commit['timestamp']} - #{commit['author']['name']} (#{commit['author']['email']})
 #{commit['url']}
 
 #{commit['message']}
+
 
 EOH
   end
