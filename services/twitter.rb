@@ -6,7 +6,7 @@ service :twitter do |data, payload|
     commit = commit.last
     begin
       Timeout::timeout(2) do
-        github_url = Net::HTTP.get "tinyurl.com", "/api-create.php?url=#{commit['url']}"
+        github_url = Net::HTTP.get "is.gd", "/api.php?longurl=#{commit['url']}"
       end
     rescue
     end
