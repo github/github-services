@@ -20,4 +20,6 @@ service :jabber do |data, payload|
 #{commit['url']}
 EOM
   end
+
+  im.disconnect
 end
