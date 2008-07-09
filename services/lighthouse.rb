@@ -12,6 +12,7 @@ service :lighthouse do |data, payload|
         <title>#{CGI.escapeHTML(title)}</title>
         <body>#{CGI.escapeHTML(body)}</body>
         <changes type="yaml">#{CGI.escapeHTML(diff)}</changes>
+        <committer>#{CGI.escapeHTML(commit['author']['name'])}</committer>
         <revision>#{CGI.escapeHTML(commit_id)}</revision>
         <changed-at type="datetime">#{CGI.escapeHTML(commit['timestamp'])}</changed-at>
       </changeset>
