@@ -21,7 +21,6 @@ Home: #{payload['repository']['url']}
 
 EOH
 
-
   payload['commits'].each do |gitsha, commit|
     added    = commit['added'].map    { |f| ['A', f] }
     removed  = commit['removed'].map  { |f| ['R', f] }
