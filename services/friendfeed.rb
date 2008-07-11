@@ -1,7 +1,7 @@
 service :friendfeed do |data, payload|
   # You need your friendfeed nickname and your friendfeed 
   repository = payload['repository']['name']
-  friendfeed_url = URI.parse("http://www.friendfeed.com/api/share")
+  friendfeed_url = URI.parse("http://friendfeed.com/api/share")
 
   payload['commits'].each do |commit_id, commit|
     github_url, name, commit_msg = commit['url'], commit['author']['name'], commit['message']
