@@ -25,25 +25,7 @@ Steps to contributing
 5. Send us a pull request
 6. Once it's accepted, we'll add any new necessary data fields to the GitHub front-end so people can start using your addition.
 
-- Patches including tests are greatly appreciated.
+
+*Patches including tests are encouraged*
 
 Bugs can be filed here: [Lighthouse](http://logicalawesome.lighthouseapp.com/projects/8570-github/tickets)
-
-
-Thanks to the following people for making this possible
--------------------------------------------------------
-
-- Blake Mizerany
-- Brandon Keepers
-- Christian Neukirchen
-- El Draper
-- Florian Frank
-- Hans Engel
-- John Nunemaker
-- John Reilly
-- Jorge Bernal
-- Luke Redpath
-- Noah (ngage)
-- Sean O'Brien
-- Tekkub Stoutwrithe
-- W. Andrew Loe III
