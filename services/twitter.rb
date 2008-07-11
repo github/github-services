@@ -4,6 +4,7 @@ service :twitter do |data, payload|
 
   payload['commits'].each do |commit|
     commit = commit.last
+    github_url = nil
     begin
       Timeout::timeout(2) do
         github_url = Net::HTTP.get "is.gd", "/api.php?longurl=#{commit['url']}"
