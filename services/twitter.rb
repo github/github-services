@@ -8,9 +8,9 @@ service :twitter do |data, payload|
       Timeout::timeout(2) do
         github_url = Net::HTTP.get "is.gd", "/api.php?longurl=#{commit['url']}"
       end
-    rescue
+    rescue Timeout::Error
+      github_url = commit['url']
     end
-    github_url ||= commit['url']
     status = "[#{repository}] #{github_url} #{commit['author']['name']} - #{commit['message']}"
 
     req = Net::HTTP::Post.new(url.path)
