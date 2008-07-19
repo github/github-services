@@ -11,28 +11,31 @@ service :cia do |data, payload|
   branch     = payload['ref'].split('/').last
   payload['commits'].each do |sha1, commit|
     message = %Q|
-<message>
-  <generator>
-    <name>github</name>
-    <version>1</version>
-    <url>http://www.github.com</url>
-  </generator>
-  <source>
-    <project>#{repository}</project>
-    <branch>#{branch}</branch>
-  </source>
-  <timestamp>#{timestamp_to_epoch(commit['timestamp'])}</timestamp>
-  <body>
-    <commit>
-      <author>#{commit['author']['name']}</author>
-      <revision>#{sha1[0..6]}</revision>
-      <log>#{commit['message']}</log>
-      <url>#{commit['url']}</url>
-    </commit>
-  </body>
-</message>
-|
+			<message>
+				<generator>
+					<name>github</name>
+					<version>1</version>
+					<url>http://www.github.com</url>
+				</generator>
+				<source>
+					<project>#{repository}</project>
+					<branch>#{branch}</branch>
+				</source>
+				<timestamp>#{timestamp_to_epoch(commit['timestamp'])}</timestamp>
+				<body>
+					<commit>
+						<author>#{commit['author']['name']}</author>
+						<revision>#{sha1[0..6]}</revision>
+						<log>#{commit['message']}</log>
+						<url>#{commit['url']}</url>
+						<files>
+							<file> #{commit['modified'].join("</file>\n<file>")} </file>
+						</files>
+					</commit>
+				</body>
+			</message>
+		|
 
-    result = server.call("hub.deliver", message)
+		result = server.call("hub.deliver", message)
   end
 end
