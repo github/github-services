@@ -1,3 +1,9 @@
+
+def timestamp_to_epoch(timestamp)
+	dt = DateTime.parse(timestamp).new_offset
+	Time.send(:gm, dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec).to_i
+end
+
 service :cia do |data, payload|
   server = XMLRPC::Client.new2("http://cia.navi.cx")
 
@@ -15,7 +21,7 @@ service :cia do |data, payload|
     <project>#{repository}</project>
     <branch>#{branch}</branch>
   </source>
-  <timestamp>#{commit['timestamp'].to_i}</timestamp>
+  <timestamp>#{timestamp_to_epoch(commit['timestamp'])}</timestamp>
   <body>
     <commit>
       <author>#{commit['author']['name']}</author>
