@@ -4,11 +4,14 @@ CIA.vc
 Install Notes
 -------------
 
-  1. this service only requires activation
+  1. Disable multiple messages if more than 5 commits are pushed.  Instead announce the last commit with "(+## more commits...)" appended to the note.
 
 
 Developer Notes
 ---------------
+
+data
+  - no_spam
 
 payload
   - refer to docs/github_payload

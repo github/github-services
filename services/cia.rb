@@ -9,8 +9,12 @@ service :cia do |data, payload|
 
   repository = payload['repository']['name']
   branch     = payload['ref'].split('/').last
-  payload['commits'].each do |sha1, commit|
-    message = %Q|
+	commits    = payload['commits']
+
+	if data['no_spam'] && commits.size > 5
+		sha1 = payload['after']
+		commit = commits[sha1]
+		message = %Q|
 			<message>
 				<generator>
 					<name>github</name>
@@ -26,7 +30,7 @@ service :cia do |data, payload|
 					<commit>
 						<author>#{commit['author']['name']}</author>
 						<revision>#{sha1[0..6]}</revision>
-						<log>#{commit['message']}</log>
+						<log>#{commit['message']} (+#{commits.size} more commits...)</log>
 						<url>#{commit['url']}</url>
 						<files>
 							<file> #{commit['modified'].join("</file>\n<file>")} </file>
@@ -37,5 +41,35 @@ service :cia do |data, payload|
 		|
 
 		result = server.call("hub.deliver", message)
+	else
+		commits.each do |sha1, commit|
+			message = %Q|
+				<message>
+					<generator>
+						<name>github</name>
+						<version>1</version>
+						<url>http://www.github.com</url>
+					</generator>
+					<source>
+						<project>#{repository}</project>
+						<branch>#{branch}</branch>
+					</source>
+					<timestamp>#{timestamp_to_epoch(commit['timestamp'])}</timestamp>
+					<body>
+						<commit>
+							<author>#{commit['author']['name']}</author>
+							<revision>#{sha1[0..6]}</revision>
+							<log>#{commit['message']}</log>
+							<url>#{commit['url']}</url>
+							<files>
+								<file> #{commit['modified'].join("</file>\n<file>")} </file>
+							</files>
+						</commit>
+					</body>
+				</message>
+			|
+
+			result = server.call("hub.deliver", message)
+		end
   end
 end
