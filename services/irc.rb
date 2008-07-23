@@ -18,7 +18,8 @@ service :irc do |data, payload|
   irc.puts "USER #{botname} #{botname} #{botname} :GitHub IRCBot"
   irc.puts "NICK #{botname}"
   rooms.each do |room|
-    irc.puts "JOIN #{room}"
+    room, pass = room.split("::")
+    irc.puts "JOIN #{room} #{pass}"
     payload['commits'].each do |sha1, commit|
       irc.puts "PRIVMSG #{room} :\002#{repository}:\002 \0033#{commit['author']['name']} \0037#{branch}\0030 SHA1-\002#{sha1[0..6]}\002"
       irc.puts "PRIVMSG #{room} :#{commit['message']}"
