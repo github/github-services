@@ -1,7 +1,35 @@
+def build_cia_commit(repository, branch, commit, size = 1)
+  log = commit['message']
+  log << " (+#{size} more commits...)" if size > 1
 
-def timestamp_to_epoch(timestamp)
-	dt = DateTime.parse(timestamp).new_offset
-	Time.send(:gm, dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec).to_i
+  dt = DateTime.parse(commit['timestamp']).new_offset
+  timestamp = Time.send(:gm, dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec).to_i
+
+  <<-MSG
+    <message>
+      <generator>
+        <name>github</name>
+        <version>1</version>
+        <url>http://www.github.com</url>
+      </generator>
+      <source>
+        <project>#{repository}</project>
+        <branch>#{branch}</branch>
+      </source>
+      <timestamp>#{timestamp}</timestamp>
+      <body>
+        <commit>
+          <author>#{commit['author']['name']}</author>
+          <revision>#{sha1[0..6]}</revision>
+          <log>#{log}</log>
+          <url>#{commit['url']}</url>
+          <files>
+            <file> #{commit['modified'].join("</file>\n<file>")} </file>
+          </files>
+        </commit>
+      </body>
+    </message>
+  MSG
 end
 
 service :cia do |data, payload|
@@ -9,67 +37,15 @@ service :cia do |data, payload|
 
   repository = payload['repository']['name']
   branch     = payload['ref'].split('/').last
-	commits    = payload['commits']
+  commits    = payload['commits']
 
-	if data['no_spam'] && commits.size > 5
-		sha1 = payload['after']
-		commit = commits[sha1]
-		message = %Q|
-			<message>
-				<generator>
-					<name>github</name>
-					<version>1</version>
-					<url>http://www.github.com</url>
-				</generator>
-				<source>
-					<project>#{repository}</project>
-					<branch>#{branch}</branch>
-				</source>
-				<timestamp>#{timestamp_to_epoch(commit['timestamp'])}</timestamp>
-				<body>
-					<commit>
-						<author>#{commit['author']['name']}</author>
-						<revision>#{sha1[0..6]}</revision>
-						<log>#{commit['message']} (+#{commits.size} more commits...)</log>
-						<url>#{commit['url']}</url>
-						<files>
-							<file> #{commit['modified'].join("</file>\n<file>")} </file>
-						</files>
-					</commit>
-				</body>
-			</message>
-		|
-
-		result = server.call("hub.deliver", message)
-	else
-		commits.each do |sha1, commit|
-			message = %Q|
-				<message>
-					<generator>
-						<name>github</name>
-						<version>1</version>
-						<url>http://www.github.com</url>
-					</generator>
-					<source>
-						<project>#{repository}</project>
-						<branch>#{branch}</branch>
-					</source>
-					<timestamp>#{timestamp_to_epoch(commit['timestamp'])}</timestamp>
-					<body>
-						<commit>
-							<author>#{commit['author']['name']}</author>
-							<revision>#{sha1[0..6]}</revision>
-							<log>#{commit['message']}</log>
-							<url>#{commit['url']}</url>
-							<files>
-								<file> #{commit['modified'].join("</file>\n<file>")} </file>
-							</files>
-						</commit>
-					</body>
-				</message>
-			|
-
-			result = server.call("hub.deliver", message)
-		end
+  if commits.size > 5
+    message = build_cia_commit(repository, branch, commits[payload['after']], commits.size)
+    server.call("hub.deliver", message)
+  else
+    commits.each do |sha1, commit|
+      message = build_cia_commit(repository, branch, commit)
+      server.call("hub.deliver", message)
+    end
   end
 end
