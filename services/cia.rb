@@ -1,4 +1,4 @@
-def build_cia_commit(repository, branch, commit, size = 1)
+def build_cia_commit(repository, branch, sha1, commit, size = 1)
   log = commit['message']
   log << " (+#{size} more commits...)" if size > 1
 
@@ -40,11 +40,11 @@ service :cia do |data, payload|
   commits    = payload['commits']
 
   if commits.size > 5
-    message = build_cia_commit(repository, branch, commits[payload['after']], commits.size)
+    message = build_cia_commit(repository, branch, payload['after'], commits[payload['after']], commits.size)
     server.call("hub.deliver", message)
   else
     commits.each do |sha1, commit|
-      message = build_cia_commit(repository, branch, commit)
+      message = build_cia_commit(repository, branch, sha1, commit)
       server.call("hub.deliver", message)
     end
   end
