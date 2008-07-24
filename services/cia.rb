@@ -5,6 +5,8 @@ def build_cia_commit(repository, branch, sha1, commit, size = 1)
   dt = DateTime.parse(commit['timestamp']).new_offset
   timestamp = Time.send(:gm, dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec).to_i
 
+  files = commit['modified'] + commit['added'] + commit['removed']
+
   <<-MSG
     <message>
       <generator>
@@ -24,7 +26,7 @@ def build_cia_commit(repository, branch, sha1, commit, size = 1)
           <log>#{log}</log>
           <url>#{commit['url']}</url>
           <files>
-            <file> #{commit['modified'].join("</file>\n<file>")} </file>
+            <file> #{files.join("</file>\n<file>")} </file>
           </files>
         </commit>
       </body>
