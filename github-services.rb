@@ -8,6 +8,7 @@ require 'socket'
 require 'timeout'
 require 'xmlrpc/client'
 require 'openssl'
+#~ require 'date' # This is needed by the CIA service in ruby 1.8.7 or later
 
 # vendor
 require 'rack'

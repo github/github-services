@@ -1,0 +1,15 @@
+FriendFeed
+==========
+
+This service lets your broadcast your commits on FriendFeed. A simple post is made to http://www.friendfeed.com/api/share with your commits.
+
+
+Developer Notes
+---------------
+
+data
+  - nickname
+  - remotekey [As specified by http://www.friendfeed.com/remotekey]
+
+payload
+  - refer to docs/github_payload
