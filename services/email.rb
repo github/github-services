@@ -1,9 +1,8 @@
 service :email do |data, payload|
-
   name_with_owner = File.join(payload['repository']['owner']['name'], payload['repository']['name'])
 
   # Should be: first_commit = payload['commits'].first
-  first_commit_sha, first_commit = payload['commits'].select { |c| c }
+  first_commit_sha, first_commit = payload['commits'].collect.first
 
   # Shorten the elements of the subject
   first_commit_sha = first_commit_sha[0..5]
@@ -14,10 +13,8 @@ service :email do |data, payload|
   end
   
   body = <<-EOH
-Commits to #{name_with_owner}
-Ref:  #{payload['ref']}
-Home: #{payload['repository']['url']}
-
+Branch: #{payload['ref']}
+Home:   #{payload['repository']['url']}
 
 EOH
 
@@ -33,13 +30,23 @@ EOH
 
     body << <<-EOH
 Commit: #{gitsha}
+    #{commit['url']}
 Author: #{commit['author']['name']} <#{commit['author']['email']}>
-Date: #{timestamp} (#{timestamp.strftime('%a, %d %b %Y')})
-Url: #{commit['url']}
+Date:   #{timestamp} (#{timestamp.strftime('%a, %d %b %Y')})
 
+EOH
+
+    if changed_paths.size > 0
+      body << <<-EOH
 Changed paths:
   #{changed_paths}
 
+EOH
+    end
+
+    body << <<-EOH
+Log Message:
+-----------
 #{commit['message']}
 
 
@@ -51,7 +58,7 @@ EOH
   message.subject = "[#{name_with_owner}] #{first_commit_sha}: #{first_commit_title}"
   message.body    = body
   message.date    = Time.now
-  
+
   Net::SMTP.start('smtp', 25, 'github.com') do |smtp|
     smtp.send_message message.to_s, 'noreply@github.com', data['address']
   end
