@@ -11,7 +11,8 @@ service :jabber do |data, payload|
   # Accept any friend request
   im.accept_subscriptions = true
   
-  payload['commits'].each do |sha1, commit|
+  payload['commits'].each do |commit|
+    sha1 = commit['id']
     puts "*** Sending commit #{sha1[0..6]}" if $DEBUG
     im.deliver recipient, <<EOM
 #{repository}: #{commit['author']['name']} #{branch} SHA1-#{sha1[0..6]}"

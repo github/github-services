@@ -1,7 +1,8 @@
 service :basecamp do |data, payload|
   repository = payload['repository']['name']
   branch     = payload['ref'].split('/').last
-  payload['commits'].each do |commit_id, commit|
+  payload['commits'].each do |commit|
+    commid_id = commit['id']
     bc = Basecamp.new(data['url'], data['username'], data['password'])
     project_id = bc.projects.select { |p| p.name.downcase == data['project'].downcase }.first.id
     category_id = bc.message_categories(project_id).select { |category| category.name.downcase == data['category'].downcase }.first.id

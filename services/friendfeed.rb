@@ -3,7 +3,8 @@ service :friendfeed do |data, payload|
   repository = payload['repository']['name']
   friendfeed_url = URI.parse("http://friendfeed.com/api/share")
 
-  payload['commits'].each do |commit_id, commit|
+  payload['commits'].each do |commit|
+    commit_id = commit['id']
     github_url, name, commit_msg = commit['url'], commit['author']['name'], commit['message']
     title = "#{name} just pushed #{commit_id} to #{repository} on GitHub"
     # This commit will be published to FriendFeed as 'Arun Thampi just pushed 56436bcdef2342ddfca234234 to github-services on GitHub'

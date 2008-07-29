@@ -45,7 +45,8 @@ service :cia do |data, payload|
     message = build_cia_commit(repository, branch, payload['after'], commits[payload['after']], commits.size - 1)
     server.call("hub.deliver", message)
   else
-    commits.each do |sha1, commit|
+    commits.each do |commit|
+      sha1 = commit['id']
       message = build_cia_commit(repository, branch, sha1, commit)
       server.call("hub.deliver", message)
     end

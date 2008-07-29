@@ -2,7 +2,8 @@ service :email do |data, payload|
   name_with_owner = File.join(payload['repository']['owner']['name'], payload['repository']['name'])
 
   # Should be: first_commit = payload['commits'].first
-  first_commit_sha, first_commit = payload['commits'].collect.first
+  first_commit     = payload['commits'].first
+  first_commit_sha = first_commit['id']
 
   # Shorten the elements of the subject
   first_commit_sha = first_commit_sha[0..5]
@@ -18,7 +19,8 @@ Home:   #{payload['repository']['url']}
 
 EOH
 
-  payload['commits'].each do |gitsha, commit|
+  payload['commits'].each do |commit|
+    gitsha   = commit['id']
     added    = commit['added'].map    { |f| ['A', f] }
     removed  = commit['removed'].map  { |f| ['R', f] }
     modified = commit['modified'].map { |f| ['M', f] }

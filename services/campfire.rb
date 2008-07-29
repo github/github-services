@@ -5,7 +5,6 @@ service :campfire do |data, payload|
   campfire.login data['email'], data['password']
   room       = campfire.find_room_by_name data['room']
   payload['commits'].each do |commit|
-    commit = commit.last
     text   = "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} (#{commit['url']})"
     room.speak text
   end

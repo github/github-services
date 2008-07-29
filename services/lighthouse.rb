@@ -1,9 +1,10 @@
 service :lighthouse do |data, payload|
-  payload['commits'].each do |commit_id, commit|
-    added    = commit['added'].map    { |f| ['A', f] }
-    removed  = commit['removed'].map  { |f| ['R', f] }
-    modified = commit['modified'].map { |f| ['M', f] }
-    diff     = YAML.dump(added + removed + modified)
+  payload['commits'].each do |commit|
+    commit_id = commit['id']
+    added     = commit['added'].map    { |f| ['A', f] }
+    removed   = commit['removed'].map  { |f| ['R', f] }
+    modified  = commit['modified'].map { |f| ['M', f] }
+    diff      = YAML.dump(added + removed + modified)
 
     title = "Changeset [%s] by %s" % [commit_id, commit['author']['name']]
     body  = "#{commit['message']}\n#{commit['url']}"

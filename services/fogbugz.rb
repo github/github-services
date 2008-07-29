@@ -4,9 +4,10 @@ service :fogbugz do |data, payload|
   branch      = payload['ref'].split('/').last
   before      = payload['before']   
   
-  payload['commits'].each do |commit_id, commit|
-    message = commit["message"]
-    files   = commit["removed"] | commit["added"] | commit["modified"]
+  payload['commits'].each do |commit|
+    commit_id = commit['id']
+    message   = commit["message"]
+    files     = commit["removed"] | commit["added"] | commit["modified"]
     
     # look for a bug id in each line of the commit message
     bug_list = []
