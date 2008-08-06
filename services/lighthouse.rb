@@ -1,10 +1,14 @@
 service :lighthouse do |data, payload|
   payload['commits'].each do |commit|
+    next if commit['message'] =~ /^x /
+
     commit_id = commit['id']
     added     = commit['added'].map    { |f| ['A', f] }
     removed   = commit['removed'].map  { |f| ['R', f] }
     modified  = commit['modified'].map { |f| ['M', f] }
     diff      = YAML.dump(added + removed + modified)
+
+    diff = YAML.dump([]) if data['private']
 
     title = "Changeset [%s] by %s" % [commit_id, commit['author']['name']]
     body  = "#{commit['message']}\n#{commit['url']}"

@@ -11,6 +11,9 @@ http://logicalawesome.lighthouseapp.com/projects/8570-github/overview
   2. project_id is 8570
   3. this service only supports project tokens
      (accepting patches for user-based tokens)
+  4. 'private' determines whether changed files 
+     should be displayed (useful for public LH 
+     accounts and private GH repos)
 
 
 Developer Notes
@@ -20,6 +23,7 @@ data
   - subdomain
   - project_id
   - token
+  - private
 
 payload
   - refer to docs/github_payload
