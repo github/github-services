@@ -26,7 +26,7 @@ service :fogbugz do |data, payload|
         fb_file = CGI.escape("#{branch}/#{f}")
         
         #build the GET request, and send it to fogbugz
-        fb_url = "#{data['cvs_submit_url']}?ixBug=#{fb_bugzid}&sRepo=#{fb_repo}&sFile=#{fb_file}&sPrev=#{fb_r1}&sNew=#{fb_r2}"
+        fb_url = "#{data['cvssubmit_url']}?ixBug=#{fb_bugzid}&sRepo=#{fb_repo}&sFile=#{fb_file}&sPrev=#{fb_r1}&sNew=#{fb_r2}"
         url = URI.parse(fb_url)
         conn = Net::HTTP.new(url.host, url.port)
         conn.use_ssl = true
