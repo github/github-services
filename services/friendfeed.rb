@@ -11,5 +11,3 @@ service :friendfeed do |data, payload|
     Net::HTTP.new(friendfeed_url.host, friendfeed_url.port).start { |http| http.request(req) }
   end
 end
-
-genii904parch
