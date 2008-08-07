@@ -3,7 +3,6 @@ service :twitter do |data, payload|
   url = URI.parse("http://twitter.com/statuses/update.xml")
 
   payload['commits'].each do |commit|
-    commit = commit.last
     github_url = nil
     begin
       Timeout::timeout(2) do
