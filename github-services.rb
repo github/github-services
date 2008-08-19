@@ -21,6 +21,7 @@ require 'basecamp'
 require 'tmail'
 require 'xmpp4r'
 require 'xmpp4r-simple'
+require 'rubyforge'
 
 module GitHub
   def service(name, &block)

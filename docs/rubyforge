@@ -1,0 +1,30 @@
+RubyForge
+=========
+
+Special Thanks
+-------------
+
+Would like to notice Ara Howard and his RubyForge gem, from which I copied most of the code
+used in this service.  Would also like to notice the author of the Basecamp service, since
+I used that service as a template for the RubyForge service.
+
+This service simply posts a new NewsByte to the RubyForge project (as specified by the groupid).
+
+Install Notes
+-------------
+
+  1. username should be the username of a user that has access to the RubyForge project
+  2. password should be the password of the given user
+  3. groupid should be the group id of the RubyForge project
+
+
+Developer Notes
+---------------
+
+data
+  - username
+  - password
+  - groupid
+
+payload
+  - refer to docs/github_payload
