@@ -1,4 +1,4 @@
-service :friendfeed do |data, payload|
+service :friend_feed do |data, payload|
   repository = payload['repository']['name']
   friendfeed_url = URI.parse("http://friendfeed.com/api/share")
 
