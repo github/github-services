@@ -1,4 +1,4 @@
-service :fogbugz do |data, payload|
+service :fog_bugz do |data, payload|
   
   repository  = payload['repository']['name']
   branch      = payload['ref'].split('/').last
