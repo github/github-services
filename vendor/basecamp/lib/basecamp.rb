@@ -379,6 +379,7 @@ class Basecamp
   private
 
     def connect!(url, use_ssl)
+      url = url.sub(/https?:\/\//, '').chomp('/')
       @use_ssl = use_ssl
       @url = url
       @connection = Net::HTTP.new(url, use_ssl ? 443 : 80)
