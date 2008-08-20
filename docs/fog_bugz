@@ -1,16 +1,37 @@
 FogBugz
-========
+=======
 
 Install Notes
 -------------
 
-Be sure to set up your FogBugz installation to handle multiple 
-repositories/multiple source control systems as described in
-http://www.fogcreek.com/FogBugz/KB/howto/MultipleRepositories-Mult.html
+  1.  Requires FogBugz version 6.1 or above, and your FogBugz installation
+      must be accessible from the internet
+      
+  2.  "cvssubmit_url" is the url to the cvsSubmit.[php|asp] file on your 
+      FogBugz server.
+      Example: https://server.com/fogbugz/cvsSubmit.php
+      
+  3.  The "sRepo" field (in FogBugz) will be automatically set to the name of 
+      this GitHub repository.
 
-  1. cvssubmit_url is the url to the cvsSubmit.[php|asp] file on your FogBugz server.
-     Example: https://server.com/fogbugz/cvsSubmit.php
-  2. The "sRepo" field will be set to the name of the github repo.
+Fogbugz Configuration
+---------------------
+
+If you want to use GitHub as your sole source control system, configuration
+within FogBugz is relatively easy. 
+
+In your site configuration:
+
+  1.  Set "the Source Control URL for logs" field to be:
+      https://github.com/[github_username]/^SREPO/commits/^FILE
+      
+  2.  Set "the Source Control URL for diffs" field to be:
+      https://github.com/[github_username]/^SREPO/commit/^R2
+
+If you have commits in FogBugz from a previous source control system, or if
+you want to use multiple GitHub accounts, please read:
+ 
+http://www.fogcreek.com/FogBugz/KB/howto/MultipleRepositories-Mult.html
 
 
 Developer Notes
