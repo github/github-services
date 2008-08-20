@@ -3,10 +3,19 @@ service :irc do |data, payload|
   branch     = payload['ref'].split('/').last
   rooms      = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
   botname    = "GitHub#{rand(200)}"
-  socket     = TCPSocket.open(data['server'], data['port'])
+  socket     = nil
+
+  begin
+    Timeout.timeout(2) do
+      socket = TCPSocket.open(data['server'], data['port'])
+    end
+  rescue Timeout::Error
+    throw :halt, 400
+  end
+
   if data['ssl'].to_i == 1
     ssl_context = OpenSSL::SSL::SSLContext.new()
-    ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE             # do not verify client certificates
+    ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
     ssl_socket = OpenSSL::SSL::SSLSocket.new(socket, ssl_context)
     ssl_socket.sync_close = true
     ssl_socket.connect
@@ -14,9 +23,11 @@ service :irc do |data, payload|
   else
     irc = socket
   end
+
   irc.puts "PASS #{data['password']}" unless data['password'].empty?
   irc.puts "USER #{botname} #{botname} #{botname} :GitHub IRCBot"
   irc.puts "NICK #{botname}"
+
   rooms.each do |room|
     room, pass = room.split("::")
     irc.puts "JOIN #{room} #{pass}"
@@ -34,5 +45,6 @@ service :irc do |data, payload|
     end
     irc.puts "PART #{room}"
   end
+
   irc.puts "QUIT"
 end
