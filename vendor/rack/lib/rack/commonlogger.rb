@@ -35,6 +35,7 @@ module Rack
       }
 
       @now = Time.now
+      code = @status.to_s[0..3].to_i
 
       # Common Log Format: http://httpd.apache.org/docs/1.3/logs.html#common
       # lilith.local - - [07/Aug/2006 23:58:02] "GET / HTTP/1.1" 500 -
@@ -47,10 +48,11 @@ module Rack
          @env["PATH_INFO"],
          @env["QUERY_STRING"].empty? ? "" : "?"+@env["QUERY_STRING"],
          @env["HTTP_VERSION"],
-         @status.to_s[0..3],
+         code,
          (length.zero? ? "-" : length.to_s),
          @now - @time
         ]
+      @logger << @body.inspect if code == 500
     end
   end
 end
