@@ -3,10 +3,12 @@ service :friend_feed do |data, payload|
   friendfeed_url = URI.parse("http://friendfeed.com/api/share")
 
   payload['commits'].each do |commit|
-    title = "#{commit['author']['name']} just pushed #{commit['id']} to #{repository} on GitHub"
+    title = "#{commit['author']['name']} just committed a change to #{repository} on GitHub"
+    comment = "#{commit['id']} - #{commit['message']}"
+
     req = Net::HTTP::Post.new(friendfeed_url.path)
     req.basic_auth(data['nickname'], data['remotekey'])
-    req.set_form_data('title' => title, 'link' => commit['url'], 'comment' => commit['message'])
+    req.set_form_data('title' => title, 'link' => commit['url'], 'comment' => comment, 'via' => 'github')
 
     Net::HTTP.new(friendfeed_url.host, friendfeed_url.port).start { |http| http.request(req) }
   end
