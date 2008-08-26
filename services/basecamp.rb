@@ -9,7 +9,7 @@ service :basecamp do |data, payload|
 
     basecamp.post_message(project_id, {
       :title => "Commit Notification (#{repository}/#{branch}): #{commit['id']}",
-      :body => "`#{commit['message']}`, pushed by #{commit['author']['name']} (#{commit['author']['email']}). View more details for this change at #{commit['url']}.",
+      :body => "`#{commit['message']}`\nPushed by #{commit['author']['name']} (#{commit['author']['email']}).\n\nView more details for this change at #{commit['url']}.",
       :category_id => category_id
     })
   end
