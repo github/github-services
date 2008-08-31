@@ -34,7 +34,7 @@ def build_cia_commit(repository, branch, sha1, commit, size = 1)
         <commit>
           <author>#{commit['author']['name']}</author>
           <revision>#{sha1[0..6]}</revision>
-          <log>#{log}</log>
+          <log>#{CGI.escapeHTML(log)}</log>
           <url>#{commit['url']}</url>
           <files>
             <file> #{files.join("</file>\n<file>")} </file>
