@@ -1,12 +1,9 @@
-JABBER_USER = "github-services@jabber.org"
-JABBER_PASSWORD = "g1thub"
-
 service :jabber do |data, payload|
   repository = payload['repository']['name']
   branch     = payload['ref'].split('/').last
   recipient  = data['user']
   puts "*** Connecting" if $DEBUG
-  im         = Jabber::Simple.new(JABBER_USER, JABBER_PASSWORD)
+  im         = Jabber::Simple.new(jabber_user, jabber_password)
   
   # Accept any friend request
   im.accept_subscriptions = true
