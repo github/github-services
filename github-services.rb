@@ -23,14 +23,14 @@ require 'xmpp4r-simple'
 
 module GitHub
   def service(name, &block)
-    Timeout.timeout(15) do
+    #Timeout.timeout(15) do
       post "/#{name}/" do
         data = JSON.parse(params[:data])
         payload = JSON.parse(params[:payload])
         yield data, payload
       end
-    end
-  rescue Timeout::Error
+    #end
+  #rescue Timeout::Error
   end
 end
 include GitHub
