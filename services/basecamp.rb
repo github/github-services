@@ -8,8 +8,8 @@ service :basecamp do |data, payload|
     category_id = basecamp.message_categories(project_id).select { |category| category.name.downcase == data['category'].downcase }.first.id
 
     basecamp.post_message(project_id, {
-      :title => "Commit Notification (#{repository}/#{branch}): #{commit['id']}",
-      :body => "`#{commit['message']}`\nPushed by #{commit['author']['name']} (#{commit['author']['email']}).\n\nView more details for this change at #{commit['url']}.",
+      :title => "Commit Notification (#{repository}/#{branch}): #{commit['id'][0..6]}",
+      :body => "\"#{commit['message']}\"\nPushed by #{commit['author']['name']} (#{commit['author']['email']}).\n\n<a href=\"#{commit['url']}\">View more details for this change</a>",
       :category_id => category_id
     })
   end
