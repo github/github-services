@@ -8,8 +8,12 @@ def build_cia_commit(repository, branch, sha1, commit, size = 1)
   files = commit['modified'] + commit['added'] + commit['removed']
 
   isgd_url = nil
-  Timeout::timeout(2) do
-    isgd_url = Net::HTTP.get "is.gd", "/api.php?longurl=#{commit['url']}"
+  begin
+    Timeout::timeout(6) do
+      isgd_url = Net::HTTP.get "is.gd", "/api.php?longurl=#{commit['url']}"
+    end
+  rescue Timeout::Error
+    isgd_url = nil
   end
 
   log << " - #{isgd_url}" unless isgd_url.nil?
@@ -45,7 +49,7 @@ service :cia do |data, payload|
   server = XMLRPC::Client.new2("http://cia.navi.cx")
 
   repository = payload['repository']['name']
-  branch     = payload['ref'].split('/').last
+  branch     = (payload['ref'] =~ /^refs\/heads\/(.+)$/ ? $1 : payload['ref'])
   commits    = payload['commits']
 
   if commits.size > 5
