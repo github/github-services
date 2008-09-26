@@ -2,11 +2,11 @@ service :presently do |data, payload|
   repository = payload['repository']['name']
   url = URI.parse("https://#{data['subdomain']}.presentlyapp.com/api/twitter/statuses/update.xml")
 
-  receiver = (data['group'].nil? || data['group'] == '') ? 'system' : data['group']
+  prefix = (data['group'].nil? || data['group'] == '') ? '' : "b #{data['group']} "
   
   payload['commits'].each do |commit|
     
-    status = "b #{receiver} [#{repository}] #{commit['author']['name']} - #{commit['message']}"
+    status = "#{prefix}[#{repository}] #{commit['author']['name']} - #{commit['message']}"
     status = status[0...137] + '...' if status.length > 140
     
     paste = "\"Commit #{commit['id']}\":#{commit['url']}\n\n"
@@ -14,7 +14,7 @@ service :presently do |data, payload|
     
     %w(added modified removed).each do |kind|
       commit[kind].each do |filename|
-        paste << "* #{kind.capitalize} '#{filename}'\n"
+        paste << "* *#{kind.capitalize}* '#{filename}'\n"
       end
     end
     
@@ -27,6 +27,8 @@ service :presently do |data, payload|
       'paste_text' => paste
     )
 
-    Net::HTTP.new(url.host, url.port).start { |http| http.request(req) }
+    net = Net::HTTP.new(url.host, 443)
+    net.use_ssl = true
+    net.start { |http| http.request(req) }
   end
 end
