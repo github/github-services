@@ -4,7 +4,9 @@ Campfire
 Install Notes
 -------------
 
-  1. subdomain is http://your-subdomain.campfirenow.com
+  1. subdomain is your campfire subdomain 
+	(ie 'your-subdomain' if you visit 'http://your-subdomain.campfirenow.com')
+
   2. room is the actual room name, not the id
 
 
