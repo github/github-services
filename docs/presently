@@ -1,0 +1,21 @@
+Present.ly
+==========
+
+Install Notes
+-------------
+
+  1. subdomain (for a Present.ly account)
+  2. group_name (OPTIONAL; will broadcast as a group or as the system if group is 'system')
+  3. username (user must be a manager of the specified group or admin for 'system')
+
+Developer Notes
+---------------
+
+data
+  - subdomain
+  - group_name (optional)
+  - username
+  - password
+
+payload
+  - refer to docs/github_payload
