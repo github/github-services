@@ -2,7 +2,7 @@ service :presently do |data, payload|
   repository = payload['repository']['name']
   url = URI.parse("https://#{data['subdomain']}.presentlyapp.com/api/twitter/statuses/update.xml")
 
-  prefix = (data['group'].nil? || data['group'] == '') ? '' : "b #{data['group']} "
+  prefix = (data['group_name'].nil? || data['group_name'] == '') ? '' : "b #{data['group_name']} "
   
   payload['commits'].each do |commit|
     
