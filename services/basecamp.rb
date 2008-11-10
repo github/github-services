@@ -1,6 +1,6 @@
 service :basecamp do |data, payload|
   repository      = payload['repository']['name']
-  name_with_owner = File.join(repository, payload['repository']['name'])
+  name_with_owner = File.join(payload['repository']['owner']['name'], repository)
   branch          = payload['ref'].split('/').last
 
   basecamp    = Basecamp.new(data['url'], data['username'], data['password'])
@@ -27,9 +27,9 @@ service :basecamp do |data, payload|
     title = "Commit (#{name_with_owner}): #{short_git_sha}: #{commit_title}"
 
     body = <<-EOH
-*Date:*   #{timestamp} (#{timestamp.strftime('%a, %d %b %Y')})
 *Author:* #{commit['author']['name']} <#{commit['author']['email']}>
 *Commit:* <a href="#{commit['url']}">#{gitsha}</a>
+*Date:*   #{timestamp} (#{timestamp.strftime('%a, %d %b %Y')})
 *Branch:* #{branch}
 *Home:*   #{payload['repository']['url']}
 
@@ -43,7 +43,7 @@ EOH
 
 h2. Changed paths
 
-<pre> #{changed_paths}</pre>
+<pre>  #{changed_paths}</pre>
 EOH
     end
 
