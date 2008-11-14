@@ -43,7 +43,7 @@ service :irc do |data, payload|
         isgd_url = commit['url']
       end
 
-      irc.puts "PRIVMSG #{room} :\002#{repository}:\002 \0033#{commit['author']['name']} \0037#{branch}\0030 SHA1-\002#{sha1[0..6]}\002"
+      irc.puts "PRIVMSG #{room} :\002#{repository}:\002 \0033#{commit['author']['name']} \00307#{branch}\0030 SHA1-\002#{sha1[0..6]}\002"
       irc.puts "PRIVMSG #{room} :#{commit['message']}"
       irc.puts "PRIVMSG #{room} :#{isgd_url}"
     end
