@@ -24,7 +24,7 @@ service :basecamp do |data, payload|
       commit_title = commit_title.slice(0,50) << '...'
     end
 
-    title = "Commit (#{name_with_owner}): #{short_git_sha}: #{commit_title}"
+    title = "Commit on #{name_with_owner}: #{short_git_sha}: #{commit_title}"
 
     body = <<-EOH
 *Author:* #{commit['author']['name']} <#{commit['author']['email']}>
