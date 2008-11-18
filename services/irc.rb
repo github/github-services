@@ -59,4 +59,5 @@ service :irc do |data, payload|
   end
 
   irc.puts "QUIT"
+  irc.gets until irc.eof?
 end
