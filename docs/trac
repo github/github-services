@@ -1,0 +1,23 @@
+======================================
+Trac
+======================================
+
+Make sure that you installed the github-trac plugin from here:
+    http://github.com/davglass/github-trac/
+
+Now put the URL of your trac project in the above field.
+
+
+
+It searches commit messages for text in the form of:
+    command #1
+    command #1, #2
+    command #1 & #2 
+    command #1 and #2
+
+Instead of the short-hand syntax "#1", "ticket:1" can be used as well, e.g.:
+    command ticket:1
+    command ticket:1, ticket:2
+    command ticket:1 & ticket:2 
+    command ticket:1 and ticket:2
+
