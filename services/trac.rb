@@ -1,9 +1,11 @@
 service :trac do |data, payload|
-    url = URI.parse(data['url'])
-    # Need to get the GitHub API Token here..
-    api_token = "NEED TO GET THIS.."
+    url = data['url']
+    # This is the API Token that is set in your trac.ini
+    api_token = data['apitoken']
     # Build the URL
-    url = "#{url}/github/#{api_token}"
+    # This should build a URL like this:
+    #       http://yourserver.com/projects/myapp/github/APITOKEN
+    url = URI.join(url, "/github/", api_token)
     # Send the request..
     Net::HTTP.post_form(url, payload)
 end

@@ -5,11 +5,13 @@ Trac
 Make sure that you installed the github-trac plugin from here:
     http://github.com/davglass/github-trac/
 
-Now put the URL of your trac project in the above field.
+Please supply a link to your Trac project and your API Token.
+    (NOTE: The API Token provided needs to be the same that you put in your trac.ini)
 
 
 
-It searches commit messages for text in the form of:
+
+The plugin searches commit messages for text in the form of:
     command #1
     command #1, #2
     command #1 & #2 
