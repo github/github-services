@@ -9,5 +9,6 @@ service :campfire do |data, payload|
   payload['commits'].each do |commit|
     room.speak "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} (#{commit['url']})"
   end
+  room.leave
   campfire.logout
 end
