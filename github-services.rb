@@ -24,7 +24,7 @@ require 'xmpp4r-simple'
 require 'rubyforge'
 
 module GitHub
-  def service(name, &block)
+  def service(name)
     Timeout.timeout(20) do
       post "/#{name}/" do
         data = JSON.parse(params[:data])
@@ -33,6 +33,14 @@ module GitHub
       end
     end
   rescue Timeout::Error
+  end
+
+  def shorten_url(url)
+    Timeout::timeout(6) do
+      Net::HTTP.get "tinyurl.com", "/api-create.php?url=#{commit['url']}"
+    end
+  rescue Timeout::Error
+    url
   end
 end
 include GitHub

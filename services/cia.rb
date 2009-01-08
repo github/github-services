@@ -2,21 +2,12 @@ def build_cia_commit(repository, branch, sha1, commit, size = 1)
   log = commit['message']
   log << " (+#{size} more commits...)" if size > 1
 
-  dt = DateTime.parse(commit['timestamp']).new_offset
-  timestamp = Time.send(:gm, dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec).to_i
+  dt         = DateTime.parse(commit['timestamp']).new_offset
+  timestamp  = Time.send(:gm, dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec).to_i
+  files      = commit['modified'] + commit['added'] + commit['removed']
+  tiny_url   = shorten_url(commit['url'])
 
-  files = commit['modified'] + commit['added'] + commit['removed']
-
-  isgd_url = nil
-  begin
-    Timeout::timeout(6) do
-      isgd_url = Net::HTTP.get "is.gd", "/api.php?longurl=#{commit['url']}"
-    end
-  rescue Timeout::Error
-    isgd_url = nil
-  end
-
-  log << " - #{isgd_url}" unless isgd_url.nil?
+  log << " - #{tiny_url}" unless tiny_url == commit['url']
 
   <<-MSG
     <message>

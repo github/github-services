@@ -3,15 +3,8 @@ service :twitter do |data, payload|
   url = URI.parse("http://twitter.com/statuses/update.xml")
 
   payload['commits'].each do |commit|
-    github_url = nil
-    begin
-      Timeout::timeout(6) do
-        github_url = Net::HTTP.get "is.gd", "/api.php?longurl=#{commit['url']}"
-      end
-    rescue Timeout::Error
-      github_url = commit['url']
-    end
-    status = "[#{repository}] #{github_url} #{commit['author']['name']} - #{commit['message']}"
+    tiny_url = shorten_url(commit['url'])
+    status   = "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{commit['message']}"
 
     req = Net::HTTP::Post.new(url.path)
     req.basic_auth(data['username'], data['password'])

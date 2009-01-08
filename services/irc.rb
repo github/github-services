@@ -34,18 +34,11 @@ service :irc do |data, payload|
     payload['commits'].each do |commit|
       sha1 = commit['id']
 
-      isgd_url = nil
-      begin
-        Timeout::timeout(6) do
-          isgd_url = Net::HTTP.get "is.gd", "/api.php?longurl=#{commit['url']}"
-        end
-      rescue Timeout::Error
-        isgd_url = commit['url']
-      end
+      tiny_url = shorten_url(url)
 
       irc.puts "PRIVMSG #{room} :\002#{repository}:\002 \0033#{commit['author']['name']} \00307#{branch}\0030 SHA1-\002#{sha1[0..6]}\002"
       irc.puts "PRIVMSG #{room} :#{commit['message']}"
-      irc.puts "PRIVMSG #{room} :#{isgd_url}"
+      irc.puts "PRIVMSG #{room} :#{tiny_url}"
     end
     irc.puts "PART #{room}"
   end
