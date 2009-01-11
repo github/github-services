@@ -37,7 +37,7 @@ module GitHub
 
   def shorten_url(url)
     Timeout::timeout(6) do
-      Net::HTTP.get "tinyurl.com", "/api-create.php?url=#{commit['url']}"
+      Net::HTTP.get "tinyurl.com", "/api-create.php?url=#{url}"
     end
   rescue Timeout::Error
     url
