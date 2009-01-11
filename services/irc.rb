@@ -14,7 +14,7 @@ service :irc do |data, payload|
   end
 
   if data['ssl'].to_i == 1
-    ssl_context = OpenSSL::SSL::SSLContext.new()
+    ssl_context = OpenSSL::SSL::SSLContext.new
     ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
     ssl_socket = OpenSSL::SSL::SSLSocket.new(socket, ssl_context)
     ssl_socket.sync_close = true
@@ -34,7 +34,7 @@ service :irc do |data, payload|
     payload['commits'].each do |commit|
       sha1 = commit['id']
 
-      tiny_url = shorten_url(url)
+      tiny_url = shorten_url(commit['url'])
 
       irc.puts "PRIVMSG #{room} :\002#{repository}:\002 \0033#{commit['author']['name']} \00307#{branch}\0030 SHA1-\002#{sha1[0..6]}\002"
       irc.puts "PRIVMSG #{room} :#{commit['message']}"
