@@ -30,17 +30,14 @@ service :irc do |data, payload|
 
   begin
     Timeout.timeout(10) do
-    loop {
-      begin
-        recv = irc.gets
-        if(recv =~ / 004 #{botname} /)
+      loop do
+        case irc.gets
+        when / 004 #{botname} /
           break
-        end
-        if(recv =~ /^PING\s*:\s*(.*)$/)
+        when /^PING\s*:\s*(.*)$/
           irc.puts "PONG #{$1}"
         end
       end
-    }
     end
   rescue Timeout::Error
     throw :halt, 400
