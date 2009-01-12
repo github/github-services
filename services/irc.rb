@@ -28,6 +28,24 @@ service :irc do |data, payload|
   irc.puts "NICK #{botname}"
   irc.puts "USER #{botname} 8 * :GitHub IRCBot"
 
+  begin
+    Timeout.timeout(10) do
+    loop {
+      begin
+        recv = irc.gets
+        if(recv =~ / 004 #{botname} /)
+          break
+        end
+        if(recv =~ /^PING\s*:\s*(.*)$/)
+          irc.puts "PONG #{$1}"
+        end
+      end
+    }
+    end
+  rescue Timeout::Error
+    throw :halt, 400
+  end
+
   rooms.each do |room|
     room, pass = room.split("::")
     irc.puts "JOIN #{room} #{pass}"
