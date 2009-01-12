@@ -25,8 +25,8 @@ service :irc do |data, payload|
   end
 
   irc.puts "PASS #{data['password']}" unless data['password'].empty?
-  irc.puts "USER #{botname} #{botname} #{botname} :GitHub IRCBot"
   irc.puts "NICK #{botname}"
+  irc.puts "USER #{botname} 8 * :GitHub IRCBot"
 
   rooms.each do |room|
     room, pass = room.split("::")
