@@ -2,7 +2,7 @@
 # we are not in their buddy list (which is always) so messages
 # never get sent before we disconnect. This forces the library
 # to assume the recipient is a buddy.
-class Jabber::Contact
+class Jabber::Simple
   def subscribed_to?(x); true; end
 end
 
