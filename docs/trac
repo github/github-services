@@ -1,14 +1,10 @@
-======================================
 Trac
-======================================
+====
 
-Make sure that you installed the github-trac plugin from here:
-    http://github.com/davglass/github-trac/
+Install the following plugin on your Trac server before proceeding: http://github.com/davglass/github-trac/
 
-Please supply a link to your Trac project and your API Token.
-    (NOTE: The API Token provided needs to be the same that you put in your trac.ini)
-
-
+  1. url field is your Trac install's url
+  2. token (this needs to be the same token you put in your trac.ini installed via the plugin)
 
 
 The plugin searches commit messages for text in the form of:
@@ -22,4 +18,3 @@ Instead of the short-hand syntax "#1", "ticket:1" can be used as well, e.g.:
     command ticket:1, ticket:2
     command ticket:1 & ticket:2 
     command ticket:1 and ticket:2
-
