@@ -1,0 +1,18 @@
+freckle
+========
+
+Install Notes
+-------------
+
+todo
+
+Developer Notes
+---------------
+
+data
+  - subdomain
+  - token
+  - project name (?)
+
+payload
+  - refer to docs/github_payload
