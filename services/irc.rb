@@ -3,6 +3,9 @@ service :irc do |data, payload|
   branch     = (payload['ref'] =~ /^refs\/heads\/(.+)$/ ? $1 : payload['ref'])
   rooms      = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
   botname    = "GitHub#{rand(200)}"
+  if data['nick']
+    botname    = data['nick']
+  end
   socket     = nil
 
   begin
