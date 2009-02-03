@@ -11,6 +11,7 @@ Install Notes
   5. room passwords can be specified for each room like this:
        room_name::password
   6. prefixing '#' to the room field is optional
+  7. nick is not required, if provided the IRCBot will use that nick
 
 
 Developer Notes
@@ -22,6 +23,7 @@ data
   - room
   - password
   - ssl
+  - nick
 
 payload
   - refer to docs/github_payload

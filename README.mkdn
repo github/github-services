@@ -28,4 +28,4 @@ Steps to contributing
 
 *Patches including tests are encouraged*
 
-Bugs can be filed here: [Lighthouse](http://logicalawesome.lighthouseapp.com/projects/8570-github/tickets)
+Bugs can be filed here: [http://support.github.com/discussions/post-receive-issues](http://support.github.com/discussions/post-receive-issues)
