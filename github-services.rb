@@ -37,7 +37,9 @@ module GitHub
 
   def shorten_url(url)
     Timeout::timeout(6) do
-      Net::HTTP.get "tinyurl.com", "/api-create.php?url=#{url}"
+      short = Net::HTTP.get("api.bit.ly", "/shorten?version=2.0.1&longUrl=#{url}&login=github&apiKey=R_261d14760f4938f0cda9bea984b212e4")
+      short = JSON.parse(short)
+      short["errorCode"].zero? ? short["results"][url]["shortUrl"] : url
     end
   rescue Timeout::Error
     url
