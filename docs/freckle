@@ -4,7 +4,12 @@ freckle
 Install Notes
 -------------
 
-todo
+  1. subdomain of the freckle account
+  2. token: a users api auth token, available through the settings, integration tab
+  3. project name: name of the project the time entries should be associated to
+
+Note that the author email of a commit has to match a freckle user's email. Else, the
+entry is not valid and will not be saved.
 
 Developer Notes
 ---------------
@@ -12,7 +17,7 @@ Developer Notes
 data
   - subdomain
   - token
-  - project name (?)
+  - project name
 
 payload
   - refer to docs/github_payload
