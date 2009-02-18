@@ -13,6 +13,7 @@ Developer Notes
 data
   - username
   - password
+  - digest (boolean)
 
 payload
   - refer to docs/github_payload
