@@ -12,6 +12,11 @@ require 'cgi'
 #~ require 'date' # This is needed by the CIA service in ruby 1.8.7 or later
 
 # vendor
+require 'mime/types'
+require 'xmlsimple'
+require 'activesupport'
+require 'gem_plugin'
+require 'mongrel'
 require 'rack'
 require 'sinatra'
 require 'tinder'
