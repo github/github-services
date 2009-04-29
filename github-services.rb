@@ -27,7 +27,13 @@ require 'xmpp4r-simple'
 require 'rubyforge'
 
 set :run, true
-set :server, 'webrick'
+
+begin
+  require 'mongrel'
+  set :server, 'webrick'
+rescue LoadError
+  set :server, 'webrick'
+end
 
 module GitHub
   def service(name)
