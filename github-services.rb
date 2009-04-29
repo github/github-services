@@ -30,7 +30,7 @@ set :run, true
 
 begin
   require 'mongrel'
-  set :server, 'webrick'
+  set :server, 'mongrel'
 rescue LoadError
   set :server, 'webrick'
 end
