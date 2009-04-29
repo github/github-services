@@ -15,8 +15,6 @@ require 'cgi'
 require 'mime/types'
 require 'xmlsimple'
 require 'activesupport'
-require 'gem_plugin'
-require 'mongrel'
 require 'rack'
 require 'sinatra'
 require 'tinder'
@@ -27,6 +25,9 @@ require 'tmail'
 require 'xmpp4r'
 require 'xmpp4r-simple'
 require 'rubyforge'
+
+set :run, true
+set :server, 'webrick'
 
 module GitHub
   def service(name)
