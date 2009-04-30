@@ -1,4 +1,4 @@
-$:.unshift *Dir["#{File.dirname(__FILE__)}/vendor/**/lib"]
+$LOAD_PATH.unshift *Dir["#{File.dirname(__FILE__)}/vendor/**/lib"]
 
 # stdlib
 require 'net/http'

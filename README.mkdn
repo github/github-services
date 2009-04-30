@@ -35,4 +35,5 @@ Running the server locally
 3. cd github-services
 4. ruby github-services.rb
 
-Bugs can be filed here: [http://support.github.com/discussions/post-receive-issues](http://support.github.com/discussions/post-receive-issues)
+* Bugs in the code should be filed under the Issues tab
+* Problems with the service hooks can be filed here: [http://support.github.com/discussions/post-receive-issues](http://support.github.com/discussions/post-receive-issues)
