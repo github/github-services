@@ -15,11 +15,11 @@ service :jabber do |data, payload|
   # Accept any friend request
   im.accept_subscriptions = true
 
-  #Split multiple addresses into array
-  recipients  = data['user'].split(',')
+  #Split multiple addresses into array, removing duplicates
+  recipients  = data['user'].split(',').uniq
 
-  #Send message to each member in array 
-  recipients.each do |recipient|
+  #Send message to each member in array (Limit to 25 members to prevent overloading something, if this is not and issue, just remove the [0..24] from recipients 
+  recipients[0..24].each do |recipient|
     # Ask recipient to be our buddy if need be
     im.add(recipient)
 
