@@ -27,6 +27,8 @@ require 'xmpp4r-simple'
 require 'rubyforge'
 
 set :run, true
+set :environment, :production
+set :port, ARGV.first
 
 begin
   require 'mongrel'
