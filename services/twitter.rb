@@ -1,17 +1,16 @@
 service :twitter do |data, payload|
   repository = payload['repository']['name']
-  url = URI.parse("http://twitter.com/statuses/update.xml")  
+  url = URI.parse("http://twitter.com/statuses/update.xml")
   statuses = Array.new
 
-  if data['digest'] == false then #=> continue normal behaviour
+  if data['digest'] == '1'
+    commit = payload['commits'][-1]
+    tiny_url = shorten_url(payload['repository']['url'] + '/commits/' + payload['ref'].split('/')[-1])
+    statuses.push "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{payload['commits'].length} commits"
+  else
     payload['commits'].each do |commit|
       tiny_url = shorten_url(commit['url'])
       statuses.push "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{commit['message']}"
-    end
-  else #=> Only post the latest commit
-    payload['commits'].pop do |commit|
-      tiny_url = shorten_url(commit['url'])
-      statuses.push "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{payload['commits'].length} commits"
     end
   end
 
