@@ -1,0 +1,17 @@
+RunCodeRun
+==========
+
+Install Notes
+-------------
+
+  1. Activating this post-commit hook will begin building the project on RunCodeRun. See http://runcoderun.com/github
+  2. If this is a private project, you'll still need to add the rcr-private user as a collaborator.
+
+Developer Notes
+---------------
+
+data
+  - none
+
+payload
+  - refer to docs/github_payload
