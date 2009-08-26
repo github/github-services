@@ -56,7 +56,7 @@ EOH
   end
 
   message = TMail::Mail.new
-  message.set_content_type('text', 'plain')
+  message.set_content_type('text', 'plain', {:charset => 'UTF-8'})
   message.to      = data['address']
   message.subject = "[#{name_with_owner}] #{first_commit_sha}: #{first_commit_title}"
   message.body    = body
