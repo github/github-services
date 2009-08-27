@@ -38,3 +38,13 @@ Running the server locally
 
 * Bugs in the code should be filed under the Issues tab
 * Problems with the service hooks can be filed here: [http://support.github.com/discussions/post-receive-issues](http://support.github.com/discussions/post-receive-issues)
+
+How to test your service
+------------------------
+
+1. Start the local server using `ruby github-services.rb`. By default, it runs on port 8080.
+2. Test your service by posting to http://localhost:8080/service_name/ with the params example found in docs/github_payload
+
+    Example using curl: `curl -F "data={}&params={}" http://localhost:8080/service_name/`
+    
+3. That should trigger a request to your service which will send your server the payload.
