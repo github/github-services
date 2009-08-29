@@ -34,7 +34,7 @@ service :fog_bugz do |data, payload|
         end
         url = URI.parse(fb_url)
         conn = Net::HTTP.new(url.host, url.port)
-        conn.use_ssl = true
+        conn.use_ssl = url.scheme == "https"
         conn.verify_mode = OpenSSL::SSL::VERIFY_NONE
         conn.start do |http| 
           http.get(url.path + '?' + url.query)
