@@ -25,11 +25,10 @@ service :fog_bugz do |data, payload|
         fb_r2 = CGI.escape("#{commit_id}")
         fb_file = CGI.escape("#{branch}/#{f}")
         
-        #build the GET request, and send it to fogbugz
-		fb_url = ""
-		if ( data['fb_version'] == '7.0' )
+        # build the GET request, and send it to fogbugz
+		    if data['fb_version'] == '7.0'
           fb_url = "#{data['cvssubmit_url']}?ixBug=#{fb_bugzid}&sFile=#{fb_file}&sPrev=#{fb_r1}&sNew=#{fb_r2}&ixRepository=#{data['fb_repoid']}"
-		else
+		    else
           # FogBugz 6.1
           fb_url = "#{data['cvssubmit_url']}?ixBug=#{fb_bugzid}&sRepo=#{fb_repo}&sFile=#{fb_file}&sPrev=#{fb_r1}&sNew=#{fb_r2}"
         end
