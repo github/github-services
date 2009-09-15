@@ -38,3 +38,10 @@ Running the server locally
 
 * Bugs in the code should be filed under the Issues tab
 * Problems with the service hooks can be filed here: [http://support.github.com/discussions/post-receive-issues](http://support.github.com/discussions/post-receive-issues)
+
+How to test your service
+------------------------
+
+1. Start the github-services Sinatra server with `ruby github-services.rb`. By default, it runs on port 8080.
+2. Edit the doc/github_payload file as necessary to test your service.  (Usually just editing the "data" values but leaving the "payload" alone.)
+3. Send the doc/github_payload file to your service by calling: `./script/deliver_payload [service-name]`  
