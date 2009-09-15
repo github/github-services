@@ -1,0 +1,27 @@
+freckle
+========
+
+Install Notes
+-------------
+
+Using the following URL as an example:
+https://nutsnbolts.letsfreckle.com
+
+  1. Account name: subdomain of the freckle account (nutsnbolts)
+  2. Token: the API token for an individual freckle user who is associated with the target freckle account (see instructions below)
+  3. Project name: the exact name of the target freckle project to log time for this repo
+
+To get your API token: log into your freckle account, click Settings at the top right, then click the Integration (API) tab. 
+
+Note about email addresses: the email address on a committer's Github account should match his/her email address on his/her freckle account. Otherwise, we can't identify the person who is logging time.
+
+Developer Notes
+---------------
+
+data
+  - subdomain
+  - token
+  - project name
+
+payload
+  - refer to docs/github_payload

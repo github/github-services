@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require "json"
+
+unless ARGV[0]
+  puts "Usage: ./script/deliver_payload [service-name]"
+  exit 1
+end
+
+payload_file = File.new("docs/github_payload")
+hash = eval(payload_file.read)
+
+data_json = JSON.generate(hash["data"])
+payload_json = JSON.generate(hash["payload"])
+
+exec "curl --data-binary 'data=#{data_json}&payload=#{payload_json}' http://localhost:8080/#{ARGV[0]}/"

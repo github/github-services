@@ -1,0 +1,16 @@
+RunCodeRun
+==========
+
+RunCodeRun is a hosted continuous integration service.  It is free for public 
+projects.  For private project plans, see http://runcoderun.com/plans.
+
+Install Notes
+-------------
+
+  1. Check the "Active" checkbox and click "Update Settings".
+  2. Click on the "RunCodeRun" service name and then click the "Test Hook" link.
+  3. You should receive an email from RunCodeRun letting you know your
+     project was setup.
+  4. If this is a private project, add the rcr-private user as a collaborator.
+
+For more details, go to http://runcoderun.com/github
