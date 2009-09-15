@@ -28,7 +28,7 @@ require 'rubyforge'
 
 set :run, true
 set :environment, :production
-set :port, ARGV.first
+set :port, ARGV.first || 8080
 
 begin
   require 'mongrel'
