@@ -1,0 +1,20 @@
+Statusnet (laconica)
+====================
+
+Install Notes
+-------------
+
+  1. the server field should be the server base URI.(eg. http://identi.ca or http://identi.ca/index.php)
+
+
+Developer Notes
+---------------
+
+data
+  - username
+  - password
+  - digest (boolean)
+  - server
+
+payload
+  - refer to docs/github_payload
