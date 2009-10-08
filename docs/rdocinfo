@@ -1,0 +1,15 @@
+rdoc.info
+=========
+
+This service allows you to auto-public documentation for your Ruby gem or library.
+The resulting documentation will be hosted for you at http://rdoc.info/projects/your-name/your-project
+
+
+Developer Notes
+---------------
+
+data
+  - (no data is required, payload is simply posted to http://rdoc.info/projects/update)
+
+payload
+  - refer to docs/github_payload
