@@ -56,3 +56,6 @@ How to test your service
    just editing the "data" values but leaving the "payload" alone.)
 3. Send the doc/github_payload file to your service by calling:
    `./script/deliver_payload [service-name]`  
+
+NOTE: The name of the service and your docs/ file matters. If your service is RunCodeRun, your service
+and docs MUST be `run_code_run`. Good luck!
