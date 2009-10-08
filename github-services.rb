@@ -31,10 +31,15 @@ set :environment, :production
 set :port, ARGV.first || 8080
 
 begin
-  require 'thin'
-  set :server, 'thin'
+  require 'mongrel'
+  set :server, 'mongrel'
 rescue LoadError
-  set :server, 'webrick'
+  begin
+    require 'thin'
+    set :server, 'thin'
+  rescue LoadError
+    set :server, 'webrick'
+  end
 end
 
 module GitHub
