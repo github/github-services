@@ -31,8 +31,8 @@ set :environment, :production
 set :port, ARGV.first || 8080
 
 begin
-  require 'mongrel'
-  set :server, 'mongrel'
+  require 'thin'
+  set :server, 'thin'
 rescue LoadError
   set :server, 'webrick'
 end
