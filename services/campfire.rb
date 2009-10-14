@@ -9,7 +9,7 @@ service :campfire do |data, payload|
 
 
   if commits.size > 5
-    commit = commits[payload['after']]
+    commit = commits.last
     room.speak "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} (#{commit['url']})"
   else
     commits.each do |commit|
