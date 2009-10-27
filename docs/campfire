@@ -19,6 +19,7 @@ data
   - password
   - room
   - ssl
+  - play_sound
 
 payload
   - refer to docs/github_payload
