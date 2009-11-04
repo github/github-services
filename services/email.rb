@@ -1,3 +1,5 @@
+email_conf = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config', 'email.yml'))
+
 service :email do |data, payload|
   name_with_owner = File.join(payload['repository']['owner']['name'], payload['repository']['name'])
 
@@ -62,7 +64,10 @@ EOH
   message.body    = body
   message.date    = Time.now
 
-  Net::SMTP.start('smtp', 25, 'github.com') do |smtp|
+  smtp_settings  = [ email_conf[:address], (email_conf[:port] || 25), (email_conf[:domain] || 'localhost.localdomain') ]
+  smtp_settings += [ email_conf[:user_name], email_conf[:password], email_conf[:authentication] ] if email_conf[:authentication]
+
+  Net::SMTP.start(*smtp_settings) do |smtp|
     smtp.send_message message.to_s, 'noreply@github.com', data['address']
   end
 end

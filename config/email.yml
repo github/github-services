@@ -1,0 +1,4 @@
+---
+address: smtp1.rs.github.com
+port: 25
+domain: github.com
