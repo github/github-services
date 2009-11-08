@@ -16,7 +16,7 @@ service :jabber do |data, payload|
   im.accept_subscriptions = true
 
   #Split multiple addresses into array, removing duplicates
-  recipients  = data['user'].split(',').uniq
+  recipients  = data['user'].split(',').uniq.collect(&:strip)
 
   #Send message to each member in array (Limit to 25 members to prevent overloading something, if this is not and issue, just remove the [0..24] from recipients 
   recipients[0..24].each do |recipient|
