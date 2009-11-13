@@ -14,7 +14,7 @@ service :email do |data, payload|
   if first_commit_title.length > 50
     first_commit_title = first_commit_title.slice(0,50) << '...'
   end
-  
+
   body = <<-EOH
 Branch: #{payload['ref']}
 Home:   #{payload['repository']['url']}
@@ -68,6 +68,6 @@ EOH
   smtp_settings += [ email_conf['user_name'], email_conf['password'], email_conf['authentication'] ] if email_conf['authentication']
 
   Net::SMTP.start(*smtp_settings) do |smtp|
-    smtp.send_message message.to_s, 'noreply@github.com', data['address']
+    smtp.send_message message.to_s, "GitHub <noreply@github.com>", data['address']
   end
 end
