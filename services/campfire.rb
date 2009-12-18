@@ -5,7 +5,7 @@ service :campfire do |data, payload|
   campfire   = Tinder::Campfire.new(data['subdomain'], :ssl => data['ssl'].to_i == 1)
   play_sound = data['play_sound'].to_i == 1
 
-  throw(:halt, 400) unless campfire && campfire.login(data['email'], data['password'])
+  throw(:halt, 400) unless campfire && campfire.login(data['token'], 'X')
   throw(:halt, 400) unless room = campfire.find_room_by_name(data['room'])
 
 
