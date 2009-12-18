@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Tinder</title>
+	<link rel="stylesheet" type="text/css" href="http://opensoul.org/stylesheets/code.css" />
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
+    <link href="http://opensoul.org/stylesheets/ci.css" rel="stylesheet" type="text/css" />
+    <script src="http://opensoul.org/javascripts/code_highlighter.js" type="text/javascript"></script>
+    <script src="http://opensoul.org/javascripts/ruby.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="collectiveidea">
+    <a href="http://collectiveidea.com"><img src="http://opensoul.org/images/header_logo.gif" alt="Collective Idea" class="logo" width="17" height="22" /></a>
+    <ul class="links">
+        <li><a href="http://daniel.collectiveidea.com/blog">Daniel</a></li>
+        <li><a href="http://opensoul.org">Brandon</a></li>
+        <li class="name"><a href="http://collectiveidea.com"><img src="http://opensoul.org/images/header_collectiveidea.gif" alt="Collective Idea" width="123" height="21" /></a></li>
+    </ul>
+</div>
+<div id="main">
+    <div id="header">
+        <h1><a href="/">Tinder</a></h1>
+        <p>Getting the campfire started</p>
+        <ul id="nav">
+            <li><a href="tinder">API Docs</a></li>
+            <li><a href="http://rubyforge.org/projects/tinder">RubyForge</a></li>
+            <li><a href="http://opensoul.org/tags/tinder">Blog</a></li>
+        </ul>
+    </div>
+    <div id="content">
+        <p>Tinder is an API for interfacing with <a href="http://campfirenow.com">Campfire</a>, the 37Signals chat application.</p>
+        <h2>Example</h2>
+        
+        <pre><code class="ruby">campfire = Tinder::Campfire.new 'mysubdomain'
+campfire.login 'myemail@example.com', 'mypassword'</code></pre>
+
+<h3>Create, find and destroy rooms</h3>
+<pre><code class="ruby">room = campfire.create_room 'New Room', 'My new campfire room to test tinder'
+room = campfire.find_room_by_name 'Other Room'
+room.destroy</code></pre>
+
+<h3>Speak and Paste</h3>
+<pre><code class="ruby">room.speak 'Hello world!'
+room.paste File.read(&quot;path/to/your/file.txt&quot;)</code></pre>
+
+<h3>Listening</h3>
+<pre><code class="ruby">room.listen
+#=&gt; [{:person=&gt;&quot;Brandon&quot;, :message=&gt;&quot;I'm getting very sleepy&quot;, :user_id=&gt;&quot;148583&quot;, :id=&gt;&quot;16434003&quot;}]
+
+# or in block form
+room.listen do |m|
+  room.speak 'Welcome!' if m[:message] == /hello/
+end</code></pre>
+
+<h3>Guest Access</h3>
+<pre><code class="ruby">room.toggle_guest_access
+room.guest_url         #=> http://mysubdomain.campfirenow.com/11111
+room.guest_invite_code #=> 11111</code></pre>
+
+<h3>Change the name and topic</h3>
+<pre><code class="ruby">room.name = 'Tinder Demo'
+room.topic = 'Showing how to change the room name and topic with tinder…'</code></pre>
+
+<h3>Users</h3>
+<pre><code class="ruby">room.users
+campfire.users # users in all rooms</code></pre>
+
+<h3>Transcripts</h3>
+<pre><code class="ruby">transcript = room.transcript(room.available_transcripts.first)
+#=&gt; [{:message=&gt;&quot;foobar!&quot;, :user_id=&gt;&quot;99999&quot;, :person=&gt;&quot;Brandon&quot;, :id=&gt;&quot;18659245&quot;, :timestamp=&gt;Tue May 05 07:15:00 -0700 2009}]
+</code></pre>
+
+        <p>See the <a href="tinder">API documentation</a> for more details.</p>
+
+        <h2>Installation</h2>
+        
+        <p>Tinder can be installed as a gem or a Rails plugin. Install the gem by executing:</p>
+        
+        <pre>gem install tinder</pre>
+        
+        <p>Or, download it from <a href="http://rubyforge.org/frs/?group_id=2922">RubyForge</a>.</p>
+        
+        <h2>Source</h2>
+        
+        <p>Contributions are welcome and appreciated!  The source is available from:</p>
+        
+        <pre>http://github.com/collectiveidea/tinder</pre>
+    </div>
+</div>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-194397-8";
+urchinTracker();
+</script>
+</body>
+</html>

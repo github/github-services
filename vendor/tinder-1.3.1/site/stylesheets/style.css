@@ -1,0 +1,77 @@
+body {
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-size: 76%;
+  background: #2A2A2A;
+  margin: 0;
+  padding: 0;
+}
+
+#collectiveidea {
+  border-bottom: 1px solid #444;
+}
+
+a {
+  color: #2D5385;
+}
+
+#main {
+  background-color: #FFF;
+  width: 700px;
+  margin: 0 auto;
+  border: 5px #CCC;
+  border-left-style: solid;
+  border-right-style: solid;
+  padding: 0 1em;
+}
+
+#header {
+  position: relative;
+  border-bottom: 1px solid #999;
+  padding: 1em;
+}
+
+#header h1 {
+  margin: 0;
+  padding: 0;
+  color: #2D5385;
+}
+
+#header h1 a {
+  text-decoration: none;
+}
+
+#header p {
+  margin: 0;
+  padding: 0;
+  font-size: 0.8em;
+  color: #999;
+}
+
+#nav {
+  list-style: none;
+  position: absolute;
+  right: 0;
+  top: 0.6em;
+}
+#nav li {
+  display: inline;
+  padding: 0 0.5em;
+}
+
+#content {
+  padding: 1em 0;
+}
+
+dl {
+  background-color: #DDD;
+  padding: 1em;
+  border: 1px solid #CCC;
+}
+dl .pronunciation {
+  color: #C00;
+}
+dl .description {
+  text-transform: uppercase;
+  font-size: 0.8em;
+  font-family: fixed;
+}

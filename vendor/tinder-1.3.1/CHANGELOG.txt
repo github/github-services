@@ -1,3 +1,17 @@
+1.2.1 - 2009-08-27
+* Fixes for listening after campfire updates [Jordan Byron]
+
+1.2.0 - 2009-01-28
+* Get the list of available files [Christopher MacGown]
+* Upload files [Joshua Wand]
+* Find rooms even when full [Josh Owens]
+* Join rooms as a guest [Ian Lesperance]
+
+1.1.7 - 2008-07-24
+* Don't join the room when only speaking [Brian Donovan]
+* Added support for HTTP proxies
+* Fix listening for messages that contain URLs [Jared Kuolt]
+
 0.1.6 - 2008-03-07
 * Added Room#topic for getting the current topic [Even Weaver]
 * Trap INT in #listen(&block) [borrowed from Chris Shea's Pyre]

@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
+ 
+<head> 
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+  <title>Chat rooms</title> 
+  <link href="/stylesheets/screen.css?1224558404" media="all" rel="stylesheet" type="text/css" /> 
+    <!--[if lte IE 6]>
+      <style type="text/css">
+        @import url("/stylesheets/screen-ie.css?1224558404");
+      </style>
+    <![endif]--> 
+    <!--[if IE 7]>
+      <style type="text/css">
+        @import url("/stylesheets/screen-ie-7.css?1224558404");
+      </style>
+    <![endif]--> 
+  
+  <link href="/stylesheets/print.css?1224558404" media="print" rel="stylesheet" type="text/css" /> 
+  <link href="/stylesheets/blue.css?1224558404" media="screen" rel="stylesheet" title="Theme" type="text/css" /> 
+  <script src="/javascripts/prototype.js?1224558404" type="text/javascript"></script> 
+<script src="/javascripts/effects.js?1224558404" type="text/javascript"></script> 
+<script src="/javascripts/application.js?1224558404" type="text/javascript"></script> 
+<script src="/javascripts/nubbins.js?1224558404" type="text/javascript"></script> 
+<script src="/javascripts/campfire.js?1224558404" type="text/javascript"></script> 
+<script src="/javascripts/javascript_flash_gateway.js?1224558404" type="text/javascript"></script> 
+</head> 
+ 
+<body class="lobby"> 
+  
+  
+  
+  
+    <div id="Header"> 
+      <div id="Tabs"> 
+        <ul id="MainTabs"> 
+    <li><a href="http://fish.campfirenow.com/" class="current">Lobby</a></li> 
+  
+    
+        
+        <li><a href="http://fish.campfirenow.com/room/179715" class="chat" id="room_tab-17715">Just Fishin</a></li> 
+        
+    
+  
+ 
+    <li><a href="http://fish.campfirenow.com/files+transcripts" class="" style="margin-left: 8px">Files, Transcripts &amp; Search</a></li> 
+  
+    <li style="float: right;" class="logout"><a href="http://fish.campfirenow.com/logout">Logout</a></li> 
+          <li style="float: right" class="logout"><a href="/member/edit">My account</a></li> 
+      
+ 
+</ul> 
+      </div> 
+    </div> 
+  
+ 
+  <div id="Wrapper"> 
+  	<div id="Container"> 
+      
+ 
+ 
+ 
+<div class="Full"> 
+	<div class="col">	
+ 
+    <div id="lobby"> 
+    <h1> 
+  <span><a class="admin toggle show_hide_toggler_new_room" href="#" id="create_room_link" onclick="$('new_room').showHide.toggle(); return false;">Create a new room</a></span> 
+    Chat rooms
+</h1> 
+ 
+<div class="currentChatters"> 
+      3 people currently chatting
+          <span> 
+        <br />You're near your simultaneous chatter limit of 4.
+        Ask <a href="mailto:bob@billy.com">Billy Bob</a> to upgrade the account.
+      </span> 
+     
+  </div> 
+<div class="show_hide_wrapper"><div class=" showhide" id="new_room" style="display: none"><div class="basic_form_wrapper"> 
+  <div class="basic_form"> 
+    <div class="explanation"> 
+      <h3>Create a new room</h3> 
+      <p>All chats take place in rooms. You can create as many rooms as you'd like.</p> 
+      <p>Consider making rooms for client projects, general discussions, specific meetings/events, and more.</p> 
+      <div class="spinner" id="new_room_spinner" style="display: none">&nbsp;</div> 
+    </div> 
+    <div id="new_room_form_errors"></div> 
+    <div class="body"> 
+<form action="http://fish.campfirenow.com/account/create/room?from=lobby" id="new_room_form" method="post" onsubmit="$(this).down('input[type=submit]').disable(); Element.hide('new_room_cancel_link'); new Ajax.Request('http://fish.campfirenow.com/account/create/room?from=lobby', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;">      <h3>Name the room</h3> 
+      <p><input class="big expanded" id="room_name" name="room[name]" size="30" type="text" /></p> 
+      <h3 style="font-weight: normal;">Optional: Give the room a topic or description</h3> 
+      <p><textarea class="expanded" cols="40" id="room_topic" name="room[topic]" rows="20"></textarea></p> 
+      <p class="submit"><input class="primary" name="commit" type="submit" value="Create the room" /> 
+      <span id="new_room_cancel_link"> or
+      <a class="admin show_hide_toggler_new_room" href="#" onclick="$('new_room').showHide.toggle(); return false;">Cancel</a></span></p> 
+</form>    </div> 
+  </div> 
+</div> 
+</div><script type="text/javascript"> 
+//<![CDATA[ 
+new ShowHide('new_room', {"beforeToggle": function(showHide) {Form.reset('new_room_form'); Element.update('new_room_form_errors', '')}, "afterToggle": function(showHide) {if (/MSIE/.test(navigator.userAgent)) {Element.hide(document.body);Element.show(document.body);};Field.activate('room_name')}}) 
+//]]> 
+</script></div> 
+ 
+<div id="rooms"> 
+        <table class="lobby"> 
+      <tr> 
+              <td class="lobby_room" style="vertical-align: top; width: 33%;"><div id="room_17715" class="room shaded"> 
+  <h2> 
+ 
+      <a href="http://fish.campfirenow.com/room/17715">Just Fishin</a> 
+  </h2> 
+ 
+  <div class="updated"> 
+          <span class="active"> Active 12 minutes ago</span> 
+  </div> 
+    <p>Sargasm: Deriving far too much satisfaction from glibly berating another with sarcasm.  
+ 
+Ex: &quot;Oh, thanks a lot for drinking my last beer! No, it's my fault... if I wanted it for myself, I shouldn't have put it in the fridge!&quot; 
+&quot;Dude, don't have a sargasm</p> 
+ 
+ 
+    <ul class="participant-list" id="participant_list-17715"> 
+    <li class="user nubbin_region" id="user_38447"> 
+      
+      <span class="name">Caribou Barbie</span> 
+      
+    </li> 
+    <li class="user nubbin_region" id="user_38449"> 
+      
+      <span class="name">Joe Sixpack</span> 
+      
+    </li> 
+    <li class="user nubbin_region" id="user_38445"> 
+      
+      <span class="name">Billy Bob</span> 
+      
+    </li> 
+</ul> 
+ 
+</div> 
+</td> 
+              <td class="lobby_room" style="vertical-align: top; width: 33%;">&nbsp;</td> 
+              <td class="lobby_room" style="vertical-align: top; width: 33%;">&nbsp;</td> 
+          </tr> 
+  </table> 
+ 
+  </div> 
+    </div> 
+ 
+    <script type="text/javascript"> 
+//<![CDATA[ 
+      Ajax.Responders.register({ 
+        onCreate: function() { 
+          if (Ajax.activeRequestCount > 0)
+            Element.show('new_room_spinner');
+        },
+        onComplete: function() {
+          if (Ajax.activeRequestCount == 0)
+            Element.hide('new_room_spinner');
+        }
+      });
+ 
+//]]>
+</script> 
+    <script type="text/javascript"> 
+//<![CDATA[ 
+new PeriodicalExecuter(function() {new Ajax.Request('http://fish.campfirenow.com/rooms', {asynchronous:true, evalScripts:true})}, 60) 
+//]]> 
+</script> 
+    
+    <p style="clear: both;">&nbsp;</p> 
+    
+  </div> 
+ 
+    <div class="bottom">&nbsp;</div> 
+  <div id="Footer"> 
+   	<strong><a href="http://www.campfirenow.com/help" target=_blank>FAQs and Help</a></strong> | 
+    <a href="http://www.campfirenow.com/privacy.html" target=_blank>Privacy Policy</a> | 
+    <a href="http://www.campfirenow.com/terms.html" target=_blank>Terms of Service</a> 
+  </div> 
+ 
+</div> 
+ 
+ 
+    </div> 
+  </div> 
+ 
+ 
+</body> 
+</html>
