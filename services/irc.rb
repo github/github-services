@@ -1,4 +1,6 @@
 service :irc do |data, payload|
+  return if payload['commits'].empty?
+  
   repository = payload['repository']['name']
   branch     = (payload['ref'] =~ /^refs\/heads\/(.+)$/ ? $1 : payload['ref'])
   rooms      = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
