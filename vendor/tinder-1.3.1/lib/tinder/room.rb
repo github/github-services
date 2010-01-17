@@ -89,6 +89,10 @@ module Tinder
       send_message(message, 'PasteMessage')
     end
 
+    def play(sound)
+      send_message(sound, 'SoundMessage')
+    end
+
     # Get the list of users currently chatting for this room
     def users
       reload!

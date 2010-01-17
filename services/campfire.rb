@@ -17,7 +17,7 @@ service :campfire do |data, payload|
       room.speak "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} (#{commit['url']})"
     end
   end
-  room.speak "/play rimshot" if play_sound
+  room.play "rimshot" if play_sound
 
   room.leave
   campfire.logout

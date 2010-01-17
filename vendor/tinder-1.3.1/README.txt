@@ -1,12 +1,6 @@
 = Tinder - get the Campfire started
 
-
-This branch is a rewrite of Tinder to use the official Campfire API. The API is intended to be backwards compatible so consumers can easily migrate off the HTML API.
-
--- Joshua Peek (Programmer, 37signals)
-
-
-Tinder is a library for interfacing with Campfire, the chat application from 37Signals. Unlike Marshmallow, it is designed to be a full-featured API (since 37Signals doesn't provide a real one), allowing you to programatically manage and speak/listen in chat rooms.
+Tinder is a library for interfacing with Campfire, the chat application from 37Signals, allowing you to programatically manage and speak/listen in chat rooms.  As of December 2009, thanks to initial work from Joshua Peek at 37signals, it now makes use of the official Campfire API (described at: http://developer.37signals.com/campfire/).
 
 == Usage
 
