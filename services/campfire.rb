@@ -8,10 +8,10 @@ service :campfire do |data, payload|
   throw(:halt, 400) unless campfire && campfire.login(data['token'], 'X')
   throw(:halt, 400) unless room = campfire.find_room_by_name(data['room'])
 
-
   if commits.size > 10
     commit = commits.last
-    room.speak "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} (#{commit['url']})"
+    compare_url = commit['url'].sub(/commit\/([a-z0-9]{40})$/, "compare/#{commits.first.sha}..." + '\1')
+    room.speak "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} (#{compare_url})"
   else
     commits.each do |commit|
       room.speak "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} (#{commit['url']})"
