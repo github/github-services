@@ -2,8 +2,9 @@
 
 { 
   "data" => {
-    "username" => "foo",
-    "password" => "bar"
+    "token" => "token",
+    "url" => "https://youraccount.talkerapp.com/rooms/ROOM_ID",
+    "digest" => 1
   },
 
   "payload" => {

@@ -1,0 +1,22 @@
+Talker
+========
+
+Install Notes
+-------------
+
+  1. url should be your room url, for example https://youraccount.talkerapp.com/rooms/ROOM_ID
+  2. token should be on your settings page
+  3. if digest is checked, all commits will be compressed in one message
+  
+Note: replace https with http on the url if you're on the Free plan as it doesn't include enhanced security (SSL).
+
+Developer Notes
+---------------
+
+data
+  - url
+  - token
+  - digest (boolean)
+
+payload
+  - refer to docs/github_payload
