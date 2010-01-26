@@ -30,6 +30,8 @@ set :run, true
 set :environment, :production
 set :port, ARGV.first || 8080
 
+HOSTNAME = `hostname`.chomp
+
 begin
   require 'mongrel'
   set :server, 'mongrel'
@@ -45,10 +47,18 @@ end
 module GitHub
   def service(name)
     post "/#{name}/" do
-      Timeout.timeout(20) do
-        data = JSON.parse(params[:data])
-        payload = JSON.parse(params[:payload])
-        yield data, payload
+      begin
+        Timeout.timeout(20) do
+          data = JSON.parse(params[:data])
+          payload = JSON.parse(params[:payload])
+          yield data, payload
+        end
+      rescue => boom
+        report_exception boom,
+          :hook_name    => name,
+          :hook_data    => params[:data],
+          :hook_payload => params[:payload]
+        raise
       end
     end
   end
@@ -61,6 +71,32 @@ module GitHub
     end
   rescue Timeout::Error
     url
+  end
+
+  def report_exception(exception, other)
+    # run only in github's production environment
+    return if HOSTNAME != 'sh1'
+
+    backtrace = Array(exception.backtrace)[0..500]
+
+    data = {
+      'type'      => 'exception',
+      'class'     => exception.class.to_s,
+      'server'    => hostname,
+      'message'   => exception.message[0..254],
+      'backtrace' => backtrace.join("\n"),
+      'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0])
+    }
+
+    # optional
+    other.each { |key, value| data[key.to_s] = value.to_s }
+
+    Net::HTTP.new('aux1', 9292).
+      post('/haystack/async', "json=#{Rack::Utils.escape(data.to_json)}")
+  rescue => boom
+    $stderr.puts "reporting exception failed:"
+    $stderr.puts "#{boom.class}: #{boom}"
+    # swallow errors
   end
 end
 include GitHub
