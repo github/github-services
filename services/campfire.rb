@@ -6,6 +6,7 @@ service :campfire do |data, payload|
   owner      = payload['repository']['owner']['name']
   branch     = payload['ref'].split('/').last
   commits    = payload['commits']
+  next if commits.empty?
   campfire   = Tinder::Campfire.new(data['subdomain'], :ssl => data['ssl'].to_i == 1)
   play_sound = data['play_sound'].to_i == 1
 
