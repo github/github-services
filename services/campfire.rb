@@ -31,7 +31,7 @@ service :campfire do |data, payload|
     before, after = payload['before'], payload['after']
     url = payload['repository']['url'] + "/compare/#{before}...#{after}"
   else
-    url = commit['url']
+    url = commits.first['url']
   end
 
   room.paste message
