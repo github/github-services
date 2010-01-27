@@ -54,7 +54,7 @@ module GitHub
         data = JSON.parse(params[:data])
         payload = JSON.parse(params[:payload])
         Timeout.timeout(20, ServiceTimeout) { yield data, payload }
-      rescue => boom
+      rescue Object => boom
         # redact sensitive info in hook_data hash
         hook_data = data || params[:data]
         %w[password token].each { |key| hook_data[key] &&= '<redacted>' }
