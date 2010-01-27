@@ -1,6 +1,7 @@
 
 service :campfire do |data, payload|
   repository = payload['repository']['name']
+  owner      = payload['repository']['owner']['name']
   branch     = payload['ref'].split('/').last
   commits    = payload['commits']
   campfire   = Tinder::Campfire.new(data['subdomain'], :ssl => data['ssl'].to_i == 1)
@@ -22,7 +23,7 @@ service :campfire do |data, payload|
 
   throw(:halt, 400) unless room
 
-  message  = "[#{repository}/#{branch}]\n"
+  message  = "[#{owner}/#{repository}/#{branch}]\n"
   message += commits.map do |commit|
     "#{commit['id'][0..5]} #{commit['message']} - #{commit['author']['name']}"
   end.join("\n")
