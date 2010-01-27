@@ -82,7 +82,7 @@ module GitHub
     data = {
       'type'      => 'exception',
       'class'     => exception.class.to_s,
-      'server'    => hostname,
+      'server'    => HOSTNAME,
       'message'   => exception.message[0..254],
       'backtrace' => backtrace.join("\n"),
       'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0])
