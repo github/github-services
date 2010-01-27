@@ -54,12 +54,13 @@ module GitHub
           yield data, payload
         end
       rescue => boom
-        hook_data = params[:data].dup
+        # redact sensitive info in hook_data hash
+        hook_data = data || params[:data]
         %w[password token].each { |key| hook_data[key] &&= '<redacted>' }
         report_exception boom,
           :hook_name    => name,
-          :hook_data    => hook_data,
-          :hook_payload => params[:payload]
+          :hook_data    => hook_data.inspect,
+          :hook_payload => (payload || params[:payload]).inspect
         raise
       end
     end
