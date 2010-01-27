@@ -5,6 +5,8 @@ service :email do |data, payload|
 
   # Should be: first_commit = payload['commits'].first
   first_commit     = payload['commits'].first
+  next if first_commit.nil?
+
   first_commit_sha = first_commit['id']
 
   # Shorten the elements of the subject
