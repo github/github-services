@@ -57,13 +57,14 @@ module GitHub
       rescue Object => boom
         # redact sensitive info in hook_data hash
         hook_data = data || params[:data]
+        hook_payload = payload || params[:payload]
         %w[password token].each { |key| hook_data[key] &&= '<redacted>' }
         owner = hook_payload['repository']['owner']['name'] rescue nil
         repo  = hook_payload['repository']['name'] rescue nil
         report_exception boom,
           :hook_name    => name,
           :hook_data    => hook_data.inspect,
-          :hook_payload => (payload || params[:payload]).inspect,
+          :hook_payload => hook_payload.inspect,
           :user         => owner,
           :repo         => "#{owner}/#{repo}"
         raise
