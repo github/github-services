@@ -75,7 +75,7 @@ module GitHub
 
   def report_exception(exception, other)
     # run only in github's production environment
-    return if HOSTNAME != 'sh1'
+    return if HOSTNAME != 'sh1.rs.github.com'
 
     backtrace = Array(exception.backtrace)[0..500]
 
