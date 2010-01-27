@@ -22,16 +22,20 @@ service :campfire do |data, payload|
 
   throw(:halt, 400) unless room
 
+  message  = "[#{repository}/#{branch}]\n"
+  message += commits.map do |commit|
+    "#{commit['id'][0..5]} #{commit['message']} - #{commit['author']['name']}"
+  end.join("\n")
+
   if commits.size > 1
-    commit = commits.last
     before, after = payload['before'], payload['after']
-    compare_url = payload['repository']['url'] + "/compare/#{before}...#{after}"
-    room.speak "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} (#{compare_url})"
+    url = payload['repository']['url'] + "/compare/#{before}...#{after}"
   else
-    commits.each do |commit|
-      room.speak "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} (#{commit['url']})"
-    end
+    url = commit['url']
   end
+
+  room.paste message
+  room.speak url
   room.play "rimshot" if play_sound
 
   room.leave
