@@ -44,14 +44,13 @@ end
 
 module GitHub
   def service(name)
-    Timeout.timeout(20) do
-      post "/#{name}/" do
+    post "/#{name}/" do
+      Timeout.timeout(20) do
         data = JSON.parse(params[:data])
         payload = JSON.parse(params[:payload])
         yield data, payload
       end
     end
-  rescue Timeout::Error
   end
 
   def shorten_url(url)
