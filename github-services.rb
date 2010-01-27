@@ -89,6 +89,7 @@ module GitHub
     }
 
     # optional
+    %w[password token].each { |key| other[key] &&= '<redacted>' }
     other.each { |key, value| data[key.to_s] = value.to_s }
 
     Net::HTTP.new('aux1', 9292).
