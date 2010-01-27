@@ -1,5 +1,5 @@
 service :irc do |data, payload|
-  return if payload['commits'].empty?
+  next if payload['commits'].empty?
   
   repository = payload['repository']['name']
   branch     = (payload['ref'] =~ /^refs\/heads\/(.+)$/ ? $1 : payload['ref'])
