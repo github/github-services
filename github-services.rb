@@ -48,11 +48,9 @@ module GitHub
   def service(name)
     post "/#{name}/" do
       begin
-        Timeout.timeout(20) do
-          data = JSON.parse(params[:data])
-          payload = JSON.parse(params[:payload])
-          yield data, payload
-        end
+        data = JSON.parse(params[:data])
+        payload = JSON.parse(params[:payload])
+        Timeout.timeout(20) { yield data, payload }
       rescue => boom
         # redact sensitive info in hook_data hash
         hook_data = data || params[:data]
