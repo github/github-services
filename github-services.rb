@@ -54,9 +54,11 @@ module GitHub
           yield data, payload
         end
       rescue => boom
+        hook_data = params[:data].dup
+        %w[password token].each { |key| hook_data[key] &&= '<redacted>' }
         report_exception boom,
           :hook_name    => name,
-          :hook_data    => params[:data],
+          :hook_data    => hook_data,
           :hook_payload => params[:payload]
         raise
       end
@@ -89,7 +91,6 @@ module GitHub
     }
 
     # optional
-    %w[password token].each { |key| other[key] &&= '<redacted>' }
     other.each { |key, value| data[key.to_s] = value.to_s }
 
     Net::HTTP.new('aux1', 9292).
