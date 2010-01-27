@@ -14,7 +14,7 @@ service :campfire do |data, payload|
 
   message  = "[#{owner}/#{repository}/#{branch}]\n"
   message += commits.map do |commit|
-    "#{commit['id'][0..5]} #{commit['message']} - #{commit['author']['name']}"
+    "#{commit['id'][0..6]} #{commit['message']} - #{commit['author']['name']}"
   end.join("\n")
 
   if commits.size > 1
