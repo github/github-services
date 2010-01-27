@@ -66,4 +66,8 @@ module GitHub
 end
 include GitHub
 
+get "/" do
+  "ok"
+end
+
 Dir["#{File.dirname(__FILE__)}/services/**/*.rb"].each { |service| load service }
