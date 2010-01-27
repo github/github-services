@@ -1,7 +1,6 @@
 require 'pathname'
 require 'net/http'
 require 'net/https'
-require 'rubygems'
 require 'crack'
 
 dir = Pathname(__FILE__).dirname.expand_path
