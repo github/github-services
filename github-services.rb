@@ -45,12 +45,15 @@ rescue LoadError
 end
 
 module GitHub
+  class ServiceTimeout < Timeout::Error
+  end
+
   def service(name)
     post "/#{name}/" do
       begin
         data = JSON.parse(params[:data])
         payload = JSON.parse(params[:payload])
-        Timeout.timeout(20) { yield data, payload }
+        Timeout.timeout(20, ServiceTimeout) { yield data, payload }
       rescue => boom
         # redact sensitive info in hook_data hash
         hook_data = data || params[:data]
