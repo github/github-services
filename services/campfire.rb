@@ -1,4 +1,3 @@
-
 service :campfire do |data, payload|
   repository = payload['repository']['name']
   owner      = payload['repository']['owner']['name']
@@ -8,20 +7,7 @@ service :campfire do |data, payload|
   play_sound = data['play_sound'].to_i == 1
 
   throw(:halt, 400) unless campfire && campfire.login(data['token'], 'X')
-
-  # XXX temporary band-aid to work around intermittent errors locating
-  # a campfire room.
-  attempts = 0
-  begin
-    room = campfire.find_room_by_name(data['room'])
-  rescue NoMethodError
-    attempts += 1
-    $stderr.puts "retrying failed find room attempt #{attempts}"
-    retry if attempts <= 3
-    raise
-  end
-
-  throw(:halt, 400) unless room
+  throw(:halt, 400) unless room = campfire.find_room_by_name(data['room'])
 
   message  = "[#{owner}/#{repository}/#{branch}]\n"
   message += commits.map do |commit|
