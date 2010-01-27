@@ -1,4 +1,7 @@
 service :campfire do |data, payload|
+  # fail fast with no token
+  throw(:halt, 400) if data['token'].to_s == ''
+
   repository = payload['repository']['name']
   owner      = payload['repository']['owner']['name']
   branch     = payload['ref'].split('/').last
