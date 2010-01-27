@@ -20,7 +20,7 @@ service :campfire do |data, payload|
   end.join("\n")
 
   if commits.size > 1
-    before, after = payload['before'], payload['after']
+    before, after = payload['before'][0..6], payload['after'][0..6]
     url = payload['repository']['url'] + "/compare/#{before}...#{after}"
   else
     url = commits.first['url']
