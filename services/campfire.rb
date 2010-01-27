@@ -10,7 +10,8 @@ service :campfire do |data, payload|
 
   if commits.size > 10
     commit = commits.last
-    compare_url = commit['url'].sub(/commit\/([a-z0-9]{40})$/, "compare/#{commits.first.sha}..." + '\1')
+    before, after = payload['before'], payload['after']
+    compare_url = payload['repository']['url'] + "/compare/#{before}/#{after}"
     room.speak "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} (#{compare_url})"
   else
     commits.each do |commit|
