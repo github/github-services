@@ -16,7 +16,7 @@ service :campfire do |data, payload|
   rescue NoMethodError
     attempts += 1
     $stderr.puts "retrying failed find room attempt #{attempts}"
-    retry if attempts < 3
+    retry if attempts <= 3
     raise
   end
 
