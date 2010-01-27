@@ -8,7 +8,7 @@ service :campfire do |data, payload|
   throw(:halt, 400) unless campfire && campfire.login(data['token'], 'X')
   throw(:halt, 400) unless room = campfire.find_room_by_name(data['room'])
 
-  if commits.size > 10
+  if commits.size > 1
     commit = commits.last
     before, after = payload['before'], payload['after']
     compare_url = payload['repository']['url'] + "/compare/#{before}...#{after}"
