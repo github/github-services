@@ -15,6 +15,29 @@ service :irc do |data, payload|
     throw :halt, 400
   end
 
+  messages =
+    payload['commits'].map do |commit|
+      short = commit['message'].split("\n", 2).first
+      short += ' ...' if short != commit['message']
+      author = commit['author']['name']
+      sha1 = commit['id']
+      "\002#{repository}:\002 \00307#{branch}\003 \00303#{author}\003 * " +
+      "\002#{sha1[0..6]}\002: #{short}"
+    end
+
+  if messages.size > 1
+    before, after = payload['before'][0..6], payload['after'][0..6]
+    compare_url = payload['repository']['url'] + "/compare/#{before}...#{after}"
+    tiny_url = shorten_url(compare_url)
+    summary = "\002#{repository}:\002 \00307#{branch}\003 commits " +
+              "\002#{before}\002...\002#{after}\002 - #{tiny_url}"
+    messages << summary
+  else
+    commit = payload['commits'][0]
+    tiny_url = shorten_url(commit['url'])
+    messages[0] << " - #{tiny_url}"
+  end
+
   if data['ssl'].to_i == 1
     ssl_context = OpenSSL::SSL::SSLContext.new
     ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -48,14 +71,8 @@ service :irc do |data, payload|
   rooms.each do |room|
     room, pass = room.split("::")
     irc.puts "JOIN #{room} #{pass}"
-    payload['commits'].each do |commit|
-      sha1 = commit['id']
-
-      tiny_url = shorten_url(commit['url'])
-
-      irc.puts "PRIVMSG #{room} :\002#{repository}:\002 \0033#{commit['author']['name']} \00307#{branch}\0030 SHA1-\002#{sha1[0..6]}\002"
-      irc.puts "PRIVMSG #{room} :#{commit['message']}"
-      irc.puts "PRIVMSG #{room} :#{tiny_url}"
+    messages.each do |message|
+      irc.puts "PRIVMSG #{room} :#{message}"
     end
     irc.puts "PART #{room}"
   end
