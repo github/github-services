@@ -21,8 +21,10 @@ service :irc do |data, payload|
       short += ' ...' if short != commit['message']
       author = commit['author']['name']
       sha1 = commit['id']
+      files = Array(commit['modified'])
+      dirs = files.map { |file| File.dirname(file) }.uniq
       "\002#{repository}:\002 \00307#{branch}\003 \00303#{author}\003 * " +
-      "\002#{sha1[0..6]}\002: #{short}"
+      "\002#{sha1[0..6]}\002 (#{files.size} files in #{dirs.size} dirs): #{short}"
     end
 
   if messages.size > 1
