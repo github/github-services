@@ -1,0 +1,12 @@
+Web Translate It
+================
+
+This service notify Web Translate It of pushes to your public repository. Web Translate It will then refresh the language file(s) if they have been updated.
+
+More info: https://webtranslateit.com/documentation/wikis/github-integration
+
+Install Notes
+-------------
+
+  API Key is your project API key
+	(you can find it in the project settings)
