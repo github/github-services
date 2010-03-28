@@ -1,7 +1,7 @@
 rdoc.info
 =========
 
-This service allows you to auto-public documentation for your Ruby gem or library.
+This service allows you to auto-publish documentation for your Ruby gem or library.
 The resulting documentation will be hosted for you at http://rdoc.info/projects/your-name/your-project
 
 
