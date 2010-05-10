@@ -66,7 +66,7 @@ EOH
   message.body    = body
   message.date    = Time.now
 
-  smtp_settings  = [ email_conf['address'], (email_conf['port'] || 25), (email_conf['domain'] || 'localhost.localdomain') ]
+  smtp_settings  = [ email_conf['address'], (email_conf['port'] || 25).to_i, (email_conf['domain'] || 'localhost.localdomain') ]
   smtp_settings += [ email_conf['user_name'], email_conf['password'], email_conf['authentication'] ] if email_conf['authentication']
 
   Net::SMTP.start(*smtp_settings) do |smtp|
