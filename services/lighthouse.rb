@@ -24,7 +24,7 @@ service :lighthouse do |data, payload|
     XML
 
     account = "http://#{data['subdomain']}.lighthouseapp.com"
-    url = URI.parse('%s/projects/%d/changesets.xml' % [account, data['project_id']])
+    url = URI.parse('%s/projects/%d/changesets.xml' % [account, data['project_id'].to_i])
     req = Net::HTTP::Post.new(url.path)
     req.basic_auth data['token'], 'x'
     req.body = changeset_xml
