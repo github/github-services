@@ -51,8 +51,8 @@ module GitHub
   def service(name)
     post "/#{name}/" do
       begin
-        data = JSON.parse(params[:data])
-        payload = JSON.parse(params[:payload])
+        data    = JSON.parse(params[:data])
+        payload = parse_payload(params[:payload])
         Timeout.timeout(20, ServiceTimeout) { yield data, payload }
       rescue Object => boom
         # redact sensitive info in hook_data hash
@@ -70,6 +70,12 @@ module GitHub
         raise
       end
     end
+  end
+
+  def parse_payload(json)
+    payload = JSON.parse(json)
+    payload['ref_name'] = payload['ref'].to_s.sub(/\Arefs\/(heads|tags)\//, '')
+    payload
   end
 
   def shorten_url(url)

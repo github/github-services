@@ -1,6 +1,6 @@
 service :talker do |data, payload|
   repository = payload['repository']['name']
-  branch = payload['ref'].split('/').last
+  branch = payload['ref_name']
   commits = payload['commits']
   token = data['token']
   url = URI.parse("#{data['url']}/messages.json")

@@ -1,7 +1,7 @@
 service :fog_bugz do |data, payload|
   
   repository  = payload['repository']['name']
-  branch      = payload['ref'].split('/').last
+  branch      = payload['ref_name']
   before      = payload['before']   
   
   payload['commits'].each do |commit|

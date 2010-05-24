@@ -8,7 +8,7 @@ end
 
 service :jabber do |data, payload|
   repository = payload['repository']['name']
-  branch     = payload['ref'].split('/').last
+  branch     = payload['ref_name']
   im         = Jabber::Simple.new(jabber_user, jabber_password)
 
 

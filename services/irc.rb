@@ -2,7 +2,7 @@ service :irc do |data, payload|
   next if payload['commits'].empty?
 
   repository = payload['repository']['name']
-  branch     = (payload['ref'] =~ /^refs\/heads\/(.+)$/ ? $1 : payload['ref'])
+  branch     = payload['ref_name']
   rooms      = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
   botname    = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
   socket     = nil

@@ -1,6 +1,6 @@
 service :rubyforge do |data, payload|
   repository = payload['repository']['name']
-  branch     = payload['ref'].split('/').last
+  branch     = payload['ref_name']
   payload['commits'].each do |commit|
     id        = commit['id']
     rf        = RubyForge.new(data['username'], data['password'])

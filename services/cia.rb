@@ -40,7 +40,7 @@ service :cia do |data, payload|
   server = XMLRPC::Client.new2("http://cia.navi.cx")
 
   repository = payload['repository']['name']
-  branch     = (payload['ref'] =~ /^refs\/heads\/(.+)$/ ? $1 : payload['ref'])
+  branch     = payload['ref_name']
   commits    = payload['commits']
 
   if commits.size > 5
