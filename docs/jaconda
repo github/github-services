@@ -1,0 +1,20 @@
+Jaconda
+========
+
+Install Notes
+-------------
+
+  1. Room ID should be numerical ID of your room, could be found in address bar
+  2. API token should be on your Account page
+  3. if Digest is checked, all commits will be compressed in one message
+  
+Developer Notes
+---------------
+
+data
+  - room_id
+  - api_token
+  - digest (boolean)
+
+payload
+  - refer to docs/github_payload

@@ -2,8 +2,8 @@
 
 { 
   "data" => {
-    "token" => "token",
-    "url" => "https://youraccount.talkerapp.com/rooms/ROOM_ID",
+    "api_token" => "API token",
+    "room_id" => "Room ID",
     "digest" => 1
   },
 
