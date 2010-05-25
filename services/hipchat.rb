@@ -1,4 +1,4 @@
-service :hipchat do |data, payload|
+service :hip_chat do |data, payload|
   # make sure we have what we need
   throw :halt, [400, "Missing auth_token"] if data['auth_token'].to_s == ''
   throw :halt, [400, "Missing room"] if data['room'].to_s == ''
