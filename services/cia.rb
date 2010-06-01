@@ -44,7 +44,7 @@ service :cia do |data, payload|
   commits    = payload['commits']
 
   if commits.size > 5
-    message = build_cia_commit(repository, branch, payload['after'], commits[payload['after']], commits.size - 1)
+    message = build_cia_commit(repository, branch, payload['after'], commits.last, commits.size - 1)
     server.call("hub.deliver", message)
   else
     commits.each do |commit|
