@@ -12,7 +12,7 @@ service :email do |data, payload|
   # Shorten the elements of the subject
   first_commit_sha = first_commit_sha[0..5]
 
-  first_commit_title = first_commit['message'][/^([^\n]+)/, 1]
+  first_commit_title = first_commit['message'][/^([^\n]+)/, 1] || ''
   if first_commit_title.length > 50
     first_commit_title = first_commit_title.slice(0,50) << '...'
   end
