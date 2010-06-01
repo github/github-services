@@ -118,7 +118,7 @@ module GitHub
       'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0])
     }
 
-    if exception.kind_of?(GitHub::ServiceException)
+    if exception.kind_of?(GitHub::ServiceError)
       if exception.original_exception
         data['original_class'] = exception.original_exception.to_s
         data['backtrace'] = exception.original_exception.backtrace.join("\n")
@@ -126,7 +126,7 @@ module GitHub
       end
     else
       data['original_class'] = data['class']
-      data['class'] = 'GitHub::ServiceException'
+      data['class'] = 'GitHub::ServiceError'
     end
 
     # optional
