@@ -1,6 +1,6 @@
 service :campfire do |data, payload|
   # fail fast with no token
-  throw(:halt, 400) if data['token'].to_s == ''
+  raise GitHub::ServiceConfigurationError, "Missing token" if data['token'].to_s == ''
 
   repository = payload['repository']['name']
   owner      = payload['repository']['owner']['name']
@@ -10,8 +10,13 @@ service :campfire do |data, payload|
   campfire   = Tinder::Campfire.new(data['subdomain'], :ssl => data['ssl'].to_i == 1)
   play_sound = data['play_sound'].to_i == 1
 
-  throw(:halt, 400) unless campfire && campfire.login(data['token'], 'X')
-  throw(:halt, 400) unless room = campfire.find_room_by_name(data['room'])
+  if !campfire.login(data['token'], 'X')
+    raise GitHub::ServiceConfigurationError, "Invalid token"
+  end
+
+  if (room = campfire.find_room_by_name(data['room'])).nil?
+    raise GitHub::ServiceConfigurationError, "No such room"
+  end
 
   prefix = "[#{repository}/#{branch}]"
   primary, others = commits[0..4], Array(commits[5..-1])
