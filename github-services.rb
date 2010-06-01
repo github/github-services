@@ -69,6 +69,14 @@ module GitHub
         data    = JSON.parse(params[:data])
         payload = parse_payload(params[:payload])
         Timeout.timeout(20, ServiceTimeout) { yield data, payload }
+        status 200
+        ""
+      rescue GitHub::ServiceConfigurationError => boom
+        status 400
+        boom.message
+      rescue GitHub::ServiceTimeout => boom
+        status 504
+        "Service Timeout"
       rescue Object => boom
         # redact sensitive info in hook_data hash
         hook_data = data || params[:data]
@@ -82,7 +90,9 @@ module GitHub
           :hook_payload => hook_payload.inspect,
           :user         => owner,
           :repo         => "#{owner}/#{repo}"
-        raise
+
+        status 500
+        "ERROR"
       end
     end
   end
