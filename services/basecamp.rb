@@ -55,15 +55,13 @@ EOH
     if boom.to_s =~ /getaddrinfo: Name or service not known/
       raise GitHub::ServiceConfigurationError, "Invalid basecamp domain name"
     else
-      raise GitHub::ServiceError, boom
+      raise
     end
   rescue RuntimeError => boom
     if boom.to_s =~ /Forbidden.*403/ || boom.to_s =~ /Authorization Required.*401/
       raise GitHub::ServiceConfigurationError, "Invalid credentials"
     else
-      raise GitHub::ServiceError, boom
+      raise
     end
-  rescue => boom
-    raise GitHub::ServiceError, boom
   end
 end

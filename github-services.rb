@@ -118,6 +118,17 @@ module GitHub
       'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0])
     }
 
+    if exception.kind_of?(GitHub::ServiceException)
+      if exception.original_exception
+        data['original_class'] = exception.original_exception.to_s
+        data['backtrace'] = exception.original_exception.backtrace.join("\n")
+        data['message'] = exception.original_exception.message[0..254]
+      end
+    else
+      data['original_class'] = data['class']
+      data['class'] = 'GitHub::ServiceException'
+    end
+
     # optional
     other.each { |key, value| data[key.to_s] = value.to_s }
 

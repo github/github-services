@@ -74,13 +74,11 @@ service :irc do |data, payload|
     if boom.to_s =~ /getaddrinfo: Servname not supported for ai_socktype/
       raise GitHub::ServiceConfigurationError, "Invalid port"
     else
-      raise GitHub::ServiceError, boom
+      raise
     end
   rescue Errno::ECONNREFUSED
     raise GitHub::ServiceConfigurationError, "Invalid host"
   rescue OpenSSL::SSL::SSLError
     raise GitHub::ServiceConfigurationError, "Host does not support SSL"
-  rescue Errno::ECONNRESET
-    raise GitHub::ServiceError, boom
   end
 end
