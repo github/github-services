@@ -62,6 +62,8 @@ EOH
       raise GitHub::ServiceConfigurationError, "Invalid credentials"
     elsif boom.to_s == 'Not Found (404)'
       raise GitHub::ServiceConfigurationError, "Invalid project URL"
+    elsif boom.to_s == 'Unprocessable Entity (422)'
+      # do nothing
     else
       raise
     end
