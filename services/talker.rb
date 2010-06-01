@@ -7,7 +7,7 @@ service :talker do |data, payload|
 
   if data['digest'] == 1
     commit = commits.last
-    message = "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} (#{commit['url']}))"
+    message = "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} #{commit['url']} )"
     
     req = Net::HTTP::Post.new(url.path)
     req["X-Talker-Token"] = "#{token}"
@@ -18,7 +18,7 @@ service :talker do |data, payload|
     http.start { |http| http.request(req) }
   else
     commits.each do |commit|
-      message = "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} (#{commit['url']})"
+      message = "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} #{commit['url']}"
       
       req = Net::HTTP::Post.new(url.path)
       req["X-Talker-Token"] = "#{token}"
