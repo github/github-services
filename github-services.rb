@@ -124,7 +124,7 @@ module GitHub
         data['backtrace'] = exception.original_exception.backtrace.join("\n")
         data['message'] = exception.original_exception.message[0..254]
       end
-    else
+    elsif !exception.kind_of?(GitHub::ServiceTimeout)
       data['original_class'] = data['class']
       data['class'] = 'GitHub::ServiceError'
     end
