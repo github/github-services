@@ -8,7 +8,10 @@ service :basecamp do |data, payload|
     project_id  = basecamp.projects.select { |p| p.name.downcase == data['project'].downcase }.first.id
     category_id = basecamp.message_categories(project_id).select { |category| category.name.downcase == data['category'].downcase }.first.id
 
-    payload['commits'].each do |commit|
+    commits = payload['commits'].reject { |commit| commit['message'].to_s.strip == '' }
+    next if commits.empty?
+
+    commits.each do |commit|
       gitsha        = commit['id']
       short_git_sha = gitsha[0..5]
       timestamp     = Date.parse(commit['timestamp'])
