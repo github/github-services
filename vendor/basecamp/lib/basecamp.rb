@@ -453,6 +453,8 @@ class Basecamp
         when 1 then value.first
         else value
         end
+      when 'true'
+        true
       else
         raise "can't typecast #{value.inspect}"
       end
