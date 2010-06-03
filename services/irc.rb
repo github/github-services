@@ -76,7 +76,7 @@ service :irc do |data, payload|
     else
       raise
     end
-  rescue Errno::ECONNREFUSED
+  rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
     raise GitHub::ServiceConfigurationError, "Invalid host"
   rescue OpenSSL::SSL::SSLError
     raise GitHub::ServiceConfigurationError, "Host does not support SSL"
