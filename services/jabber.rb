@@ -6,11 +6,11 @@ class Jabber::Simple
   def subscribed_to?(x); true; end
 end
 
+im = nil
 service :jabber do |data, payload|
   repository = payload['repository']['name']
   branch     = payload['ref_name']
-  im         = Jabber::Simple.new(jabber_user, jabber_password)
-
+  im         ||= Jabber::Simple.new(jabber_user, jabber_password)
 
   # Accept any friend request
   im.accept_subscriptions = true
@@ -23,7 +23,6 @@ service :jabber do |data, payload|
     # Ask recipient to be our buddy if need be
     im.add(recipient)
 
-
     payload['commits'].each do |commit|
       sha1 = commit['id']
       im.deliver recipient, <<EOM
@@ -34,6 +33,4 @@ service :jabber do |data, payload|
 EOM
   end
     end
-
-  im.disconnect
 end
