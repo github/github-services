@@ -71,7 +71,9 @@ service :irc do |data, payload|
     irc.puts "QUIT"
     irc.gets until irc.eof?
   rescue SocketError => boom
-    if boom.to_s =~ /getaddrinfo: Servname not supported for ai_socktype/
+    if boom.to_s =~ /getaddrinfo: Name or service not known/
+      raise GitHub::ServiceConfigurationError, "Invalid host"
+    elsif boom.to_s =~ /getaddrinfo: Servname not supported for ai_socktype/
       raise GitHub::ServiceConfigurationError, "Invalid port"
     else
       raise
