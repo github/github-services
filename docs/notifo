@@ -1,0 +1,23 @@
+Notifo
+==========
+
+This service lets your broadcast your commits on Notifo, a mobile notifications platform. Get commit notifications on your iPhone and other mobile devices immediately via PUSH.
+
+Install Notes
+-------------
+
+  1. Create a user account on Notifo at https://notifo.com/user/register
+  2. Once logged in, go to http://notifo.com/user/settings and find your API secret
+  3. Fill out your username and apisecret above. 
+  4. Enjoy.
+
+
+Developer Notes
+---------------
+
+data
+  - username
+  - apisecret [As listed on http://notifo.com/user/settings]
+
+payload
+  - refer to docs/github_payload
