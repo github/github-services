@@ -46,7 +46,7 @@ service :irc do |data, payload|
       irc = socket
     end
 
-    irc.puts "PASS #{data['password']}" if !data['password'] && !data['password'].empty?
+    irc.puts "PASS #{data['password']}" if data['password'] && !data['password'].empty?
     irc.puts "NICK #{botname}"
     irc.puts "USER #{botname} 8 * :GitHub IRCBot"
 
