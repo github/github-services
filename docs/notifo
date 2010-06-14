@@ -11,13 +11,12 @@ Install Notes
   3. Enjoy.
 
 Notifications are only sent after the service (GitHub) has been approved to send you notifications on Notifo. This happens after the first commit after this service is enabled. You will begin receiving commit notifications from then on.
- 
+
 
 Developer Notes
 ---------------
 
 data
-  - apisecret (hidden - add manually and do not list in source on github-services repo)
   - subscribers (csv list of up to 25 Notifo usernames)
 
 payload

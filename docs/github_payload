@@ -1,9 +1,8 @@
 # example params hash sinatra receives
 
-{ 
+{
   "data" => {
-    "apisecret" => "",
-	"subscribers" => "" #CSV list
+	  "subscribers" => "" #CSV list
   },
 
   "payload" => {
@@ -27,7 +26,7 @@
         "url"       => "http://github.com/mojombo/grit/commit/06f63b43050935962f84fe54473a7c5de7977325",
         "author"    => { "name" => "Tom Preston-Werner", "email" => "tom@mojombo.com" },
         "id"        => "06f63b43050935962f84fe54473a7c5de7977325"
-      }, 
+      },
       {
         "removed"   => [],
         "message"   => "clean up heads test",
