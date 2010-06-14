@@ -2,8 +2,8 @@
 
 { 
   "data" => {
-    "username" => "pstamatiou",
-    "apisecret" => "mysecretgoeshere"
+    "apisecret" => "",
+	"subscribers" => " pstamatiou, jazzychad, chad, notifo"
   },
 
   "payload" => {
