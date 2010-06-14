@@ -1,3 +1,5 @@
+secrets = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config', 'secrets.yml'))
+
 # Jabber::Simple does some insane kind of queueing if it thinks
 # we are not in their buddy list (which is always) so messages
 # never get sent before we disconnect. This forces the library
@@ -10,7 +12,7 @@ im = nil
 service :jabber do |data, payload|
   repository = payload['repository']['name']
   branch     = payload['ref_name']
-  im         ||= Jabber::Simple.new(jabber_user, jabber_password)
+  im         ||= Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
 
   # Accept any friend request
   im.accept_subscriptions = true
@@ -18,7 +20,7 @@ service :jabber do |data, payload|
   #Split multiple addresses into array, removing duplicates
   recipients  = data['user'].split(',').uniq.collect(&:strip)
 
-  #Send message to each member in array (Limit to 25 members to prevent overloading something, if this is not and issue, just remove the [0..24] from recipients 
+  #Send message to each member in array (Limit to 25 members to prevent overloading something, if this is not and issue, just remove the [0..24] from recipients
   recipients[0..24].each do |recipient|
     # Ask recipient to be our buddy if need be
     im.add(recipient)
