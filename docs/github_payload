@@ -2,9 +2,8 @@
 
 { 
   "data" => {
-    "api_token" => "API token",
-    "room_id" => "Room ID",
-    "digest" => 1
+    "apisecret" => "",
+	"subscribers" => "" #CSV list
   },
 
   "payload" => {
