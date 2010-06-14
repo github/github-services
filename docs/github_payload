@@ -3,7 +3,7 @@
 { 
   "data" => {
     "apisecret" => "",
-	"subscribers" => " pstamatiou, jazzychad, chad, notifo"
+	"subscribers" => "" #CSV list
   },
 
   "payload" => {
