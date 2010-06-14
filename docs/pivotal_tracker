@@ -1,0 +1,16 @@
+Pivotal Tracker
+===============
+
+Install Notes
+-------------
+
+  1. token is your Pivotal Tracker API Token. This is at the bottom of your 'My Profile' page.
+
+Developer Notes
+---------------
+
+data
+  - token
+
+payload
+  - refer to docs/github_payload
