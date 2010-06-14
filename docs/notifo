@@ -18,7 +18,7 @@ Developer Notes
 
 data
   - apisecret (hidden - add manually and do not list in source on github-services repo)
-  - subscribers (csv list of up to 25 names)
+  - subscribers (csv list of up to 25 Notifo usernames)
 
 payload
   - refer to docs/github_payload
