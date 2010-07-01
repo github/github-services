@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+$LOAD_PATH << File.join(File.dirname(__FILE__), '..', 'vendor', 'json-1.1.2', 'lib')
+
 require "json"
 
 unless ARGV[0]
