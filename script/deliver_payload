@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH << File.join(File.dirname(__FILE__), '..', 'vendor', 'json-1.1.2', 'lib')
+$LOAD_PATH.unshift *Dir["#{File.dirname(__FILE__)}/../vendor/**/lib"]
 
 require "json"
 
