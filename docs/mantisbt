@@ -1,0 +1,20 @@
+MantisBT
+========
+
+Install Notes
+-------------
+
+Requires the Source Integration plugins from http://leetcode.net/projects/source-integration/
+
+  1. Base URL to MantisBT install
+
+
+Developer Notes
+---------------
+
+data
+  - url
+
+payload
+  - refer to docs/github_payload
+
