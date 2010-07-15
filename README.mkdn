@@ -29,7 +29,7 @@ Steps to contributing
    the requires at the top of github-services.rb
 4. Add documentation to `docs/service_name` (refer to the others for guidance)
 5. Add your name to the `CONTRIBUTORS` file
-6. Create an Issue at http://github.com/pjhyett/github-services/issues with
+6. Create an Issue at http://github.com/github/github-services/issues with
    links to each commit you want included.
 7. Once it's accepted we'll add any new necessary data fields to the GitHub
    front-end so people can start using your addition.
@@ -40,7 +40,7 @@ Running the server locally
 --------------------------
 
 1. [sudo] gem install hpricot
-2. git clone git://github.com/pjhyett/github-services.git
+2. git clone git://github.com/github/github-services.git
 3. cd github-services
 4. ruby github-services.rb
 
