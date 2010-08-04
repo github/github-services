@@ -61,9 +61,7 @@ EOH
       raise
     end
   rescue RuntimeError => boom
-    if boom.to_s == 'Forbidden (403)' ||
-       boom.to_s == 'Authorization Required (401)' ||
-       boom.to_s == 'Unauthorized (401)'
+    if boom.to_s =~ /\((?:403|401|422)\)/
       raise GitHub::ServiceConfigurationError, "Invalid credentials"
     elsif boom.to_s == 'Not Found (404)'
       raise GitHub::ServiceConfigurationError, "Invalid project URL"
