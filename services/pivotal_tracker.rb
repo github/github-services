@@ -14,7 +14,7 @@ service :pivotal_tracker do |data, payload|
       connection.request(req)
     end
   rescue Net::HTTPBadResponse
-    raise GitHub::ServiceConfigurationError
+    raise GitHub::ServiceConfigurationError, "Invalid configuration"
   end
   nil
 end
