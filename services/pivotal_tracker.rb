@@ -9,8 +9,12 @@ service :pivotal_tracker do |data, payload|
   http = Net::HTTP.new("www.pivotaltracker.com", 443)
   http.use_ssl = true
   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-  http.start do |connection|
-    connection.request(req)
+  begin
+    http.start do |connection|
+      connection.request(req)
+    end
+  rescue Net::HTTPBadResponse
+    raise GitHub::ServiceConfigurationError
   end
   nil
 end
