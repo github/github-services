@@ -2,10 +2,11 @@ service :campfire do |data, payload|
   # fail fast with no token
   raise GitHub::ServiceConfigurationError, "Missing token" if data['token'].to_s == ''
 
-  repository = payload['repository']['name']
-  owner      = payload['repository']['owner']['name']
-  branch     = payload['ref_name']
-  commits    = payload['commits']
+  repository  = payload['repository']['name']
+  owner       = payload['repository']['owner']['name']
+  branch      = payload['ref_name']
+  commits     = payload['commits']
+  compare_url = payload['compare']
   commits.reject! { |commit| commit['message'].to_s.strip == '' }
   next if commits.empty?
   campfire   = Tinder::Campfire.new(data['subdomain'], :ssl => data['ssl'].to_i == 1)
@@ -30,7 +31,7 @@ service :campfire do |data, payload|
 
   if messages.size > 1
     before, after = payload['before'][0..6], payload['after'][0..6]
-    url = payload['repository']['url'] + "/compare/#{before}...#{after}"
+    url = compare_url
     summary =
       if others.any?
         "#{prefix} (+#{others.length} more) commits #{before}...#{after}: #{url}"
