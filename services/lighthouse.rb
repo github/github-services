@@ -24,11 +24,16 @@ service :lighthouse do |data, payload|
     XML
 
     account = "http://#{data['subdomain']}.lighthouseapp.com"
-    url = URI.parse('%s/projects/%d/changesets.xml' % [account, data['project_id'].to_i])
-    req = Net::HTTP::Post.new(url.path)
-    req.basic_auth data['token'], 'x'
-    req.body = changeset_xml
-    req.set_content_type('application/xml')
-    Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
+
+    begin
+      url = URI.parse('%s/projects/%d/changesets.xml' % [account, data['project_id'].to_i])
+      req = Net::HTTP::Post.new(url.path)
+      req.basic_auth data['token'], 'x'
+      req.body = changeset_xml
+      req.set_content_type('application/xml')
+      Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
+    rescue URI::InvalidURIError
+      raise GitHub::ServiceConfigurationError, "Invalid subdomain: #{data['subdomain']}"
+    end
   end
 end
