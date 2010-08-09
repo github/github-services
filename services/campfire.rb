@@ -47,6 +47,5 @@ service :campfire do |data, payload|
   messages.each { |line| room.speak line }
   room.play "rimshot" if play_sound
 
-  room.leave
   campfire.logout
 end
