@@ -24,6 +24,7 @@ require 'tmail'
 require 'xmpp4r'
 require 'xmpp4r-simple'
 require 'rubyforge'
+require 'oauth'
 
 set :run, true
 set :environment, :production
@@ -146,6 +147,7 @@ module GitHub
   rescue => boom
     $stderr.puts "reporting exception failed:"
     $stderr.puts "#{boom.class}: #{boom}"
+    $stderr.puts "#{boom.backtrace.join("\n")}"
     # swallow errors
   end
 end
