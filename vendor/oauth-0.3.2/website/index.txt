@@ -1,0 +1,73 @@
+h1. Ruby OAuth GEM
+
+h2. What
+
+This is a RubyGem for implementing both OAuth clients and servers in Ruby applications.
+
+See the "OAuth specs":http://oauth.net/core/1.0/
+
+h2. Installing
+
+<pre syntax="ruby">sudo gem install oauth</pre>
+
+You can also install it from the "oauth rubyforge project":http://rubyforge.org/projects/oauth/.
+
+The source code is now hosted on the "OAuth GitHub Project":http://github.com/pelle/oauth/tree/master
+
+h2. The basics
+
+This is a ruby library which is intended to be used in creating Ruby Consumer and Service Provider applications. It is NOT a Rails plugin, but could easily be used for the foundation for such a Rails plugin.
+
+As a matter of fact it has been pulled out from an "OAuth Rails Plugin":http://code.google.com/p/oauth-plugin/ which now requires this GEM.
+
+h2. Demonstration of usage
+
+Create a new consumer instance by passing it a configuration hash:
+
+<pre><code>@consumer=OAuth::Consumer.new( "key","secret", {
+    :site=>"https://agree2"
+    })</code></pre>
+
+Start the process by requesting a token
+
+<pre><code>@request_token=@consumer.get_request_token
+session[:request_token]=@request_token
+redirect_to @request_token.authorize_url</code></pre>
+
+When user returns create an access_token
+
+<pre><code>@access_token=@request_token.get_access_token
+@photos=@access_token.get('/photos.xml')</code></pre>
+
+For more detailed instructions I have written this "OAuth Client Tutorial":http://stakeventures.com/articles/2008/02/23/developing-oauth-clients-in-ruby and "How to turn your rails site into an OAuth Provider ":http://stakeventures.com/articles/2007/11/26/how-to-turn-your-rails-site-into-an-oauth-provider.
+
+Finally be sure to check out the "OAuth RDoc Manual":http://oauth.rubyforge.org/rdoc/.
+
+h2. Documentation Wiki
+
+There is some documentation on the Google Code project for the "OAuth Rails Plugin":http://code.google.com/p/oauth-plugin/ :
+
+* "RequestToken":http://code.google.com/p/oauth-plugin/wiki/RequestToken
+* "AccessToken":http://code.google.com/p/oauth-plugin/wiki/AccessToken
+
+h2. Forum
+
+"http://groups.google.com/group/oauth-ruby":http://groups.google.com/group/oauth-ruby
+
+
+h2. How to submit patches
+
+Read the "8 steps for fixing other people's code":http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/.
+
+The source code is now hosted on the "OAuth GitHub Project":http://github.com/pelle/oauth/tree/master
+
+To submit a patch, please fork the oauth project and create a patch with tests. Once you're happy with it send a pull request and post a message to the google group.
+
+h2. License
+
+This code is free to use under the terms of the MIT license. 
+
+h2. Contact
+
+Comments are welcome. Send an email to "Pelle Braendgaard":mailto:pelleb@gmail.com email via the "OAuth Ruby mailing list":http://groups.google.com/group/oauth-ruby
+
