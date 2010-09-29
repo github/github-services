@@ -25,13 +25,14 @@ service :irc do |data, payload|
     if messages.size > 1
       before, after = payload['before'][0..6], payload['after'][0..6]
       compare_url   = payload['repository']['url'] + "/compare/#{before}...#{after}"
-      tiny_url      = shorten_url(compare_url)
+      tiny_url      = data['long_url'].to_i == 1 ? compare_url : shorten_url(compare_url)
       summary       = "\002#{repository}:\002 \00307#{branch}\003 commits " +
                 "\002#{before}\002...\002#{after}\002 - #{tiny_url}"
       messages << summary
     else
       commit   = payload['commits'][0]
-      tiny_url = shorten_url(commit['url'])
+      url      = commit['url']
+      tiny_url = data['long_url'].to_i == 1 ? url : shorten_url(url)
       messages[0] << " - #{tiny_url}"
     end
 
