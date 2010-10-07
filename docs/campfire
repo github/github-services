@@ -5,7 +5,7 @@ Install Notes
 -------------
 
   1. subdomain is your campfire subdomain
-	(ie 'your-subdomain' if you visit 'http://your-subdomain.campfirenow.com')
+	(ie 'your-subdomain' if you visit 'https://your-subdomain.campfirenow.com')
 
   2. room is the actual room name, not the id
 
@@ -20,7 +20,6 @@ data
   - subdomain
   - token
   - room
-  - ssl
   - play_sound
 
 payload

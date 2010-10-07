@@ -9,7 +9,7 @@ service :campfire do |data, payload|
   compare_url = payload['compare']
   commits.reject! { |commit| commit['message'].to_s.strip == '' }
   next if commits.empty?
-  campfire   = Tinder::Campfire.new(data['subdomain'], :ssl => data['ssl'].to_i == 1)
+  campfire   = Tinder::Campfire.new(data['subdomain'], :ssl => true)
   play_sound = data['play_sound'].to_i == 1
 
   if !campfire.login(data['token'], 'X')
