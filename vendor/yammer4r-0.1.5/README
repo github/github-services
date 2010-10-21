@@ -1,0 +1,16 @@
+= Yammer4R
+
+== Developers
+* {Jim Patterson} <jimp79 at gmail dot com>
+
+== Description
+Yammer4R provides an object based API to query or update your Yammer account via pure Ruby.  It hides the ugly HTTP/REST code from your code.
+
+== External Dependencies
+* Ruby 1.8 (tested with 1.8.7)
+* JSON gem (tested with versions: 1.1.3)
+* OAuth gem (tested with versions: 0.2.7)
+* RSpec gem (tested with versions: 1.1.11)
+
+== Usage Examples
+Coming soon...
