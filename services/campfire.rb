@@ -44,8 +44,12 @@ service :campfire do |data, payload|
     messages[0] = "#{messages.first} (#{url})"
   end
 
-  messages.each { |line| room.speak line }
-  room.play "rimshot" if play_sound
+  begin
+    messages.each { |line| room.speak line }
+    room.play "rimshot" if play_sound
 
-  campfire.logout
+    campfire.logout
+  rescue Errno::ECONNREFUSED => boom
+    raise GitHub::ServiceConfigurationError, "Connection refused. Invalid subdomain."
+  end
 end
