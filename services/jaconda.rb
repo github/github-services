@@ -6,7 +6,7 @@ service :jaconda do |data, payload|
   commits = payload['commits']
   api_token = data['api_token']
   room_id = data['room_id']
-  url = URI.parse("http://#{api_token}:X@jaconda.im/api/rooms/#{room_id}/messages.json")
+  url = URI.parse("http://#{api_token.strip}:X@jaconda.im/api/rooms/#{room_id}/messages.json")
 
   before, after = payload['before'][0..6], payload['after'][0..6]
   compare_url = payload['repository']['url'] + "/compare/#{before}...#{after}"
