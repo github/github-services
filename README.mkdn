@@ -4,7 +4,7 @@ GitHub Services
 How the services work
 ---------------------
 
-1. A post-receive background job is submitted when someone pushes their 
+1. A post-receive background job is submitted when someone pushes their
    commits to GitHub
 2. If the repository the commits belong to has any "Service Hooks" setup, the
    job makes a request to `http://services-server/service_name/` with the
@@ -29,8 +29,7 @@ Steps to contributing
    the requires at the top of github-services.rb
 4. Add documentation to `docs/service_name` (refer to the others for guidance)
 5. Add your name to the `CONTRIBUTORS` file
-6. Create an Issue at http://github.com/github/github-services/issues with
-   links to each commit you want included.
+6. Send a pull request from your fork to [github/github-services](https://github.com/github/github-services)
 7. Once it's accepted we'll add any new necessary data fields to the GitHub
    front-end so people can start using your addition.
 
@@ -45,7 +44,7 @@ Running the server locally
 4. ruby github-services.rb
 
 * Bugs in the code should be filed under the Issues tab
-* Problems with the service hooks can be filed here: [http://support.github.com/discussions/post-receive-issues](http://support.github.com/discussions/post-receive-issues)
+* Problems with the service hooks can be filed [here](http://support.github.com/discussions/post-receive-issues)
 
 How to test your service
 ------------------------
@@ -55,7 +54,7 @@ How to test your service
 2. Edit the doc/github_payload file as necessary to test your service.  (Usually
    just editing the "data" values but leaving the "payload" alone.)
 3. Send the doc/github_payload file to your service by calling:
-   `./script/deliver_payload [service-name]`  
+   `./script/deliver_payload [service-name]`
 
 NOTE: The name of the service and your docs/ file matters. If your service is RunCodeRun, your service
 and docs MUST be `run_code_run`. Good luck!
