@@ -63,7 +63,7 @@ EOH
   rescue RuntimeError => boom
     if boom.to_s =~ /\((?:403|401|422)\)/
       raise GitHub::ServiceConfigurationError, "Invalid credentials"
-    elsif boom.to_s == 'Not Found (404)'
+    elsif boom.to_s =~ /\((?:404|301)\)/
       raise GitHub::ServiceConfigurationError, "Invalid project URL"
     elsif boom.to_s == 'Unprocessable Entity (422)'
       # do nothing
