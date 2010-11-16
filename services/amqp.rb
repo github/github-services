@@ -64,7 +64,7 @@ service :amqp do |data, payload|
             author = commit['author']['email']
             routing_key = "github.commit.#{owner}.#{repo}.#{ref}.#{author}"
 
-            # Assemble the commit routing key
+            # Assemble the commit message
             msg = {}
             msg['_meta'] = {
                 'routing_key' => routing_key,
@@ -72,7 +72,7 @@ service :amqp do |data, payload|
             }
             msg['payload'] = commit
 
-            # Publish the commit message
+            # Publish the commit message to the exchange
             exchange.publish(msg.to_json,
                              :key => routing_key,
                              :content_type => 'application/json')
