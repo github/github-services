@@ -1,0 +1,2 @@
+== HashTable RPC Example
+  :include: mq/hashtable.rb
