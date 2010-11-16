@@ -60,7 +60,7 @@ service :amqp do |data, payload|
 
         # Publish individual commit messages
         payload['commits'].each do |commit|
-            # Generat the commit routing key
+            # Generate the commit routing key
             author = commit['author']['email']
             routing_key = "github.commit.#{owner}.#{repo}.#{ref}.#{author}"
 
