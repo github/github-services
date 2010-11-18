@@ -1,0 +1,7 @@
+consumer:
+  key: CLIENT_KEY
+  secret: CLIENT_SECRET
+  
+access:
+  token: CONSUMER_TOKEN
+  secret: CONSUMER_SECRET
