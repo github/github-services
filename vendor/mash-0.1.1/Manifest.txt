@@ -1,0 +1,7 @@
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+lib/mash.rb
+spec/mash_spec.rb
+spec/spec_helper.rb

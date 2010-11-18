@@ -1,0 +1,26 @@
+=== 0.0.5 / 2008-04-29
+
+* [bugfix] Mashes do not infinite loop when initialized with another Mash.
+
+=== 0.0.4 / 2008-04-25
+
+* Setting up for GitHub gem hosting instead of Rubyforge.
+
+=== 0.0.3 / 2008-04-19
+
+* [] no longer defaults to a new Mash, will return nil if
+* Attribute-esque method names will yield the default value if not set
+* Hash extended with #to_mash and #stringify_keys
+* Added #dup and #deep_merge
+* Aliased the default Hash methods so they are still accessible
+* Cleaned up the recursive conversion process
+
+=== 0.0.2 / 2008-04-12
+
+* Added bang(!) method support
+* No longer automatically multi-level assigning
+* Hash conversion now calls methods instead of []= to allow for overrides
+
+=== 0.0.1 / 2008-04-12
+
+* Initial release
