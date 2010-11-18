@@ -1,5 +1,5 @@
 service :grmble do |data, payload|
-  url = URI.parse("#{data['roomAPIURL']}/msg/")
+  url = URI.parse("#{data['room_api_url']}/msg/")
   repository = payload[ 'repository' ][ 'name' ]
   branch = payload[ 'ref_name' ]
   commits = payload[ 'commits' ]

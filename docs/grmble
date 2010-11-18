@@ -4,7 +4,7 @@ Grmble
 Install Notes
 -------------
 
-  1. roomAPIURL should be your room's API url from your room's admin page
+  1. room_api_url should be your room's API url from your room's admin page
        Eg: http://grmble.com/api/room/ROOMKEY
   2. token should be the API key from your room's admin page
   
@@ -12,7 +12,7 @@ Developer Notes
 ---------------
 
 data
-  - roomAPIURL
+  - room_api_url
   - token
 
 payload
