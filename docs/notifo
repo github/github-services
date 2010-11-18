@@ -1,12 +1,12 @@
 Notifo
 ==========
 
-This service lets your broadcast your commits on Notifo, a mobile notifications platform. Get commit notifications on your iPhone and other mobile devices immediately via PUSH.
+This service lets your broadcast your commits on Notifo, a mobile notifications platform. Get commit notifications on your iPhone and other mobile devices immediately via PUSH. Notifo also OS X, Linux and Windows notification apps. If multiple commits are in a push you will be shown the last with a message stating how many more exist, and a link to the compare url. 
 
 Install Notes
 -------------
 
-  1. Create a user account on Notifo at https://notifo.com/user/register
+  1. Create a user account on Notifo at https://notifo.com/register
   2. Type in your username and the usernames of others wanting to be notified of commits to this repository with Notifo into the subscribers field.
   3. Enjoy.
 
