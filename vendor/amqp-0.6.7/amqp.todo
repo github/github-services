@@ -1,0 +1,32 @@
+- breaks with header values that are nil
+- breaks with header values that are ruby objects (convert to strings?)
+- sending utf8 data in 1.9 breaks
+
+- generate amqp/spec.rb from original xml spec
+- add peek and pop to queues
+- use rabbitmq generated consumer tag from basic.consume-ok reply
+
+- allow temporary queues with amq.queue(nil) syntax (use uuids)
+  - use as temp queue in rpc
+  - use uuids for message ids in rpc
+
+- add ack/completed responses for messages
+- deleting queues/bindings/exchanges
+  + queue.unbind
+  - queue.remove or queue.close or queue.delete
+  - exchange.remove
+  - rpc.remove
+
+- handle errors and exceptions
+    binding to a non-existent (or not yet created in clock.rb) exchange
+      #<AMQP::Protocol::Channel::Close:0x11d35d4
+       @class_id=50,
+       @debug=1,
+       @method_id=20,
+       @reply_code=404,
+       @reply_text="NOT_FOUND - no exchange 'clock' in vhost '/'">>]
+
+- handle connection.redirect during connect (for rabbitmq in distributed mode) [or just set insist to true]
+
+- add amq.queue('name').size{ |num| "#{num} messages in the queue" } (send declare passive, look at declare-ok response)
+- clean up MQ.default on disconnect

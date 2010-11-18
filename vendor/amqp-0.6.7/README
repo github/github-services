@@ -1,0 +1,128 @@
+Simple AMQP driver for Ruby/EventMachine
+  (c) 2008 Aman Gupta (tmm1)
+ 
+  http://github.com/tmm1/amqp
+  http://rubyforge.org/projects/amqp
+  http://hopper.squarespace.com/blog/2008/7/22/simple-amqp-library-for-ruby.html
+  http://groups.google.com/group/ruby-amqp
+  http://lists.rabbitmq.com/pipermail/rabbitmq-discuss/2008-July/001417.html
+
+This library works with Ruby 1.8, Ruby 1.9, JRuby and Rubinius, and is licensed under the Ruby License.
+
+This library was tested primarily with RabbitMQ, although it should be compatible with any
+server implementing the AMQP 0-8 spec.
+
+To use with RabbitMQ, first run the server:
+
+  hg clone http://hg.rabbitmq.com/rabbitmq-codegen
+  hg clone http://hg.rabbitmq.com/rabbitmq-server
+  cd rabbitmq-server
+  make run
+
+To get started, refer to the various bundled examples:
+
+  ruby examples/mq/pingpong.rb   # 1-1 communication using amq.direct
+  ruby examples/mq/clock.rb      # 1-N communication using amq.fanout
+  ruby examples/mq/stocks.rb     # 1-subscriber communication using amq.topic
+
+  ruby examples/mq/multiclock.rb # header based routing (new rabbitmq feature)
+  ruby examples/mq/ack.rb        # using ack
+  ruby examples/mq/pop.rb        # pop off messages one at a time
+
+  ruby examples/mq/hashtable.rb  # simple async rpc layer
+  ruby examples/mq/primes.rb 4   # parallelized prime number generation
+  ruby examples/mq/logger.rb     # simple logging api
+
+For more details into the lower level AMQP client API, run the simple client example:
+
+  ruby examples/amqp/simple.rb   # low-level AMQP api
+  ruby examples/mq/internal.rb   # low-level Queue/Exchange api
+
+Or refer to protocol/doc.txt, which enumerates packets sent between a server and client
+during a typical session, in both binary and decoded formats.
+
+To run the test suite:
+
+  rake spec
+
+The lib/amqp/spec.rb file is generated automatically based on the AMQP specification. To generate it:
+
+  rake codegen
+
+This project was inspired by py-amqplib, rabbitmq, qpid and rubbyt.
+Special thanks to Dmitriy Samovskiy, Ben Hood and Tony Garnock-Jones.
+
+AMQP resources:
+
+  Servers:
+    RabbitMQ (Rabbit Technologies, Erlang/OTP, MPL) - http://rabbitmq.com
+    ZeroMQ   (iMatix/FastMQ/Intel, C++, GPL3)       - http://www.zeromq.org
+    OpenAMQ  (iMatix, C, GPL2)                      - http://openamq.org
+    ActiveMQ (Apache Foundation, Java, apache2)     - http://activemq.apache.org
+
+  Steve Vinoski explains AMQP in his column, Towards Integration
+    http://steve.vinoski.net/pdf/IEEE-Advanced_Message_Queuing_Protocol.pdf
+
+  John O'Hara on the history of AMQP
+    http://www.acmqueue.org/modules.php?name=Content&pa=showpage&pid=485
+
+  Dmitriy's presentation on RabbitMQ/AMQP
+    http://somic-org.homelinux.org/blog/2008/07/31/slides-for-my-amqprabbitmq-talk/
+
+  ZeroMQ's analysis of the messaging technology market
+    http://www.zeromq.org/whitepapers:market-analysis
+
+  Pieter Hintjens's background to AMQP
+    http://www.openamq.org/doc:amqp-background
+
+  Barry Pederson's py-amqplib
+    http://barryp.org/software/py-amqplib/
+
+  Ben Hood on writing an AMQP client
+    http://hopper.squarespace.com/blog/2008/6/21/build-your-own-amqp-client.html
+
+  Dmitriy Samovskiy introduces Ruby + QPid + RabbitMQ
+    http://somic-org.homelinux.org/blog/2008/06/24/ruby-amqp-rabbitmq-example/
+
+  Ben Hood's as3-amqp
+    http://github.com/0x6e6562/as3-amqp
+    http://hopper.squarespace.com/blog/2008/7/4/server-side-as3.html
+    http://hopper.squarespace.com/blog/2008/3/24/as3-amqp-client-first-cut.html
+
+  RabbitMQ's protocol code generator
+    http://hg.rabbitmq.com/rabbitmq-codegen/
+
+  Erlang Exchange presentation on the implementation of RabbitMQ
+    http://skillsmatter.com/podcast/erlang/presenting-rabbitmq-an-erlang-based-implementatio-nof-amqp
+    http://www.lshift.net/blog/2008/07/01/slides-from-our-erlang-exchange-talk
+
+  Jonathan Conway's series on RabbitMQ and using it with Ruby/Merb
+    http://jaikoo.com/2008/3/20/daemonize-rabbitmq
+    http://jaikoo.com/2008/3/14/oh-hai-rabbitmq
+    http://jaikoo.com/2008/2/29/friday-round-up-2008-02-29
+    http://jaikoo.com/2007/9/4/didn-t-you-get-the-memo
+
+  Open Enterprise's series on messaging middleware and AMQP
+    http://www1.interopsystems.com/analysis/can-amqp-break-ibms-mom-monopoly-part-1.html
+    http://www1.interopsystems.com/analysis/can-amqp-break-ibms-mom-monopoly-part-2.html
+    http://www1.interopsystems.com/analysis/can-amqp-break-ibms-mom-monopoly-part-3.html
+
+Messaging and distributed systems resources:
+
+  A Critique of the Remote Procedure Call Paradigm
+    http://www.cs.vu.nl/~ast/publications/euteco-1988.pdf
+
+  A Note on Distributed Computing
+    http://research.sun.com/techrep/1994/smli_tr-94-29.pdf
+
+  Convenience Over Correctness
+    http://steve.vinoski.net/pdf/IEEE-Convenience_Over_Correctness.pdf
+
+  Metaprotocol Taxonomy and Communications Patterns
+    http://hessian.caucho.com/doc/metaprotocol-taxonomy.xtp
+
+  Joe Armstrong on Erlang messaging vs RPC
+    http://armstrongonsoftware.blogspot.com/2008/05/road-we-didnt-go-down.html
+
+  SEDA: scalable internet services using message queues
+    http://www.eecs.harvard.edu/~mdw/papers/seda-sosp01.pdf

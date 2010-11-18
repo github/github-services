@@ -26,6 +26,7 @@ require 'xmpp4r-simple'
 require 'rubyforge'
 require 'oauth'
 require 'yammer4r'
+require 'mq'
 
 set :run, true
 set :environment, :production
