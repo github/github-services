@@ -82,7 +82,7 @@ module GitHub
         # redact sensitive info in hook_data hash
         hook_data = data || params[:data]
         hook_payload = payload || params[:payload]
-        %w[password token].each { |key| hook_data[key] &&= '<redacted>' }
+        #%w[password token].each { |key| hook_data[key] &&= '<redacted>' }
         owner = hook_payload['repository']['owner']['name'] rescue nil
         repo  = hook_payload['repository']['name'] rescue nil
         report_exception boom,
@@ -115,8 +115,6 @@ module GitHub
   end
 
   def report_exception(exception, other)
-    # run only in github's production environment
-    return if HOSTNAME != 'sh1.rs.github.com'
 
     backtrace = Array(exception.backtrace)[0..500]
 
@@ -143,8 +141,15 @@ module GitHub
     # optional
     other.each { |key, value| data[key.to_s] = value.to_s }
 
-    Net::HTTP.new('aux1', 9292).
-      post('/haystack/async', "json=#{Rack::Utils.escape(data.to_json)}")
+    if HOSTNAME == 'sh1.rs.github.com'
+      # run only in github's production environment
+      Net::HTTP.new('aux1', 9292).
+        post('/haystack/async', "json=#{Rack::Utils.escape(data.to_json)}")
+    else
+      $stderr.puts data[ 'message' ]
+      $stderr.puts data[ 'backtrace' ]
+    end
+
   rescue => boom
     $stderr.puts "reporting exception failed:"
     $stderr.puts "#{boom.class}: #{boom}"
