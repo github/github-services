@@ -8,7 +8,7 @@ This service lets you publish push and commit messages to a message broker
 Install Notes
 -------------
 
-  1. Server is the hostname of the broker
+  1. Host is the hostname of the AMQP broker
   2. Port is the port to connect (AMQP default is 5672)
   3. Vhost is the vhost to use while publishing (default is '/')
   4. Exchange is the exchange to use while publishing
@@ -37,7 +37,7 @@ Developer Notes
 ---------------
 
 data
-  - server
+  - host
   - port
   - vhost
   - exchange
