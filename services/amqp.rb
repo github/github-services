@@ -2,6 +2,9 @@ service :amqp do |data, payload|
 
     EM.run do
 
+        # Support for specifying as host or server
+        data['host'] = data['host'] || data['server'] || nil
+
         # Connect to the AMQP server
         connection = AMQP.connect(:host    => data['host']     || nil,
                                   :port    => data['port']     || 5672,
