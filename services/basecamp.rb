@@ -4,7 +4,7 @@ service :basecamp do |data, payload|
     name_with_owner = File.join(payload['repository']['owner']['name'], repository)
     branch          = payload['ref_name']
 
-    basecamp    = Basecamp.new(data['url'], data['username'], data['password'])
+    basecamp    = Basecamp.new(data['url'], data['username'], data['password'], data['ssl'])
     project_id  = basecamp.projects.select { |p| p.name.downcase == data['project'].downcase }.first.id
     category_id = basecamp.message_categories(project_id).select { |category| category.name.downcase == data['category'].downcase }.first.id
 

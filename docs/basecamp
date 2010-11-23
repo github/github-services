@@ -9,6 +9,7 @@ Install Notes
   3. password should be the password of the user that you want to use to post the messages.  If username is an API token, set password to 'x'.
   4. project should be the name of the project that you want to post the message into (not the id)
   5. category should be the name of the category that you want to post the message using (not the id)
+  6. ssl should be enabled for accounts that need SSL.
 
 
 Developer Notes
@@ -20,6 +21,7 @@ data
   - password
   - project
   - category
+  - ssl
 
 payload
   - refer to docs/github_payload
