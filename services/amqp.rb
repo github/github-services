@@ -3,23 +3,23 @@ service :amqp do |data, payload|
     EM.run do
 
         # Support for specifying as host or server
-        data['host'] = data['host'] || data['server'] || nil
+        data['host'] ||= data['server']
+
+        if !data['host']
+          raise GitHub::ServiceConfigurationError, "Invalid server host."
+        end
+
+        if !data['exchange']
+          raise GitHub::ServiceConfigurationError, "Invalid exchange."
+        end
 
         # Connect to the AMQP server
-        connection = AMQP.connect(:host    => data['host']     || nil,
+        connection = AMQP.connect(:host    => data['host'],
                                   :port    => data['port']     || 5672,
                                   :user    => data['username'] || 'guest',
                                   :pass    => data['password'] || 'guest',
                                   :vhost   => data['vhost']    || '/',
                                   :logging => false)
-
-        if !data['host']
-            raise GitHub::ServiceConfigurationError, "Invalid server host."
-        end
-
-        if !data['exchange']
-            raise GitHub::ServiceConfigurationError, "Invalid exchange."
-        end
 
         # Open a channel on the AMQP connection
         channel = MQ.new(connection)
@@ -71,7 +71,7 @@ service :amqp do |data, payload|
             msg = {}
             msg['_meta'] = {
                 'routing_key' => routing_key,
-                'exchange' => data['exchange'],
+                'exchange'    => data['exchange'],
             }
             msg['payload'] = commit
 
@@ -81,7 +81,7 @@ service :amqp do |data, payload|
                              :content_type => 'application/json')
         end
         
-        connection.close{ EM.stop_event_loop }
+        connection.close { EM.stop_event_loop }
 
     end
 
