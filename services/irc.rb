@@ -6,7 +6,6 @@ service :irc do |data, payload|
     branch     = payload['ref_name']
     rooms      = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
     botname    = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
-    username   = data['username'].to_s.empty? ? botname : data['username']
     socket     = nil
 
     socket = TCPSocket.open(data['server'], data['port'])
@@ -48,9 +47,9 @@ service :irc do |data, payload|
       irc = socket
     end
 
-    irc.puts "USER #{username} 8 * :GitHub IRCBot"
     irc.puts "PASS #{data['password']}" if data['password'] && !data['password'].empty?
     irc.puts "NICK #{botname}"
+    irc.puts "USER #{botname} 8 * :GitHub IRCBot"
 
     loop do
       case irc.gets
