@@ -1,8 +1,9 @@
-require 'spec/rake/spectask'
+require "rspec/core/rake_task" # RSpec 2.0
 
-Spec::Rake::SpecTask.new('spec') do |t|
-  t.spec_opts = ['--options', "spec/spec.opts"]
-  t.spec_files = FileList['spec/**/*_spec.rb']
+# RSpec 2.0
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = 'spec/**/*_spec.rb'
+  spec.rspec_opts = ['--color']
 end
 
 task :default => :spec

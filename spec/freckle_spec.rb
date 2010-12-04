@@ -1,9 +1,12 @@
-require 'sinatra'
-require 'sinatra/test/rspec'
 require 'github-services'
+require 'spec_helper.rb'
 
 describe 'service freckle' do
 
+  def app
+    Sinatra::Application
+  end
+  
   before(:each) do
     @req = mock('req')
     @req.stub!(:set_content_type)
@@ -12,52 +15,44 @@ describe 'service freckle' do
     end
     Net::HTTP::Post.stub!(:new).and_return(@req)
     Net::HTTP.stub!(:new).and_return(mock('nethttp', :start => nil))
+    do_request
   end
 
   it 'should be ok' do
-    do_request
-    @response.should be_ok
+    last_response.should be_ok
   end
 
   it 'should post with 2 entries' do
-    do_request
     @data['entries'].size.should == 2
   end
 
   it 'should include auth token' do
-    do_request
     @data['token'].should == '12345'
   end
 
   it 'should parse the amount of minutes from the commit message' do
-    do_request
     @data['entries'][0]['minutes'].should == '15'
     @data['entries'][1]['minutes'].should == '2hrs'
   end
 
   it 'should strip freckle tags from description' do
-    do_request
     @data['entries'][0]['description'].should == 'stub git call for Grit#heads test'
     @data['entries'][1]['description'].should == 'clean up heads test'
   end
 
   it 'should include project name' do
-    do_request
     @data['entries'][0]['project_name'].should == 'Test Project'
   end
 
   it 'should include author email as user' do
-    do_request
     @data['entries'][0]['user'].should == 'tom@mojombo.com'
   end
 
   it 'should include commit url' do
-    do_request
     @data['entries'][0]['url'].should == 'http://github.com/mojombo/grit/commit/06f63b43050935962f84fe54473a7c5de7977325'
   end
 
   it 'should include timestamp as date' do
-    do_request
     @data['entries'][0]['date'].should == '2007-10-10T00:11:02-07:00'
   end
 
