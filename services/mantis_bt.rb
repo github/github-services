@@ -1,14 +1,11 @@
 service :mantis_bt do |data, payload|
   begin
-    base_url = data['url'].chomp('/')
-    full_url = "#{base_url}/plugin.php"
-
-    #add page/action to payload
-    payload['page'] = 'Source/checkin'
-
-    Net::HTTP.post_form(URI.parse(full_url), payload)
-
+    url_value = data['url'].chomp('/')
+    url = "#{url_value}/plugin.php?page=Source/checkin"
+    Net::HTTP.post_form(URI.parse(url), "payload" => payload.to_json)
   rescue Net::HTTPBadResponse => boom
     raise GitHub::ServiceConfigurationError, "Invalid configuration"
+  rescue Errno::ECONNREFUSED => boom
+    raise GitHub::ServiceConfigurationError, "Connection refused. Invalid server URL."
   end
 end
