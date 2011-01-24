@@ -2,7 +2,10 @@
 
 {
   "data" => {
-	  "subscribers" => "" #CSV list
+	  "base_url" => "http://teamcity.example.com/",
+	  "build_type_id" => "bt123",
+	  "username" => "DOMAIN\\user",
+	  "password" => "MyP@ssw0rD"
   },
 
   "payload" => {
