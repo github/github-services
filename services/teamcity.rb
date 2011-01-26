@@ -12,7 +12,7 @@ module TeamCity
     
     def trigger_build
       @conn.start do |http|
-        req = Net::HTTP::Get.new('/httpAuth/action.html?add2Queue=' + CGI.escape(@build_type_id))
+        req = Net::HTTP::Get.new(@uri.path + '/httpAuth/action.html?add2Queue=' + CGI.escape(@build_type_id))
         req.basic_auth @username, @password
         resp = http.request(req)
         if resp
