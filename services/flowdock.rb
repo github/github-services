@@ -16,7 +16,7 @@ service :flowdock do |data, payload|
   end
 
   post_data("https://api.flowdock.com/v1/git", {
-    :token => data['api_token'],
+    :token => data['token'],
     :payload => JSON.generate(payload),
   })
 end
