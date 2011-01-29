@@ -40,11 +40,13 @@ service :twitter do |data, payload|
   if data['digest'] == '1'
     commit = payload['commits'][-1]
     tiny_url = shorten_url(payload['repository']['url'] + '/commits/' + payload['ref_name'])
-    statuses << "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{payload['commits'].length} commits"
+    status = "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{payload['commits'].length} commits"
+    status.length >= 140 ? statuses << status[0..136] + '...' : statuses << status
   else
     payload['commits'].each do |commit|
       tiny_url = shorten_url(commit['url'])
-      statuses << "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{commit['message']}"
+      status = "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{commit['message']}"
+      status.length >= 140 ? statuses << status[0..136] + '...' : statuses << status
     end
   end
 
