@@ -9,7 +9,7 @@ module TeamCity
       @conn.use_ssl = @uri.scheme.eql?("https")
       @conn.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
-    
+
     def trigger_build
       @conn.start do |http|
         req = Net::HTTP::Get.new(@uri.path + '/httpAuth/action.html?add2Queue=' + CGI.escape(@build_type_id))
@@ -20,13 +20,12 @@ module TeamCity
           # but at least raise an HTTP error if response.code is not 2xx
           resp.value
         end
-      end 
+      end
     end
-    
   end
 end
 
-service :teamcity do |data, payload|
+service :team_city do |data, payload|
   begin
     TeamCity::Remote.new(data).trigger_build
   rescue SocketError => e
