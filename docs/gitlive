@@ -6,11 +6,11 @@ gitlive displays your GitHub pushes in realtime on your project homepage. See ht
 Install Notes
 -------------
 
-	1. Activate service
+1. Activate service
 	
-	2. Generate widget at http://gitlive.com/ for embedding on your project page.
+2. Generate widget at http://gitlive.com/ for embedding on your project page.
 	
-	Note: Service is active after first push on GitHub.
+Note: Service is active after first push on GitHub.
 	
 Developer Notes
 ---------------
