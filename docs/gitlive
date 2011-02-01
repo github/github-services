@@ -1,0 +1,22 @@
+gitlive
+=======
+
+gitlive displays your GitHub pushes in realtime on your project homepage. See http://gitlive.com/ for mort information.
+
+Install Notes
+-------------
+
+	1. Activate service
+	
+	2. Generate widget at http://gitlive.com/ for embedding on your project page.
+	
+	Note: Service is active after first push on GitHub.
+	
+Developer Notes
+---------------
+
+data
+  - none
+
+payload
+  - refer to docs/github_payload
