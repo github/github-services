@@ -1,0 +1,16 @@
+Acunote
+========
+
+Install Notes
+-------------
+
+  1. You can find your acunote github token here: http://<yourdomain>.acunote.com/repositories/github
+
+Developer Notes
+---------------
+
+data
+  - token
+
+payload
+  - refer to docs/github_payload
