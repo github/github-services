@@ -4,7 +4,9 @@ Acunote
 Install Notes
 -------------
 
-  1. You can find your acunote github token here: http://<yourdomain>.acunote.com/repositories/github
+  You can find your acunote github token at
+  "Edit Organization" -> "Repositories" page
+  on your acunote account
 
 Developer Notes
 ---------------
