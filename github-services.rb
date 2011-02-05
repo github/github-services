@@ -5,7 +5,6 @@ require 'net/http'
 require 'net/https'
 require 'net/smtp'
 require 'socket'
-require 'timeout'
 require 'xmlrpc/client'
 require 'openssl'
 require 'cgi'
@@ -46,8 +45,16 @@ rescue LoadError
   end
 end
 
+begin
+  require 'system_timer'
+  ServiceTimeout = SystemTimer
+rescue LoadError
+  require 'timeout'
+  ServiceTimeout = Timeout
+end
+
 module GitHub
-  class ServiceTimeout < Timeout::Error
+  class ServiceTimeoutError < Timeout::Error
   end
 
   # Raised when an unexpected error occurs during service hook execution.
@@ -70,13 +77,13 @@ module GitHub
       begin
         data    = JSON.parse(params[:data])
         payload = parse_payload(params[:payload])
-        Timeout.timeout(20, ServiceTimeout) { yield data, payload }
+        ServiceTimeout.timeout(20, ServiceTimeoutError) { yield data, payload }
         status 200
         ""
       rescue GitHub::ServiceConfigurationError => boom
         status 400
         boom.message
-      rescue GitHub::ServiceTimeout => boom
+      rescue GitHub::ServiceTimeoutError => boom
         status 504
         "Service Timeout"
       rescue Object => boom
@@ -106,12 +113,12 @@ module GitHub
   end
 
   def shorten_url(url)
-    Timeout::timeout(6) do
+    ServiceTimeout.timeout(6, ServiceTimeoutError) do
       short = Net::HTTP.get("api.bit.ly", "/shorten?version=2.0.1&longUrl=#{url}&login=github&apiKey=R_261d14760f4938f0cda9bea984b212e4")
       short = JSON.parse(short)
       short["errorCode"].zero? ? short["results"][url]["shortUrl"] : url
     end
-  rescue Timeout::Error
+  rescue ServiceTimeoutError
     url
   end
 
@@ -120,6 +127,7 @@ module GitHub
     backtrace = Array(exception.backtrace)[0..500]
 
     data = {
+      'app'       => 'github-services',
       'type'      => 'exception',
       'class'     => exception.class.to_s,
       'server'    => HOSTNAME,
@@ -134,7 +142,7 @@ module GitHub
         data['backtrace'] = exception.original_exception.backtrace.join("\n")
         data['message'] = exception.original_exception.message[0..254]
       end
-    elsif !exception.kind_of?(GitHub::ServiceTimeout)
+    elsif !exception.kind_of?(GitHub::ServiceTimeoutError)
       data['original_class'] = data['class']
       data['class'] = 'GitHub::ServiceError'
     end
