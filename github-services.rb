@@ -127,6 +127,7 @@ module GitHub
     backtrace = Array(exception.backtrace)[0..500]
 
     data = {
+      'app',      => 'github-services',
       'type'      => 'exception',
       'class'     => exception.class.to_s,
       'server'    => HOSTNAME,
