@@ -10,6 +10,8 @@ end
 
 im = nil
 service :jabber do |data, payload|
+  raise GitHub::ServiceConfigurationError, "jabber hook temporarily disabled"
+
   repository = payload['repository']['name']
   branch     = payload['ref_name']
   im         ||= Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
