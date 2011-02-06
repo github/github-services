@@ -6,7 +6,7 @@ service :acunote do |data, payload|
   req.set_form_data('payload' => payload.to_json)
   req["Content-Type"] = 'application/x-www-form-urlencoded'
 
-  http = Net::HTTP.new("www.acunote", 443)
+  http = Net::HTTP.new("www.acunote.com", 443)
   http.use_ssl = true
   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
   begin
