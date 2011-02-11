@@ -12,7 +12,8 @@ service :fog_bugz do |data, payload|
     # look for a bug id in each line of the commit message
     bug_list = []
     message.split("\n").each do |line|
-      if (line =~ /\s*Bug[zs]*\s*IDs*\s*[#:; ]+((\d+[ ,:;#]*)+)/i)
+      # match variants of bugids or cases
+      if (line =~ /\s*(?:Bug[zs]*\s*IDs*\s*|Case[s]*)[#:; ]+((\d+[ ,:;#]*)+)/i)
         bug_list << $1.to_i
       end
     end
