@@ -1,13 +1,13 @@
 Acunote
 =======
 
-Acunote is an online project management and Scrum software. Integrating it with GitHub lets you see commits in the Timeline, perform code review on commit diffs and create code inspection tasks.
+Acunote is an online project management and Scrum software. Integrating it with GitHub lets you see commits in the Timeline, perform code review on commits and create code inspection tasks.
 
 
 Install Notes
 -------------
 
-  1. Token - API token for your Acunote organization. You can get it under "Edit Organization" -> "Repositories" page in Acunote.
+  1. Token - GitHub Service Hook Token for your Acunote organization. Get it from "Edit Organization" > "Repositories" page in Acunote.
 
 
 Developer Notes
