@@ -4,10 +4,10 @@ Jaconda
 Install Notes
 -------------
 
-  1. Room ID should be numerical ID of your room, could be found in address bar
-  2. API token should be on your Account page
+  1. Room ID is the numerical ID of your room, it can be found on the Room Integration page
+  2. API token is also displayed on the Room Integration page too
   3. if Digest is checked, all commits will be compressed in one message
-  
+
 Developer Notes
 ---------------
 
