@@ -4,15 +4,17 @@ HipChat
 Install Notes
 -------------
 
-  1. Auth token - one of your group's API tokens. See: http://www.hipchat.com/docs/api/auth
-  2. Room - the full name of the room to send the message to. The room's room_id will also work.
+  1. Auth token - One of your group's API tokens. See: http://www.hipchat.com/docs/api/auth
+  2. Room - The full name of the room to send the message to. The room's room_id will also work.
+  3. Notify - Whether or not to notify room members.
 
 Developer Notes
 ---------------
 
 data
  - auth_token
- - room_id
+ - room
+ - notify (boolean)
 
 payload
   - refer to docs/github_payload
