@@ -2,10 +2,7 @@
 
 {
   "data" => {
-	  "base_url" => "http://teamcity.example.com/",
-	  "build_type_id" => "bt123",
-	  "username" => "DOMAIN\\user",
-	  "password" => "MyP@ssw0rD"
+    "token" => "token from travis-ci.org/profile"
   },
 
   "payload" => {
