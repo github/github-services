@@ -1,4 +1,4 @@
-service :travis_ci do |data, payload|
+service :travis do |data, payload|
   user = payload['repository']['owner']['name']
   token = data['token']
 
