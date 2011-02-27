@@ -23,6 +23,11 @@ Home:   #{payload['repository']['url']}
 
 EOH
 
+  if payload['commits'].size > 1
+    last_commit_sha  = payload['commits'].last['id'][0..5]
+    compare_link = "Compare View #{payload['repository']['url']}/compare/#{first_commit_sha}...#{last_commit_sha}"
+  end
+
   payload['commits'].each do |commit|
     gitsha   = commit['id']
     added    = commit['added'].map    { |f| ['A', f] }
@@ -58,6 +63,8 @@ Log Message:
 
 EOH
   end
+
+  body << compare_link unless compare_link.blank?
 
   begin
     message = TMail::Mail.new
