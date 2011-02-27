@@ -64,7 +64,7 @@ Log Message:
 EOH
   end
 
-  body << compare_link unless compare_link.blank?
+  body << compare_link unless compare_link.nil?
 
   begin
     message = TMail::Mail.new
