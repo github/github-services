@@ -24,8 +24,9 @@ Home:   #{payload['repository']['url']}
 EOH
 
   if payload['commits'].size > 1
-    last_commit_sha  = payload['commits'].last['id'][0..5]
-    compare_link = "Compare View #{payload['repository']['url']}/compare/#{first_commit_sha}...#{last_commit_sha}"
+    last_commit_sha   = payload['commits'].last['id'][0..5]
+    before_commit_sha = payload['before'][0..5]
+    compare_link = "Compare View #{payload['repository']['url']}/compare/#{before_commit_sha}...#{last_commit_sha}"
   end
 
   payload['commits'].each do |commit|
