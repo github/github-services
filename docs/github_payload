@@ -9,7 +9,8 @@
     "after"   => "a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
     "ref"     => "refs/heads/master",
     "before"  => "4c8124ffcf4039d292442eeccabdeca5af5c5017",
-    "compare" => "https://github.com/mojombo/grit/compare/4c8124...a47fd4",
+    "compare" => "http://github.com/mojombo/grit/compare/4c8124ffcf4039d292442eeccabdeca5af5c5017...a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
+    "forced"  => false,
 
     "repository" => {
       "name"  => "grit",
