@@ -1,13 +1,13 @@
-def build_cia_commit(repository, branch, sha1, commit, size = 1)
+def build_cia_commit(data, repository, branch, sha1, commit, size = 1)
   log = commit['message']
   log << " (+#{size} more commits...)" if size > 1
 
   dt         = DateTime.parse(commit['timestamp']).new_offset
   timestamp  = Time.send(:gm, dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec).to_i
   files      = commit['modified'] + commit['added'] + commit['removed']
-  tiny_url   = shorten_url(commit['url'])
+  tiny_url   = data['long_url'].to_i == 1 ? commit['url'] : shorten_url(commit['url'])
 
-  log << " - #{tiny_url}" unless tiny_url == commit['url']
+  log << " - #{tiny_url}"
 
   <<-MSG
     <message>
@@ -44,12 +44,12 @@ service :cia do |data, payload|
   commits    = payload['commits']
 
   if commits.size > 5
-    message = build_cia_commit(repository, branch, payload['after'], commits.last, commits.size - 1)
+    message = build_cia_commit(data, repository, branch, payload['after'], commits.last, commits.size - 1)
     server.call("hub.deliver", message)
   else
     commits.each do |commit|
       sha1 = commit['id']
-      message = build_cia_commit(repository, branch, sha1, commit)
+      message = build_cia_commit(data, repository, branch, sha1, commit)
       server.call("hub.deliver", message)
     end
   end
