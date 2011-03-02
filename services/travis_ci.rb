@@ -1,9 +1,9 @@
 service :travis_ci do |data, payload|
-  user = data['user'] || payload['repository']['owner']['name']
-  token = data['token']
-  domain = data['domain'] || 'http://travis-ci.org'
+  user = (data['user'] || payload['repository']['owner']['name']).strip
+  token = (data['token']).strip
+  domain = (data['domain'] || 'http://travis-ci.org').strip
 
-  scheme = domain.to_s.scan(/^https?/).pop || 'http'
+  scheme = (domain.to_s.scan(/^https?/).pop || 'http').strip
 
   travis_url = URI.parse("#{scheme}://#{user}:#{token}@#{domain}/builds")
 
