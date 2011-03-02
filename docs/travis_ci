@@ -7,18 +7,18 @@ Travis – a distributed build server tool for the Ruby community
 Install Notes
 -------------
 
-  1.  Create an account on travis-ci.org (just sign in with github)
+  1.  Create an account (on travis-ci.org you can just sign in with github)
   2.  Enter your credentials
-      - The token which you can find on http://travis-ci.org/profile
+      - The token which you can find on the travis profile page
       Optional steps:
-      - Enter a username if your github username differs from the repository owner
-        (most commonly used for company accounts)
+      - Enter a username if your github username differs from the repository owner (most commonly used for company accounts)
       - Enter the host of your travis-installation (defaults to http://travis-ci.org)
+
   3.  Check the "Active" checkbox and click "Update Settings".
   4.  Click on the "Travis CI" service name and then click the "Test Hook" link.
   5.  You should receive an email from Travis once the build has completed
 
-For more details about travis, go to http://github.com/svenfuchs/travis/wiki
+For more details about travis, go to http://github.com/travis-ci/travis-ci/wiki
 
 
 Developer Notes
