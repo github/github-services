@@ -59,6 +59,8 @@ Log Message:
 EOH
   end
 
+  body << "Compare: #{payload['compare']}" if payload['commits'].size > 1
+
   begin
     message = TMail::Mail.new
     message.set_content_type('text', 'plain', {:charset => 'UTF-8'})

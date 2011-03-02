@@ -1,4 +1,4 @@
-service :travis_ci do |data, payload|
+service :travis do |data, payload|
   user = (data['user'] || payload['repository']['owner']['name']).strip
   token = (data['token']).strip
   domain = (data['domain'] || 'http://travis-ci.org').strip
