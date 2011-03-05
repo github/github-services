@@ -30,11 +30,11 @@ service :campfire do |data, payload|
   messages = []
 
   if created
-    messages << "#{prefix} #{branch} created"
+    messages << "#{prefix} branch created"
   elsif deleted
-    messages << "#{prefix} #{branch} deleted"
+    messages << "#{prefix} branch deleted"
   elsif forced
-    messages << "#{prefix} #{branch} force-pushed"
+    messages << "#{prefix} branch force-pushed"
   end
 
   if commits.any?
