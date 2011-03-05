@@ -7,7 +7,9 @@ service :campfire do |data, payload|
   branch      = payload['ref_name']
   commits     = payload['commits']
   compare_url = payload['compare']
-  commits.reject! { |commit| commit['message'].to_s.strip == '' }
+  commits.reject! { |commit|
+    commit['message'].to_s.strip == '' || commit['distinct'] == false
+  }
   next if commits.empty?
   campfire   = Tinder::Campfire.new(data['subdomain'], :ssl => true)
   play_sound = data['play_sound'].to_i == 1
