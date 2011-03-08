@@ -2,7 +2,10 @@
 
 {
   "data" => {
-    "token" => "token from travis-ci.org/profile"
+    "api_version" => "2.0.alpha1",
+    "username" => "jamie.winsor",
+    "password" => "passw0rd",
+    "server_url" => "http://jira"
   },
 
   "payload" => {
@@ -21,7 +24,7 @@
     "commits" => [
       {
         "removed"   => [],
-        "message"   => "stub git call for Grit#heads test",
+        "message"   => "[#WEB-249 status:31 resolution:1] stub git call for Grit#heads test",
         "added"     => [],
         "timestamp" => "2007-10-10T00:11:02-07:00",
         "modified"  => ["lib/grit/grit.rb", "test/helper.rb", "test/test_grit.rb"],
