@@ -2,8 +2,7 @@ source "http://rubygems.org"
 
 gem "activesupport", "2.2.2"
 gem "amqp",          "0.6.7", :require => 'mq'
-gem "crack",         "0.1.4"
-gem "httparty",      "0.5.0"
+gem "httparty",      "0.7.4"
 gem "json",          "~> 1.5.1"
 gem "mash",          "~> 0.1.1"
 gem "mime-types",    "1.15", :require => 'mime/types'
