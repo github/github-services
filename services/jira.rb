@@ -9,15 +9,15 @@ service :jira do |data, payload|
     commit['message'].match(/\[#(.+)\]/)
     # Don't need to continue if we don't have a commit message containing JIRA markup
     next unless $1
-    
+
     jira_markup = $1.split
     issue_id = jira_markup.shift
-    
+
     changeset = { :comment => { :body => comment_body } }
-    
+
     jira_markup.each do |entry|
       key, value = entry.split(':')
-      
+
       if key =~ /(?i)status|(?i)transition/
         changeset.merge!(:transition => value.to_i)
       elsif key =~ /(?i)resolution/
@@ -26,10 +26,10 @@ service :jira do |data, payload|
         changeset.merge!(:fields => { key.to_sym => "Resolved" })
       end
     end
-    
+
     # Don't need to continue if we don't have a transition to perform
     next unless changeset.has_key?(:transition)
-    
+
     begin
       url = URI.parse('%s/rest/api/%s/issue/%s/transitions' % [data['server_url'], data['api_version'], issue_id])
       Net::HTTP.start(url.host, url.port) do |http|

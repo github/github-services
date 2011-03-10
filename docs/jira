@@ -4,9 +4,9 @@ Jira
 This service hook allows you to transition Jira tickets using the REST API available in
 version 4.2+ of Jira. To interact with tickets in Jira you will need to place markup
 similar to Lighthouse's in your commit message.
-  
+
   Fixed an annoying bug [#WEB-210 transition:31 resolution:1]
-  
+
 This will perform transition 31 with a resolution code of 1 on the issue WEB-210. You can specify
 any key value pair with the `key:value` notation, but at the very least transition must be present.
 
@@ -15,7 +15,7 @@ versa.
 
 Install Notes
 -------------
-A user in Jira will need to be created for GitHub. It should be given full 
+A user in Jira will need to be created for GitHub. It should be given full
 access to all projects.
 
 Using the following url as an example:
