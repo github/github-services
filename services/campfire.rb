@@ -81,7 +81,7 @@ service :campfire do |data, payload|
     end
 
     messages.each { |line| room.speak line }
-    room.play "rimshot" if play_sound
+    room.play "rimshot" if play_sound && room.respond_to?(:play)
 
     campfire.logout
   rescue Errno::ECONNREFUSED => boom
