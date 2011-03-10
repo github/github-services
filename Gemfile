@@ -15,4 +15,4 @@ gem "xml-simple",    "1.0.11", :require => 'xmlsimple'
 gem "xmpp4r-simple", "0.8.4"
 #gem "yammer4r",      "0.1.5"
 gem "ruby-hmac",     "0.4.0"
-gem "thin",          "1.2.8"
+gem "thin",          "1.2.2"
