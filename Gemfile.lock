@@ -27,10 +27,6 @@ GEM
     xmpp4r (0.5)
     xmpp4r-simple (0.8.4)
       xmpp4r (>= 0.3.0)
-    yammer4r (0.1.5)
-      json (>= 1.1.7)
-      mash (>= 0.0.3)
-      oauth (>= 0.3.5)
 
 PLATFORMS
   ruby
@@ -50,4 +46,3 @@ DEPENDENCIES
   tmail (= 1.2.3.1)
   xml-simple (= 1.0.11)
   xmpp4r-simple (= 0.8.4)
-  yammer4r (= 0.1.5)
