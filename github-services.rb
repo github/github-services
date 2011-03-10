@@ -11,21 +11,11 @@ require 'cgi'
 #~ require 'date' # This is needed by the CIA service in ruby 1.8.7 or later
 
 # vendor
-require 'mime/types'
-require 'xmlsimple'
-require 'activesupport'
-require 'rack'
-require 'sinatra'
-require 'tinder'
-require 'json'
+require 'rubygems'
+require 'bundler'
+Bundler.require
 require 'basecamp'
-require 'tmail'
-require 'xmpp4r'
-require 'xmpp4r-simple'
 require 'rubyforge'
-require 'oauth'
-require 'yammer4r'
-require 'mq'
 
 set :run, true
 set :environment, :production
