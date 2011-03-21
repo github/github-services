@@ -9,11 +9,11 @@ service :unfuddle do |data, payload|
   repository  = payload['repository']['name']
   branch      = payload['ref_name']
   before      = payload['before']
-  
+
   # setup
   uri = URI.parse(u_account)
   http = Net::HTTP.new(uri.host, uri.port)
-  
+
   # grab people data for matching author-id
   begin
     req = Net::HTTP::Get.new('/api/v1/people.json')
@@ -29,7 +29,7 @@ service :unfuddle do |data, payload|
     commit_id = commit['id']
     message   = "#{commit['message']}\n#{commit['url']}"
     files     = commit['removed'] | commit['added'] | commit['modified']
-    
+
     # set Unfuddles's correct changeset association by getting the matching
     # author-id
     author_id = 0
@@ -39,7 +39,7 @@ service :unfuddle do |data, payload|
         break
       end
     end
-    
+
     if author_id > 0
       author_id_element = "<author-id type=\"integer\">#{author_id}</author-id>"
       committer_id_element = "<committer-id type=\"integer\">#{author_id}</committer-id>"
@@ -47,7 +47,7 @@ service :unfuddle do |data, payload|
       author_id_element = ""
       committer_id_element = ""
     end
-    
+
     changeset_xml = <<-XML.strip
       <changeset>
         #{author_id_element}
@@ -63,7 +63,7 @@ service :unfuddle do |data, payload|
         <revision>#{CGI.escapeHTML(commit_id)}</revision>
       </changeset>
     XML
-    
+
     begin
       url = URI.parse("%s/api/v1/repositories/%d/changesets.json" % [u_account, u_repoid.to_i])
       req = Net::HTTP::Post.new(url.path)
@@ -87,7 +87,5 @@ service :unfuddle do |data, payload|
     rescue URI::InvalidURIError
       raise GitHub::ServiceConfigurationError, "Invalid Unfuddle repository id: #{data['u_repoid']}"
     end
-    
   end
-
 end
