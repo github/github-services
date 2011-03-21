@@ -3,7 +3,7 @@
 
 service :unfuddle do |data, payload|
 
-  u_repoid    = data['u_repoid']
+  u_repoid    = data['repo_id']
   u_account   = "http://#{data['subdomain']}.unfuddle.com/"
 
   repository  = payload['repository']['name']

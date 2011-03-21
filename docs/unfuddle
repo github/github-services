@@ -17,13 +17,13 @@ http://example.unfuddle.com/a#/projects/32429/repositories/28573/browse
 In the above, the data you need for configuration is:
 
   - subdomain: example
-  - u_repoid:  28573
+  - repo_id:  28573
 
 Developer Notes
 ---------------
 
 data
-  - u_repoid    (Unfuddle respository ID)
-  - subdomain   
+  - repo_id     (Unfuddle respository ID)
+  - subdomain
   - username    (Unfuddle API account holder)
   - password    (Unfuddle API account password)
