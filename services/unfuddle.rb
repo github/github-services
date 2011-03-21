@@ -22,7 +22,7 @@ service :unfuddle do |data, payload|
     people = JSON.parse(response.body)
   rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError,
          Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError => e
-         puts e.message
+    raise GitHub::ServiceConfigurationError, "#{e.class}: #{e.message}"
   end
 
   payload['commits'].each do |commit|
