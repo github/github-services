@@ -3,6 +3,8 @@ service :socialcast do |data, payload|
   url = URI.parse("https://#{data['api_domain']}/api/messages.xml")
   group_id = (data['group_id'].nil? || data['group_id'] == '') ? '' : data['group_id']
   
+  kind_symbol = Hash["added" => "+", "modified" => "Δ", "removed" => "-"]
+  
   payload['commits'].each do |commit|
     
     title = "Github commit to repo [#{repository}] by #{commit['author']['name']}"
@@ -10,7 +12,7 @@ service :socialcast do |data, payload|
     
     %w(added modified removed).each do |kind|
       commit[kind].each do |filename|
-        message << "* #{kind.capitalize} '#{filename}'\n"
+        message << "#{kind_symbol[kind]} '#{filename}'\n"
       end
     end
     
