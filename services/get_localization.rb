@@ -1,6 +1,6 @@
 service :get_localization do |data, payload|
   project_name = data['project_id']
-  project_secret = data['project_token']
+  project_token = data['project_token']
   
   gl_uri = "https://www.getlocalization.com/services/github/notify/#{project_name}/#{project_token}/"
   
