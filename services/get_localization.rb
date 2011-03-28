@@ -1,13 +1,24 @@
 service :get_localization do |data, payload|
-  project_name = data['project_id']
+  project_name = data['project_name']
   project_token = data['project_token']
-  
-  gl_uri = "https://www.getlocalization.com/services/github/notify/#{project_name}/#{project_token}/"
-  
+
+  path = "/services/github/notify/#{project_name}/#{project_token}/"
+
+  req = Net::HTTP::Post.new(path)
+  req.set_form_data('payload' => payload.to_json)
+  req["Content-Type"] = 'application/x-www-form-urlencoded'
+
+  http = Net::HTTP.new("getlocalization.com", 443)
+  http.use_ssl = true
+  http.verify_mode = OpenSSL::SSL::VERIFY_NONE
   begin
-    url = URI.parse(gl_uri)
-    Net::HTTP.post_form(url, :payload => JSON.generate(payload))
+    http.start do |connection|
+      connection.request(req)
+    end
   rescue Net::HTTPBadResponse
     raise GitHub::ServiceConfigurationError, "Invalid configuration"
   end
+  nil
 end
+
+
