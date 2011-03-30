@@ -125,8 +125,8 @@ module GitHub
 
     if HOSTNAME == 'sh1.rs.github.com'
       # run only in github's production environment
-      Net::HTTP.new('aux1', 9292).
-        post('/haystack/async', "json=#{Rack::Utils.escape(data.to_json)}")
+      Net::HTTP.new('haystack', 80).
+        post('/async', "json=#{Rack::Utils.escape(data.to_json)}")
     else
       $stderr.puts data[ 'message' ]
       $stderr.puts data[ 'backtrace' ]
