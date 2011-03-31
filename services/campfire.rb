@@ -8,11 +8,11 @@ service :campfire do |data, payload|
   branch      = payload['ref_name']
   compare_url = payload['compare']
   commits     = payload['commits']
+  num_dup     = commits.count{ |commit| commit['distinct'] == false }
   commits.reject! { |commit|
     commit['message'].to_s.strip == '' || commit['distinct'] == false
   }
   created, deleted, forced = payload.values_at('created','deleted','forced')
-  next unless created or deleted or forced or commits.any?
 
   before, after = payload['before'][0..6], payload['after'][0..6]
   url = compare_url
@@ -37,6 +37,15 @@ service :campfire do |data, payload|
   elsif forced
     messages << "[#{repository}] #{pusher} force-pushed #{branch} from #{before} to #{after}"
     messages[0] += ": #{branch_url}" if commits.empty?
+
+  elsif commits.empty? and num_dup > 0
+    messages << "[#{repository}] #{pusher} fast-forwarded #{branch}"
+    if base = payload['base']
+      messages[0] += " to #{payload['base']}"
+    else
+      messages[0] += " from #{before} to #{after}"
+    end
+    messages[0] += ": #{url}"
   end
 
   if commits.any?
