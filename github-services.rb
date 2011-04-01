@@ -123,7 +123,7 @@ module GitHub
     # optional
     other.each { |key, value| data[key.to_s] = value.to_s }
 
-    if HOSTNAME == 'sh1.rs.github.com'
+    if HOSTNAME =~ /^sh1\.(rs|stg)\.github\.com$/
       # run only in github's production environment
       Net::HTTP.new('haystack', 80).
         post('/async', "json=#{Rack::Utils.escape(data.to_json)}")
