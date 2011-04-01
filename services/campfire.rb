@@ -8,6 +8,7 @@ service :campfire do |data, payload|
   compare_url = payload['compare']
   commits     = payload['commits']
 
+  ref         = payload['ref']
   branch      = payload['ref_name']
   base_ref    = payload['base_ref']
   if base_ref
