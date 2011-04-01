@@ -5,10 +5,18 @@ service :campfire do |data, payload|
   repository  = payload['repository']['name']
   owner       = payload['repository']['owner']['name']
   pusher      = payload['pusher']['name']
-  branch      = payload['ref_name']
   compare_url = payload['compare']
   commits     = payload['commits']
-  num_dup     = commits.count{ |commit| commit['distinct'] == false }
+
+  branch      = payload['ref_name']
+  base_ref    = payload['base_ref']
+  if base_ref
+    base_name = base_ref.sub(/\Arefs\/\w+\//, '')
+  end
+
+  num_dup     = commits.count{ |commit|
+    commit['distinct'] == false
+  }
   commits.reject! { |commit|
     commit['message'].to_s.strip == '' || commit['distinct'] == false
   }
@@ -20,11 +28,14 @@ service :campfire do |data, payload|
   messages = []
 
   if created
-    messages << "[#{repository}] #{pusher} created #{branch}"
-    messages[0] += " from #{payload['base']}" if payload['base']
+    verb = (ref =~ /\Arefs\/tags/ ? 'tagged' : 'created')
+    messages << "[#{repository}] #{pusher} #{verb} #{branch}"
+    if base_name
+      messages[0] += " #{verb == 'tagged' ? 'at' : 'from'} #{base_name}"
+    end
 
     if commits.empty?
-      messages[0] += " at #{after}" unless payload['base']
+      messages[0] += " at #{after}" if !base_name
       messages[0] += ": #{branch_url}"
     else
       messages[0] += " (+#{commits.size} new commits)"
@@ -40,8 +51,8 @@ service :campfire do |data, payload|
 
   elsif commits.empty? and num_dup > 0
     messages << "[#{repository}] #{pusher} fast-forwarded #{branch}"
-    if base = payload['base']
-      messages[0] += " to #{payload['base']}"
+    if base_name
+      messages[0] += " to #{base_name}"
     else
       messages[0] += " from #{before} to #{after}"
     end
