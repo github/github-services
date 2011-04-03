@@ -62,7 +62,7 @@ service :irc do |data, payload|
 
     rooms.each do |room|
       room, pass = room.split("::")
-      if data['join_room'].to_i != 0
+      unless data['message_without_join'] == true
         irc.puts "JOIN #{room} #{pass}"
       end
 
@@ -70,7 +70,7 @@ service :irc do |data, payload|
         irc.puts "PRIVMSG #{room} :#{message}"
       end
 
-      if data['join_room'].to_i != 0
+      unless data['message_without_join'] == true
         irc.puts "PART #{room}"
       end
     end
