@@ -51,11 +51,11 @@ service :campfire do |data, payload|
     messages[0] += ": #{branch_url}" if commits.empty?
 
   elsif commits.empty? and num_dup > 0
-    messages << "[#{repository}] #{pusher} fast-forwarded #{branch}"
+    messages << "[#{repository}] #{pusher}"
     if base_name
-      messages[0] += " to #{base_name}"
+      messages[0] += " merged #{base_name} into #{branch}"
     else
-      messages[0] += " from #{before} to #{after}"
+      messages[0] += " fast-forwarded #{branch} from #{before} to #{after}"
     end
     messages[0] += ": #{url}"
   end
