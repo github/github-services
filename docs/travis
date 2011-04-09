@@ -18,7 +18,7 @@ Install Notes
   4.  Click on the "Travis CI" service name and then click the "Test Hook" link.
   5.  You should receive an email from Travis once the build has completed
 
-For more details about Travis, go to http://github.com/travis-ci/travis-ci/wiki
+For more details about Travis, go to http://github.com/travis-ci/travis-ci
 
 
 Developer Notes
