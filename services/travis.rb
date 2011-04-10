@@ -1,7 +1,7 @@
 service :travis do |data, payload|
-  user = (data['user'] || payload['repository']['owner']['name']).strip
+  user = ((data['user'].to_s == '') ? payload['repository']['owner']['name'] : data['user']).strip
   token = (data['token']).strip
-  domain = (data['domain'] || 'http://travis-ci.org').strip
+  domain = ((data['domain'].to_s == '') ? 'http://travis-ci.org' : data['domain']).strip
 
   scheme = (domain.to_s.scan(/^https?/).pop || 'http').strip
 
