@@ -1,31 +1,4 @@
-$LOAD_PATH.unshift *Dir["#{File.dirname(__FILE__)}/vendor/**/lib"]
-
-# stdlib
-require 'net/http'
-require 'net/https'
-require 'net/smtp'
-require 'socket'
-require 'xmlrpc/client'
-require 'openssl'
-require 'cgi'
-#~ require 'date' # This is needed by the CIA service in ruby 1.8.7 or later
-
-# vendor
-require 'mime/types'
-require 'xmlsimple'
-require 'activesupport'
-require 'rack'
-require 'sinatra'
-require 'tinder'
-require 'json'
-require 'basecamp'
-require 'tmail'
-require 'xmpp4r'
-require 'xmpp4r-simple'
-require 'rubyforge'
-require 'oauth'
-require 'yammer4r'
-require 'mq'
+require File.expand_path('../config/load', __FILE__)
 
 set :run, true
 set :environment, :production
@@ -150,10 +123,10 @@ module GitHub
     # optional
     other.each { |key, value| data[key.to_s] = value.to_s }
 
-    if HOSTNAME == 'sh1.rs.github.com'
+    if HOSTNAME =~ /^sh1\.(rs|stg)\.github\.com$/
       # run only in github's production environment
-      Net::HTTP.new('aux1', 9292).
-        post('/haystack/async', "json=#{Rack::Utils.escape(data.to_json)}")
+      Net::HTTP.new('haystack', 80).
+        post('/async', "json=#{Rack::Utils.escape(data.to_json)}")
     else
       $stderr.puts data[ 'message' ]
       $stderr.puts data[ 'backtrace' ]
