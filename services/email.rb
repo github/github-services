@@ -69,6 +69,8 @@ EOH
     message.body    = body
     message.date    = Time.now
 
+    message['Approved'] = data['secret'] if data['secret']
+
     smtp_settings  = [ email_conf['address'], (email_conf['port'] || 25).to_i, (email_conf['domain'] || 'localhost.localdomain') ]
     smtp_settings += [ email_conf['user_name'], email_conf['password'], email_conf['authentication'] ] if email_conf['authentication']
 
