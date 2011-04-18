@@ -12,7 +12,7 @@ Install Notes
       - The token which you can find on the Travis profile page
       Optional steps:
       - Enter a username if your GitHub username differs from the repository owner (most commonly used for company accounts)
-      - Enter the host of your Travis installation (defaults to http://travis-ci.org)
+      - Enter the host of your Travis installation (defaults to http://travis-ci.org), the protocol-prefix is optional and defaults to "http://".
 
   3.  Check the "Active" checkbox and click "Update Settings".
   4.  Click on the "Travis CI" service name and then click the "Test Hook" link.
