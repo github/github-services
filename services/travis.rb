@@ -46,7 +46,7 @@ module Travis
     end
 
     def domain_parts
-      full_domain.split('://')
+      @domain_parts ||= full_domain.split('://')
     end
   end
 end
