@@ -11,7 +11,7 @@ Install Notes
   2.  Enter your credentials
       - The token which you can find on the Travis profile page
       Optional steps:
-      - Enter a username if your GitHub username differs from the repository owner (most commonly used for company accounts)
+      - Enter the username who the travis-token belongs to (defaults to the repository owner)
       - Enter the host of your Travis installation (defaults to http://travis-ci.org), the protocol-prefix is optional and defaults to "http://".
 
   3.  Check the "Active" checkbox and click "Update Settings".
