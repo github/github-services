@@ -4,16 +4,19 @@ IRC
 Install Notes
 -------------
 
-  1. server (ie. irc.freenode.net)
-  2. port is normally 6667 / 9999 for ssl
-  3. the room field can support multiple rooms (comma separated)
-  4. the password field is for the server password
-  5. room passwords can be specified for each room like this:
+1. `server` (ie. irc.freenode.net)
+2. `port` is normally 6667 / 9999 for ssl
+3. the `room` field can support multiple rooms (comma separated)
+4. the `password` field is for the server password
+5. room passwords can be specified for each room like this:
        room_name::password
-  6. prefixing '#' to the room field is optional
-  7. nick is not required, if provided the IRCBot will use that nick
-  8. Enable long_url so that compare/commit url's are not passed 
-     through bit.ly.
+6. prefixing '#' to the room field is optional
+7. `nick` is not required.  If provided, the IRCBot will use that
+   nick.
+8. Enable `long_url` so that compare/commit url's are not passed
+   through bit.ly.
+9. Enable `message_without_join' to keep the GitHub IRC bot from
+   joining and immediately leaving the channel for each push.
 
 
 Developer Notes
@@ -27,6 +30,7 @@ data
   - ssl
   - nick
   - long_url
+  - message_without_join
 
 payload
   - refer to docs/github_payload
