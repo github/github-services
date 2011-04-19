@@ -36,6 +36,19 @@ Steps to contributing
 
 A huge thanks goes out to [our many contributors](https://github.com/github/github-services/contributors)!
 
+Naming Convention
+-----------------
+
+If your service name is two words, the filenames and service key should
+be underscored, with words separated by an underscore.
+
+    # GitHub
+    # docs/git_hub
+    # services/git_hub.rb
+    service :git_hub do |data, payload|
+      ...
+    end
+
 Running the server locally
 --------------------------
 

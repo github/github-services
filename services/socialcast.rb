@@ -6,7 +6,7 @@ service :socialcast do |data, payload|
   s_if_plural = (payload['commits'].length > 1) ? 's' : ''
   title       = "#{payload['commits'].length} commit#{s_if_plural} pushed to Github repo [#{repository}]"
   message     = ""
-  
+
   payload['commits'].each_with_index do |commit, i|
     timestamp = Date.parse(commit['timestamp'])
     heading = "√#{i+1} by #{commit['author']['name']} at #{timestamp}"
@@ -15,16 +15,16 @@ service :socialcast do |data, payload|
       message << "-" 
     end
     message << "\n#{commit['url']}\n#{commit['message']}\n"
-    
+
     %w(added modified removed).each do |kind|
       commit[kind].each do |filename|
         message << "#{kind_symbol[kind]} '#{filename}'\n"
       end
     end
-    
-    message << "\n"    
+
+    message << "\n"
   end
-  
+
   req = Net::HTTP::Post.new(url.path)
   req.basic_auth(data['username'], data['password'])
   req.set_form_data(
@@ -36,5 +36,4 @@ service :socialcast do |data, payload|
   net = Net::HTTP.new(url.host, 443)
   net.use_ssl = true
   net.start { |http| http.request(req) }
-  
 end

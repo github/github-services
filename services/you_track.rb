@@ -1,17 +1,10 @@
-#require File.expand_path('../github-services', __FILE__)
-#require "/home/user/git-services/github-services/github-services.rb"
-#require "/usr/lib/ruby/1.8/net/http.rb"
-#require "rexml/document"
-#require "cgi"
-
 module YouTrack
-
   class Remote
     def initialize(data={})
       # required fot connection
-      @base_url, @username, @password, @commiters = data['base_url'], data['username'], data['password'], data['commiters']
+      @base_url, @username, @password, @committers = data['base_url'], data['username'], data['password'], data['committers']
       # check if all the variables are initialized from service params
-      [@base_url, @username, @password, @commiters].each{|var| raise GitHub::ServiceConfigurationError.new("Missing configuration: #{var}") if var.to_s.empty? }
+      [@base_url, @username, @password, @committers].each{|var| raise GitHub::ServiceConfigurationError.new("Missing configuration: #{var}") if var.to_s.empty? }
       # delete last slash in the string
       correct_uri = @base_url.gsub(/\/$/, '')
       @uri = URI.parse(correct_uri)
@@ -62,7 +55,7 @@ module YouTrack
       while true
         body = ""
         @conn.start do |http|
-          req = Net::HTTP::Get.new(@rest_path + "/admin/user?q" +email + "&group="+CGI.escape(@commiters) +
+          req = Net::HTTP::Get.new(@rest_path + "/admin/user?q" +email + "&group="+CGI.escape(@committers) +
                                        "&start=#{counter}", @headers)
           resp = http.request(req)
           resp.value
@@ -89,8 +82,7 @@ module YouTrack
   end
 end
 
-service :youtrack do |data, payload|
-  #include YouTrack
+service :you_track do |data, payload|
   begin
     YouTrack::Remote.new(data).process_commits(payload)
   rescue => e
