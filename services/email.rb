@@ -64,16 +64,24 @@ EOH
   begin
     message = TMail::Mail.new
     message.set_content_type('text', 'plain', {:charset => 'UTF-8'})
+    message.from = "#{commit['author']['name']} <#{commit['author']['email']}>" if data['send_from_author']
+    message.reply_to = "#{commit['author']['name']} <#{commit['author']['email']}>"
     message.to      = data['address']
     message.subject = "[#{name_with_owner}] #{first_commit_sha}: #{first_commit_title}"
     message.body    = body
     message.date    = Time.now
 
+    message['Approved'] = data['secret'] if data['secret']
+
     smtp_settings  = [ email_conf['address'], (email_conf['port'] || 25).to_i, (email_conf['domain'] || 'localhost.localdomain') ]
     smtp_settings += [ email_conf['user_name'], email_conf['password'], email_conf['authentication'] ] if email_conf['authentication']
 
     Net::SMTP.start(*smtp_settings) do |smtp|
-      smtp.send_message message.to_s, "GitHub <noreply@github.com>", data['address']
+      if data['send_from_author']
+        smtp.send_message message.to_s, "#{commit['author']['name']} <#{commit['author']['email']}>", data['address']
+      else
+        smtp.send_message message.to_s, "GitHub <noreply@github.com>", data['address']
+      end
     end
   rescue Net::SMTPSyntaxError, Net::SMTPFatalError
     raise GitHub::ServiceConfigurationError, "Invalid email address"
