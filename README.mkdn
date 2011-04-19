@@ -28,12 +28,13 @@ Steps to contributing
 3. Vendor any external gems your code relies on, and make sure to include it in
    the requires at the top of github-services.rb
 4. Add documentation to `docs/service_name` (refer to the others for guidance)
-5. Add your name to the `CONTRIBUTORS` file
-6. Send a pull request from your fork to [github/github-services](https://github.com/github/github-services)
-7. Once it's accepted we'll add any new necessary data fields to the GitHub
+5. Send a pull request from your fork to [github/github-services](https://github.com/github/github-services)
+6. Once it's accepted we'll add any new necessary data fields to the GitHub
    front-end so people can start using your addition.
 
 *Patches including tests are encouraged*
+
+A huge thanks goes out to [our many contributors](https://github.com/github/github-services/contributors)!
 
 Running the server locally
 --------------------------
