@@ -60,19 +60,16 @@ service :irc do |data, payload|
       end
     end
 
+    without_join = data['message_without_join'] == '1'
     rooms.each do |room|
       room, pass = room.split("::")
-      unless data['message_without_join'] == true
-        irc.puts "JOIN #{room} #{pass}"
-      end
+      irc.puts "JOIN #{room} #{pass}" unless without_join
 
       messages.each do |message|
         irc.puts "PRIVMSG #{room} :#{message}"
       end
 
-      unless data['message_without_join'] == true
-        irc.puts "PART #{room}"
-      end
+      irc.puts "PART #{room}" unless without_join
     end
 
     irc.puts "QUIT"
