@@ -60,6 +60,7 @@ EOH
   end
 
   body << "Compare: #{payload['compare']}" if payload['commits'].size > 1
+  commit = payload['commits'].last # assume that the last committer is also the pusher
 
   begin
     message = TMail::Mail.new
