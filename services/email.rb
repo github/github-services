@@ -66,7 +66,7 @@ EOH
     message = TMail::Mail.new
     message.set_content_type('text', 'plain', {:charset => 'UTF-8'})
     message.from = "#{commit['author']['name']} <#{commit['author']['email']}>" if data['send_from_author']
-    message.reply_to = "#{commit['author']['name']} <#{commit['author']['email']}>"
+    message.reply_to = "#{commit['author']['name']} <#{commit['author']['email']}>" if data['send_from_author']
     message.to      = data['address']
     message.subject = "[#{name_with_owner}] #{first_commit_sha}: #{first_commit_title}"
     message.body    = body
