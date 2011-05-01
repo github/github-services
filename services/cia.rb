@@ -39,7 +39,7 @@ end
 service :cia do |data, payload|
   server = XMLRPC::Client.new2("http://cia.navi.cx")
 
-  repository = payload['repository']['name']
+  repository = data['name'] || payload['repository']['name']
   branch     = payload['ref_name']
   commits    = payload['commits']
 
