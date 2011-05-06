@@ -1,3 +1,5 @@
+require 'savon'
+
 module TargetProcess
   class Remote
     def initialize(data={})
@@ -6,12 +8,9 @@ module TargetProcess
       # check if all the variables are initialized from service params
       [@base_url, @username, @password, @project_key].each{|var| raise GitHub::ServiceConfigurationError.new("Missing configuration: #{var}") if var.to_s.empty? }
       # delete last slash in the string
-      correct_uri = @base_url.gsub(/\/$/, '')
-      @uri = URI.parse(correct_uri)
-      @soap_path = @uri.path + "/Services/"
-      @tp_client = Savon::Client.new do
-        wsse.credentials @username, @password
-      end
+      @soap_path = @base_url.gsub(/\/$/,'') + "/Services/"
+      @tp_client = Savon::Client.new()
+      @tp_client.wsse.credentials @username, @password
     end
 
     def process_commits(payload)
@@ -37,7 +36,7 @@ private
 
     def get_state_data()
       @tp_client.wsdl.document = @soap_path + 'ProjectService.asmx?WSDL'
-      response = @tp_client.request :wsdl, "Retreive", :hql => ["from Projects as p where p.IsActive = 1 and p.Abbreviation = '%s'" % @project_key]
+      response = @tp_client.request :wsdl, "Retreive", :query => ["from Projects as p where p.IsActive = 1 and p.Abbreviation = '%s'" % @project_key]
       raise GitHub::ServiceConfigurationError.new("Cannot find project #{@project_key}, verify it is active and exists") if !response.html.success?
       process_id = response.to_hash.RetreiveResult.ProjectDTO.ProcessId
       @tp_client.wsdl.document = @soap_path + 'ProcessService.asmx?WSDL'
@@ -73,14 +72,33 @@ private
 
     def find_user_by_email(email)
       @tp_client.wsdl.document = @soap_path + 'UserService.asmx?WSDL'
-      response = @tp_client.request :wsdl, :retrieve, :hql => ["from Users where active = 1 and email = '%s'" % email]
-      nil if !response.http.success? else response.to_hash.RetreiveResult.UserDTO rescue nil
+      response = @tp_client.request :retrieve do
+	soap.body = ["<query>from Users where active = 1 and email = '%s'</query>" % email]
+	soap.input = ["Retrieve", {"xmlns" => "http://targetprocess.com/"}]
+      end
+      begin
+        if !response.http.success? 
+	  nil
+        else
+	  response.to_hash.RetreiveResult.UserDTO
+	end
+      rescue
+	nil
+      end
     end
 
     def find_bug_by_id(bug_id)
       @tp_client.wsdl.document = @soap_path + 'BugService.asmx?WSDL'
       response = @tp_client.request :wsdl, "GetByID", :id => bug_id
-      false if !response.http.success? else response.to_hash rescue false
+      begin
+        if !response.http.success? 
+          false
+        else
+          response.to_hash
+        end
+      rescue 
+        false
+      end
     end
   end
 end
