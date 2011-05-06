@@ -21,7 +21,7 @@ module TargetProcess
     end
 
 
-    private
+private
     def process_commit(commit)
       author = find_user_by_email(commit["author"]["email"])
       return if author.nil?
@@ -47,23 +47,23 @@ module TargetProcess
     end
 
     def execute_command(author, bug_id, command, commit)
-      return if bug = find_bug_by_id(bug_id) = false
+      return if bug = find_bug_by_id(bug_id) == false
       @state_data.RetrieveEntityStatesForProcessResult.each do |e|
         next if e.Name != command
         @tp_client.wsdl.document = @soap_path + 'BugService.asmx?WSDL'
         response = @tp_client.request :update do
-          soap.body => {
-            :BugID => bug_id,
-            :LastEditorId => @author_id,
+          soap.body = {
+            :BugID => bug.BugID,
+            :LastEditorId => author.UserID,
             :EntityStateID => e.EntityStateID
           }
         end
         if response.html.success?
           # Add the comment
           @tp_client.request :AddCommentToBug do
-            soap.body => {
-              :BugID => bug_id,
-              :OwnerID => @author_id,
+            soap.body = {
+              :BugID => bug.BugID,
+              :OwnerID => author.UserID,
               :Description => commit["Message"]
             }
           end
@@ -72,18 +72,20 @@ module TargetProcess
     end
 
     def find_user_by_email(email)
-      #TODO
+      @tp_client.wsdl.document = @soap_path + 'UserService.asmx?WSDL'
+      response = @tp_client.request :wsdl, :retrieve, :hql => ["from Users where active = 1 and email = '%s'" % email]
+      nil if !response.http.success? else response.to_hash.RetreiveResult.UserDTO rescue nil
     end
 
     def find_bug_by_id(bug_id)
       @tp_client.wsdl.document = @soap_path + 'BugService.asmx?WSDL'
       response = @tp_client.request :wsdl, "GetByID", :id => bug_id
-      false if !response.http.success? else response.to_hash
+      false if !response.http.success? else response.to_hash rescue false
     end
   end
 end
 
-service :targetprocess do |data, payload|
+service :target_process do |data, payload|
   begin
     TargetProcess::Remote.new(data).process_commits(payload)
   rescue => e
