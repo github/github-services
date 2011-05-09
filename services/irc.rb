@@ -18,16 +18,26 @@ service :irc do |data, payload|
         sha1   = commit['id']
         files  = Array(commit['modified'])
         dirs   = files.map { |file| File.dirname(file) }.uniq
-        "\002#{repository}:\002 \00307#{branch}\003 \00303#{author}\003 * " +
-        "\002#{sha1[0..6]}\002 (#{files.size} files in #{dirs.size} dirs): #{short}"
+        if data['no_colors'].to_i == 1
+            "#{repository}: #{branch} #{author} * " +
+            "#{sha1[0..6]} (#{files.size} files in #{dirs.size} dirs): #{short}"
+        else
+            "\002#{repository}:\002 \00307#{branch}\003 \00303#{author}\003 * " +
+            "\002#{sha1[0..6]}\002 (#{files.size} files in #{dirs.size} dirs): #{short}"
+        end
       end
 
     if messages.size > 1
       before, after = payload['before'][0..6], payload['after'][0..6]
       compare_url   = payload['repository']['url'] + "/compare/#{before}...#{after}"
       tiny_url      = data['long_url'].to_i == 1 ? compare_url : shorten_url(compare_url)
-      summary       = "\002#{repository}:\002 \00307#{branch}\003 commits " +
-                "\002#{before}\002...\002#{after}\002 - #{tiny_url}"
+      if data['no_colors'].to_i == 1
+          summary = "#{repository}: #{branch} commits " +
+                    "#{before}...#{after} - #{tiny_url}"
+      else
+          summary = "\002#{repository}:\002 \00307#{branch}\003 commits " +
+                    "\002#{before}\002...\002#{after}\002 - #{tiny_url}"
+      end
       messages << summary
     else
       commit   = payload['commits'][0]
