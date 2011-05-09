@@ -38,7 +38,7 @@ Commit Message Syntax
 General comment format for changing bug states:
 
 
-	[comment] #<bugID> <new state>
+	[comment] #<bugID>:<new state>
 
 
 Developer Notes
@@ -48,6 +48,6 @@ data
 -base_url
 -username
 -password
--project_key
+-project_id
 
 
