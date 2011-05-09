@@ -1,3 +1,5 @@
+require 'savon'
+
 module TargetProcess
   class Users
     include HTTParty
