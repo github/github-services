@@ -1,31 +1,17 @@
 require 'savon'
 
 module TargetProcess
-  class Users
-    include HTTParty
-    format :xml
-
-    def initialize(u, p, b)
-      @auth = {:username => u, :password => p}
-      self.base_uri = b
-    end
-
-    def gather_all(acid)
-      self.class.get('/api/v1/Users/?acid='+acid,{:basic_auth => @auth})
-    end
-  end
-
   class Context
     include HTTParty
     format :xml
 
     def initialize(u, p, b)
       @auth = {:username => u, :password => p}
-      self.base_uri = b
+      @base_uri = b
     end
 
     def get_by_project(id)
-      self.class.get('/api/v1/Context?ids='+id,{:basic_auth => @auth})
+      self.class.get('%s/api/v1/Context/?ids=%s' % [@base_uri , id],{:basic_auth => @auth})
     end
   end
 
@@ -35,13 +21,28 @@ module TargetProcess
 
     def initialize(u, p, b)
       @auth = {:username => u, :password => p}
-      self.base_uri = b
+      @base_uri = b
     end
 
     def gather_all(acid)
-      self.class.get('/api/v1/EntityState?acid='+acid,{:basic_auth => @auth})
+      self.class.get('%s/api/v1/EntityState/?acid=%s' % [@base_uri, acid],{:basic_auth => @auth})
     end
   end
+
+  class Project
+    include HTTParty
+    format :xml
+
+    def initialize(u, p, b)
+      @auth = {:username => u, :password => p}
+      @base_uri = b
+    end
+
+    def gather_all(acid)
+      self.class.get('%s/api/v1/Projects/?acid=%s&include=[Users]' % [@base_uri, acid],{:basic_auth => @auth})
+    end
+  end
+
 
   class Remote
     def initialize(data={})
@@ -51,7 +52,7 @@ module TargetProcess
       [@base_url, @username, @password, @project_id].each{|var| raise GitHub::ServiceConfigurationError.new("Missing configuration: #{var}") if var.to_s.empty? }
       # delete last slash in the string
       correct_uri = @base_url.gsub(/\/$/, '')
-      @uri = URI.parse(correct_uri)
+      @base_url = URI.parse(correct_uri)
       get_context_and_users
     end
 
@@ -78,15 +79,15 @@ private
 
     def execute_command(author, bug_id, command, commit)
       @states.each do |e|
-        next if e.Name != command
+        next if e['Name'] != command
         @soap_client = Savon::Client.new(@uri.path + "/Services/BugService.asmx?WSDL") do
           wsse.credentials @username, @password
         end
         response = @soap_client.request :update do
           soap.body = {
             :BugID => bug_id,
-            :LastEditorId => author.UserID,
-            :EntityStateID => e.Id
+            :LastEditorId => author['ID'],
+            :EntityStateID => e['Id']
           }
         end
         if response.html.success?
@@ -94,7 +95,7 @@ private
           @soap_client.request :AddCommentToBug do
             soap.body = {
               :BugID => bug_id,
-              :OwnerID => author.UserID,
+              :OwnerID => author['ID'],
               :Description => commit["Message"]
             }
           end
@@ -103,9 +104,10 @@ private
     end
 
     def find_user_by_email(email)
+      return nil if @users.nil?
       @users.each do |u|
-        if u.Email == email
-          return u.Id
+        if u['Email'] == email
+          return u['Id']
         end
       end
       nil
@@ -113,14 +115,16 @@ private
 
     def get_context_and_users()
       @context_data = Context.new(@username,@password,@base_url).get_by_project(@project_id)
-      @users = Users.new(@username,@password,@base_url).gather_all(@context_data.Acid)
+      puts @context_data.inspect
+      @project_data = Project.new(@username,@password,@base_url).gather_all(@context_data['Context']['Acid'])
+      puts @project_data.inspect
     end
 
     def get_state_data()
-      states = EntityState.new(@username,@password,@base_url).gather_all(@context_data.Acid)
+      states = EntityState.new(@username,@password,@base_url).gather_all(@context_data['Context']['Acid'])
       @states = {}
-      states.each do |s|
-        if s.EntityType == "Bug"
+      states['EntityState'].each do |s|
+        if s.['EntityName'] == "Bug"
           @states.merge(s)
         end
       end
