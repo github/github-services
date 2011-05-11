@@ -97,7 +97,10 @@ service :campfire do |data, payload|
       raise GitHub::ServiceConfigurationError, "Invalid token"
     end
 
-    if (room = campfire.find_room_by_name(data['room'])).nil?
+    begin
+      room = campfire.find_room_by_name(data['room'])
+      raise NoMethodError if room.nil?
+    rescue NoMethodError
       raise GitHub::ServiceConfigurationError, "No such room"
     end
 
