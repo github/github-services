@@ -13,6 +13,7 @@ Developer Notes
 data
   - no_spam
   - project - Optional project name, defaults to the Repository name.
+  - address - Optional CIA address, defaults to http://cia.vc
 
 payload
   - refer to docs/github_payload
