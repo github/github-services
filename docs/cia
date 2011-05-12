@@ -12,6 +12,7 @@ Developer Notes
 
 data
   - no_spam
+  - name - Optional Name.  Defaults to the Repository name.
 
 payload
   - refer to docs/github_payload
