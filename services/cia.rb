@@ -40,7 +40,7 @@ service :cia do |data, payload|
   server = XMLRPC::Client.new2("http://cia.navi.cx")
 
   repository =
-    if !(name = data['name']).to_s.empty?
+    if !(name = data['project']).to_s.empty?
       name
     else
       payload['repository']['name']
