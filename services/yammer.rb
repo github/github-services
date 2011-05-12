@@ -23,7 +23,7 @@ service :yammer do |data, payload|
 
   statuses.each do |status|
     params = { :body => status }
-    params['group_id'] = data['group_id'] if data['group_id']
+    params['group_id'] = data['group_id'] unless data['group_id'].to_s.empty?
     yammer.message(:post, params)
   end
 end
