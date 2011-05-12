@@ -22,6 +22,8 @@ service :yammer do |data, payload|
                                  :secret => data['access_secret']})
 
   statuses.each do |status|
-    yammer.message(:post, :body => status)
+    params = { :body => status }
+    params['group_id'] = data['group_id'] if data['group_id']
+    yammer.message(:post, params)
   end
 end
