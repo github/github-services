@@ -37,7 +37,12 @@ def build_cia_commit(data, repository, branch, sha1, commit, size = 1)
 end
 
 service :cia do |data, payload|
-  server = XMLRPC::Client.new2("http://cia.navi.cx")
+  server = XMLRPC::Client.new2(
+    if !(address = data['address'].to_s).empty?
+      address
+    else
+      "http://cia.vc"
+    end)
 
   repository =
     if !(name = data['project']).to_s.empty?
