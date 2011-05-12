@@ -2,7 +2,7 @@ service :splendid_bacon do |data, payload|
   token = data['token']
   project_id = data['project_id']
   path = "/api/v1/projects/#{project_id}/github?token=#{token}"
-  
+
   req = Net::HTTP::Post.new(path)
   req.set_form_data('payload' => payload.to_json)
   req["Content-Type"] = 'application/x-www-form-urlencoded'

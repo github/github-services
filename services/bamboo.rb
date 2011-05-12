@@ -9,7 +9,7 @@ module Bamboo
       @conn.use_ssl = @uri.scheme.eql?("https")
       @conn.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
-    
+
     def trigger_build
       authenticated do |token|
         @conn.start do |http|

@@ -11,8 +11,8 @@ service :socialcast do |data, payload|
     timestamp = Date.parse(commit['timestamp'])
     heading = "√#{i+1} by #{commit['author']['name']} at #{timestamp}"
     message << "#{heading}\n"
-    heading.length.times do 
-      message << "-" 
+    heading.length.times do
+      message << "-"
     end
     message << "\n#{commit['url']}\n#{commit['message']}\n"
 
@@ -29,7 +29,7 @@ service :socialcast do |data, payload|
   req.basic_auth(data['username'], data['password'])
   req.set_form_data(
     'message[title]' => title,
-    'message[body]' => message, 
+    'message[body]' => message,
     'message[group_id]' => group_id
   )
 
