@@ -45,12 +45,19 @@ service :cia do |data, payload|
     end)
 
   repository =
-    if !(name = data['project']).to_s.empty?
+    if !(name = data['project'].to_s).empty?
       name
     else
       payload['repository']['name']
     end
-  branch  = payload['ref_name']
+
+  branch =
+    if (!branch = data['branch'].to_s).empty?
+      branch.to_s % payload['ref_name']
+    else
+      payload['ref_name']
+    end
+
   commits = payload['commits']
 
   if commits.size > 5
