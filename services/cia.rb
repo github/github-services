@@ -39,9 +39,14 @@ end
 service :cia do |data, payload|
   server = XMLRPC::Client.new2("http://cia.navi.cx")
 
-  repository = data['name'] || payload['repository']['name']
-  branch     = payload['ref_name']
-  commits    = payload['commits']
+  repository =
+    if !(name = data['name']).to_s.empty?
+      name
+    else
+      payload['repository']['name']
+    end
+  branch  = payload['ref_name']
+  commits = payload['commits']
 
   if commits.size > 5
     message = build_cia_commit(data, repository, branch, payload['after'], commits.last, commits.size - 1)
