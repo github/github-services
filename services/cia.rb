@@ -52,8 +52,8 @@ service :cia do |data, payload|
     end
 
   branch =
-    if (!branch = data['branch'].to_s).empty?
-      branch.to_s % payload['ref_name']
+    if !(branch = data['branch'].to_s).empty?
+      branch % payload['ref_name']
     else
       payload['ref_name']
     end
