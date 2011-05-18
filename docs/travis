@@ -15,7 +15,7 @@ Install Notes
       - Enter the host of your Travis installation (defaults to http://travis-ci.org), the protocol-prefix is optional and defaults to "http://".
 
   3.  Check the "Active" checkbox and click "Update Settings".
-  4.  Click on the "Travis CI" service name and then click the "Test Hook" link.
+  4.  Click on the "Travis" service name and then click the "Test Hook" link.
   5.  You should receive an email from Travis once the build has completed
 
 For more details about Travis, go to http://github.com/travis-ci/travis-ci
