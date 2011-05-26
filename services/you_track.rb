@@ -30,7 +30,8 @@ module YouTrack
 
     def execute_command(author, issue_id, command)
       @conn.start do |http|
-        req = Net::HTTP::Post.new(@rest_path + "/issue/" + issue_id + "/execute?command=" + command + "&runAs=" + author, @headers)
+        req = Net::HTTP::Post.new(@rest_path + "/issue/" + issue_id + "/execute?command=" + CGI.escape(command) +
+                                      "&runAs=" + author, @headers)
         resp = http.request(req)
         resp.value
       end
@@ -55,7 +56,7 @@ module YouTrack
       while true
         body = ""
         @conn.start do |http|
-          req = Net::HTTP::Get.new(@rest_path + "/admin/user?q" +email + "&group="+CGI.escape(@committers) +
+          req = Net::HTTP::Get.new(@rest_path + "/admin/user?q=" +email + "&group="+CGI.escape(@committers) +
                                        "&start=#{counter}", @headers)
           resp = http.request(req)
           resp.value
@@ -67,7 +68,7 @@ module YouTrack
             req = Net::HTTP::Get.new(@rest_path + "/admin/user/" + user_ref.attributes["login"], @headers)
             resp = http.request(req)
             resp.value
-            if REXML::Document.new(resp.body).root.attributes["email"] == email
+            if REXML::Document.new(resp.body).root.attributes["email"].upcase == email.upcase
               return if !found_user.nil?
               found_user = user_ref.attributes["login"]
             end
