@@ -33,7 +33,7 @@ describe 'travis service hook' do
   end
 
   it 'can post the payload to the travis_url' do
-    # this is the call we need to do in order to mimick the standard post-reveice hook
+    # this is the call we need to do in order to mimick the standard post-receive hook
     Net::HTTP.stub!(:post_form).once.with(
       URI.parse('http://kronn:5373dd4a3648b88fa9acb8e46ebc188a@my-travis-ci.heroku.com/builds'),
       :payload => JSON.generate(payload)
