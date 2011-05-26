@@ -4,7 +4,7 @@ service :friend_feed do |data, payload|
 
   payload['commits'].each do |commit|
     title = "#{commit['author']['name']} just committed a change to #{repository} on GitHub"
-    comment = "#{commit['id']} - #{commit['message']}"
+    comment = "#{commit['message']} (#{commit['id']})"
 
     req = Net::HTTP::Post.new(friendfeed_url.path)
     req.basic_auth(data['nickname'], data['remotekey'])
