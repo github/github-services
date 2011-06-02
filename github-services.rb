@@ -47,19 +47,7 @@ module GitHub
         status 504
         "Service Timeout"
       rescue Object => boom
-        # redact sensitive info in hook_data hash
-        hook_data = data || params[:data]
-        hook_payload = payload || params[:payload]
-        #%w[password token].each { |key| hook_data[key] &&= '<redacted>' }
-        owner = hook_payload['repository']['owner']['name'] rescue nil
-        repo  = hook_payload['repository']['name'] rescue nil
-        report_exception boom,
-          :hook_name    => name,
-          :hook_data    => hook_data.inspect,
-          :hook_payload => hook_payload.inspect,
-          :user         => owner,
-          :repo         => "#{owner}/#{repo}"
-
+        report_exception boom
         status 500
         "ERROR"
       end
@@ -82,7 +70,7 @@ module GitHub
     url
   end
 
-  def report_exception(exception, other)
+  def report_exception(exception)
 
     backtrace = Array(exception.backtrace)[0..500]
 
@@ -106,9 +94,6 @@ module GitHub
       data['original_class'] = data['class']
       data['class'] = 'Service::Error'
     end
-
-    # optional
-    other.each { |key, value| data[key.to_s] = value.to_s }
 
     if HOSTNAME =~ /^sh1\.(rs|stg)\.github\.com$/
       # run only in github's production environment
