@@ -27,36 +27,23 @@ rescue LoadError
 end
 
 module GitHub
-  class ServiceTimeoutError < Timeout::Error
-  end
-
-  # Raised when an unexpected error occurs during service hook execution.
-  class ServiceError < StandardError
-    attr_reader :original_exception
-    def initialize(message, original_exception=nil)
-      original_exception = message if message.kind_of?(Exception)
-      @original_exception = original_exception
-      super(message)
-    end
-  end
-
-  # Raised when a service hook fails due to bad configuration. Services that
-  # fail with this exception may be automatically disabled.
-  class ServiceConfigurationError < ServiceError
-  end
+  # backwards compatibility
+  ServiceError = Service::Error
+  ServiceTimeoutError = Service::TimeoutError
+  ServiceConfigurationError = Service::ConfigurationError
 
   def service(name)
     post "/#{name}/" do
       begin
         data    = JSON.parse(params[:data])
         payload = parse_payload(params[:payload])
-        ServiceTimeout.timeout(20, ServiceTimeoutError) { yield data, payload }
+        Service::Timeout.timeout(20, Service::TimeoutError) { yield data, payload }
         status 200
         ""
-      rescue GitHub::ServiceConfigurationError => boom
+      rescue Service::ConfigurationError => boom
         status 400
         boom.message
-      rescue GitHub::ServiceTimeoutError => boom
+      rescue Service::TimeoutError => boom
         status 504
         "Service Timeout"
       rescue Object => boom
@@ -86,12 +73,12 @@ module GitHub
   end
 
   def shorten_url(url)
-    ServiceTimeout.timeout(6, ServiceTimeoutError) do
+    Service::Timeout.timeout(6, Service::TimeoutError) do
       short = Net::HTTP.get("api.bit.ly", "/shorten?version=2.0.1&longUrl=#{url}&login=github&apiKey=R_261d14760f4938f0cda9bea984b212e4")
       short = JSON.parse(short)
       short["errorCode"].zero? ? short["results"][url]["shortUrl"] : url
     end
-  rescue ServiceTimeoutError
+  rescue Service::TimeoutError
     url
   end
 
@@ -109,15 +96,15 @@ module GitHub
       'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0])
     }
 
-    if exception.kind_of?(GitHub::ServiceError)
+    if exception.kind_of?(Service::Error)
       if exception.original_exception
         data['original_class'] = exception.original_exception.to_s
         data['backtrace'] = exception.original_exception.backtrace.join("\n")
         data['message'] = exception.original_exception.message[0..254]
       end
-    elsif !exception.kind_of?(GitHub::ServiceTimeoutError)
+    elsif !exception.kind_of?(Service::TimeoutError)
       data['original_class'] = data['class']
-      data['class'] = 'GitHub::ServiceError'
+      data['class'] = 'Service::Error'
     end
 
     # optional
