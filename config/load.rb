@@ -93,7 +93,7 @@ require 'mime/types'
 require 'xmlsimple'
 require 'activesupport'
 require 'rack'
-require 'sinatra'
+require 'sinatra/base'
 require 'tinder'
 require 'json'
 require 'basecamp'
@@ -106,3 +106,4 @@ require 'yammer4r'
 require 'mq'
 
 require File.expand_path('../../lib/service', __FILE__)
+require File.expand_path('../../lib/app', __FILE__)
