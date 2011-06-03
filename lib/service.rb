@@ -29,6 +29,8 @@ class Service
   attr_reader :payload
 
   attr_writer :faraday
+  attr_writer :secret_file
+  attr_writer :secrets
 
   def initialize(event_type, data, payload)
     @event_type = event_type
@@ -73,6 +75,15 @@ class Service
       req.body = body             if body
       yield req if block_given?
     end
+  end
+
+  def secrets
+    @secrets ||=
+      File.exist?(secret_file) ? YAML.load_file(secret_file) : {}
+  end
+
+  def secret_file
+    @secret_file ||= File.expand_path("../../config/secrets.yml")
   end
 
   def raise_config_error(msg = "Invalid configuration")
