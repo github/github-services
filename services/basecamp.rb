@@ -1,12 +1,10 @@
-service :basecamp do |data, payload|
-  begin
+class Service::Basecamp < Service
+  self.hook_name = :basecamp
+
+  def receive_push
     repository      = payload['repository']['name']
     name_with_owner = File.join(payload['repository']['owner']['name'], repository)
     branch          = payload['ref_name']
-
-    basecamp    = Basecamp.new(data['url'], data['username'], data['password'], data['ssl'])
-    project_id  = basecamp.projects.select { |p| p.name.downcase == data['project'].downcase }.first.id
-    category_id = basecamp.message_categories(project_id).select { |category| category.name.downcase == data['category'].downcase }.first.id
 
     commits = payload['commits'].reject { |commit| commit['message'].to_s.strip == '' }
     next if commits.empty?
@@ -56,19 +54,35 @@ EOH
 
   rescue SocketError => boom
     if boom.to_s =~ /getaddrinfo: Name or service not known/
-      raise GitHub::ServiceConfigurationError, "Invalid basecamp domain name"
+      raise_config_error "Invalid basecamp domain name"
     else
       raise
     end
   rescue RuntimeError => boom
     if boom.to_s =~ /\((?:403|401|422)\)/
-      raise GitHub::ServiceConfigurationError, "Invalid credentials"
+      raise_config_error "Invalid credentials"
     elsif boom.to_s =~ /\((?:404|301)\)/
-      raise GitHub::ServiceConfigurationError, "Invalid project URL"
+      raise_config_error "Invalid project URL"
     elsif boom.to_s == 'Unprocessable Entity (422)'
       # do nothing
     else
       raise
     end
+  end
+
+  attr_writer :basecamp
+  attr_writer :project_id
+  attr_writer :category_id
+
+  def basecamp
+    @basecamp ||= ::Basecamp.new(data['url'], data['username'], data['password'], data['ssl'])
+  end
+
+  def project_id
+    @project_id ||= basecamp.projects.select { |p| p.name.downcase == data['project'].downcase }.first.id
+  end
+
+  def category_id
+    @category_id ||= basecamp.message_categories(project_id).select { |category| category.name.downcase == data['category'].downcase }.first.id
   end
 end
