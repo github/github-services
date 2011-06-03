@@ -1,12 +1,16 @@
 class Service::App < Sinatra::Base
-  def self.service(name)
-    post "/#{name}/" do
+  def self.service(svc)
+    post "/#{svc.hook_name}/" do
       begin
         data    = JSON.parse(params[:data])
         payload = parse_payload(params[:payload])
-        Service::Timeout.timeout(20, Service::TimeoutError) { yield data, payload }
-        status 200
-        ""
+        if svc.receive(:push, data, payload)
+          status 200
+          ""
+        else
+          status 404
+          status "#{svc.hook_name} Service does not respond to 'push' events"
+        end
       rescue Service::ConfigurationError => boom
         status 400
         boom.message
@@ -79,20 +83,9 @@ module GitHub
   ServiceConfigurationError = Service::ConfigurationError
 
   def service(name)
-    Service::App.service(name)
-  end
-
-  def shorten_url(url)
-    Service::Timeout.timeout(6, Service::TimeoutError) do
-      short = Net::HTTP.get("api.bit.ly", "/shorten?version=2.0.1&longUrl=#{url}&login=github&apiKey=R_261d14760f4938f0cda9bea984b212e4")
-      short = JSON.parse(short)
-      short["errorCode"].zero? ? short["results"][url]["shortUrl"] : url
-    end
-  rescue Service::TimeoutError
-    url
   end
 end
 
 include GitHub
 
-Dir["#{File.dirname(__FILE__)}/services/**/*.rb"].each { |service| load service }
+Dir["#{File.dirname(__FILE__)}/../services/**/*.rb"].each { |service| load service }
