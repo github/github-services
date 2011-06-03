@@ -2,16 +2,22 @@ GEM
   remote: http://rubygems.org/
   specs:
     activesupport (2.2.2)
+    addressable (2.2.6)
     amqp (0.6.7)
       eventmachine (>= 0.12.4)
     crack (0.1.8)
     daemons (1.1.0)
     eventmachine (0.12.10)
+    faraday (0.7.0)
+      addressable (~> 2.2.4)
+      multipart-post (~> 1.1.0)
+      rack (>= 1.1.0, < 2)
     httparty (0.7.4)
       crack (= 0.1.8)
     json (1.5.1)
     mash (0.1.1)
     mime-types (1.15)
+    multipart-post (1.1.2)
     oauth (0.4.4)
     rack (1.2.1)
     ruby-hmac (0.4.0)
@@ -39,6 +45,7 @@ PLATFORMS
 DEPENDENCIES
   activesupport (= 2.2.2)
   amqp (= 0.6.7)
+  faraday
   httparty (= 0.7.4)
   json (~> 1.5.1)
   mash (~> 0.1.1)
