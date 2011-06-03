@@ -75,10 +75,17 @@ class Service
     end
   end
 
+  def raise_config_error(msg = "Invalid configuration")
+    raise GitHub::ServiceConfigurationError, msg
+  end
+
   def faraday(options = {})
     @faraday ||= begin
       options[:timeout] ||= 6
-      Faraday.new(options) { |b| b.adapter(:net_http) }
+      Faraday.new(options) do |b|
+        b.request :url_encoded
+        b.adapter :net_http
+      end
     end
   end
 

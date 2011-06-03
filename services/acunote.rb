@@ -2,23 +2,14 @@ class AcunoteService < Service
   self.hook_name = :acunote
 
   def receive_push
-    token = @data['token']
-    path = "/source_control/github/#{token}"
+    faraday :ssl => { :verify => false } # :(
 
-    req = Net::HTTP::Post.new(path)
-    req.set_form_data('payload' => @payload.to_json)
-    req["Content-Type"] = 'application/x-www-form-urlencoded'
+    res = http_post "https://www.acunote.com/source_control/github/%s" %
+      [ @data['token'] ],
+      {'payload' => @payload.to_json}
 
-    http = Net::HTTP.new("www.acunote.com", 443)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    begin
-      http.start do |connection|
-        connection.request(req)
-      end
-    rescue Net::HTTPBadResponse
-      raise GitHub::ServiceConfigurationError, "Invalid configuration"
+    if res.status != 200
+      raise_config_error
     end
-    nil
   end
 end

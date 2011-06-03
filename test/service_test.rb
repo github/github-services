@@ -6,8 +6,7 @@ class ServiceTest < Service::TestCase
 
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
-    @service = TestService.new(:push, 'data', 'payload')
-    @service.faraday = Faraday.new { |b| b.adapter(:test, @stubs) }
+    @service = service(:push, 'data', 'payload')
   end
 
   def test_url_shorten
@@ -24,5 +23,9 @@ class ServiceTest < Service::TestCase
     end
 
     assert_equal 'short', @service.shorten_url(url)
+  end
+
+  def service(*args)
+    super TestService, *args
   end
 end
