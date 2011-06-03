@@ -1,4 +1,4 @@
-class AcunoteService < Service
+class Service::Acunote < Service
   self.hook_name = :acunote
 
   def receive_push

@@ -3,8 +3,6 @@ require File.expand_path('../helper', __FILE__)
 class AcunoteTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
-    @service = AcunoteService.new(:push, 'data', 'payload')
-    @service.faraday = Faraday.new { |b| b.adapter(:test, @stubs) }
   end
 
   def test_push
@@ -18,7 +16,7 @@ class AcunoteTest < Service::TestCase
   end
 
   def service(*args)
-    super AcunoteService, *args
+    super Service::Acunote, *args
   end
 end
 
