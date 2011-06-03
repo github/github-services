@@ -1,4 +1,4 @@
-require 'github-services'
+require File.expand_path('../../config/load', __FILE__)
 
 describe 'travis service hook' do
   it 'accepts data and payload as intializing arguments' do

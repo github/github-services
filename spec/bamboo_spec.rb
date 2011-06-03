@@ -1,14 +1,14 @@
-require 'github-services'
+require File.expand_path('../../config/load', __FILE__)
 require 'spec_helper'
 
-set :environment, :test
+Service::App.set :environment, :test
 
 describe 'bamboo service' do
 
   EXAMPLE_BASE_URL = "http://bamboo.example.com".freeze
 
   def app
-    Sinatra::Application
+    Service::App
   end
 
   before(:each) do

@@ -1,12 +1,12 @@
-require 'github-services'
+require File.expand_path('../../config/load', __FILE__)
 require 'spec_helper.rb'
 
 describe 'service freckle' do
 
   def app
-    Sinatra::Application
+    Service::App
   end
-  
+
   before(:each) do
     @req = mock('req')
     @req.stub!(:set_content_type)
