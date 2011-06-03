@@ -1,3 +1,5 @@
+require 'faraday'
+
 class Service
   class << self
     attr_reader :hook_name
@@ -26,18 +28,58 @@ class Service
   attr_reader :data
   attr_reader :payload
 
-  def initialize(event_type)
+  attr_writer :faraday
+
+  def initialize(event_type, data, payload)
     @event_type = event_type
+    @data       = data
+    @payload    = payload
+    @faraday = nil
   end
 
+  # Public
   def shorten_url(url)
-    Service::Timeout.timeout(6, Service::TimeoutError) do
-      short = Net::HTTP.get("api.bit.ly", "/shorten?version=2.0.1&longUrl=#{url}&login=github&apiKey=R_261d14760f4938f0cda9bea984b212e4")
-      short = JSON.parse(short)
-      short["errorCode"].zero? ? short["results"][url]["shortUrl"] : url
+    res = http_get do |req|
+      req.url "http://api.bit.ly/shorten",
+        :version => '2.0.1',
+        :longUrl => url,
+        :login   => 'github',
+        :apiKey  => 'R_261d14760f4938f0cda9bea984b212e4'
     end
-  rescue Service::TimeoutError
+
+    short = JSON.parse(res.body)
+    short["errorCode"].zero? ? short["results"][url]["shortUrl"] : url
+  rescue TimeoutError
     url
+  end
+
+  # Public
+  def http_get(url = nil, headers = nil)
+    block = block_given? ? Proc.new : nil
+    http_method(:get, url, nil, headers, &block)
+  end
+
+  # Public
+  def http_post(url = nil, body = nil, headers = nil)
+    block = block_given? ? Proc.new : nil
+    http_method(:post, url, body, headers, &block)
+  end
+
+  # Public
+  def http_method(method, url = nil, body = nil, headers = nil)
+    faraday.send(method) do |req|
+      req.url(url)                if url
+      req.headers.update(headers) if headers
+      req.body = body             if body
+      yield req if block_given?
+    end
+  end
+
+  def faraday(options = {})
+    @faraday ||= begin
+      options[:timeout] ||= 6
+      Faraday.new(options) { |b| b.adapter(:net_http) }
+    end
   end
 
   # Raised when an unexpected error occurs during service hook execution.
