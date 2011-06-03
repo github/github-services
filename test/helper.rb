@@ -7,7 +7,10 @@ class Service::TestCase < Test::Unit::TestCase
 
   def service(klass, event, data, payload)
     service = klass.new(event, data, payload)
-    service.faraday = Faraday.new { |b| b.adapter(:test, @stubs) }
+    service.faraday = Faraday.new do |b|
+      b.request :url_encoded
+      b.adapter :test, @stubs
+    end
     service
   end
 
