@@ -3,8 +3,8 @@ class Service::Acunote < Service
 
   def receive_push
     res = http_post "https://www.acunote.com/source_control/github/%s" %
-      [ @data['token'] ],
-      {'payload' => @payload.to_json}
+      [ data['token'] ],
+      {'payload' => payload.to_json}
 
     if res.status != 200
       raise_config_error
