@@ -6,4 +6,12 @@ RSpec::Core::RakeTask.new(:spec) do |spec|
   spec.rspec_opts = ['--color']
 end
 
-task :default => :spec
+task :default => :test
+
+require 'rake/testtask'
+Rake::TestTask.new(:test) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/*_test.rb'
+  test.verbose = true
+end
+

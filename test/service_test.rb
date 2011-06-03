@@ -1,7 +1,6 @@
-require 'test/unit'
-require File.expand_path('../../config/load', __FILE__)
+require File.expand_path('../helper', __FILE__)
 
-class ServiceTest < Test::Unit::TestCase
+class ServiceTest < Service::TestCase
   class TestService < Service
   end
 
