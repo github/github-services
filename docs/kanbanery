@@ -1,0 +1,16 @@
+Kanbanery
+======
+
+Install Notes
+-------------
+
+  1. project_id used in kanbanery
+
+Developer Notes
+---------------
+
+data
+  - project_id
+
+payload
+  - refer to docs/github_payload
