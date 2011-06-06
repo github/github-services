@@ -46,7 +46,7 @@ module GitHub
   end
 
   def service(name)
-    post "/#{name}/" do
+    app = lambda do
       begin
         data    = JSON.parse(params[:data])
         payload = parse_payload(params[:payload])
@@ -77,6 +77,8 @@ module GitHub
         "ERROR"
       end
     end
+    post "/#{name}/", &app
+    post "/#{name.to_s.gsub(/[^a-z]/, '')}/:event", &app
   end
 
   def parse_payload(json)
