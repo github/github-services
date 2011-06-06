@@ -2,7 +2,7 @@ service :fog_bugz do |data, payload|
 
   repository  = payload['repository']['name']
   branch      = payload['ref_name']
-  before      = payload['before']   
+  before      = payload['before']
 
   payload['commits'].each do |commit|
     commit_id = commit['id']
