@@ -2,10 +2,11 @@ require 'faraday'
 
 class Service
   class << self
-    attr_reader :hook_name
+    attr_reader :hook_name, :legacy_hook_name
 
     def hook_name=(value)
-      @hook_name = value
+      @legacy_hook_name = value
+      @hook_name = value.to_s.gsub(/[^a-z]/, '')
       Service::App.service(self)
     end
 

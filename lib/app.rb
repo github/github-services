@@ -1,6 +1,6 @@
 class Service::App < Sinatra::Base
   def self.service(svc)
-    post "/#{svc.hook_name}/" do
+    app = lambda do
       begin
         data    = JSON.parse(params[:data])
         payload = parse_payload(params[:payload])
@@ -23,6 +23,8 @@ class Service::App < Sinatra::Base
         "ERROR"
       end
     end
+    post "/#{svc.legacy_hook_name}/", &app
+    post "/#{svc.hook_name}/:event", &app
   end
 
   get "/" do
