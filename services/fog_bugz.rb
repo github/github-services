@@ -27,11 +27,12 @@ service :fog_bugz do |data, payload|
         fb_file = CGI.escape("#{branch}/#{f}")
 
         # build the GET request, and send it to fogbugz
-		    if data['fb_version'] == '7.0'
-          fb_url = "#{data['cvssubmit_url']}?ixBug=#{fb_bugzid}&sFile=#{fb_file}&sPrev=#{fb_r1}&sNew=#{fb_r2}&ixRepository=#{data['fb_repoid']}"
-		    else
-          # FogBugz 6.1
-          fb_url = "#{data['cvssubmit_url']}?ixBug=#{fb_bugzid}&sRepo=#{fb_repo}&sFile=#{fb_file}&sPrev=#{fb_r1}&sNew=#{fb_r2}"
+        if data['fb_version'] == '6'
+            # FogBugz 6 created repositories automatically upon source checkin based on "sRepo"
+            fb_url = "#{data['cvssubmit_url']}?ixBug=#{fb_bugzid}&sRepo=#{fb_repo}&sFile=#{fb_file}&sPrev=#{fb_r1}&sNew=#{fb_r2}"
+        else
+            # FogBugz 7 and later requires you to create the repo in FogBugz and supply "ixRepository" here
+            fb_url = "#{data['cvssubmit_url']}?ixBug=#{fb_bugzid}&sFile=#{fb_file}&sPrev=#{fb_r1}&sNew=#{fb_r2}&ixRepository=#{data['fb_repoid']}"
         end
         url = URI.parse(fb_url)
         conn = Net::HTTP.new(url.host, url.port)
