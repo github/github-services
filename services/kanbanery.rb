@@ -1,31 +1,24 @@
 secrets = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config', 'secrets.yml'))
-site = "http://kanbanery.com/api/v1/projects"
-action = "git_commits"
+site = "http://smackaho.st:3000"
+@uri = URI.parse(site)
+
 service :kanbanery do |data, payload|
-  project_id = secrets['kanbanery']['project_id']
+  project_id = data['project_id']
+  api_token = data['api_token']
   commits   = [ ]
   repository = payload['repository']['name']
 
-  if data['digest'] == '1'
-    commit = payload['commits'][-1]
-    commit_info = {
-      :tiny_url => shorten_url(payload['repository']['url'] + '/commits/' + payload['ref_name']),
-      :message  => commit['message'] #???
-    }
-    commits << commit_info
-  else
-    payload['commits'].each do |commit|
-      commit_info = {
-        :tiny_url => shorten_url(commit['url']),
-        :message  => commit['message'],
-        :author   => commit['author']['name'] || commit['author']['email'],
-        :ref      => commit['ref']
-      }
-      commits << commit_info
-    end
+
+  payload['commits'].each do |commit|
+    commit['shortened_url'] = shorten_url(commit['url'])
   end
 
-  #send commits to "#{site}/#{project_id}/#{action}"
-
+  @uri.path = "/api/v1/projects/#{project_id}/git_commits"
+  http = Net::HTTP.new(@uri.host, @uri.port)
+  request = Net::HTTP::Post.new(@uri.request_uri)
+  request.body = payload.to_json
+  request.content_type = 'application/json'
+  response = http.request(request)
+  
   
 end
