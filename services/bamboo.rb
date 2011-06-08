@@ -46,7 +46,7 @@ class Service::Bamboo < Service
     %w(base_url build_key username password).each do |var|
       raise_config_error "Missing configuration: #{var}" if send(var).to_s.empty?
     end
-    faraday.url_prefix = base_url
+    http.url_prefix = base_url
   end
 
   def base_url

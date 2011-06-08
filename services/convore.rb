@@ -36,9 +36,9 @@ class Service::Convore < Service
       messages[0] = "#{messages.first} (#{url})"
     end
 
-    faraday.url_prefix = "https://convore.com/api/topics"
-    faraday.headers['Content-Type'] = 'application/json'
-    faraday.basic_auth data['username'], data['password']
+    http.url_prefix = "https://convore.com/api/topics"
+    http.headers['Content-Type'] = 'application/json'
+    http.basic_auth data['username'], data['password']
 
     begin
       messages.each do |line|

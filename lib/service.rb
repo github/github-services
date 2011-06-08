@@ -28,7 +28,7 @@ class Service
   attr_reader :data
   attr_reader :payload
 
-  attr_writer :faraday
+  attr_writer :http
   attr_writer :secret_file
   attr_writer :secrets
 
@@ -36,7 +36,7 @@ class Service
     @event_type = event_type
     @data       = data
     @payload    = payload
-    @faraday = nil
+    @http = nil
   end
 
   # Public
@@ -69,7 +69,7 @@ class Service
 
   # Public
   def http_method(method, url = nil, body = nil, headers = nil)
-    faraday.send(method) do |req|
+    http.send(method) do |req|
       req.url(url)                if url
       req.headers.update(headers) if headers
       req.body = body             if body
@@ -90,8 +90,8 @@ class Service
     raise GitHub::ServiceConfigurationError, msg
   end
 
-  def faraday(options = {})
-    @faraday ||= begin
+  def http(options = {})
+    @http ||= begin
       options[:timeout] ||= 6
       Faraday.new(options) do |b|
         b.request :url_encoded
