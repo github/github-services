@@ -31,6 +31,8 @@ class Service
   attr_writer :http
   attr_writer :secret_file
   attr_writer :secrets
+  attr_writer :email_config_file
+  attr_writer :email_config
 
   def initialize(event_type, data, payload)
     @event_type = event_type
@@ -83,7 +85,16 @@ class Service
   end
 
   def secret_file
-    @secret_file ||= File.expand_path("../../config/secrets.yml")
+    @secret_file ||= File.expand_path("../../config/secrets.yml", __FILE__)
+  end
+
+  def email_config
+    @email_config ||=
+      File.exist?(email_config_file) ? YAML.load_file(email_config_file) : {}
+  end
+
+  def email_config_file
+    @email_config_file ||= File.expand_path('../../config/email.yml', __FILE__)
   end
 
   def raise_config_error(msg = "Invalid configuration")
