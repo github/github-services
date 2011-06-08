@@ -12,7 +12,8 @@ Install Notes
     4. Enter the full URL to your Redmine instance as well as the project's identifier and the API key.
     5. We will then notify your Redmine whenever you do a "git push".
 
-Note: The github servers need to have access to "sys/fetch_changesets". The 
+Note: The github servers need to have access to "sys/fetch_changesets". Some older tutorials have you add a rule to your server config to
+allow access to sys/ only from localhost. Since it is now possible to use an API key, this is no longer necessary.
 
 
 Developer Notes
