@@ -1,10 +1,9 @@
+class Service::GeoCommit < Service
+  self.hook_name = :geocommit
 
-service :geocommit do |data, payload|
-
-    url = URI.parse('http://hook.geocommit.com/api/github')
-    req = Net::HTTP::Post.new(url.path)
-    req.body = JSON.generate(payload)
-    req.set_content_type('application/githubpostreceive+json')
-    Net::HTTP.new(url.host, url.port).start {|http| http.request(req)}
-
+  def receive_push
+    http.headers['Content-Type'] = 'application/githubpostreceive+json'
+    http_post 'http://hook.geocommit.com/api/github',
+      JSON.generate(payload)
+  end
 end
