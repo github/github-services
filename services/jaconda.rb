@@ -1,23 +1,16 @@
-service :jaconda do |data, payload|
-  throw :halt, [400, "Missing 'subdomain'"] if data['subdomain'].to_s == ''
-  throw :halt, [400, "Missing 'room_id'"] if data['room_id'].to_s == ''
-  throw :halt, [400, "Missing 'room_token'"] if data['room_token'].to_s == ''
+class Service::Jaconda < Service
+  self.hook_name = :jaconda
 
-  url = URI.parse("https://#{data['subdomain']}.jaconda.im/api/v2/rooms/#{data['room_id']}/notify/github.json")
-  req = Net::HTTP::Post.new(url.path)
-  req.set_form_data({
-    :payload => JSON.generate(payload),
-    :digest => data['digest']
-  })
-  req.basic_auth data['room_token'], "x"
-  http = Net::HTTP.new(url.host, url.port)
-  http.use_ssl = true
-  res = nil
-  http.start { |http| res = http.request(req) }
+  def receive_push
+    raise_config_error "Missing 'subdomain'"  if data['subdomain'].to_s == ''
+    raise_config_error "Missing 'room_id'"    if data['room_id'].to_s == ''
 
-  if res.is_a?(Net::HTTPSuccess)
-    true
-  else
-    throw :halt, [res.code.to_i, res.body.to_s]
+    res = http_post "https://#{data['subdomain']}.jaconda.im/api/v2/rooms/#{data['room_id']}/notify/github.json",
+      :payload => JSON.generate(payload),
+      :digest => data['digest']
+
+    if res.status < 200 || res.status > 299
+      raise_config_error "#{res.status}: #{res.body}"
+    end
   end
 end
