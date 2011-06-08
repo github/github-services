@@ -26,7 +26,7 @@ class BambooTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service :push, data, payload
+    svc = service data, payload
     svc.receive_push
 
     @stubs.verify_stubbed_calls
@@ -47,7 +47,7 @@ class BambooTest < Service::TestCase
     end
 
     data = self.data.update('base_url' => "https://secure.bamboo.com/context")
-    svc = service :push, data, payload
+    svc = service data, payload
     svc.receive_push
 
     @stubs.verify_stubbed_calls
@@ -67,7 +67,7 @@ class BambooTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service :push, data, payload
+    svc = service data, payload
     assert_raise Service::ConfigurationError do
       svc.receive_push
     end
@@ -80,7 +80,7 @@ class BambooTest < Service::TestCase
       [401, {}, '']
     end
 
-    svc = service :push, data, payload
+    svc = service data, payload
 
     assert_raise Service::ConfigurationError do
       svc.receive_push
@@ -89,7 +89,7 @@ class BambooTest < Service::TestCase
 
   def test_requires_base_url
     data = self.data.update('base_url' => '')
-    svc = service :push, data, payload
+    svc = service data, payload
 
     assert_raise Service::ConfigurationError do
       svc.receive_push
@@ -98,7 +98,7 @@ class BambooTest < Service::TestCase
 
   def test_requires_build_key
     data = self.data.update('build_key' => '')
-    svc = service :push, data, payload
+    svc = service data, payload
 
     assert_raise Service::ConfigurationError do
       svc.receive_push
@@ -107,7 +107,7 @@ class BambooTest < Service::TestCase
 
   def test_requires_username
     data = self.data.update('username' => '')
-    svc = service :push, data, payload
+    svc = service data, payload
 
     assert_raise Service::ConfigurationError do
       svc.receive_push
@@ -116,7 +116,7 @@ class BambooTest < Service::TestCase
 
   def test_requires_password
     data = self.data.update('password' => '')
-    svc = service :push, data, payload
+    svc = service data, payload
 
     assert_raise Service::ConfigurationError do
       svc.receive_push
@@ -124,7 +124,7 @@ class BambooTest < Service::TestCase
   end
 
   def test_failed_bamboo_server
-    svc = service :push, data, payload
+    svc = service data, payload
     def svc.http_post(*args)
       raise SocketError, "getaddrinfo: Name or service not known"
     end
@@ -139,7 +139,7 @@ class BambooTest < Service::TestCase
       [404, {}, '']
     end
 
-    svc = service :push, data, payload
+    svc = service data, payload
 
     assert_raise Service::ConfigurationError do
       svc.receive_push

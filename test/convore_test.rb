@@ -14,7 +14,7 @@ class ConvoreTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service(:push, {
+    svc = service({
       'topic_id' => '1',
       'username' => 'rick',
       'password' => 'monkey'

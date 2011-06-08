@@ -2,9 +2,9 @@ require File.expand_path('../helper', __FILE__)
 
 class EmailTest < Service::TestCase
   def test_push
-    svc = service :push,
+    svc = service(
       {'address' => 'a'},
-      payload
+      payload)
 
     svc.receive_push
 
@@ -16,9 +16,9 @@ class EmailTest < Service::TestCase
   end
 
   def test_push_from_author
-    svc = service :push,
+    svc = service(
       {'address' => 'a', 'send_from_author' => '1'},
-      payload
+      payload)
 
     svc.receive_push
 
@@ -30,17 +30,17 @@ class EmailTest < Service::TestCase
   end
 
   def test_smtp_settings
-    svc = service :push,
+    svc = service(
       {'address' => 'a'},
-      'payload'
+      'payload')
     svc.email_config = {'address' => 'a', 'port' => '1', 'domain' => 'd'}
     assert_equal ['a', 1, 'd'], svc.smtp_settings
   end
 
   def test_smtp_settings_with_auth
-    svc = service :push,
+    svc = service(
       {'address' => 'a'},
-      'payload'
+      'payload')
     svc.email_config = {'address' => 'a', 'port' => '1', 'domain' => 'd',
       'authentication' => 'au', 'user_name' => 'u', 'password' => 'p'}
     assert_equal ['a', 1, 'd', 'u', 'p', 'au'], svc.smtp_settings

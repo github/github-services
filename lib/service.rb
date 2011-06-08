@@ -10,7 +10,7 @@ class Service
     end
 
     def receive(event_type, data, payload)
-      svc = new(event_type, data, payload)
+      svc = new(data, payload)
       event_method = "receive_#{event_type}"
       if svc.respond_to?(event_method)
         Service::Timeout.timeout(20, TimeoutError) do
@@ -24,7 +24,6 @@ class Service
     end
   end
 
-  attr_reader :event_type
   attr_reader :data
   attr_reader :payload
 
@@ -34,8 +33,7 @@ class Service
   attr_writer :email_config_file
   attr_writer :email_config
 
-  def initialize(event_type, data, payload)
-    @event_type = event_type
+  def initialize(data, payload)
     @data       = data
     @payload    = payload
     @http = nil

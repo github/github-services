@@ -6,7 +6,7 @@ class ContinuityAppTest < Service::TestCase
   end
 
   def test_push
-    svc = service :push, {'project_id' => '55'}, {'a' => 1}
+    svc = service({'project_id' => '55'}, 'a' => 1)
 
     @stubs.post "/github_selfservice/v1/55" do |env|
       assert_match /(^|\&)payload=%7B%22a%22%3A1%7D($|\&)/, env[:body]

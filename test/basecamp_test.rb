@@ -2,7 +2,7 @@ require File.expand_path('../helper', __FILE__)
 
 class BasecampTest < Service::TestCase
   def test_receives_push
-    svc = service :push, {}, payload
+    svc = service({}, payload)
     svc.receive_push
 
     assert msg = svc.basecamp.messages.shift

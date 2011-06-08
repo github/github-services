@@ -9,7 +9,7 @@ class CIATest < Service::TestCase
   end
 
   def test_push
-    svc = service :push, {'project' => 'abc', 'long_url'=>1}, payload
+    svc = service({'project' => 'abc', 'long_url'=>1}, payload)
     svc.xmlrpc_server = @server
     svc.receive_push
 

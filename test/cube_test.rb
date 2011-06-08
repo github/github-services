@@ -15,9 +15,9 @@ class CubeTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service :push,
+    svc = service(
       {'project' => 'p', 'token' => 't', 'domain' => 'd'},
-      {'a' => 1}
+      'a' => 1)
     svc.receive_push
   end
 

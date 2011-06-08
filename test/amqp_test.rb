@@ -19,7 +19,7 @@ class AMQPTest < Service::TestCase
       }]
     }
 
-    svc = service(:push, data, payload)
+    svc = service(data, payload)
     svc.amqp_connection = connection_stub
     svc.amqp_exchange   = exchange_stub
     svc.receive_push
@@ -51,14 +51,14 @@ class AMQPTest < Service::TestCase
   end
 
   def test_requires_data_host
-    svc = service(:push, {}, 'payload')
+    svc = service({}, 'payload')
     assert_raise Service::ConfigurationError do
       svc.receive_push
     end
   end
 
   def test_requires_data_exchange
-    svc = service(:push, {'data' => 'a'}, 'payload')
+    svc = service({'data' => 'a'}, 'payload')
     assert_raise Service::ConfigurationError do
       svc.receive_push
     end

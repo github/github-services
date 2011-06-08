@@ -12,7 +12,7 @@ class AcunoteTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service(:push, {'token' => 'abc'}, 'payload')
+    svc = service({'token' => 'abc'}, 'payload')
     svc.receive_push
   end
 

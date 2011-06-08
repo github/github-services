@@ -17,9 +17,9 @@ class FogBugzTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service :push,
+    svc = service(
       {'cvssubmit_url' => '/fb', 'fb_repoid' => 'r'},
-      modified_payload
+      modified_payload)
     svc.receive_push
   end
 
@@ -35,9 +35,9 @@ class FogBugzTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service :push,
+    svc = service(
       {'cvssubmit_url' => '/fb', 'fb_repoid' => 'r', 'fb_version' => '6'},
-      modified_payload
+      modified_payload)
     svc.receive_push
   end
 

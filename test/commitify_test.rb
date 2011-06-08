@@ -6,7 +6,7 @@ class CommitifyTest < Service::TestCase
   end
 
   def test_push
-    svc = service :push, {'private_key' => 'abc'}, {'a' => 1}
+    svc = service({'private_key' => 'abc'}, 'a' => 1)
 
     @stubs.post "/commit" do |env|
       assert_match "key=abc", env[:body]

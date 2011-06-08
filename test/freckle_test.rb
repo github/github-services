@@ -67,7 +67,7 @@ class FreckleTest < Service::TestCase
 
   def call_service(event)
     res = nil
-    svc  = service event, data, payload
+    svc  = service data, payload
     @stubs.post '/api/entries/import' do |env|
       res = JSON.parse env[:body]
     end

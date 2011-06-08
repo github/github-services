@@ -12,8 +12,8 @@ class FlowdockTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service :push,
-      {'token' => 't'}, {'a' => 1}
+    svc = service(
+      {'token' => 't'}, 'a' => 1)
     svc.receive_push
   end
 

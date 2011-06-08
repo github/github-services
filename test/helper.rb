@@ -5,8 +5,8 @@ class Service::TestCase < Test::Unit::TestCase
   def test_default
   end
 
-  def service(klass, event, data, payload)
-    service = klass.new(event, data, payload)
+  def service(klass, data, payload)
+    service = klass.new(data, payload)
     service.http = Faraday.new do |b|
       b.request :url_encoded
       b.adapter :test, @stubs

@@ -6,7 +6,7 @@ class CoOpTest < Service::TestCase
   end
 
   def test_push
-    svc = service :push, {'group_id' => 'abc', 'token' => 'def'}, payload
+    svc = service({'group_id' => 'abc', 'token' => 'def'}, payload)
 
     num = 0
     @stubs.post "/groups/abc/notes" do |env|
