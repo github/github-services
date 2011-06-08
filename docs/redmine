@@ -7,10 +7,12 @@ Install Notes
 -------------
 
 	1. Download and install Redmine from http://redmine.org
-    2. Activate "Enable WS for repository management" in the global settings.
+    2. Activate "Enable WS for repository management" in the global settings. While there, generate an API key (if neccessary) and copy it.
     3. Set your github repository as git repository for a project.
-    4. Enter the full URL to your Redmine instance as well as the project's identifier.
-    5. We will then notify your Redmine whenever you do a "git push",
+    4. Enter the full URL to your Redmine instance as well as the project's identifier and the API key.
+    5. We will then notify your Redmine whenever you do a "git push".
+
+Note: The github servers need to have access to "sys/fetch_changesets". The 
 
 
 Developer Notes
@@ -18,6 +20,7 @@ Developer Notes
 
 data
   - address (full URL of the redmine instance)
+  - api_key (the API key for using the webservice)
   - project (identifier of the project belonging to this repsitory)
 
 payload

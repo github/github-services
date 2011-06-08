@@ -1,5 +1,5 @@
 service :redmine do |data, payload|
-    url = URI.join(data['address'], "sys/fetch_changesets?id=#{URI.escape(data['project'])}")
+    url = URI.join(data['address'], "sys/fetch_changesets?key=#{URI.escape(data['api_key'])}&id=#{URI.escape(data['project'])}")
     if (url.scheme == "http")
         Net::HTTP.get(url)
     elsif (url.scheme == "https")
