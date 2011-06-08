@@ -15,7 +15,7 @@ service :kanbanery do |data, payload|
 
   @uri.path = "/api/v1/projects/#{project_id}/git_commits"
   http = Net::HTTP.new(@uri.host, @uri.port)
-  request = Net::HTTP::Post.new(@uri.request_uri)
+  request = Net::HTTP::Post.new(@uri.request_uri, {'X-Kanbanery-ApiToken' => api_token})
   request.body = payload.to_json
   request.content_type = 'application/json'
   response = http.request(request)
