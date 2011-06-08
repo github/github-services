@@ -58,15 +58,23 @@ class Service
   end
 
   # Public
-  def http_get(url = nil, headers = nil)
-    block = block_given? ? Proc.new : nil
-    http_method(:get, url, nil, headers, &block)
+  def http_get(url = nil, params = nil, headers = nil)
+    http.get do |req|
+      req.url(url)                if url
+      req.params.update(params)   if params
+      req.headers.update(headers) if headers
+      yield req if block_given?
+    end
   end
 
   # Public
   def http_post(url = nil, body = nil, headers = nil)
-    block = block_given? ? Proc.new : nil
-    http_method(:post, url, body, headers, &block)
+    http.post do |req|
+      req.url(url)                if url
+      req.headers.update(headers) if headers
+      req.body = body             if body
+      yield req if block_given?
+    end
   end
 
   # Public

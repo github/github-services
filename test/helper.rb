@@ -33,7 +33,7 @@ class Service::TestCase < Test::Unit::TestCase
       "commits" => [
         {
           "removed"   => [],
-          "message"   => "stub git call for Grit#heads test f:15",
+          "message"   => "stub git call for Grit#heads test f:15 Case#1",
           "added"     => [],
           "timestamp" => "2007-10-10T00:11:02-07:00",
           "modified"  => ["lib/grit/grit.rb", "test/helper.rb", "test/test_grit.rb"],
@@ -65,3 +65,4 @@ class Service::TestCase < Test::Unit::TestCase
     }
   end
 end
+

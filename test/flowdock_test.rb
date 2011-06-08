@@ -22,5 +22,3 @@ class FlowdockTest < Service::TestCase
   end
 end
 
-
-
