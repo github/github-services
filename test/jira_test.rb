@@ -24,4 +24,3 @@ class JiraTest < Service::TestCase
   end
 end
 
-
