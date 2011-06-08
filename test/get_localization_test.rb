@@ -23,5 +23,3 @@ class GetLocalizationTest < Service::TestCase
   end
 end
 
-
-
