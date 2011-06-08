@@ -1,65 +1,60 @@
-service :convore do |data, payload|
-  # fail fast with no username
-  raise GitHub::ServiceConfigurationError, "Missing username" if data['username'].to_s == ''
+class Service::Convore < Service
+  self.hook_name = :convore
 
-  repository  = payload['repository']['name']
-  owner       = payload['repository']['owner']['name']
-  branch      = payload['ref_name']
-  commits     = payload['commits']
-  compare_url = payload['compare']
-  commits.reject! { |commit| commit['message'].to_s.strip == '' }
-  next if commits.empty?
+  def receive_push
+    raise_config_error "Missing username" if data['username'].to_s == ''
 
-  prefix = "[#{repository}/#{branch}]"
-  primary, others = commits[0..4], Array(commits[5..-1])
-  messages =
-    primary.map do |commit|
-      short = commit['message'].split("\n", 2).first
-      short += ' ...' if short != commit['message']
-      "#{prefix} #{short} - #{commit['author']['name']}"
-    end
+    repository  = payload['repository']['name']
+    owner       = payload['repository']['owner']['name']
+    branch      = payload['ref_name']
+    commits     = payload['commits']
+    compare_url = payload['compare']
+    commits.reject! { |commit| commit['message'].to_s.strip == '' }
+    next if commits.empty?
 
-  if messages.size > 1
-    before, after = payload['before'][0..6], payload['after'][0..6]
-    url = compare_url
-    summary =
-      if others.any?
-        "#{prefix} (+#{others.length} more) commits #{before}...#{after}: #{url}"
-      else
-        "#{prefix} commits #{before}...#{after}: #{url}"
+    prefix = "[#{repository}/#{branch}]"
+    primary, others = commits[0..4], Array(commits[5..-1])
+    messages =
+      primary.map do |commit|
+        short = commit['message'].split("\n", 2).first
+        short += ' ...' if short != commit['message']
+        "#{prefix} #{short} - #{commit['author']['name']}"
       end
-    messages << summary
-  else
-    url = commits.first['url']
-    messages[0] = "#{messages.first} (#{url})"
-  end
 
-  def speak(data, line)
-    url = URI.parse("https://convore.com/api/topics/#{data['topic_id']}/messages/create.json")
-    http = Net::HTTP.new(url.host, 443)
-    req = Net::HTTP::Post.new(url.path)
-    http.use_ssl = true
-    req['Content-Type'] = "application/json"
-    req.basic_auth data['username'], data['password']
-    req.set_form_data({ 'message' => line })
-    return http.request(req)
-  end
-  
-  begin
-    messages.each do |line| 
-      
-      response = speak(data, line)
-      
-      case response
-        when Net::HTTPSuccess
-          # OK
+    if messages.size > 1
+      before, after = payload['before'][0..6], payload['after'][0..6]
+      url = compare_url
+      summary =
+        if others.any?
+          "#{prefix} (+#{others.length} more) commits #{before}...#{after}: #{url}"
         else
-          response.error!
+          "#{prefix} commits #{before}...#{after}: #{url}"
         end
-      
+      messages << summary
+    else
+      url = commits.first['url']
+      messages[0] = "#{messages.first} (#{url})"
     end
 
-  rescue Errno::ECONNREFUSED => boom
-    raise GitHub::ServiceConfigurationError, "Connection refused. Invalid group."
+    faraday.url_prefix = "https://convore.com/api/topics"
+    faraday.headers['Content-Type'] = 'application/json'
+    faraday.basic_auth data['username'], data['password']
+
+    begin
+      messages.each do |line|
+        res = speak(data['topic_id'], line)
+        if res.status < 200 or res.status > 299
+          raise_config_error "Convore Error"
+        end
+      end
+
+    rescue Errno::ECONNREFUSED => boom
+      raise_config_error "Connection refused. Invalid group."
+    end
+  end
+
+  def speak(topic_id, line)
+    http_post "#{data['topic_id']}/messages/create.json",
+      JSON.generate('message' => line)
   end
 end

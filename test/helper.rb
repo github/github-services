@@ -14,6 +14,10 @@ class Service::TestCase < Test::Unit::TestCase
     service
   end
 
+  def basic_auth(user, pass)
+    "Basic " + ["#{user}:#{pass}"].pack("m*").strip
+  end
+
   def payload
     {
       "after"  => "a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
