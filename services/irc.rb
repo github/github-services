@@ -1,14 +1,13 @@
-service :irc do |data, payload|
-  begin
+class Service::IRC < Service
+  self.hook_name = :irc
+
+  def receive_push
     next if payload['commits'].empty?
 
     repository = payload['repository']['name']
     branch     = payload['ref_name']
     rooms      = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
     botname    = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
-    socket     = nil
-
-    socket = TCPSocket.open(data['server'], data['port'])
 
     messages =
       payload['commits'].map do |commit|
@@ -46,44 +45,33 @@ service :irc do |data, payload|
       messages[0] << " - #{tiny_url}"
     end
 
-    if data['ssl'].to_i == 1
-      ssl_context = OpenSSL::SSL::SSLContext.new
-      ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      ssl_socket = OpenSSL::SSL::SSLSocket.new(socket, ssl_context)
-      ssl_socket.sync_close = true
-      ssl_socket.connect
-      irc = ssl_socket
-    else
-      irc = socket
-    end
-
-    irc.puts "PASS #{data['password']}" if data['password'] && !data['password'].empty?
-    irc.puts "NICK #{botname}"
-    irc.puts "USER #{botname} 8 * :GitHub IRCBot"
+    self.puts "PASS #{data['password']}" if data['password'] && !data['password'].empty?
+    self.puts "NICK #{botname}"
+    self.puts "USER #{botname} 8 * :GitHub IRCBot"
 
     loop do
-      case irc.gets
+      case self.gets
       when / 004 #{botname} /
         break
       when /^PING\s*:\s*(.*)$/
-        irc.puts "PONG #{$1}"
+        self.puts "PONG #{$1}"
       end
     end
 
     without_join = data['message_without_join'] == '1'
     rooms.each do |room|
       room, pass = room.split("::")
-      irc.puts "JOIN #{room} #{pass}" unless without_join
+      self.puts "JOIN #{room} #{pass}" unless without_join
 
       messages.each do |message|
-        irc.puts "PRIVMSG #{room} :#{message}"
+        self.puts "PRIVMSG #{room} :#{message}"
       end
 
-      irc.puts "PART #{room}" unless without_join
+      self.puts "PART #{room}" unless without_join
     end
 
-    irc.puts "QUIT"
-    irc.gets until irc.eof?
+    self.puts "QUIT"
+    self.gets until self.eof?
   rescue SocketError => boom
     if boom.to_s =~ /getaddrinfo: Name or service not known/
       raise GitHub::ServiceConfigurationError, "Invalid host"
@@ -96,5 +84,34 @@ service :irc do |data, payload|
     raise GitHub::ServiceConfigurationError, "Invalid host"
   rescue OpenSSL::SSL::SSLError
     raise GitHub::ServiceConfigurationError, "Host does not support SSL"
+  end
+
+  def gets
+    irc.gets
+  end
+
+  def eof?
+    irc.eof?
+  end
+
+  def puts(*args)
+    irc.puts *args
+  end
+
+  def irc
+    @irc ||= begin
+      socket = TCPSocket.open(data['server'], data['port'])
+    end
+
+    if data['ssl'].to_i == 1
+      ssl_context = OpenSSL::SSL::SSLContext.new
+      ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      ssl_socket = OpenSSL::SSL::SSLSocket.new(socket, ssl_context)
+      ssl_socket.sync_close = true
+      ssl_socket.connect
+      ssl_socket
+    else
+      socket
+    end
   end
 end
