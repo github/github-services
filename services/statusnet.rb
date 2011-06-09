@@ -1,7 +1,8 @@
-service :statusnet do |data, payload|
-  begin
+class Service::StatusNet < Service
+  self.hook_name = :statusnet
+
+  def receive_push
     repository = payload['repository']['name']
-    url = URI.parse(data['server'] + "/api/statuses/update.xml")
     statuses = Array.new
 
     if data['digest'] == '1'
@@ -15,14 +16,13 @@ service :statusnet do |data, payload|
       end
     end
 
+    http.url_prefix = data['server']
+    http.basic_auth(data['username'], data['password'])
     statuses.each do |status|
-      req = Net::HTTP::Post.new(url.path)
-      req.basic_auth(data['username'], data['password'])
-      req.set_form_data('status' => status, 'source' => 'github')
-
-      Net::HTTP.new(url.host, url.port).start { |http| http.request(req) }
+      http_post '/api/statuses/update.xml',
+        'status' => status, 'source' => 'github'
     end
   rescue Errno::ECONNREFUSED => boom
-    raise GitHub::ServiceConfigurationError, "Connection refused. Invalid server configuration."
+    raise_config_error "Connection refused. Invalid server configuration."
   end
 end
