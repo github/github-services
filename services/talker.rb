@@ -1,32 +1,25 @@
-service :talker do |data, payload|
-  repository = payload['repository']['name']
-  branch = payload['ref_name']
-  commits = payload['commits']
-  token = data['token']
-  url = URI.parse("#{data['url']}/messages.json")
+class Service::Talker < Service
+  self.hook_name = :talker
 
-  if data['digest'] == 1
-    commit = commits.last
-    message = "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} #{commit['url']} )"
+  def receive_push
+    repository = payload['repository']['name']
+    branch = payload['ref_name']
+    commits = payload['commits']
+    token = data['token']
 
-    req = Net::HTTP::Post.new(url.path)
-    req["X-Talker-Token"] = "#{token}"
-    req.set_form_data('message' => message)
+    http.headers["X-Talker-Token"] = token
 
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true if url.port == 443 || url.instance_of?(URI::HTTPS)
-    http.start { |http| http.request(req) }
-  else
-    commits.each do |commit|
-      message = "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} #{commit['url']}"
+    if data['digest'] == 1
+      commit = commits.last
+      message = "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} #{commit['url']} )"
 
-      req = Net::HTTP::Post.new(url.path)
-      req["X-Talker-Token"] = "#{token}"
-      req.set_form_data('message' => message)
+      http_post data['url'], :message => message
+    else
+      commits.each do |commit|
+        message = "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} #{commit['url']}"
 
-      http = Net::HTTP.new(url.host, url.port)
-      http.use_ssl = true if url.port == 443 || url.instance_of?(URI::HTTPS)
-      http.start { |http| http.request(req) }
+        http_post data['url'], :message => message
+      end
     end
   end
 end
