@@ -43,6 +43,18 @@ module PayloadHelpers
     payload['after'][0..6]
   end
 
+  def format_commit_message(commit)
+    short = commit['message'].split("\n", 2).first
+    short += '...' if short != commit['message']
+    "[#{repository}/#{branch_name}] #{short} - #{commit['author']['name']}"
+  end
+
+  def commit_messages
+    distinct_commits.map do |commit|
+      format_commit_message(commit)
+    end
+  end
+
   def summary_message
     message = []
     message << "[#{repo_name}] #{pusher_name}"
@@ -106,7 +118,6 @@ module PayloadHelpers
 
     elsif distinct_commits.size == 1
       distinct_commits.first['url']
-      after_sha_url
 
     else
       compare_url

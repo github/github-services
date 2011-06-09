@@ -6,20 +6,12 @@ class Service::Campfire < Service
 
     messages = []
     messages << "#{summary_message}: #{summary_url}"
-
-    distinct_commits.first(4).each do |commit|
-      short = commit['message'].split("\n", 2).first
-      short += '...' if short != commit['message']
-
-      messages << "[#{repository}/#{branch_name}] #{short} - #{commit['author']['name']}"
-    end
+    messages += commit_messages.first(4)
 
     if messages.first =~ /pushed 1 new commit/
       messages.shift # drop summary message
       messages.first << " (#{distinct_commits.first['url']})"
     end
-
-    return if messages.empty?
 
     begin
       campfire   = Tinder::Campfire.new(data['subdomain'], :ssl => true)
