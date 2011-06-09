@@ -14,7 +14,7 @@ class Service::Campfire < Service
       messages << "[#{repository}/#{branch_name}] #{short} - #{commit['author']['name']}"
     end
 
-    if distinct_commits.size == 1
+    if messages.first =~ /pushed 1 new commit/
       messages.shift # drop summary message
       messages.first << " (#{distinct_commits.first['url']})"
     end
