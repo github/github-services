@@ -23,6 +23,7 @@ class Service::TestCase < Test::Unit::TestCase
       "after"  => "a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
       "ref"    => "refs/heads/master",
       "before" => "4c8124ffcf4039d292442eeccabdeca5af5c5017",
+      "compare" => "http://github.com/mojombo/grit/compare/4c8124f...a47fd41",
 
       "repository" => {
         "name"  => "grit",
@@ -30,8 +31,13 @@ class Service::TestCase < Test::Unit::TestCase
         "owner" => { "name" => "mojombo", "email" => "tom@mojombo.com" }
       },
 
+      "pusher" => {
+        "name" => "rtomayko"
+      },
+
       "commits" => [
         {
+          "distinct"  => true,
           "removed"   => [],
           "message"   => "stub git call for Grit#heads test f:15 Case#1",
           "added"     => [],
@@ -42,6 +48,7 @@ class Service::TestCase < Test::Unit::TestCase
           "id"        => "06f63b43050935962f84fe54473a7c5de7977325"
         },
         {
+          "distinct"  => true,
           "removed"   => [],
           "message"   => "clean up heads test f:2hrs",
           "added"     => [],
@@ -52,6 +59,7 @@ class Service::TestCase < Test::Unit::TestCase
           "id"        => "5057e76a11abd02e83b7d3d3171c4b68d9c88480"
         },
         {
+          "distinct"  => true,
           "removed"   => [],
           "message"   => "add more comments throughout",
           "added"     => [],
