@@ -1,6 +1,5 @@
 module TeamCity
   class Remote
-
     def initialize(data = {})
       @base_url, @build_type_id, @username, @password = data['base_url'], data['build_type_id'], data['username'], data['password']
       instance_variables.each{|var| raise GitHub::ServiceConfigurationError.new("Missing configuration: #{var}") if instance_variable_get(var).to_s.empty? }
@@ -25,8 +24,10 @@ module TeamCity
   end
 end
 
-service :team_city do |data, payload|
-  begin
+class Service::TeamCity < Service
+  self.hook_name = :team_city
+
+  def receive_push
     TeamCity::Remote.new(data).trigger_build
   rescue SocketError => e
     raise GitHub::ServiceConfigurationError.new("Invalid TeamCity host name") if e.to_s =~ /getaddrinfo: Name or service not known/
