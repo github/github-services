@@ -24,14 +24,12 @@ class FogBugzTest < Service::TestCase
   end
 
   def test_push_for_fogbugz_6
-    url = "/fb?"
-    url << "ixBug=1&"
-    url << "sFile=%2Flib%2Fgrit%2Fgrit.rb&"
-    url << "sNew=06f63b43050935962f84fe54473a7c5de7977325&"
-    url << "sPrev=4c8124ffcf4039d292442eeccabdeca5af5c5017&"
-    url << "sRepo=grit"
-
-    @stubs.get url do |env|
+    @stubs.get '/fb' do |env|
+      assert_equal '1', env[:params]['ixBug']
+      assert_equal '/lib/grit/grit.rb', env[:params]['sFile']
+      assert_equal '06f63b43050935962f84fe54473a7c5de7977325', env[:params]['sNew']
+      assert_equal '4c8124ffcf4039d292442eeccabdeca5af5c5017', env[:params]['sPrev']
+      assert_equal 'grit', env[:params]['sRepo']
       [200, {}, '']
     end
 
