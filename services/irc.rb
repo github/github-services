@@ -2,48 +2,15 @@ class Service::IRC < Service
   self.hook_name = :irc
 
   def receive_push
-    next if payload['commits'].empty?
+    return if distinct_commits.empty?
 
-    repository = payload['repository']['name']
-    branch     = payload['ref_name']
-    rooms      = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
-    botname    = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
+    rooms   = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
+    botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
+    url     = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
 
-    messages =
-      payload['commits'].map do |commit|
-        short  = commit['message'].split("\n", 2).first.to_s
-        short += ' ...' if short != commit['message']
-        author = commit['author']['name']
-        sha1   = commit['id']
-        files  = Array(commit['modified'])
-        dirs   = files.map { |file| File.dirname(file) }.uniq
-        if data['no_colors'].to_i == 1
-            "#{repository}: #{branch} #{author} * " +
-            "#{sha1[0..6]} (#{files.size} files in #{dirs.size} dirs): #{short}"
-        else
-            "\002#{repository}:\002 \00307#{branch}\003 \00303#{author}\003 * " +
-            "\002#{sha1[0..6]}\002 (#{files.size} files in #{dirs.size} dirs): #{short}"
-        end
-      end
-
-    if messages.size > 1
-      before, after = payload['before'][0..6], payload['after'][0..6]
-      compare_url   = payload['repository']['url'] + "/compare/#{before}...#{after}"
-      tiny_url      = data['long_url'].to_i == 1 ? compare_url : shorten_url(compare_url)
-      if data['no_colors'].to_i == 1
-          summary = "#{repository}: #{branch} commits " +
-                    "#{before}...#{after} - #{tiny_url}"
-      else
-          summary = "\002#{repository}:\002 \00307#{branch}\003 commits " +
-                    "\002#{before}\002...\002#{after}\002 - #{tiny_url}"
-      end
-      messages << summary
-    else
-      commit   = payload['commits'][0]
-      url      = commit['url']
-      tiny_url = data['long_url'].to_i == 1 ? url : shorten_url(url)
-      messages[0] << " - #{tiny_url}"
-    end
+    messages = []
+    messages << "#{summary_message}: #{url}"
+    messages += commit_messages.first(3)
 
     self.puts "PASS #{data['password']}" if data['password'] && !data['password'].empty?
     self.puts "NICK #{botname}"
@@ -74,16 +41,16 @@ class Service::IRC < Service
     self.gets until self.eof?
   rescue SocketError => boom
     if boom.to_s =~ /getaddrinfo: Name or service not known/
-      raise GitHub::ServiceConfigurationError, "Invalid host"
+      raise_config_error 'Invalid host'
     elsif boom.to_s =~ /getaddrinfo: Servname not supported for ai_socktype/
-      raise GitHub::ServiceConfigurationError, "Invalid port"
+      raise_config_error 'Invalid port'
     else
       raise
     end
   rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-    raise GitHub::ServiceConfigurationError, "Invalid host"
+    raise_config_error 'Invalid host'
   rescue OpenSSL::SSL::SSLError
-    raise GitHub::ServiceConfigurationError, "Host does not support SSL"
+    raise_config_error 'Host does not support SSL'
   end
 
   def gets
@@ -112,6 +79,24 @@ class Service::IRC < Service
       ssl_socket
     else
       socket
+    end
+  end
+
+  def format_commit_message(commit)
+    short  = commit['message'].split("\n", 2).first.to_s
+    short += '...' if short != commit['message']
+
+    author = commit['author']['name']
+    sha1   = commit['id']
+    files  = Array(commit['modified'])
+    dirs   = files.map { |file| File.dirname(file) }.uniq
+
+    if data['no_colors'].to_i == 1
+        "#{repo_name}: #{branch_name} #{author} * " +
+        "#{sha1[0..6]} (#{files.size} files in #{dirs.size} dirs): #{short}"
+    else
+        "\002#{repo_name}:\002 \00307#{branch_name}\003 \00303#{author}\003 * " +
+        "\002#{sha1[0..6]}\002 (#{files.size} files in #{dirs.size} dirs): #{short}"
     end
   end
 end
