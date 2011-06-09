@@ -21,6 +21,3 @@ class FriendFeedTest < Service::TestCase
   end
 end
 
-
-
-

@@ -25,4 +25,3 @@ class BoxcarTest < Service::TestCase
   end
 end
 
-
