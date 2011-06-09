@@ -1,21 +1,13 @@
-service :splendid_bacon do |data, payload|
-  token = data['token']
-  project_id = data['project_id']
-  path = "/api/v1/projects/#{project_id}/github?token=#{token}"
+class Service::SplendidBacon < Service
+  self.hook_name = :splendid_bacon
 
-  req = Net::HTTP::Post.new(path)
-  req.set_form_data('payload' => payload.to_json)
-  req["Content-Type"] = 'application/x-www-form-urlencoded'
-
-  http = Net::HTTP.new("splendidbacon.com", 443)
-  http.use_ssl = true
-  http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-  begin
-    http.start do |connection|
-      connection.request(req)
+  def receive_push
+    token = data['token']
+    project_id = data['project_id']
+    http.url_prefix = 'https://splendidbacon.com'
+    http_post "/api/v1/projects/#{project_id}/github" do |req|
+      req.params[:token] = token
+      req.body = {:payload => payload.to_json}
     end
-  rescue Net::HTTPBadResponse
-    raise GitHub::ServiceConfigurationError, "Invalid configuration"
   end
-  nil
 end
