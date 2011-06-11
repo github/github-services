@@ -33,6 +33,7 @@ class YouTrackTest < Service::TestCase
       assert_equal 'sc', env[:request_headers]['Cookie']
       assert_equal 'zomg omg', env[:params]['command']
       assert_equal 'mojombo', env[:params]['runAs']
+      [200, {}, '']
     end
 
     hash = payload

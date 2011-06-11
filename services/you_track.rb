@@ -14,6 +14,7 @@ class Service::YouTrack < Service
           :password => data['password']
         req.headers['Content-Length'] = '0'
       end
+      verify_response(res)
 
       http.headers['Cookie'] = res.headers['set-cookie']
       http.headers['Cache-Control'] = 'no-cache'
@@ -44,9 +45,11 @@ class Service::YouTrack < Service
     while true
       body = ""
       res = http_get "rest/admin/user", :q => email, :group => data['committers'], :start => counter
+      verify_response(res)
       xml_body = REXML::Document.new(res.body)
       xml_body.root.each_element do |user_ref|
         res = http_get "rest/admin/user/#{user_ref.attributes['login']}"
+        verify_response(res)
         if REXML::Document.new(res.body).root.attributes["email"].upcase == email.upcase
           return if !found_user.nil?
           found_user = user_ref.attributes["login"]
@@ -58,19 +61,19 @@ class Service::YouTrack < Service
   end
 
   def execute_command(author, issue_id, command)
-    http_post "rest/issue/#{issue_id}/execute" do |req|
+    res = http_post "rest/issue/#{issue_id}/execute" do |req|
       req.params[:command] = command
       req.params[:runAs]   = author
     end
+    verify_response(res)
   end
 
-  #begin
-  #  YouTrack::Remote.new(data).process_commits(payload)
-  #rescue => e
-  #  case e.to_s
-  ##    when /\((?:403|401|422)\)/ then raise GitHub::ServiceConfigurationError, "Invalid credentials"
-  #    when /\((?:404|301|302)\)/ then raise GitHub::ServiceConfigurationError, "Invalid YouTrack URL"
-  #    else raise
-  #  end
-  #end
+  def verify_response(res)
+    case res.status
+      when 200..299
+      when 403, 401, 422 then raise_config_error("Invalid Credentials")
+      when 404, 301, 302 then raise_config_error("Invalid YouTrack URL")
+      else raise_config_error("HTTP: #{res.status}")
+    end
+  end
 end
