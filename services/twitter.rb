@@ -1,57 +1,46 @@
-class TwitterOAuth
-  def initialize(token, secret)
-    @token   = token
-    @secret  = secret
-    @secrets = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config', 'secrets.yml'))
-  end
+class Service::Twitter < Service
+  self.hook_name = :twitter
 
-  def consumer_key
-    @secrets['twitter']['key']
-  end
+  def receive_push
+    statuses   = [ ]
+    repository = payload['repository']['name']
 
-  def consumer_secret
-    @secrets['twitter']['secret']
-  end
+    if data['digest'] == '1'
+      commit = payload['commits'][-1]
+      tiny_url = shorten_url(payload['repository']['url'] + '/commits/' + payload['ref_name'])
+      status = "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{payload['commits'].length} commits"
+      status.length >= 140 ? statuses << status[0..136] + '...' : statuses << status
+    else
+      payload['commits'].each do |commit|
+        tiny_url = shorten_url(commit['url'])
+        status = "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{commit['message']}"
+        status.length >= 140 ? statuses << status[0..136] + '...' : statuses << status
+      end
+    end
 
-  def consumer
-    @consumer ||= ::OAuth::Consumer.new(consumer_key, consumer_secret,
-                                        {:site => "http://api.twitter.com"})
+    statuses.each do |status|
+      post(status)
+    end
   end
 
   def post(status)
     params = { 'status' => status, 'source' => 'github' }
 
-    access_token = ::OAuth::AccessToken.new(consumer, @token, @secret)
-    oauth_response = consumer.request(:post, "/1/statuses/update.json",
-                                      access_token, { :scheme => :query_string }, params)
-    case oauth_response
-    when Net::HTTPSuccess
-      JSON.parse(oauth_response.body)
-    else
-      nil
-    end
-  end
-end
-
-service :twitter do |data, payload|
-  statuses   = [ ]
-  repository = payload['repository']['name']
-
-  if data['digest'] == '1'
-    commit = payload['commits'][-1]
-    tiny_url = shorten_url(payload['repository']['url'] + '/commits/' + payload['ref_name'])
-    status = "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{payload['commits'].length} commits"
-    status.length >= 140 ? statuses << status[0..136] + '...' : statuses << status
-  else
-    payload['commits'].each do |commit|
-      tiny_url = shorten_url(commit['url'])
-      status = "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{commit['message']}"
-      status.length >= 140 ? statuses << status[0..136] + '...' : statuses << status
-    end
+    access_token = ::OAuth::AccessToken.new(consumer, data['token'], data['secret'])
+    consumer.request(:post, "/1/statuses/update.json",
+                     access_token, { :scheme => :query_string }, params)
   end
 
-  twitter_oauth = TwitterOAuth.new(data['token'], data['secret'])
-  statuses.each do |status|
-    twitter_oauth.post(status)
+  def consumer_key
+    secrets['twitter']['key']
+  end
+
+  def consumer_secret
+    secrets['twitter']['secret']
+  end
+
+  def consumer
+    @consumer ||= ::OAuth::Consumer.new(consumer_key, consumer_secret,
+                                        {:site => "http://api.twitter.com"})
   end
 end
