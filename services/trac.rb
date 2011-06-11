@@ -5,6 +5,6 @@ class Service::Trac < Service
     http.url_prefix = data['url']
     http_post "github/#{data['token']}", :payload => payload.to_json
   rescue Errno::ECONNREFUSED => boom
-    raise GitHub::ServiceConfigurationError, "Connection refused. Invalid server URL."
+    raise_config_error "Connection refused. Invalid server URL."
   end
 end
