@@ -1,40 +1,45 @@
-secrets = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config', 'secrets.yml'))
-
 # Jabber::Simple does some insane kind of queueing if it thinks
 # we are not in their buddy list (which is always) so messages
 # never get sent before we disconnect. This forces the library
 # to assume the recipient is a buddy.
-class Jabber::Simple
+class ::Jabber::Simple
   def subscribed_to?(x); true; end
 end
 
-im = nil
-service :jabber do |data, payload|
-  raise GitHub::ServiceConfigurationError, "jabber hook temporarily disabled"
+class Service::Jabber < Service
+  self.hook_name = :jabber
 
-  repository = payload['repository']['name']
-  branch     = payload['ref_name']
-  im         ||= Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
+  def receive_push
+    raise_config_error "jabber hook temporarily disabled"
 
-  # Accept any friend request
-  im.accept_subscriptions = true
+    repository = payload['repository']['name']
+    branch     = payload['ref_name']
 
-  #Split multiple addresses into array, removing duplicates
-  recipients  = data['user'].split(',').uniq.collect(&:strip)
+    # Accept any friend request
+    im.accept_subscriptions = true
 
-  #Send message to each member in array (Limit to 25 members to prevent overloading something, if this is not and issue, just remove the [0..24] from recipients
-  recipients[0..24].each do |recipient|
-    # Ask recipient to be our buddy if need be
-    im.add(recipient)
+    #Split multiple addresses into array, removing duplicates
+    recipients  = data['user'].split(',').uniq.collect(&:strip)
 
-    payload['commits'].each do |commit|
-      sha1 = commit['id']
-      im.deliver recipient, <<EOM
+    #Send message to each member in array (Limit to 25 members to prevent overloading something, if this is not and issue, just remove the [0..24] from recipients
+    recipients[0..24].each do |recipient|
+      # Ask recipient to be our buddy if need be
+      im.add(recipient)
+
+      payload['commits'].each do |commit|
+        sha1 = commit['id']
+        im.deliver recipient, <<EOM
 #{repository}: #{commit['author']['name']} #{branch} SHA1-#{sha1[0..6]}"
 
 #{commit['message']}
 #{commit['url']}
 EOM
-  end
+      end
     end
+  end
+
+  attr_writer :im
+  def im
+    @im ||= Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
+  end
 end
