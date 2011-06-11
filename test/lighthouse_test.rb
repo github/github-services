@@ -22,4 +22,3 @@ class LighthouseTest < Service::TestCase
   end
 end
 
-

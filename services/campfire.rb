@@ -14,17 +14,13 @@ class Service::Campfire < Service
     end
 
     begin
-      campfire   = Tinder::Campfire.new(data['subdomain'], :ssl => true)
       play_sound = data['play_sound'].to_i == 1
 
       if !campfire.login(data['token'], 'X')
         raise_config_error 'Invalid campfire token'
       end
 
-      begin
-        room = campfire.find_room_by_name(data['room'])
-        raise NoMethodError if room.nil?
-      rescue NoMethodError
+      unless room = campfire.find_room_by_name(data['room'])
         raise_config_error 'No such campfire room'
       end
 
@@ -35,5 +31,10 @@ class Service::Campfire < Service
     rescue Errno::ECONNREFUSED => boom
       raise_config_error "Connection refused- invalid campfire subdomain."
     end
+  end
+
+  attr_writer :campfire
+  def campfire
+    @campfire ||= Tinder::Campfire.new(data['subdomain'], :ssl => true)
   end
 end

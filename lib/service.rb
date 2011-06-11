@@ -46,7 +46,7 @@ module PayloadHelpers
   def format_commit_message(commit)
     short = commit['message'].split("\n", 2).first
     short += '...' if short != commit['message']
-    "[#{repository}/#{branch_name}] #{short} - #{commit['author']['name']}"
+    "[#{repo_name}/#{branch_name}] #{short} - #{commit['author']['name']}"
   end
 
   def commit_messages
