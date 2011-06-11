@@ -1,96 +1,76 @@
-module YouTrack
-  class Remote
-    def initialize(data={})
-      # required fot connection
-      @base_url, @username, @password, @committers = data['base_url'], data['username'], data['password'], data['committers']
-      # check if all the variables are initialized from service params
-      [@base_url, @username, @password, @committers].each{|var| raise GitHub::ServiceConfigurationError.new("Missing configuration: #{var}") if var.to_s.empty? }
-      # delete last slash in the string
-      correct_uri = @base_url.gsub(/\/$/, '')
-      @uri = URI.parse(correct_uri)
-      @rest_path = @uri.path + "/rest"
-      @conn = Net::HTTP.new(@uri.host, @uri.port)
-    end
+class Service::YouTrack < Service
+  self.hook_name = :you_track
 
-    def process_commits(payload)
-      login
-      payload["commits"].each{
-          |commit| process_commit(commit)
-      }
-    end
+  def receive_push
+    http.url_prefix = data['base_url']
+    payload['commits'].each { |c| process_commit(c) }
+  end
 
-    def login()
-      @conn.start do |http|
-        req = Net::HTTP::Post.new(@rest_path + "/user/login?login=" + @username + "&password=" + @password, {"Content-Length" => "0"})
-        resp = http.request(req)
-        resp.value
-        @headers = {"Cookie" => resp["set-cookie"], "Cache-Control"=> "no-cache"}
+  def login
+    @logged_in ||= begin
+      res = http_post 'rest/user/login' do |req|
+        req.params.update \
+          :login => data['username'],
+          :password => data['password']
+        req.headers['Content-Length'] = '0'
       end
-    end
 
-    def execute_command(author, issue_id, command)
-      @conn.start do |http|
-        req = Net::HTTP::Post.new(@rest_path + "/issue/" + issue_id + "/execute?command=" + CGI.escape(command) +
-                                      "&runAs=" + author, @headers)
-        resp = http.request(req)
-        resp.value
-      end
+      http.headers['Cookie'] = res.headers['set-cookie']
+      http.headers['Cache-Control'] = 'no-cache'
+      true
     end
+  end
 
-    private
-    def process_commit(commit)
-      author = find_user_by_email(commit["author"]["email"])
+  def process_commit(commit)
+    author = nil
+    commit["message"].each{ |commit_line|
+      issue_id = commit_line[/( |^)#(\w+-\d+) /, 2]
+      next if issue_id.nil?
+
+      # lazily load author
+      author ||= find_user_by_email(commit["author"]["email"])
       return if author.nil?
-      commit["message"].each{ |commit_line|
-        issue_id = commit_line[/( |^)#(\w+-\d+) /, 2]
-        next if issue_id.nil?
-        command = commit_line[/( |^)#\w+-\d+ (.+)/, 2].strip
-        command = "Fixed" if command.nil?
-        execute_command(author, issue_id, command)
-      }
-    end
 
-    def find_user_by_email(email)
-      counter = 0
-      found_user = nil
-      while true
-        body = ""
-        @conn.start do |http|
-          req = Net::HTTP::Get.new(@rest_path + "/admin/user?q=" +email + "&group="+CGI.escape(@committers) +
-                                       "&start=#{counter}", @headers)
-          resp = http.request(req)
-          resp.value
-          body = resp.body
+      command = commit_line[/( |^)#\w+-\d+ (.+)/, 2].strip
+      command = "Fixed" if command.nil?
+      execute_command(author, issue_id, command)
+    }
+  end
+
+  def find_user_by_email(email)
+    login
+    counter = 0
+    found_user = nil
+    while true
+      body = ""
+      res = http_get "rest/admin/user", :q => email, :group => data['committers'], :start => counter
+      xml_body = REXML::Document.new(res.body)
+      xml_body.root.each_element do |user_ref|
+        res = http_get "rest/admin/user/#{user_ref.attributes['login']}"
+        if REXML::Document.new(res.body).root.attributes["email"].upcase == email.upcase
+          return if !found_user.nil?
+          found_user = user_ref.attributes["login"]
         end
-        xml_body = REXML::Document.new(body)
-        xml_body.root.each_element do |user_ref|
-          @conn.start do |http|
-            req = Net::HTTP::Get.new(@rest_path + "/admin/user/" + user_ref.attributes["login"], @headers)
-            resp = http.request(req)
-            resp.value
-            if REXML::Document.new(resp.body).root.attributes["email"].upcase == email.upcase
-              return if !found_user.nil?
-              found_user = user_ref.attributes["login"]
-            end
-          end
-        end
-        return found_user if xml_body.root.elements.size < 10
-        counter += 10
       end
-
-    end
-
-  end
-end
-
-service :you_track do |data, payload|
-  begin
-    YouTrack::Remote.new(data).process_commits(payload)
-  rescue => e
-    case e.to_s
-      when /\((?:403|401|422)\)/ then raise GitHub::ServiceConfigurationError, "Invalid credentials"
-      when /\((?:404|301|302)\)/ then raise GitHub::ServiceConfigurationError, "Invalid YouTrack URL"
-      else raise
+      return found_user if xml_body.root.elements.size < 10
+      counter += 10
     end
   end
+
+  def execute_command(author, issue_id, command)
+    http_post "rest/issue/#{issue_id}/execute" do |req|
+      req.params[:command] = command
+      req.params[:runAs]   = author
+    end
+  end
+
+  #begin
+  #  YouTrack::Remote.new(data).process_commits(payload)
+  #rescue => e
+  #  case e.to_s
+  ##    when /\((?:403|401|422)\)/ then raise GitHub::ServiceConfigurationError, "Invalid credentials"
+  #    when /\((?:404|301|302)\)/ then raise GitHub::ServiceConfigurationError, "Invalid YouTrack URL"
+  #    else raise
+  #  end
+  #end
 end
