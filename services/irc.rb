@@ -18,7 +18,7 @@ class Service::IRC < Service
 
     loop do
       case self.gets
-      when / 004 #{botname} /
+      when / 00[1-4] #{botname} /
         break
       when /^PING\s*:\s*(.*)$/
         self.puts "PONG #{$1}"
