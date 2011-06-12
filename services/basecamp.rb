@@ -7,7 +7,7 @@ class Service::Basecamp < Service
     branch          = payload['ref_name']
 
     commits = payload['commits'].reject { |commit| commit['message'].to_s.strip == '' }
-    next if commits.empty?
+    return if commits.empty?
 
     commits.each do |commit|
       gitsha        = commit['id']

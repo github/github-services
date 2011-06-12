@@ -10,7 +10,7 @@ class Service::Convore < Service
     commits     = payload['commits']
     compare_url = payload['compare']
     commits.reject! { |commit| commit['message'].to_s.strip == '' }
-    next if commits.empty?
+    return if commits.empty?
 
     prefix = "[#{repository}/#{branch}]"
     primary, others = commits[0..4], Array(commits[5..-1])

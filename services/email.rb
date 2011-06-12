@@ -5,8 +5,8 @@ class Service::Email < Service
     name_with_owner = File.join(payload['repository']['owner']['name'], payload['repository']['name'])
 
     # Should be: first_commit = payload['commits'].first
-    first_commit     = payload['commits'].first
-    next if first_commit.nil?
+    first_commit = payload['commits'].first
+    return if first_commit.nil?
 
     first_commit_sha = first_commit['id']
 
