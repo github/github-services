@@ -81,6 +81,9 @@ EOH
   end
 
   def category_id
-    @category_id ||= basecamp.message_categories(project_id).select { |category| category.name.downcase == data['category'].downcase }.first.id
+    @category_id ||= begin
+      cat = basecamp.message_categories(project_id).select { |category| category.name.downcase == data['category'].downcase }.first
+      cat ? cat.id : raise_config_error("Invalid Category: #{data['category'].inspect}")
+    end
   end
 end
