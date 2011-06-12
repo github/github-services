@@ -127,6 +127,11 @@ class Service
       File.exist?(email_config_file) ? YAML.load_file(email_config_file) : {}
   end
 
+  # Public
+  def raise_config_error(msg = "Invalid configuration")
+    raise ConfigurationError, msg
+  end
+
   def secret_file
     @secret_file ||= File.expand_path("../../config/secrets.yml", __FILE__)
   end
@@ -135,12 +140,9 @@ class Service
     @email_config_file ||= File.expand_path('../../config/email.yml', __FILE__)
   end
 
+  # http://curl.haxx.se/ca/cacert.pem
   def ca_file
     @ca_file ||= File.expand_path('../../config/cacert.pem', __FILE__)
-  end
-
-  def raise_config_error(msg = "Invalid configuration")
-    raise ConfigurationError, msg
   end
 
   # Raised when an unexpected error occurs during service hook execution.
