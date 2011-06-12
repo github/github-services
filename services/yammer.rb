@@ -17,7 +17,15 @@ class Service::Yammer < Service
     statuses.each do |status|
       params = { :body => status }
       params['group_id'] = data['group_id'] unless data['group_id'].to_s.empty?
-      send_message params
+      begin
+        send_message params
+      rescue
+        if $!.to_s =~ /authentication failed/i
+          raise_config_error "Invalid username or password"
+        else
+          raise
+        end
+      end
     end
   end
 
