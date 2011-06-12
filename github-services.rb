@@ -1,6 +1,6 @@
 require File.expand_path('../config/load', __FILE__)
 
-Service::App.set :run   => true,
+Service::App.set :run => true,
   :environment => :production,
   :port        => ARGV.first || 8080
 
