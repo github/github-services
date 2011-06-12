@@ -107,7 +107,9 @@ class Service
   def http(options = {})
     @http ||= begin
       options[:timeout] ||= 6
-      options[:ssl] = {:ca_file => ca_file}
+      options[:ssl]     ||= {}
+      options[:ssl][:ca_file] = ca_file
+
       Faraday.new(options) do |b|
         b.request :url_encoded
         b.adapter :net_http
