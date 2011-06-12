@@ -20,10 +20,10 @@ end
 
 begin
   require 'system_timer'
-  ServiceTimeout = SystemTimer
+  Service::Timeout = SystemTimer
 rescue LoadError
   require 'timeout'
-  ServiceTimeout = Timeout
+  Service::Timeout = Timeout
 end
 
 Service::App.run!
