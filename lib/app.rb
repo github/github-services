@@ -76,16 +76,4 @@ class Service::App < Sinatra::Base
   end
 end
 
-module GitHub
-  # backwards compatibility
-  ServiceError = Service::Error
-  ServiceTimeoutError = Service::TimeoutError
-  ServiceConfigurationError = Service::ConfigurationError
-
-  def service(name)
-  end
-end
-
-include GitHub
-
 Dir["#{File.dirname(__FILE__)}/../services/**/*.rb"].each { |service| load service }
