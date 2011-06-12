@@ -46,7 +46,7 @@ class Service::Convore < Service
         end
       end
 
-    rescue Errno::ECONNREFUSED => boom
+    rescue Faraday::Error::ConnectionFailed
       raise_config_error "Connection refused. Invalid group."
     end
   end

@@ -10,7 +10,7 @@ class Service::MantisBT < Service
     if res.status < 200 || res.status > 299
       raise_config_error
     end
-  rescue Errno::ECONNREFUSED => boom
+  rescue Faraday::Error::ConnectionFailed
     raise_config_error "Connection refused. Invalid server URL."
   end
 end

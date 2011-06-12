@@ -20,7 +20,7 @@ class Service::StatusNet < Service
       http_post '/api/statuses/update.xml',
         'status' => status, 'source' => 'github'
     end
-  rescue Errno::ECONNREFUSED => boom
+  rescue Faraday::Error::ConnectionFailed
     raise_config_error "Connection refused. Invalid server configuration."
   end
 end
