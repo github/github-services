@@ -1,6 +1,4 @@
 class Service::Email < Service
-  self.hook_name = :email
-
   def receive_push
     name_with_owner = File.join(payload['repository']['owner']['name'], payload['repository']['name'])
 

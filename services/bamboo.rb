@@ -1,6 +1,4 @@
 class Service::Bamboo < Service
-  self.hook_name = :bamboo
-
   def receive_push
     verify_config
     authenticated { |token| trigger_build(token) }

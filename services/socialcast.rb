@@ -1,6 +1,4 @@
 class Service::Socialcast < Service
-  self.hook_name = :socialcast
-
   def receive_push
     repository  = payload['repository']['name']
     group_id    = (data['group_id'].nil? || data['group_id'] == '') ? '' : data['group_id'] 

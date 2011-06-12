@@ -7,8 +7,6 @@ class ::Jabber::Simple
 end
 
 class Service::Jabber < Service
-  self.hook_name = :jabber
-
   def receive_push
     raise_config_error "jabber hook temporarily disabled"
 

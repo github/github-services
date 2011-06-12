@@ -1,6 +1,4 @@
 class Service::Prowl < Service
-  self.hook_name = :prowl
-
   def receive_push
     url = URI.parse('https://api.prowlapp.com/publicapi/add')
     repository = payload['repository']['url'].split("/")

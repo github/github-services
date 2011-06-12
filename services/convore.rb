@@ -1,6 +1,4 @@
 class Service::Convore < Service
-  self.hook_name = :convore
-
   def receive_push
     raise_config_error "Missing username" if data['username'].to_s == ''
 

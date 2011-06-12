@@ -1,6 +1,4 @@
 class Service::FogBugz < Service
-  self.hook_name = :fog_bugz
-
   def receive_push
     if (fb_url = data['cvssubmit_url']).blank?
       raise_config_error "Invalid FogBugz URL"

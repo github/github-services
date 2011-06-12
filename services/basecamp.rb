@@ -1,6 +1,4 @@
 class Service::Basecamp < Service
-  self.hook_name = :basecamp
-
   def receive_push
     repository      = payload['repository']['name']
     name_with_owner = File.join(payload['repository']['owner']['name'], repository)

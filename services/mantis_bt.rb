@@ -1,6 +1,4 @@
 class Service::MantisBT < Service
-  self.hook_name = :mantis_bt
-
   def receive_push
     http.url_prefix = data['url']
     res = http_post 'plugin.php', :payload => payload.to_json do |req|

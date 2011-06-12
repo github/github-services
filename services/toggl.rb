@@ -1,6 +1,4 @@
 class Service::Toggl < Service
-  self.hook_name = :toggl
-
   def receive_push
     http.url_prefix = "https://www.toggl.com/api/v5"
     http.basic_auth data['api_token'], 'api_token'

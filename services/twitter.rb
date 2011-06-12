@@ -1,6 +1,4 @@
 class Service::Twitter < Service
-  self.hook_name = :twitter
-
   def receive_push
     statuses   = [ ]
     repository = payload['repository']['name']

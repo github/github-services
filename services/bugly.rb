@@ -1,6 +1,4 @@
 class Service::Bugly < Service
-  self.hook_name = :bugly
-
   def receive_push
     http_post "http://#{data['account_name']}.bug.ly/changesets.json",
       JSON.generate(payload),

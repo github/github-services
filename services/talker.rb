@@ -1,6 +1,4 @@
 class Service::Talker < Service
-  self.hook_name = :talker
-
   def receive_push
     repository = payload['repository']['name']
     branch = payload['ref_name']

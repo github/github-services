@@ -1,6 +1,4 @@
 class Service::IRC < Service
-  self.hook_name = :irc
-
   def receive_push
     return if distinct_commits.empty?
 

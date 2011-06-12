@@ -1,6 +1,4 @@
 class Service::Cube < Service
-  self.hook_name = :cube
-
   def receive_push
     http_post "http://cube.bitrzr.com/integration/events/github/create",
       'payload' => JSON.generate(payload),

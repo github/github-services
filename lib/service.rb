@@ -9,13 +9,6 @@ class Service
   include PushHelpers
 
   class << self
-    attr_reader :hook_name
-
-    def hook_name=(value)
-      @hook_name = value.to_s.gsub(/[^a-z]/, '')
-      Service::App.service(self)
-    end
-
     # Public
     def receive(event_type, data, payload)
       svc = new(data, payload)
@@ -29,6 +22,20 @@ class Service
       else
         false
       end
+    end
+
+    def hook_name
+      @hook_name ||= begin
+        hook = name.dup
+        hook.downcase!
+        hook.sub! /.*:/, ''
+        hook
+      end
+    end
+
+    def inherited(svc)
+      Service::App.service(self)
+      super
     end
   end
 

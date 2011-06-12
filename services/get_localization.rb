@@ -1,6 +1,4 @@
 class Service::GetLocalization < Service
-  self.hook_name = :get_localization
-
   def receive_push
     project_name = data['project_name']
     project_token = data['project_token']

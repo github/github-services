@@ -1,6 +1,4 @@
 class Service::Campfire < Service
-  self.hook_name = :campfire
-
   def receive_push
     raise_config_error 'Missing campfire token' if data['token'].to_s.empty?
 

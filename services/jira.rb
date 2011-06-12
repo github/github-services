@@ -1,6 +1,4 @@
 class Service::Jira < Service
-  self.hook_name = :jira
-
   def receive_push
     payload['commits'].each do |commit|
       next if commit['message'] =~ /^x /

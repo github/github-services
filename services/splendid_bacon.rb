@@ -1,6 +1,4 @@
 class Service::SplendidBacon < Service
-  self.hook_name = :splendid_bacon
-
   def receive_push
     token = data['token']
     project_id = data['project_id']

@@ -1,6 +1,4 @@
 class Service::Yammer < Service
-  self.hook_name = :yammer
-
   def receive_push
     statuses   = [ ]
     repository = payload['repository']['name']

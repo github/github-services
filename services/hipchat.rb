@@ -1,6 +1,4 @@
 class Service::HipChat < Service
-  self.hook_name = :hip_chat
-
   def receive_push
     # make sure we have what we need
     raise_config_error "Missing 'auth_token'" if data['auth_token'].to_s == ''

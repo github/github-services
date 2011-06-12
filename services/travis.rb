@@ -1,6 +1,4 @@
 class Service::Travis < Service
-  self.hook_name = :travis
-
   def receive_push
     http.basic_auth user, token
     http_post travis_url, :payload => payload.to_json

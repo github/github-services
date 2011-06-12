@@ -1,6 +1,4 @@
 class Service::StatusNet < Service
-  self.hook_name = :statusnet
-
   def receive_push
     repository = payload['repository']['name']
     statuses = Array.new

@@ -1,6 +1,4 @@
 class Service::Freckle < Service
-  self.hook_name = :freckle
-
   def receive_push
     entries, subdomain, token, project =
       [], data['subdomain'].strip, data['token'].strip, data['project'].strip

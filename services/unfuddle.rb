@@ -1,6 +1,4 @@
 class Service::Unfuddle < Service
-  self.hook_name = :unfuddle
-
   def receive_push
     u_repoid    = data['repo_id'].to_i
     u_account   = "http://#{data['subdomain']}.unfuddle.com/"

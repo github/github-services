@@ -1,6 +1,4 @@
 class Service::Rubyforge < Service
-  self.hook_name = :rubyforge
-
   def receive_push
     repository = payload['repository']['name']
     branch     = payload['ref_name']

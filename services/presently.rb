@@ -1,6 +1,4 @@
 class Service::Presently < Service
-  self.hook_name = :presently
-
   def receive_push
     repository = payload['repository']['name']
 

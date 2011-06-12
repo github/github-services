@@ -1,6 +1,4 @@
 class Service::TeamCity < Service
-  self.hook_name = :team_city
-
   def receive_push
     http.url_prefix = data['base_url']
     http.basic_auth data['username'], data['password']

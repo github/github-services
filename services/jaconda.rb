@@ -1,6 +1,4 @@
 class Service::Jaconda < Service
-  self.hook_name = :jaconda
-
   def receive_push
     raise_config_error "Missing 'subdomain'"  if data['subdomain'].to_s == ''
     raise_config_error "Missing 'room_id'"    if data['room_id'].to_s == ''

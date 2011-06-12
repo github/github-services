@@ -1,6 +1,4 @@
 class Service::AMQP < Service
-  self.hook_name = :amqp
-
   def receive_push
     # Support for specifying as host or server
     data['host'] ||= data['server']

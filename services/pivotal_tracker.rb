@@ -1,6 +1,4 @@
 class Service::PivotalTracker < Service
-  self.hook_name = :pivotal_tracker
-
   def receive_push
     token = data['token']
     res = http_post 'https://www.pivotaltracker.com/services/v3/github_commits' do |req|

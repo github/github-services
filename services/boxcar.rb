@@ -1,6 +1,4 @@
 class Service::Boxcar < Service
-  self.hook_name = :boxcar
-
   def receive_push
     http_post \
       "http://providers.boxcar.io/github/%s" %

@@ -1,6 +1,4 @@
 class Service::YouTrack < Service
-  self.hook_name = :you_track
-
   def receive_push
     http.url_prefix = data['base_url']
     payload['commits'].each { |c| process_commit(c) }

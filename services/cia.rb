@@ -1,6 +1,4 @@
 class Service::CIA < Service
-  self.hook_name = :cia
-
   def receive_push
     repository =
       if !(name = data['project'].to_s).empty?

@@ -1,6 +1,4 @@
 class Service::Lighthouse < Service
-  self.hook_name = :lighthouse
-
   def receive_push
     payload['commits'].each do |commit|
       next if commit['message'] =~ /^x /

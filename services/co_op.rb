@@ -1,6 +1,4 @@
 class Service::CoOp < Service
-  self.hook_name = :co_op
-
   def receive_push
     repository = payload['repository']['name']
     payload['commits'].each do |commit|

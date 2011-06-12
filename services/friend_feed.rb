@@ -1,6 +1,4 @@
 class Service::FriendFeed < Service
-  self.hook_name = :friend_feed
-
   def receive_push
     repository = payload['repository']['name']
     friendfeed_url = "http://friendfeed.com/api/share"
