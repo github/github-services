@@ -16,6 +16,7 @@ class Service
       Service::App.service(self)
     end
 
+    # Public
     def receive(event_type, data, payload)
       svc = new(data, payload)
       event_method = "receive_#{event_type}"
@@ -31,7 +32,10 @@ class Service
     end
   end
 
+  # Public
   attr_reader :data
+
+  # Public
   attr_reader :payload
 
   attr_writer :http
@@ -41,9 +45,9 @@ class Service
   attr_writer :email_config
 
   def initialize(data, payload)
-    @data       = data
-    @payload    = payload
-    @http = nil
+    @data    = data
+    @payload = payload
+    @http    = nil
   end
 
   # Public
@@ -92,28 +96,6 @@ class Service
     end
   end
 
-  def secrets
-    @secrets ||=
-      File.exist?(secret_file) ? YAML.load_file(secret_file) : {}
-  end
-
-  def secret_file
-    @secret_file ||= File.expand_path("../../config/secrets.yml", __FILE__)
-  end
-
-  def email_config
-    @email_config ||=
-      File.exist?(email_config_file) ? YAML.load_file(email_config_file) : {}
-  end
-
-  def email_config_file
-    @email_config_file ||= File.expand_path('../../config/email.yml', __FILE__)
-  end
-
-  def raise_config_error(msg = "Invalid configuration")
-    raise ConfigurationError, msg
-  end
-
   def http(options = {})
     @http ||= begin
       options[:timeout] ||= 6
@@ -122,6 +104,30 @@ class Service
         b.adapter :net_http
       end
     end
+  end
+
+  # Public
+  def secrets
+    @secrets ||=
+      File.exist?(secret_file) ? YAML.load_file(secret_file) : {}
+  end
+
+  # Public
+  def email_config
+    @email_config ||=
+      File.exist?(email_config_file) ? YAML.load_file(email_config_file) : {}
+  end
+
+  def secret_file
+    @secret_file ||= File.expand_path("../../config/secrets.yml", __FILE__)
+  end
+
+  def email_config_file
+    @email_config_file ||= File.expand_path('../../config/email.yml', __FILE__)
+  end
+
+  def raise_config_error(msg = "Invalid configuration")
+    raise ConfigurationError, msg
   end
 
   # Raised when an unexpected error occurs during service hook execution.
@@ -136,9 +142,18 @@ class Service
 
   class TimeoutError < Timeout::Error
   end
-  #
+
   # Raised when a service hook fails due to bad configuration. Services that
   # fail with this exception may be automatically disabled.
   class ConfigurationError < Error
   end
 end
+
+begin
+  require 'system_timer'
+  Service::Timeout = SystemTimer
+rescue LoadError
+  require 'timeout'
+  Service::Timeout = Timeout
+end
+

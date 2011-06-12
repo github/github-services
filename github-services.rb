@@ -18,13 +18,5 @@ rescue LoadError
   end
 end
 
-begin
-  require 'system_timer'
-  Service::Timeout = SystemTimer
-rescue LoadError
-  require 'timeout'
-  Service::Timeout = Timeout
-end
-
 Service::App.run!
 
