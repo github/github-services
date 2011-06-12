@@ -50,6 +50,7 @@ class Service
   attr_writer :secrets
   attr_writer :email_config_file
   attr_writer :email_config
+  attr_writer :ca_file
 
   def initialize(data, payload)
     @data    = data
@@ -106,6 +107,7 @@ class Service
   def http(options = {})
     @http ||= begin
       options[:timeout] ||= 6
+      options[:ssl] = {:ca_file => ca_file}
       Faraday.new(options) do |b|
         b.request :url_encoded
         b.adapter :net_http
@@ -131,6 +133,10 @@ class Service
 
   def email_config_file
     @email_config_file ||= File.expand_path('../../config/email.yml', __FILE__)
+  end
+
+  def ca_file
+    @ca_file ||= File.expand_path('../../config/cacert.pem', __FILE__)
   end
 
   def raise_config_error(msg = "Invalid configuration")
