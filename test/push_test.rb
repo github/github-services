@@ -1,7 +1,7 @@
 require File.expand_path('../helper', __FILE__)
 
-class PayloadTest < Service::TestCase
-  include PayloadHelpers
+class PushTest < Service::TestCase
+  include Service::PushHelpers
   alias :base_payload :payload
   attr_reader :payload
 
