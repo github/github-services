@@ -16,7 +16,7 @@ class Service::IRC < Service
 
     loop do
       case self.gets
-      when / 004 #{botname} /
+      when / 00[1-4] #{botname} /
         break
       when /^PING\s*:\s*(.*)$/
         self.puts "PONG #{$1}"
@@ -73,12 +73,12 @@ class Service::IRC < Service
         ssl_socket = OpenSSL::SSL::SSLSocket.new(socket, ssl_context)
         ssl_socket.sync_close = true
         ssl_socket.connect
-        ssl_socket
-      else
-        socket
+        socket = ssl_socket
       end
+
+      socket
     end
-  end
+	end
 
   def format_commit_message(commit)
     short  = commit['message'].split("\n", 2).first.to_s
