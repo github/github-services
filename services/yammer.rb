@@ -26,11 +26,12 @@ class Service::Yammer < Service
   end
 
   def yammer
-    @yammer ||= Yammer::Client.new(:consumer =>
-                                     {:key => data['consumer_key'],
-                                      :secret => data['consumer_secret']},
-                                   :access =>
-                                     {:token => data['access_token'],
-                                      :secret => data['access_secret']})
+    @yammer ||= ::Yammer::Client.new \
+      :consumer => {
+        :key    => data['consumer_key'],
+        :secret => data['consumer_secret']},
+      :access => {
+        :token  => data['access_token'],
+        :secret => data['access_secret']}
   end
 end
