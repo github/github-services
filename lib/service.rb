@@ -34,7 +34,7 @@ class Service
     end
 
     def inherited(svc)
-      Service::App.service(self)
+      Service::App.service(svc)
       super
     end
   end
