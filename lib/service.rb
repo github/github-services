@@ -109,7 +109,7 @@ class Service
       options[:timeout]            ||= 6
       options[:ssl]                ||= {}
       options[:ssl][:ca_file]      ||= ca_file
-      options[:ssl][:verify_depth] ||= 2
+      options[:ssl][:verify_depth] ||= 5
 
       Faraday.new(options) do |b|
         b.request :url_encoded
