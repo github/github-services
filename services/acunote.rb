@@ -1,5 +1,8 @@
 class Service::Acunote < Service
   def receive_push
+    # :(
+    http.ssl[:verify] = false
+
     res = http_post "https://www.acunote.com/source_control/github/%s" %
       [ data['token'] ],
       {'payload' => payload.to_json}
