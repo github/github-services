@@ -56,7 +56,7 @@ How to test your service
 You can test your service in a ruby irb console:
 
 1. Run `rake console` to start irb.
-2. Instantiate your server:
+2. Instantiate your Service:
 
         svc = Service::MyService.new(:push,
           # Hash of configuration information.
