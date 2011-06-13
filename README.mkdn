@@ -19,8 +19,8 @@ Steps to contributing
 ---------------------
 
 1. Fork the project
-2. Create a new file in /services/ called `service_name.rb`, using the following
-   template:
+2. Create a new file in /services/ called `service_name.rb`, using the [following
+   template](https://github.com/github/github-services/tree/master/services#readme):
 
         class Service::ServiceName < Service
           def receive_push
