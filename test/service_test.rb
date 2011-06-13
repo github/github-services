@@ -21,9 +21,12 @@ class ServiceTest < Service::TestCase
 
   def test_url_shorten
     url = "http://github.com"
-    bitly = "/shorten?apiKey=%s&login=%s&longUrl=%s&version=%s" % [
-      'R_261d14760f4938f0cda9bea984b212e4', 'github', 'http%3A%2F%2Fgithub.com', '2.0.1' ]
-    @stubs.get bitly do
+    @stubs.get "/shorten" do |env|
+      assert_equal 'api.bit.ly', env[:url].host
+      assert_equal 'R_261d14760f4938f0cda9bea984b212e4',
+        env[:params]['apiKey']
+      assert_equal 'github', env[:params]['login']
+      assert_equal url, env[:params]['longUrl']
       [200, {}, {
         'errorCode' => 0,
         'results' => {
