@@ -5,8 +5,17 @@ class Service::TestCase < Test::Unit::TestCase
   def test_default
   end
 
-  def service(klass, data, payload)
-    service = klass.new(data, payload)
+  def service(klass, event_or_data, data, payload=nil)
+    event = nil
+    if event_or_data.is_a?(Symbol)
+      event = event_or_data
+    else
+      payload = data
+      data    = event_or_data
+      event   = :push
+    end
+
+    service = klass.new(event, data, payload)
     service.http = Faraday.new do |b|
       b.request :url_encoded
       b.adapter :test, @stubs

@@ -2,8 +2,8 @@ require File.expand_path('../helper', __FILE__)
 
 class BasecampTest < Service::TestCase
   def test_receives_push
-    svc = service({}, payload)
-    svc.receive_push
+    svc = service :push, {}, payload
+    svc.receive
 
     assert msg = svc.basecamp.messages.shift
     assert_equal 1, project_id = msg.shift

@@ -6,7 +6,7 @@ class BuglyTest < Service::TestCase
   end
 
   def test_push
-    svc = service({'token' => 'abc'}, 'a' => 1)
+    svc = service :push, {'token' => 'abc'}, 'a' => 1
 
     @stubs.post "/changesets.json" do |env|
       assert_equal %({"a":1}), env[:body]
@@ -15,7 +15,7 @@ class BuglyTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc.receive_push
+    svc.receive
 
     @stubs.verify_stubbed_calls
   end

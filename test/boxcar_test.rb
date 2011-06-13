@@ -6,7 +6,7 @@ class BoxcarTest < Service::TestCase
   end
 
   def test_push
-    svc = service({'subscribers' => 'abc'}, 'a' => 1)
+    svc = service :push, {'subscribers' => 'abc'}, 'a' => 1
     svc.secrets = {'boxcar' => {'apikey' => 'key'}}
 
     @stubs.post "/github/key" do |env|
@@ -15,7 +15,7 @@ class BoxcarTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc.receive_push
+    svc.receive
 
     @stubs.verify_stubbed_calls
   end

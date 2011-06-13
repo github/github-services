@@ -2,16 +2,15 @@ require 'faraday'
 
 class Service
   dir = File.expand_path '..', __FILE__
-  Dir["#{dir}/service/*.rb"].each do |helper|
+  Dir["#{dir}/events/*.rb"].each do |helper|
     require helper
   end
 
-  include PushHelpers
-
   class << self
     # Public
-    def receive(event_type, data, payload)
-      svc = new(data, payload)
+    def receive(event, data, payload)
+      svc = new(event, data, payload)
+
       event_method = "receive_#{event_type}"
       if svc.respond_to?(event_method)
         Service::Timeout.timeout(20, TimeoutError) do
@@ -45,6 +44,8 @@ class Service
   # Public
   attr_reader :payload
 
+  attr_reader :event
+
   attr_writer :http
   attr_writer :secret_file
   attr_writer :secrets
@@ -52,10 +53,16 @@ class Service
   attr_writer :email_config
   attr_writer :ca_file
 
-  def initialize(data, payload)
+  def initialize(event = :push, data = {}, payload = {})
+    @event   = event
     @data    = data
     @payload = payload
     @http    = nil
+
+    helper_name = "#{@event.to_s.capitalize}Helpers"
+    if Service.const_defined?(helper_name)
+      extend(Service.const_get(helper_name))
+    end
   end
 
   # Public

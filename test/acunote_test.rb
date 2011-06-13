@@ -12,8 +12,8 @@ class AcunoteTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service({'token' => 'abc'}, 'payload')
-    svc.receive_push
+    svc = service :push, {'token' => 'abc'}, 'payload'
+    svc.receive
   end
 
   def service(*args)

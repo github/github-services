@@ -167,4 +167,8 @@ module Service::PushHelpers
       commit['distinct'] and !commit['message'].to_s.strip.empty?
     end
   end
+
+  def receive
+    receive_push
+  end
 end

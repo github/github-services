@@ -19,10 +19,10 @@ class AMQPTest < Service::TestCase
       }]
     }
 
-    svc = service(data, payload)
+    svc = service :push, data, payload
     svc.amqp_connection = connection_stub
     svc.amqp_exchange   = exchange_stub
-    svc.receive_push
+    svc.receive
 
     routing_key = "github.push.owner.owner/repo.ref"
 
@@ -51,16 +51,16 @@ class AMQPTest < Service::TestCase
   end
 
   def test_requires_data_host
-    svc = service({}, 'payload')
+    svc = service :push, {}, 'payload'
     assert_raise Service::ConfigurationError do
-      svc.receive_push
+      svc.receive
     end
   end
 
   def test_requires_data_exchange
-    svc = service({'data' => 'a'}, 'payload')
+    svc = service :push, {'data' => 'a'}, 'payload'
     assert_raise Service::ConfigurationError do
-      svc.receive_push
+      svc.receive
     end
   end
 
