@@ -3,6 +3,7 @@
 This is the directory that all Services go.  Creating a Service is
 simple:
 
+    ``` ruby
     class Service::MyService < Service
       def receive_push
       end
@@ -16,6 +17,7 @@ is supported.
 
 ## Tip: Check configuration data early.
 
+    ``` ruby
     class Service::MyService < Service
       def receive_push
         if data['username'].to_s.empty?
@@ -26,6 +28,7 @@ is supported.
 
 ## Tip: Use `http` helpers to make HTTP calls easily.
 
+    ``` ruby
     class Service::MyService < Service
       def receive_push
         # Sets this basic auth info for every request.
@@ -48,6 +51,7 @@ is supported.
 
 ## Tip: Test your service like a bossk.
 
+    ``` ruby
     class MyServiceTest < Service::TestCase
       def setup
         @stubs = Faraday::Adapter::Test::Stubs.new
