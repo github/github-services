@@ -4,6 +4,9 @@ class Service::FogBugz < Service
       raise_config_error "Invalid FogBugz URL"
     end
 
+    # FIXME
+    http.ssl[:verify] = false
+
     repository  = payload['repository']['name']
     branch      = payload['ref_name']
     before      = payload['before']
