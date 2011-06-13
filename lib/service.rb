@@ -17,7 +17,7 @@ class Service
     #
     # Returns true if the Service responded to the event, or false if the
     # Service does not respond to this event.
-    def receive(event, data, payload)
+    def receive(event, data, payload = nil)
       svc = new(event, data, payload)
 
       event_method = "receive_#{event_type}"
@@ -110,16 +110,19 @@ class Service
   # Returns nothing.
   attr_writer :ca_file
 
-  def initialize(event = :push, data = {}, payload = {})
+  def initialize(event = :push, data = {}, payload = nil)
+    helper_name = "#{event.to_s.capitalize}Helpers"
+    if Service.const_defined?(helper_name)
+      @helper = Service.const_get(helper_name)
+      extend @helper
+    else
+      raise ArgumentError, "Invalid event: #{event.inspect}"
+    end
+
     @event   = event
     @data    = data
-    @payload = payload
+    @payload = payload || sample_payload
     @http    = nil
-
-    helper_name = "#{@event.to_s.capitalize}Helpers"
-    if Service.const_defined?(helper_name)
-      extend(Service.const_get(helper_name))
-    end
   end
 
   # Public: Shortens the given URL with bit.ly.
@@ -318,6 +321,13 @@ class Service
   # Returns a String path.
   def ca_file
     @ca_file ||= File.expand_path('../../config/cacert.pem', __FILE__)
+  end
+
+  # Generates a sample payload for the current Service instance.
+  #
+  # Returns a Hash payload.
+  def sample_payload
+    @helper.sample_payload
   end
 
   # Raised when an unexpected error occurs during service hook execution.
