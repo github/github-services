@@ -80,7 +80,7 @@ class Service::AMQP < Service
   end
 
   def amqp_connection
-    @amqp_connection ||= AMQP.connect(:host    => data['host'],
+    @amqp_connection ||= ::AMQP.connect(:host    => data['host'],
                                       :port    => data['port']     || 5672,
                                       :user    => data['username'] || 'guest',
                                       :pass    => data['password'] || 'guest',
