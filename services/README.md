@@ -3,7 +3,7 @@
 This is the directory that all Services go.  Creating a Service is
 simple:
 
-    ``` ruby
+    ''' ruby
     class Service::MyService < Service
       def receive_push
       end
