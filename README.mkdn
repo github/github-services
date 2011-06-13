@@ -60,22 +60,26 @@ You can test your service in a ruby irb console:
 1. Run `rake console` to start irb.
 2. Instantiate your Service:
 
-        svc = Service::MyService.new(:push,
-          # Hash of configuration information.
-          {'token' => 'abc'},
-          # Hash of payload.
-          {'blah' => 'payload!'})
+    ```ruby
+    svc = Service::MyService.new(:push,
+      # Hash of configuration information.
+      {'token' => 'abc'},
+      # Hash of payload.
+      {'blah' => 'payload!'})
 
-        svc.receive_push
+    svc.receive_push
+    ```
 
 3. The third argument is optional if you just want to use the sample
    payload.
 
-        svc = Service::MyService.new(:push,
-          # Hash of configuration information.
-          {'token' => 'abc'})
+    ```ruby
+    svc = Service::MyService.new(:push,
+      # Hash of configuration information.
+      {'token' => 'abc'})
 
-        svc.receive_push
+    svc.receive_push
+    ```
 
 You can also test your hook with the Sinatra web service:
 
