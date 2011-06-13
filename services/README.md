@@ -3,12 +3,12 @@
 This is the directory that all Services go.  Creating a Service is
 simple:
 
-    ```ruby
+```ruby
     class Service::MyService < Service
       def receive_push
       end
     end
-    ```
+```
 
 Inside the method, you can access the configuration data in a hash named
 `data`, and the payload data in a Hash named `payload`.
