@@ -20,7 +20,7 @@ class Service
     def receive(event, data, payload = nil)
       svc = new(event, data, payload)
 
-      event_method = "receive_#{event_type}"
+      event_method = "receive_#{event}"
       if svc.respond_to?(event_method)
         Service::Timeout.timeout(20, TimeoutError) do
           svc.send(event_method)
