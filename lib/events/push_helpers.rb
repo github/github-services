@@ -1,3 +1,4 @@
+# This is a set of common helpers for Push events.
 module Service::PushHelpers
   def created?
     payload['created'] or !!(payload['before'] =~ /0{40}/)

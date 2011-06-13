@@ -1,4 +1,10 @@
+# The Sinatra App that handles incoming events.
 class Service::App < Sinatra::Base
+  # Hooks the given Service to a Sinatra route.
+  #
+  # svc - Service instance.
+  #
+  # Returns nothing.
   def self.service(svc)
     post "/#{svc.hook_name}/:event" do
       begin
@@ -29,12 +35,22 @@ class Service::App < Sinatra::Base
     "ok"
   end
 
+  # Parses the incoming payload and massages any properties.
+  #
+  # json - JSON String.
+  #
+  # Returns a Hash payload.
   def parse_payload(json)
     payload = JSON.parse(json)
     payload['ref_name'] = payload['ref'].to_s.sub(/\Arefs\/(heads|tags)\//, '')
     payload
   end
 
+  # Reports the given exception to Haystack.
+  #
+  # exception - An Exception instance.
+  #
+  # Returns nothing.
   def report_exception(exception)
     backtrace = Array(exception.backtrace)[0..500]
 

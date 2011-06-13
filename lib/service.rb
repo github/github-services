@@ -1,5 +1,7 @@
 require 'faraday'
 
+# Represents a single triggered Service call.  Each Service tracks the event
+# type, the configuration data, and the payload for the current call.
 class Service
   dir = File.expand_path '..', __FILE__
   Dir["#{dir}/events/*.rb"].each do |helper|
@@ -7,7 +9,14 @@ class Service
   end
 
   class << self
-    # Public
+    # Public: Processes an incoming Service event.
+    #
+    # event   - A symbol identifying the event type.  Example: :push
+    # data    - A Hash with the configuration data for the Service.
+    # payload - A Hash with the unique payload data for this Service instance.
+    #
+    # Returns true if the Service responded to the event, or false if the
+    # Service does not respond to this event.
     def receive(event, data, payload)
       svc = new(event, data, payload)
 
@@ -23,6 +32,9 @@ class Service
       end
     end
 
+    # Gets the String name that identifies this Service type.
+    #
+    # Returns a String.
     def hook_name
       @hook_name ||= begin
         hook = name.dup
@@ -32,25 +44,70 @@ class Service
       end
     end
 
+    # Binds the current Service to the Sinatra App.
+    #
+    # Returns nothing.
     def inherited(svc)
       Service::App.service(svc)
       super
     end
   end
 
-  # Public
+  # Public: Gets the configuration data for this Service instance.
+  #
+  # Returns a Hash.
   attr_reader :data
 
-  # Public
+  # Public: Gets the unique payload data for this Service instance.
+  #
+  # Returns a Hash.
   attr_reader :payload
 
+  # Public: Gets the identifier for the Service's event.
+  #
+  # Returns a Symbol.
   attr_reader :event
 
+  # Sets the Faraday::Connection for this Service instance.
+  #
+  # http - New Faraday::Connection instance.
+  #
+  # Returns a Faraday::Connection.
   attr_writer :http
+
+  # Sets the path to the secrets configuration file.
+  #
+  # secret_file - String path.
+  #
+  # Returns nothing.
   attr_writer :secret_file
+
+  # Sets the private configuration data.
+  #
+  # secrets - Configuration Hash.
+  #
+  # Returns nothing.
   attr_writer :secrets
+
+  # Sets the path to the email configuration file.
+  #
+  # email_config_file - The String path.
+  #
+  # Returns nothing.
   attr_writer :email_config_file
+
+  # Sets the email configuration data.
+  #
+  # email_config - Email configuration Hash.
+  #
+  # Returns nothing.
   attr_writer :email_config
+
+  # Sets the path to the SSL Certificate Authority file.
+  #
+  # ca_file - String path.
+  #
+  # Returns nothing.
   attr_writer :ca_file
 
   def initialize(event = :push, data = {}, payload = {})
@@ -65,7 +122,11 @@ class Service
     end
   end
 
-  # Public
+  # Public: Shortens the given URL with bit.ly.
+  #
+  # url - String URL to be shortened.
+  #
+  # Returns the String URL response from bit.ly.
   def shorten_url(url)
     res = http_get do |req|
       req.url "http://api.bit.ly/shorten",
@@ -81,7 +142,35 @@ class Service
     url
   end
 
-  # Public
+  # Public: Makes an HTTP GET call.
+  #
+  # url     - Optional String URL to request.
+  # params  - Optional Hash of GET parameters to set.
+  # headers - Optional Hash of HTTP headers to set.
+  #
+  # Examples
+  #
+  #   http_get("http://github.com")
+  #   # => <Faraday::Response>
+  #
+  #   # GET http://github.com?page=1
+  #   http_get("http://github.com", :page => 1)
+  #   # => <Faraday::Response>
+  #
+  #   http_get("http://github.com", {:page => 1},
+  #     'Accept': 'application/json')
+  #   # => <Faraday::Response>
+  #
+  #   # Yield the Faraday::Response for more control.
+  #   http_get "http://github.com" do |req|
+  #     req.basic_auth("username", "password")
+  #     req.params[:page] = 1
+  #     req.headers['Accept'] = 'application/json'
+  #   end
+  #   # => <Faraday::Response>
+  #
+  # Yields a Faraday::Request instance.
+  # Returns a Faraday::Response instance.
   def http_get(url = nil, params = nil, headers = nil)
     http.get do |req|
       req.url(url)                if url
@@ -91,7 +180,32 @@ class Service
     end
   end
 
-  # Public
+  # Public: Makes an HTTP POST call.
+  #
+  # url     - Optional String URL to request.
+  # body    - Optional String Body of the POST request.
+  # headers - Optional Hash of HTTP headers to set.
+  #
+  # Examples
+  #
+  #   http_post("http://github.com/create", "foobar")
+  #   # => <Faraday::Response>
+  #
+  #   http_post("http://github.com/create", "foobar",
+  #     'Accept': 'application/json')
+  #   # => <Faraday::Response>
+  #
+  #   # Yield the Faraday::Response for more control.
+  #   http_post "http://github.com/create" do |req|
+  #     req.basic_auth("username", "password")
+  #     req.params[:page] = 1 # http://github.com/create?page=1
+  #     req.headers['Content-Type'] = 'application/json'
+  #     req.body = {:foo => :bar}.to_json
+  #   end
+  #   # => <Faraday::Response>
+  #
+  # Yields a Faraday::Request instance.
+  # Returns a Faraday::Response instance.
   def http_post(url = nil, body = nil, headers = nil)
     http.post do |req|
       req.url(url)                if url
@@ -101,7 +215,33 @@ class Service
     end
   end
 
-  # Public
+  # Public: Makes an HTTP call.
+  #
+  # method  - Symbol of the HTTP method.  Example: :put
+  # url     - Optional String URL to request.
+  # body    - Optional String Body of the POST request.
+  # headers - Optional Hash of HTTP headers to set.
+  #
+  # Examples
+  #
+  #   http_method(:put, "http://github.com/create", "foobar")
+  #   # => <Faraday::Response>
+  #
+  #   http_method(:put, "http://github.com/create", "foobar",
+  #     'Accept': 'application/json')
+  #   # => <Faraday::Response>
+  #
+  #   # Yield the Faraday::Response for more control.
+  #   http_method :put, "http://github.com/create" do |req|
+  #     req.basic_auth("username", "password")
+  #     req.params[:page] = 1 # http://github.com/create?page=1
+  #     req.headers['Content-Type'] = 'application/json'
+  #     req.body = {:foo => :bar}.to_json
+  #   end
+  #   # => <Faraday::Response>
+  #
+  # Yields a Faraday::Request instance.
+  # Returns a Faraday::Response instance.
   def http_method(method, url = nil, body = nil, headers = nil)
     http.send(method) do |req|
       req.url(url)                if url
@@ -111,6 +251,12 @@ class Service
     end
   end
 
+  # Public: Lazily loads the Faraday::Connection for the current Service
+  # instance.
+  #
+  # options - Optional Hash of Faraday::Connection options.
+  #
+  # Returns a Faraday::Connection instance.
   def http(options = {})
     @http ||= begin
       options[:timeout]            ||= 6
@@ -125,32 +271,51 @@ class Service
     end
   end
 
-  # Public
+  # Public: Gets the Hash of secret configuration options.  These are set on
+  # the GitHub servers and never committed to git.
+  #
+  # Returns a Hash.
   def secrets
     @secrets ||=
       File.exist?(secret_file) ? YAML.load_file(secret_file) : {}
   end
 
-  # Public
+  # Public: Gets the Hash of email configuration options.  These are set on
+  # the GitHub servers and never committed to git.
+  #
+  # Returns a Hash.
   def email_config
     @email_config ||=
       File.exist?(email_config_file) ? YAML.load_file(email_config_file) : {}
   end
 
-  # Public
+  # Public: Raises a configuration error inside a service, and halts further
+  # processing.
+  #
+  # Raises a Service;:ConfigurationError.
   def raise_config_error(msg = "Invalid configuration")
     raise ConfigurationError, msg
   end
 
+
+  # Gets the path to the secret configuration file.
+  #
+  # Returns a String path.
   def secret_file
     @secret_file ||= File.expand_path("../../config/secrets.yml", __FILE__)
   end
 
+  # Gets the path to the email configuration file.
+  #
+  # Returns a String path.
   def email_config_file
     @email_config_file ||= File.expand_path('../../config/email.yml', __FILE__)
   end
 
-  # http://curl.haxx.se/ca/cacert.pem
+  # Gets the path to the SSL Certificate Authority certs.  These were taken
+  # from: http://curl.haxx.se/ca/cacert.pem
+  #
+  # Returns a String path.
   def ca_file
     @ca_file ||= File.expand_path('../../config/cacert.pem', __FILE__)
   end

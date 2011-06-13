@@ -7,3 +7,6 @@ end
 
 task :default => :test
 
+task :console do
+  sh "irb -r ./config/load"
+end
