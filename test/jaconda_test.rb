@@ -8,13 +8,15 @@ class JacondaTest < Service::TestCase
   def test_push
     @stubs.post "/api/v2/rooms/r/notify/github.json" do |env|
       assert_equal 's.jaconda.im', env[:url].host
+      assert_equal basic_auth(:rt, :X), env[:request_headers]['authorization']
       assert_match /(^|\&)payload=%7B%22a%22%3A1%7D($|\&)/, env[:body]
       assert_match "digest=d", env[:body]
       [200, {}, '']
     end
 
     svc = service(
-      {'subdomain' => 's', 'room_id' => 'r', 'digest' => 'd'}, 'a' => 1)
+      { 'subdomain' => 's', 'digest' => 'd',
+        'room_id' => 'r', 'room_token' => 'rt'}, 'a' => 1)
     svc.receive_push
   end
 
