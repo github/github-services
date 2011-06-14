@@ -63,6 +63,8 @@ class MyServiceTest < Service::TestCase
   def test_push
     @stubs.post "/api/create.json" do |env|
       assert_equal 'my-service.com', env[:url].host
+      assert_equal 'application/json',
+        env[:request_headers]['content-type']
       assert_equal basic_auth("user", "pass"),
         env[:request_headers]['authorization']
       [200, {}, '']
