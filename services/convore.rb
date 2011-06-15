@@ -35,7 +35,6 @@ class Service::Convore < Service
     end
 
     http.url_prefix = "https://convore.com/api/topics"
-    http.headers['Content-Type'] = 'application/json'
     http.basic_auth data['username'], data['password']
 
     begin
@@ -53,6 +52,6 @@ class Service::Convore < Service
 
   def speak(topic_id, line)
     http_post "#{data['topic_id']}/messages/create.json",
-      JSON.generate('message' => line)
+      :message => line
   end
 end
