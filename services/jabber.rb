@@ -33,8 +33,8 @@ class Service::Jabber < Service
     im.accept_subscriptions = true
 
     #Split multiple addresses into array, removing duplicates
-    recipients  = data.has_key?('user') ? data['user'].split(',').uniq.collect(&:strip) : []
-    conferences = data.has_key?('muc') ? data['muc'].split(',').uniq.collect(&:strip) : []
+    recipients  = data.has_key?('user') ? data['user'].split(',').each(&:strip!).uniq : []
+    conferences = data.has_key?('muc') ? data['muc'].split(',').each(&:strip!).uniq : []
     messages = []
     messages << "#{summary_message}: #{summary_url}"
     messages += commit_messages
@@ -54,9 +54,10 @@ class Service::Jabber < Service
   def mucs
     @@mucs ||= {}
   end
+
+  attr_writer :im
   def im
-    @@im ||= begin
-	  puts "New Jabber client"
+    @im || @@im ||= begin
       ::Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
     end
   end
