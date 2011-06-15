@@ -77,7 +77,10 @@ EOH
   end
 
   def project_id
-    @project_id ||= basecamp.projects.select { |p| p.name.downcase == data['project'].downcase }.first.id
+    @project_id ||= begin
+      proj = basecamp.projects.select { |p| p.name.downcase == data['project'].downcase }.first
+      proj ? proj.id : raise_config_error("Invalid Project: #{data['project'].downcase}")
+    end
   end
 
   def category_id
