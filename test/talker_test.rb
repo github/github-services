@@ -6,14 +6,15 @@ class TalkerTest < Service::TestCase
   end
 
   def test_push
-    @stubs.post "/room/1" do |env|
+    @stubs.post "/room/1/messages.json" do |env|
       assert_equal 's.talkerapp.com', env[:url].host
+      assert_equal 't', env[:request_headers]['x-talker-token']
       data = Rack::Utils.parse_nested_query(env[:body])
       assert data.key?('message')
       [200, {}, '']
     end
 
-    svc = service({'url' => 'https://s.talkerapp.com/room/1'}, payload)
+    svc = service({'url' => 'https://s.talkerapp.com/room/1', 'token' => 't'}, payload)
     svc.receive_push
   end
 
