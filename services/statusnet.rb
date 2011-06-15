@@ -14,6 +14,7 @@ class Service::StatusNet < Service
       end
     end
 
+    http.ssl[:verify] = false
     http.url_prefix = data['server']
     http.basic_auth(data['username'], data['password'])
     statuses.each do |status|

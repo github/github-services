@@ -5,6 +5,7 @@ class Service::Talker < Service
     commits = payload['commits']
     token = data['token']
 
+    http.ssl[:verify] = false
     http.headers["X-Talker-Token"] = token
 
     if data['digest'] == 1

@@ -2,6 +2,7 @@ class Service::Notifo < Service
   def receive_push
     subscribe_url = URI.parse('https://api.notifo.com/v1/subscribe_user')
     http.basic_auth 'github', secrets['notifo']['apikey']
+    http.ssl[:verify] = false
     http.url_prefix = "https://api.notifo.com/v1"
 
     data['subscribers'].gsub(/\s/, '').split(',').each do |subscriber|

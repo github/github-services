@@ -1,5 +1,6 @@
 class Service::Travis < Service
   def receive_push
+    http.ssl[:verify] = false
     http.basic_auth user, token
     http_post travis_url, :payload => payload.to_json
   end

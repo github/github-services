@@ -1,5 +1,6 @@
 class Service::MantisBT < Service
   def receive_push
+    http.ssl[:verify] = false
     http.url_prefix = data['url']
     res = http_post 'plugin.php', :payload => payload.to_json do |req|
       req.params.update \

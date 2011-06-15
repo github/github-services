@@ -4,6 +4,7 @@ class Service::HipChat < Service
     raise_config_error "Missing 'auth_token'" if data['auth_token'].to_s == ''
     raise_config_error "Missing 'room'" if data['room'].to_s == ''
 
+    http.ssl[:verify] = false
     res = http_post "https://api.hipchat.com/v1/webhooks/github",
       :auth_token => data['auth_token'],
       :room_id => data['room'],

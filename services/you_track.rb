@@ -1,5 +1,6 @@
 class Service::YouTrack < Service
   def receive_push
+    http.ssl[:verify] = false
     http.url_prefix = data['base_url']
     payload['commits'].each { |c| process_commit(c) }
   end
