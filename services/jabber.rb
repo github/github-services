@@ -33,8 +33,8 @@ class Service::Jabber < Service
     im.accept_subscriptions = true
 
     #Split multiple addresses into array, removing duplicates
-    recipients  = data['user'].split(',').uniq.collect(&:strip)
-    conferences = data['muc'].split(',').uniq.collect(&:strip)
+    recipients  = data.has_key?('user') ? data['user'].split(',').uniq.collect(&:strip) : []
+    conferences = data.has_key?('muc') ? data['muc'].split(',').uniq.collect(&:strip) : []
     messages = []
     messages << "#{summary_message}: #{summary_url}"
     messages += commit_messages
