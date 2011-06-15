@@ -8,7 +8,7 @@ class Service::Talker < Service
     http.ssl[:verify] = false
     http.headers["X-Talker-Token"] = token
 
-    if data['digest'] == 1
+    if data['digest'].to_i == 1
       commit = commits.last
       message = "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} #{commit['url']} )"
 
