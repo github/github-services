@@ -52,10 +52,10 @@ class Service::Jabber < Service
   end
 
   def mucs
-    @mucs ||= {}
+    @@mucs ||= {}
   end
   def im
-    @im ||= begin
+    @@im ||= begin
 	  puts "New Jabber client"
       ::Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
     end
