@@ -78,7 +78,7 @@ class Service::IRC < Service
 
       socket
     end
-	end
+  end
 
   def format_commit_message(commit)
     short  = commit['message'].split("\n", 2).first.to_s
