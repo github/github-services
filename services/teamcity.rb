@@ -1,5 +1,8 @@
 class Service::TeamCity < Service
   def receive_push
+    # :(
+    http.ssl[:verify] = false
+
     http.url_prefix = data['base_url']
     http.basic_auth data['username'], data['password']
     res = http_get "httpAuth/action.html", :add2Queue => data['build_type_id']
