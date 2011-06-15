@@ -8,8 +8,6 @@ end
 
 class Service::Jabber < Service
   def receive_push
-    raise_config_error "jabber hook temporarily disabled"
-
     repository = payload['repository']['name']
     branch     = payload['ref_name']
 
@@ -18,26 +16,20 @@ class Service::Jabber < Service
 
     #Split multiple addresses into array, removing duplicates
     recipients  = data['user'].split(',').uniq.collect(&:strip)
+	messages = []
+	messages << "#{summary_message}: #{summary_url}"
+	messages += commit_messages
+    message = messages.join("\n")
 
-    #Send message to each member in array (Limit to 25 members to prevent overloading something, if this is not and issue, just remove the [0..24] from recipients
-    recipients[0..24].each do |recipient|
-      # Ask recipient to be our buddy if need be
-      im.add(recipient)
-
-      payload['commits'].each do |commit|
-        sha1 = commit['id']
-        im.deliver recipient, <<EOM
-#{repository}: #{commit['author']['name']} #{branch} SHA1-#{sha1[0..6]}"
-
-#{commit['message']}
-#{commit['url']}
-EOM
-      end
+    recipients.each do |recipient|
+      im.deliver_deferred recipient, message, :chat
     end
   end
 
-  attr_writer :im
+#  attr_writer :im
   def im
-    @im ||= Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
+    @im ||= begin
+	  ::Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
+	end
   end
 end
