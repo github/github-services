@@ -25,6 +25,7 @@ class Service::Socialcast < Service
       message << "\n"
     end
 
+    http.ssl[:verify] = false
     http.basic_auth(data['username'], data['password'])
     http_post "https://#{data['api_domain']}/api/messages.xml",
       'message[title]' => title,
