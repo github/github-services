@@ -6,30 +6,58 @@ class ::Jabber::Simple
   def subscribed_to?(x); true; end
 end
 
+# Default implementation of MUCClient uses blocked connection
+class ::Jabber::MUC::MUCClient
+  def join(jid, password=nil)
+    raise "MUCClient already active" if active?
+
+    @jid = (jid.kind_of?(::Jabber::JID) ? jid : ::Jabber::JID.new(jid))
+    activate
+
+    pres = ::Jabber::Presence.new
+    pres.to = @jid
+    pres.from = @my_jid
+    xmuc = ::Jabber::MUC::XMUC.new
+    xmuc.password = password
+    pres.add xmuc
+
+    @stream.send pres
+
+    self
+  end
+end
+
 class Service::Jabber < Service
   def receive_push
-    repository = payload['repository']['name']
-    branch     = payload['ref_name']
-
     # Accept any friend request
     im.accept_subscriptions = true
 
     #Split multiple addresses into array, removing duplicates
     recipients  = data['user'].split(',').uniq.collect(&:strip)
-	messages = []
-	messages << "#{summary_message}: #{summary_url}"
-	messages += commit_messages
+    conferences = data['muc'].split(',').uniq.collect(&:strip)
+    messages = []
+    messages << "#{summary_message}: #{summary_url}"
+    messages += commit_messages
     message = messages.join("\n")
 
     recipients.each do |recipient|
       im.deliver_deferred recipient, message, :chat
     end
+    conferences.each do |conference|
+      muc = mucs[conference]
+      muc ||= mucs[conference] = ::Jabber::MUC::MUCClient.new(im.client)
+      muc.join(conference) unless muc.active?()
+      im.deliver_deferred conference, message, :groupchat
+    end
   end
 
-#  attr_writer :im
+  def mucs
+    @mucs ||= {}
+  end
   def im
     @im ||= begin
-	  ::Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
-	end
+	  puts "New Jabber client"
+      ::Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
+    end
   end
 end
