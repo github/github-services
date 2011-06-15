@@ -30,6 +30,9 @@ class Service::Jira < Service
       next unless changeset.has_key?(:transition)
 
       begin
+        # :(
+        http.ssl[:verify] = false
+
         http.basic_auth data['username'], data['password']
         http.headers['Content-Type'] = 'application/json'
         res = http_post '%s/rest/api/%s/issue/%s/transitions' % [data['server_url'], data['api_version'], issue_id],
