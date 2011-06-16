@@ -8,7 +8,7 @@ class ConvoreTest < Service::TestCase
   def test_push
     url = "/api/topics/1/messages/create.json"
     @stubs.post url do |env|
-      assert_equal 'application/json', env[:request_headers]["Content-Type"]
+      assert_equal 'application/x-www-form-urlencoded', env[:request_headers]["Content-Type"]
       assert_equal basic_auth(:rick, :monkey), env[:request_headers]['authorization']
       assert_match /grit/, env[:body]
       [200, {}, '']
