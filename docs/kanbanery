@@ -4,14 +4,14 @@ Kanbanery
 Install Notes
 -------------
 
-  1. API token - Your personal API token from kanbanery
+  1. project token - Your project GitHub token from kanbanery
   2. project id
 
 Developer Notes
 ---------------
 
 data
-  - api_token
+  - project_token
   - project_id
 
 payload
