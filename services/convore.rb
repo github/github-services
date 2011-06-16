@@ -43,6 +43,9 @@ class Service::Convore < Service
         if res.status < 200 or res.status > 299
           raise_config_error "Convore Error"
         end
+
+        body = JSON.parse(res.body)
+        raise_config_error "Convore Error" if body.include?("error")
       end
 
     rescue Faraday::Error::ConnectionFailed
