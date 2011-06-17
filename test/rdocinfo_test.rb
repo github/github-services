@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class RubyDocInfoTest < Service::TestCase
+class RDocInfoTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
@@ -18,7 +18,7 @@ class RubyDocInfoTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::RubyDocInfo, *args
+    super Service::RDocInfo, *args
   end
 end
 
