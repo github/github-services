@@ -11,7 +11,7 @@ class ConvoreTest < Service::TestCase
       assert_equal 'application/x-www-form-urlencoded', env[:request_headers]["Content-Type"]
       assert_equal basic_auth(:rick, :monkey), env[:request_headers]['authorization']
       assert_match /grit/, env[:body]
-      [200, {}, '']
+      [200, {}, '{}']
     end
 
     svc = service({
