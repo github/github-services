@@ -35,7 +35,6 @@ class Service::Convore < Service
     end
 
     http.url_prefix = "https://convore.com/api/topics"
-    http.headers['Content-Type'] = 'application/json'
     http.basic_auth data['username'], data['password']
 
     begin
@@ -44,6 +43,9 @@ class Service::Convore < Service
         if res.status < 200 or res.status > 299
           raise_config_error "Convore Error"
         end
+
+        body = JSON.parse(res.body)
+        raise_config_error "Convore Error" if body.include?("error")
       end
 
     rescue Faraday::Error::ConnectionFailed
@@ -53,6 +55,6 @@ class Service::Convore < Service
 
   def speak(topic_id, line)
     http_post "#{data['topic_id']}/messages/create.json",
-      JSON.generate('message' => line)
+      :message => line
   end
 end
