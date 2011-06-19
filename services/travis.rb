@@ -22,11 +22,11 @@ class Service::Travis < Service
   end
 
   def scheme
-     domain_parts.size == 1 ? 'http' : domain_parts.first
+    domain_parts.size == 1 ? 'http' : domain_parts.first
   end
 
   def domain
-     domain_parts.last
+    domain_parts.last
   end
 
   protected
