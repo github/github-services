@@ -14,7 +14,7 @@ Install Notes
 
 1. TargetProcess Requirements
 
-  - Requires TargetProcess version 2.21.x or above. Tested with 2.21.8
+  - Requires TargetProcess version 2.21.x or above. Tested with 2.21.11.17621
 
   - Your TargetProcess server should be accessible from the internet.
 
@@ -28,8 +28,8 @@ Install Notes
 
   - Administrator's account credentials to access your TargetProcess server.
 
-  - The project identifier from your TargetProcess project that the GitHub repository
-    should map to
+  - The project id from your TargetProcess project that the GitHub repository
+    should map to (this can be found on the "Projects" list within TargetProcess)
 
 ---------------------
 Commit Message Syntax
