@@ -144,7 +144,7 @@ module Service::PushHelpers
   end
 
   def pusher_name
-    payload['pusher']['name']
+    payload.include?('pusher') ? payload['pusher']['name'] : "somebody"
   end
 
   def owner_name
