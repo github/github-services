@@ -1,4 +1,6 @@
 class Service::Flowdock < Service
+  string :token
+
   def receive_push
     raise_config_error "Missing token" if data['token'].to_s.empty?
 

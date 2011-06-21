@@ -1,4 +1,7 @@
 class Service::Convore < Service
+  string :topic, :username
+  password :password
+
   def receive_push
     raise_config_error "Missing username" if data['username'].to_s == ''
 

@@ -1,4 +1,7 @@
 class Service::Campfire < Service
+  string :subdomain, :room, :token
+  boolean :play_sound
+
   def receive_push
     raise_config_error 'Missing campfire token' if data['token'].to_s.empty?
 

@@ -1,4 +1,7 @@
 class Service::AMQP < Service
+  string   :host, :port, :vhost, :exchange, :username
+  password :password
+
   def receive_push
     # Support for specifying as host or server
     data['host'] ||= data['server']

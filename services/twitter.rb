@@ -1,4 +1,7 @@
 class Service::Twitter < Service
+  string  :token, :secret
+  boolean :digest
+
   def receive_push
     statuses   = [ ]
     repository = payload['repository']['name']

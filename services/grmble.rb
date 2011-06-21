@@ -1,4 +1,6 @@
 class Service::Grmble < Service
+  string :room_api_url, :token
+
   def receive_push
     http.url_prefix = "#{data['room_api_url']}"
     repository = payload[ 'repository' ][ 'name' ]

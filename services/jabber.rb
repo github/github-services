@@ -28,6 +28,8 @@ class ::Jabber::MUC::MUCClient
 end
 
 class Service::Jabber < Service
+  string :user, :muc
+
   def receive_push
     # Accept any friend request
     im.accept_subscriptions = true

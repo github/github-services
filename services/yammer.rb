@@ -1,4 +1,8 @@
 class Service::Yammer < Service
+  string :group_id, :consumer_key, :consumer_secret,
+    :access_token, :access_secret
+  boolean :digest
+
   def receive_push
     statuses   = [ ]
     repository = payload['repository']['name']

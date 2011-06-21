@@ -1,4 +1,8 @@
 class Service::StatusNet < Service
+  string   :server, :username
+  password :password
+  boolean  :digest
+
   def receive_push
     repository = payload['repository']['name']
     statuses = Array.new

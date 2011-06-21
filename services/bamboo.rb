@@ -1,4 +1,7 @@
 class Service::Bamboo < Service
+  string   :base_url, :build_key, :username
+  password :password
+
   def receive_push
     verify_config
     authenticated { |token| trigger_build(token) }

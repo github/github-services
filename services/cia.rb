@@ -1,4 +1,6 @@
 class Service::CIA < Service
+  string :address, :project, :branch
+
   def receive_push
     repository =
       if !(name = data['project'].to_s).empty?

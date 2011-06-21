@@ -1,4 +1,7 @@
 class Service::YouTrack < Service
+  string   :base_url, :committers, :username
+  password :password
+
   def receive_push
     http.ssl[:verify] = false
     http.url_prefix = data['base_url']

@@ -1,4 +1,6 @@
 class Service::SplendidBacon < Service
+  string :project_id, :token
+
   def receive_push
     token = data['token']
     project_id = data['project_id']

@@ -1,8 +1,9 @@
 class Service::Unfuddle < Service
+  string   :subdomain, :repo_id, :username
+  password :password
+
   def receive_push
     u_repoid    = data['repo_id'].to_i
-    u_account   = "http://#{data['subdomain']}.unfuddle.com/"
-
     repository  = payload['repository']['name']
     branch      = payload['ref_name']
     before      = payload['before']
@@ -63,7 +64,6 @@ class Service::Unfuddle < Service
       XML
 
       begin
-        url = URI.parse("%s/api/v1/repositories/%d/changesets.json" % [u_account, u_repoid.to_i])
         res = http_post "/api/v1/repositories/#{u_repoid}/changesets.json" do |req|
           req.headers['Content-Type'] = 'application/xml'
           req.body = changeset_xml

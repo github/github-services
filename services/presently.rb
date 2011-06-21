@@ -1,4 +1,7 @@
 class Service::Presently < Service
+  string   :subdomain, :group_name, :username
+  password :password
+
   def receive_push
     repository = payload['repository']['name']
 

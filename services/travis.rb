@@ -1,4 +1,6 @@
 class Service::Travis < Service
+  string :domain, :user, :token
+
   def receive_push
     http.ssl[:verify] = false
     http.basic_auth user, token

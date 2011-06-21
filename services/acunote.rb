@@ -1,4 +1,6 @@
 class Service::Acunote < Service
+  string :token
+
   def receive_push
     # :(
     http.ssl[:verify] = false

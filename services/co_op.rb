@@ -1,4 +1,6 @@
 class Service::CoOp < Service
+  string :group_id, :token
+
   def receive_push
     repository = payload['repository']['name']
     payload['commits'].each do |commit|

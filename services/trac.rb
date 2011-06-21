@@ -1,4 +1,6 @@
 class Service::Trac < Service
+  string :url, :token
+
   def receive_push
     http.ssl[:verify] = false
     http.url_prefix = data['url']

@@ -1,4 +1,6 @@
 class Service::Notifo < Service
+  string :subscribers
+
   def receive_push
     subscribe_url = URI.parse('https://api.notifo.com/v1/subscribe_user')
     http.basic_auth 'github', secrets['notifo']['apikey']

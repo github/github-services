@@ -1,4 +1,7 @@
 class Service::TeamCity < Service
+  string   :base_url, :build_type_id, :username
+  password :password
+
   def receive_push
     # :(
     http.ssl[:verify] = false

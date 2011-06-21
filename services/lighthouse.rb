@@ -1,4 +1,7 @@
 class Service::Lighthouse < Service
+  string  :subdomain, :project_id, :token
+  boolean :private
+
   def receive_push
     payload['commits'].each do |commit|
       next if commit['message'] =~ /^x /

@@ -1,4 +1,7 @@
 class Service::Email < Service
+  string :address, :secret
+  boolean :send_from_author
+
   def receive_push
     name_with_owner = File.join(payload['repository']['owner']['name'], payload['repository']['name'])
 

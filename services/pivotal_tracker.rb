@@ -1,4 +1,6 @@
 class Service::PivotalTracker < Service
+  string :token
+
   def receive_push
     token = data['token']
 

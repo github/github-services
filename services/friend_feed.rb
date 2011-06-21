@@ -1,4 +1,6 @@
 class Service::FriendFeed < Service
+  string :nickname, :remotekey
+
   def receive_push
     repository = payload['repository']['name']
     friendfeed_url = "http://friendfeed.com/api/share"

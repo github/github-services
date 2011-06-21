@@ -1,4 +1,6 @@
 class Service::Redmine < Service
+  string :address, :project, :api_key
+
   def receive_push
     http.ssl[:verify] = false
     http.url_prefix = data['address']

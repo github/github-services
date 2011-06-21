@@ -1,4 +1,7 @@
 class Service::HipChat < Service
+  string :auth_token, :room
+  boolean :notify
+
   def receive_push
     # make sure we have what we need
     raise_config_error "Missing 'auth_token'" if data['auth_token'].to_s == ''

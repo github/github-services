@@ -1,4 +1,7 @@
 class Service::Jira < Service
+  string   :server_url, :api_version, :username
+  password :password
+
   def receive_push
     payload['commits'].each do |commit|
       next if commit['message'] =~ /^x /
@@ -38,7 +41,7 @@ class Service::Jira < Service
         res = http_post '%s/rest/api/%s/issue/%s/transitions' % [data['server_url'], data['api_version'], issue_id],
           changeset.to_json
       rescue URI::InvalidURIError
-        raise_config_error "Invalid server_hostname: #{data['server_hostname']}"
+        raise_config_error "Invalid server_hostname: #{data['server_url']}"
       end
     end
   end

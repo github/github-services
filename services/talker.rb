@@ -1,4 +1,7 @@
 class Service::Talker < Service
+  string  :url, :token
+  boolean :digest
+
   def receive_push
     repository = payload['repository']['name']
     branch     = payload['ref_name']

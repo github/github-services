@@ -1,4 +1,6 @@
 class Service::MantisBT < Service
+  string :url, :api_key
+
   def receive_push
     http.ssl[:verify] = false
     http.url_prefix = data['url']

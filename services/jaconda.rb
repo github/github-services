@@ -1,4 +1,7 @@
 class Service::Jaconda < Service
+  string  :subdomain, :room_id, :room_token
+  boolean :digest
+
   def receive_push
     raise_config_error "Missing 'subdomain'"  if data['subdomain'].to_s == ''
     raise_config_error "Missing 'room_id'"    if data['room_id'].to_s == ''

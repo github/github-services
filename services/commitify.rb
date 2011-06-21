@@ -1,4 +1,6 @@
 class Service::Commitify < Service
+  string :private_key
+
   def receive_push
     http_post "http://commitify.appspot.com/commit",
       # Private key (for private repositories, share with your developers)
