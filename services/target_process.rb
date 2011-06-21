@@ -48,11 +48,14 @@ module TargetProcess
         c.log_level = :info
       end
       HTTPI.log = false
-      get_context_data
+      # Gather context data and state data
+      @context_data = Context.new(@username,@password,@base_url).get_by_project(@project_id).parsed_response
       get_state_data
     end
 
     def process_commits(payload)
+      # Don't bother doing anything if we don't have state and context information
+      return if @context_data.nil? or @states.nil? or @states.length == 0
       payload["commits"].each{
           |commit| process_commit(commit)
       }
@@ -63,10 +66,10 @@ private
     def process_commit(commit)
       author = find_user_by_email(commit["author"]["email"])
       return if author.nil?
-      commit["message"].each{ |commit_line|
-	parts = commit_line.match(/(\s|^)#(\d+):(.+)\s?(.*)/)
-	next if parts.nil?
-	bug_id = parts[2].strip
+      commit["message"].each { |commit_line|
+        parts = commit_line.match(/(\s|^)#(\d+):(.+)\s?(.*)/)
+        next if parts.nil?
+        bug_id = parts[2].strip
         next if bug_id.nil? or bug_id.length == 0
         command = parts[3].strip
         next if command.nil? or command.length == 0
@@ -79,16 +82,16 @@ private
       return if bug.nil?
       state = get_state_id_by_name(command)
       return if state.nil?
-      @soap_client = Savon::Client.new(@base_url + "/Services/BugService.asmx?WSDL")
-      @soap_client.wsse.credentials @username, @password
-      response = @soap_client.request :wsdl, :change_state do
+      client = Savon::Client.new(@base_url + "/Services/BugService.asmx?WSDL")
+      client.wsse.credentials @username, @password
+      client.request :wsdl, :change_state do |soap|
         soap.body = {
           :bugID => bug_id,
           :entityStateID => state
         }
       end
       # Add the comment
-      @soap_client.request :wsdl, :add_comment_to_bug do
+      client.request :wsdl, :add_comment_to_bug do |soap|
         soap.body = {
           :bugID => bug_id,
           :comment => {
@@ -101,40 +104,36 @@ private
     end
 
     def find_user_by_email(email)
-      @soap_client = Savon::Client.new(@base_url + "/Services/UserService.asmx?WSDL")
-      @soap_client.wsse.credentials @username, @password
-      response = @soap_client.request :wsdl, :retrieve do |soap|
+      client = Savon::Client.new(@base_url + "/Services/UserService.asmx?WSDL")
+      client.wsse.credentials @username, @password
+      response = client.request :wsdl, :retrieve do |soap|
         soap.body = { :hql => "from User where Email = '#{email}'", :parameters => { :string => email } }
       end
       user_info = response.to_hash[:retrieve_response][:retrieve_result]
       user_info[:user_dto] rescue nil
     end
 
-    def get_context_data()
-      @context_data = Context.new(@username,@password,@base_url).get_by_project(@project_id).parsed_response
-    end
-
     def get_state_data()
-      @soap_client = Savon::Client.new(@base_url + "/Services/ProcessService.asmx?WSDL")
-      @soap_client.wsse.credentials @username, @password
-      response = @soap_client.request :wsdl, :retrieve_entity_states_for_process do |soap|
-	soap.body = { :processID => @context_data['Context']['Processes']['ProcessInfo']['Id'] }
+      client = Savon::Client.new(@base_url + "/Services/ProcessService.asmx?WSDL")
+      client.wsse.credentials @username, @password
+      response = client.request :wsdl, :retrieve_entity_states_for_process do |soap|
+	      soap.body = { :processID => @context_data['Context']['Processes']['ProcessInfo']['Id'] }
       end
       state_info = response.to_hash[:retrieve_entity_states_for_process_response][:retrieve_entity_states_for_process_result][:entity_state_dto]
       @states = []
       state_info.each do |v|
-	if v[:entity_type_name] == 'Tp.BusinessObjects.Bug'
-	  # Add this to our collection of possible states
-	  @states.push(v)
-	end
+        if v[:entity_type_name] == 'Tp.BusinessObjects.Bug'
+          # Add this to our collection of possible states
+          @states.push(v)
+        end
       end
     end
 
     def get_state_id_by_name(state_name)
       @states.each do |s|
-	if s[:name].capitalize == state_name.capitalize
-	  return s[:entity_state_id]
-	end
+        if s[:name].capitalize == state_name.capitalize
+          return s[:entity_state_id]
+        end
       end
       nil
     end
