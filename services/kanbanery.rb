@@ -1,4 +1,4 @@
-site = "http://smackaho.st:3000"
+site = "http://kanbanery.com"
 @uri = URI.parse(site)
 
 service :kanbanery do |data, payload|
