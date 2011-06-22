@@ -1,22 +1,14 @@
-service :flowdock do |data, payload|
-  raise GitHub::ServiceConfigurationError, "Missing token" if data['token'].to_s.empty?
+class Service::Flowdock < Service
+  string :token
 
-  def post_data(url_str, data)
-    uri = URI.parse(url_str)
-    req = Net::HTTP::Post.new(uri.path)
-    req.set_form_data(data)
-    http = Net::HTTP.new(uri.host, uri.port)
+  def receive_push
+    raise_config_error "Missing token" if data['token'].to_s.empty?
 
-    if uri.scheme == 'https'
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      http.use_ssl = true
-    end
+    # :(
+    http.ssl[:verify] = false
 
-    http.start { |http| http.request(req) }
+    http_post "https://api.flowdock.com/v1/git",
+      :token => data['token'],
+      :payload => JSON.generate(payload)
   end
-
-  post_data("https://api.flowdock.com/v1/git", {
-    :token => data['token'],
-    :payload => JSON.generate(payload),
-  })
 end

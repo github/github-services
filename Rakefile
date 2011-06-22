@@ -1,9 +1,12 @@
-require "rspec/core/rake_task" # RSpec 2.0
-
-# RSpec 2.0
-RSpec::Core::RakeTask.new(:spec) do |spec|
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rspec_opts = ['--color']
+require 'rake/testtask'
+Rake::TestTask.new(:test) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/*_test.rb'
+  test.verbose = true
 end
 
-task :default => :spec
+task :default => :test
+
+task :console do
+  sh "irb -r ./config/load"
+end

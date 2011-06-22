@@ -1,4 +1,5 @@
-service :rubydocinfo do |data, payload|
-  Net::HTTP.post_form(URI.parse("http://rubydoc.info/checkout"), :payload => JSON.generate(payload))
-  "namaste"
+class Service::RDocInfo < Service
+  def receive_push
+    http_post 'http://rubydoc.info/checkout', :payload => payload.to_json
+  end
 end

@@ -1,8 +1,9 @@
-service :web_translate_it do |data, payload|
-  begin
-    wti_url = URI.parse("https://webtranslateit.com/api/projects/#{data['api_key']}/refresh_files")
-    Net::HTTP.post_form(wti_url, :payload => JSON.generate(payload))
-  rescue Net::HTTPBadResponse
-    raise GitHub::ServiceConfigurationError, "Invalid configuration"
+class Service::WebTranslateIt < Service
+  string :api_key
+
+  def receive_push
+    http.ssl[:verify] = false
+    http_post "https://webtranslateit.com/api/projects/#{data['api_key']}/refresh_files",
+      :payload => JSON.generate(payload)
   end
 end

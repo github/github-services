@@ -1,32 +1,28 @@
-service :talker do |data, payload|
-  repository = payload['repository']['name']
-  branch = payload['ref_name']
-  commits = payload['commits']
-  token = data['token']
-  url = URI.parse("#{data['url']}/messages.json")
+class Service::Talker < Service
+  string  :url, :token
+  boolean :digest
 
-  if data['digest'] == 1
-    commit = commits.last
-    message = "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} #{commit['url']} )"
-    
-    req = Net::HTTP::Post.new(url.path)
-    req["X-Talker-Token"] = "#{token}"
-    req.set_form_data('message' => message)
+  def receive_push
+    repository = payload['repository']['name']
+    branch     = payload['ref_name']
+    commits    = payload['commits']
+    token      = data['token']
 
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true if url.port == 443 || url.instance_of?(URI::HTTPS)
-    http.start { |http| http.request(req) }
-  else
-    commits.each do |commit|
-      message = "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} #{commit['url']}"
-      
-      req = Net::HTTP::Post.new(url.path)
-      req["X-Talker-Token"] = "#{token}"
-      req.set_form_data('message' => message)
+    http.ssl[:verify] = false
+    http.headers["X-Talker-Token"] = token
+    http.url_prefix = data['url']
 
-      http = Net::HTTP.new(url.host, url.port)
-      http.use_ssl = true if url.port == 443 || url.instance_of?(URI::HTTPS)
-      http.start { |http| http.request(req) }
+    if data['digest'].to_i == 1
+      commit = commits.last
+      message = "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} #{commit['url']} )"
+
+      http_post 'messages.json', :message => message
+    else
+      commits.each do |commit|
+        message = "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} #{commit['url']}"
+
+        http_post 'messages.json', :message => message
+      end
     end
   end
 end

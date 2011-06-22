@@ -1,7 +1,11 @@
-secrets = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config', 'secrets.yml'))
+class Service::Boxcar < Service
+  string :subscribers
 
-service :boxcar do |data, payload|
-  provider_url = URI.parse("http://providers.boxcar.io/github/#{secrets['boxcar']['apikey']}")
-  Net::HTTP.post_form(provider_url, 
-    { :emails => data['subscribers'], :payload => JSON.generate(payload) })
+  def receive_push
+    http_post \
+      "http://providers.boxcar.io/github/%s" %
+        [secrets['boxcar']['apikey']],
+      :emails => data['subscribers'],
+      :payload => JSON.generate(payload)
+  end
 end
