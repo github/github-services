@@ -2,6 +2,7 @@
 deploy.rb
 *~
 config/secrets.yml
+config/services.json
 /bin
 vendor/gems
 .bundle

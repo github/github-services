@@ -32,6 +32,13 @@ class Service
       end
     end
 
+    # Tracks the defined services.
+    #
+    # Returns an Array of Service Classes.
+    def services
+      @services ||= []
+    end
+
     # Gets the current schema for the data attributes that this Service
     # expects.  This schema is used to generate the GitHub repository admin
     # interface.  The attribute types loosely to HTML input elements.
@@ -135,6 +142,7 @@ class Service
     #
     # Returns nothing.
     def inherited(svc)
+      Service.services << svc
       Service::App.service(svc)
       super
     end
