@@ -7,7 +7,7 @@ Install Notes
 Project ID and Token is required for
 configuration which will be available
 under "Dashboard" --> "Project Settings"
---> "Service Hooks". 
+--> "Service Hooks".
 
 This service hook allows you to associate
 changeset(s) with bug(s) in Zoho Projects.
