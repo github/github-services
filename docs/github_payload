@@ -27,6 +27,10 @@
       "name" => "rtomayko"
     },
 
+    "pusher" => {
+      "name" => "rtomayko"
+    },
+
     "commits" => [
       {
         "distinct"  => true,
