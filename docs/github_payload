@@ -23,6 +23,10 @@
       "owner" => { "name" => "mojombo", "email" => "tom@mojombo.com" }
     },
 
+    "pusher" => {
+      "name" => "rtomayko"
+    },
+
     "commits" => [
       {
         "distinct"  => true,
