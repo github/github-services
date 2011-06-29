@@ -15,6 +15,7 @@ class ZohoProjectsTest < Service::TestCase
   def test_push
     url = "/serviceHook"
     @stubs.post url do |env|
+      assert_equal 'projects.zoho.com', env[:url].host
       params = Rack::Utils.parse_query env[:body]
       assert_equal '1234', params['pId']
       assert_equal 'a13d', params['authtoken']
