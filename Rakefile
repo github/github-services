@@ -16,7 +16,9 @@ namespace :services do
     file = ENV["FILE"] || File.expand_path("../config/services.json", __FILE__)
     require File.expand_path("../config/load", __FILE__)
     services = Service.services.inject({}) do |memo, svc|
-      memo.update svc.hook_name => svc.schema
+      memo.update svc.title => {
+        :short_name => svc.hook_name,
+        :schema     => svc.schema}
     end
     File.open file, 'w' do |io|
       io << services.to_json
