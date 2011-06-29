@@ -28,7 +28,7 @@ class ::Jabber::MUC::MUCClient
 end
 
 class Service::Jabber < Service
-  string :user, :muc
+  string :user
 
   def receive_push
     # Accept any friend request
@@ -42,9 +42,19 @@ class Service::Jabber < Service
     messages += commit_messages
     message = messages.join("\n")
 
+    deliver_messages(message, recipients)
+
+    # temporarily disabled
+    #deliver_muc(message, conferences) if !conferences.empty?
+  end
+
+  def deliver_messages(message, recipients)
     recipients.each do |recipient|
       im.deliver_deferred recipient, message, :chat
     end
+  end
+
+  def deliver_muc(message, conferences)
     conferences.each do |conference|
       muc = mucs[conference]
       muc ||= mucs[conference] = ::Jabber::MUC::MUCClient.new(im.client)
