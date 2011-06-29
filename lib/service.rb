@@ -126,7 +126,27 @@ class Service
       end
     end
 
-    # Gets the String name that identifies this Service type.
+    # Gets the official title of this Service.  This is used in any
+    # user-facing documentation regarding the Service.
+    #
+    # Returns a String.
+    def title
+      @title ||= begin
+        hook = name.dup
+        hook.sub! /.*:/, ''
+        hook
+      end
+    end
+
+    # Sets the official title of this Service.
+    #
+    # title - The String title.
+    #
+    # Returns nothing.
+    attr_writer :title
+
+    # Gets the name that identifies this Service type.  This is a
+    # short string that is used to uniquely identify the service internally.
     #
     # Returns a String.
     def hook_name
