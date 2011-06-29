@@ -1,4 +1,6 @@
 class Service::ZohoProjects < Service
+  string :project_id, :token
+
   def receive_push
     res = http_post "https://projects.zoho.com/serviceHook",
       :pId       => data['project_id'],
