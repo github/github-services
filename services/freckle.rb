@@ -1,5 +1,5 @@
 class Service::Freckle < Service
-  string :subdomain, :project_name, :token
+  string :subdomain, :project, :token
 
   def receive_push
     entries, subdomain, token, project =
