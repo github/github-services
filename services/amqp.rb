@@ -1,5 +1,5 @@
 class Service::AMQP < Service
-  string   :host, :port, :vhost, :exchange, :username
+  string   :server, :port, :vhost, :exchange, :username
   password :password
 
   def receive_push
