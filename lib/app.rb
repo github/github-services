@@ -1,5 +1,8 @@
 # The Sinatra App that handles incoming events.
 class Service::App < Sinatra::Base
+
+  set :hostname, lambda { %x{hostname} }
+
   # Hooks the given Service to a Sinatra route.
   #
   # svc - Service instance.
@@ -58,7 +61,7 @@ class Service::App < Sinatra::Base
       'app'       => 'github-services',
       'type'      => 'exception',
       'class'     => exception.class.to_s,
-      'server'    => HOSTNAME,
+      'server'    => settings.hostname,
       'message'   => exception.message[0..254],
       'backtrace' => backtrace.join("\n"),
       'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0])
@@ -75,7 +78,7 @@ class Service::App < Sinatra::Base
       data['class'] = 'Service::Error'
     end
 
-    if HOSTNAME =~ /^sh1\.(rs|stg)\.github\.com$/
+    if settings.hostname =~ /^sh1\.(rs|stg)\.github\.com$/
       # run only in github's production environment
       Net::HTTP.new('haystack', 80).
         post('/async', "json=#{Rack::Utils.escape(data.to_json)}")

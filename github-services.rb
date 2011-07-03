@@ -5,8 +5,6 @@ Service::App.set :run => true,
   :port        => ARGV.first || 8080,
   :logging     => true
 
-HOSTNAME = `hostname`.chomp
-
 begin
   require 'mongrel'
   Service::App.set :server, 'mongrel'
