@@ -7,7 +7,7 @@ class Service::Campfire < Service
 
     messages = []
     messages << "#{summary_message}: #{summary_url}"
-    messages += commit_messages.first(4)
+    messages += commit_messages.first(12)
 
     if messages.first =~ /pushed 1 new commit/
       messages.shift # drop summary message
