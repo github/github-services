@@ -16,4 +16,4 @@ data_json = JSON.generate(hash["data"])
 payload_json = JSON.generate(hash["payload"])
 
 File.open( "docs/payload_data", 'w' ) { |f| f.write( "data=#{data_json}&payload=#{payload_json}" ) }
-exec "curl --data-binary @docs/payload_data http://localhost:8080/#{ARGV[0]}/"
+exec "curl --data-binary @docs/payload_data http://localhost:8080/#{ARGV[0]}/push"

@@ -1,15 +1,17 @@
-service :friend_feed do |data, payload|
-  repository = payload['repository']['name']
-  friendfeed_url = URI.parse("http://friendfeed.com/api/share")
+class Service::FriendFeed < Service
+  string :nickname, :remotekey
 
-  payload['commits'].each do |commit|
-    title = "#{commit['author']['name']} just committed a change to #{repository} on GitHub"
-    comment = "#{commit['message']} (#{commit['id']})"
+  def receive_push
+    repository = payload['repository']['name']
+    friendfeed_url = "http://friendfeed.com/api/share"
 
-    req = Net::HTTP::Post.new(friendfeed_url.path)
-    req.basic_auth(data['nickname'], data['remotekey'])
-    req.set_form_data('title' => title, 'link' => commit['url'], 'comment' => comment, 'via' => 'github')
+    payload['commits'].each do |commit|
+      title = "#{commit['author']['name']} just committed a change to #{repository} on GitHub"
+      comment = "#{commit['message']} (#{commit['id']})"
 
-    Net::HTTP.new(friendfeed_url.host, friendfeed_url.port).start { |http| http.request(req) }
+      http.basic_auth data['nickname'], data['remotekey']
+      http_post friendfeed_url,
+        :title => title, :link => commit['url'], :comment => comment, :via => :github
+    end
   end
 end

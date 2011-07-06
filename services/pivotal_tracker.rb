@@ -1,20 +1,20 @@
-service :pivotal_tracker do |data, payload|
-  token = data['token']
-  path = "/services/v3/github_commits?token=#{token}"
+class Service::PivotalTracker < Service
+  string :token
 
-  req = Net::HTTP::Post.new(path)
-  req.set_form_data('payload' => payload.to_json)
-  req["Content-Type"] = 'application/x-www-form-urlencoded'
+  def receive_push
+    token = data['token']
 
-  http = Net::HTTP.new("www.pivotaltracker.com", 443)
-  http.use_ssl = true
-  http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-  begin
-    http.start do |connection|
-      connection.request(req)
+    # need to figure out how to get the right equifax secure ca loaded
+    http.ssl[:verify] = false
+
+    res = http_post 'https://www.pivotaltracker.com/services/v3/github_commits' do |req|
+      req.params[:token] = data['token']
+      req.body = {:payload => payload.to_json}
     end
-  rescue Net::HTTPBadResponse
-    raise GitHub::ServiceConfigurationError, "Invalid configuration"
+
+    if res.status < 200 || res.status > 299
+      raise_config_error
+    end
   end
-  nil
 end
+

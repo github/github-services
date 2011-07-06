@@ -1,47 +1,48 @@
-require 'json'
+class Service::Jira < Service
+  string   :server_url, :api_version, :username
+  password :password
 
-service :jira do |data, payload|
-  payload['commits'].each do |commit|
-    next if commit['message'] =~ /^x /
+  def receive_push
+    payload['commits'].each do |commit|
+      next if commit['message'] =~ /^x /
 
-    comment_body = "#{commit['message']}\n#{commit['url']}"
+      comment_body = "#{commit['message']}\n#{commit['url']}"
 
-    commit['message'].match(/\[#(.+)\]/)
-    # Don't need to continue if we don't have a commit message containing JIRA markup
-    next unless $1
+      commit['message'].match(/\[#(.+)\]/)
+      # Don't need to continue if we don't have a commit message containing JIRA markup
+      next unless $1
 
-    jira_markup = $1.split
-    issue_id = jira_markup.shift
+      jira_markup = $1.split
+      issue_id = jira_markup.shift
 
-    changeset = { :comment => { :body => comment_body } }
+      changeset = { :comment => { :body => comment_body } }
 
-    jira_markup.each do |entry|
-      key, value = entry.split(':')
+      jira_markup.each do |entry|
+        key, value = entry.split(':')
 
-      if key =~ /(?i)status|(?i)transition/
-        changeset.merge!(:transition => value.to_i)
-      elsif key =~ /(?i)resolution/
-        changeset.merge!(:fields => { :resolution => value.to_i })
-      else
-        changeset.merge!(:fields => { key.to_sym => "Resolved" })
+        if key =~ /(?i)status|(?i)transition/
+          changeset.merge!(:transition => value.to_i)
+        elsif key =~ /(?i)resolution/
+          changeset.merge!(:fields => { :resolution => value.to_i })
+        else
+          changeset.merge!(:fields => { key.to_sym => "Resolved" })
+        end
       end
-    end
 
-    # Don't need to continue if we don't have a transition to perform
-    next unless changeset.has_key?(:transition)
+      # Don't need to continue if we don't have a transition to perform
+      next unless changeset.has_key?(:transition)
 
-    begin
-      url = URI.parse('%s/rest/api/%s/issue/%s/transitions' % [data['server_url'], data['api_version'], issue_id])
-      Net::HTTP.start(url.host, url.port) do |http|
-        req = Net::HTTP::Post.new(url.path)
-        req.basic_auth data['username'], data['password']
-        req.body = changeset.to_json
-        req.set_content_type('application/json')
-        response = http.request(req)
-        puts response.body
+      begin
+        # :(
+        http.ssl[:verify] = false
+
+        http.basic_auth data['username'], data['password']
+        http.headers['Content-Type'] = 'application/json'
+        res = http_post '%s/rest/api/%s/issue/%s/transitions' % [data['server_url'], data['api_version'], issue_id],
+          changeset.to_json
+      rescue URI::InvalidURIError
+        raise_config_error "Invalid server_hostname: #{data['server_url']}"
       end
-    rescue URI::InvalidURIError
-      raise GitHub::ServiceConfigurationError, "Invalid server_hostname: #{data['server_hostname']}"
     end
   end
 end

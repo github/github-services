@@ -1,40 +1,76 @@
-secrets = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config', 'secrets.yml'))
-
 # Jabber::Simple does some insane kind of queueing if it thinks
 # we are not in their buddy list (which is always) so messages
 # never get sent before we disconnect. This forces the library
 # to assume the recipient is a buddy.
-class Jabber::Simple
+class ::Jabber::Simple
   def subscribed_to?(x); true; end
 end
 
-im = nil
-service :jabber do |data, payload|
-  raise GitHub::ServiceConfigurationError, "jabber hook temporarily disabled"
+# Default implementation of MUCClient uses blocked connection
+class ::Jabber::MUC::MUCClient
+  def join(jid, password=nil)
+    raise "MUCClient already active" if active?
 
-  repository = payload['repository']['name']
-  branch     = payload['ref_name']
-  im         ||= Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
+    @jid = (jid.kind_of?(::Jabber::JID) ? jid : ::Jabber::JID.new(jid))
+    activate
 
-  # Accept any friend request
-  im.accept_subscriptions = true
+    pres = ::Jabber::Presence.new
+    pres.to = @jid
+    pres.from = @my_jid
+    xmuc = ::Jabber::MUC::XMUC.new
+    xmuc.password = password
+    pres.add xmuc
 
-  #Split multiple addresses into array, removing duplicates
-  recipients  = data['user'].split(',').uniq.collect(&:strip)
+    @stream.send pres
 
-  #Send message to each member in array (Limit to 25 members to prevent overloading something, if this is not and issue, just remove the [0..24] from recipients
-  recipients[0..24].each do |recipient|
-    # Ask recipient to be our buddy if need be
-    im.add(recipient)
-
-    payload['commits'].each do |commit|
-      sha1 = commit['id']
-      im.deliver recipient, <<EOM
-#{repository}: #{commit['author']['name']} #{branch} SHA1-#{sha1[0..6]}"
-
-#{commit['message']}
-#{commit['url']}
-EOM
+    self
   end
+end
+
+class Service::Jabber < Service
+  string :user
+
+  def receive_push
+    # Accept any friend request
+    im.accept_subscriptions = true
+
+    #Split multiple addresses into array, removing duplicates
+    recipients  = data.has_key?('user') ? data['user'].split(',').each(&:strip!).uniq : []
+    conferences = data.has_key?('muc') ? data['muc'].split(',').each(&:strip!).uniq : []
+    messages = []
+    messages << "#{summary_message}: #{summary_url}"
+    messages += commit_messages
+    message = messages.join("\n")
+
+    deliver_messages(message, recipients)
+
+    # temporarily disabled
+    #deliver_muc(message, conferences) if !conferences.empty?
+  end
+
+  def deliver_messages(message, recipients)
+    recipients.each do |recipient|
+      im.deliver_deferred recipient, message, :chat
     end
+  end
+
+  def deliver_muc(message, conferences)
+    conferences.each do |conference|
+      muc = mucs[conference]
+      muc ||= mucs[conference] = ::Jabber::MUC::MUCClient.new(im.client)
+      muc.join(conference) unless muc.active?()
+      im.deliver_deferred conference, message, :groupchat
+    end
+  end
+
+  def mucs
+    @@mucs ||= {}
+  end
+
+  attr_writer :im
+  def im
+    @im || @@im ||= begin
+      ::Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
+    end
+  end
 end
