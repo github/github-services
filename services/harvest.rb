@@ -37,7 +37,7 @@ class Service::Harvest < Service
     build_message = ""
 
     statuses.each do |status|
-      build_message = "#{status}\n"
+      build_message = "#{build_message}#{status}\n"
     end
     final_message = get_daily(build_message)
     post(final_message) if @timer_on
