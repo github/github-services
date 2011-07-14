@@ -21,24 +21,17 @@ class Service::Harvest < Service
     end
 
     @connection = Net::HTTP.new("#{data['subdomain']}.harvestapp.com", data['ssl'] ? 443 : 80)
-    @connection.use_ssl = true
+    @connection.use_ssl = data['ssl']
 
     statuses   = [ ]
     repository = payload['repository']['name']
 
-    if data['digest'] == '1'
-      commit = payload['commits'][-1]
+
+    payload['commits'].each do |commit|
       author = commit['author'] || {}
-      tiny_url = shorten_url(payload['repository']['url'] + '/commits/' + payload['ref_name'])
-      status = "[#{repository}] #{tiny_url} #{author['name']} - #{payload['commits'].length} commits"
+      tiny_url = shorten_url(commit['url'])
+      status = "[#{repository}] #{tiny_url} #{author['name']} - #{commit['message']}"
       statuses << status
-    else
-      payload['commits'].each do |commit|
-        author = commit['author'] || {}
-        tiny_url = shorten_url(commit['url'])
-        status = "[#{repository}] #{tiny_url} #{author['name']} - #{commit['message']}"
-        statuses << status
-      end
     end
 
     build_message = ""
@@ -69,7 +62,7 @@ class Service::Harvest < Service
     doc.elements.each('daily/day_entries/day_entry') do |ele|
       if ele.elements['timer_started_at']
         @timer_on = ele.elements['id'].text
-        message = "<request><notes>#{builder}\n#{ele.elements['notes'].text}</notes><hours>#{ele.elements['hours'].text}</hours></request>"
+        message = "<request><notes>#{ele.elements['notes'].text}\n#{builder}</notes><hours>#{ele.elements['hours'].text}</hours></request>"
       end
     end
     return message
