@@ -12,6 +12,7 @@ task :console do
 end
 
 namespace :services do
+  desc "Writes a JSON config to FILE || config/services.json"
   task :config do
     file = ENV["FILE"] || File.expand_path("../config/services.json", __FILE__)
     require File.expand_path("../config/load", __FILE__)
