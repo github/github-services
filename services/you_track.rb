@@ -36,7 +36,8 @@ class Service::YouTrack < Service
 
       command = commit_line[/( |^)#\w+-\d+ (.+)/, 2].strip
       command = "Fixed" if command.nil?
-      execute_command(author, issue_id, command)
+      commentString = "Commit made by '''" + commit["author"]["name"] + "''' on ''" + commit["timestamp"] + "''\n" + commit["url"] + "\n\n{quote}" + commit["message"] + "{quote}"  
+      execute_command(author, issue_id, command, commentString)
     }
   end
 
@@ -62,9 +63,10 @@ class Service::YouTrack < Service
     end
   end
 
-  def execute_command(author, issue_id, command)
+  def execute_command(author, issue_id, command, commentString)
     res = http_post "rest/issue/#{issue_id}/execute" do |req|
       req.params[:command] = command
+      req.params[:comment] = commentString
       req.params[:runAs]   = author
     end
     verify_response(res)
