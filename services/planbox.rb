@@ -3,9 +3,6 @@ class Service::Planbox < Service
 
   def receive_push
     token = data['token']
-	
-    http.ssl[:verify] = false
-
     res = http_post 'https://www.planbox.com/api/github_commits' do |req|
       req.params[:token] = data['token']
       req.body = {:payload => payload.to_json}
