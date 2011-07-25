@@ -8,5 +8,5 @@ payload contains the commit data; same as you get when using API. See docs/githu
 TEST
 ----
 
-svc = Service::Planbox.new(:push, {'token' => '130cabac97de1ad8f1d8aa435bec9805'})
+svc = Service::Planbox.new(:push, {'token' => '223cazxbs97de1ndj61d8aa435b0o9i05'})
 svc.receive_push
