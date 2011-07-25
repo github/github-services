@@ -1,0 +1,12 @@
+Planbox
+=======
+
+token is your Planbox Inititative Token. Find in on the Manage page.
+
+payload contains the commit data; same as you get when using API. See docs/github_payload.
+
+TEST
+----
+
+svc = Service::Planbox.new(:push, {'token' => '223cazxbs97de1ndj61d8aa435b0o9i05'})
+svc.receive_push
