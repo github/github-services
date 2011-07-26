@@ -9,7 +9,7 @@ class Service::ScrumDo < Service
     project_slug = data["project_slug"]
 
     # url = "http://localhost:8000/hooks/github/%s" % [project_slug]
-    url = "http://www.scrumdo.com/hooks/github/%s" % [project_slug]
+    url = "http://www.scrumdo.com/hooks/github/#{data["project_slug"]}"
     res = http_post url do |req|
        req.body = {:payload => payload.to_json, :username=>username, :password=>password}
     end
