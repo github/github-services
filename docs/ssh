@@ -1,0 +1,28 @@
+Ssh
+=========
+
+Install Notes
+-------------
+
+  1. host should be the hostname or ip address of a server that is listening for this ssh connection.
+  2. port should be the port number that the server is running on.  
+  3. user should be the username of the account on the host.
+  4. key should be the RSA private key used to authenticate to the server.
+
+
+Developer Notes
+---------------
+
+data
+  - host
+  - port
+  - user
+  - key
+
+payload
+  - refer to docs/github_payload
+
+Deployment Notes
+----------------
+
+The private key should NOT include the header or footer i.e.(-----BEGIN RSA PRIVATE KEY----- and -----END RSA PRIVATE KEY-----)
