@@ -1,4 +1,5 @@
 class Service::Kanbanery < Service
+  string :project_id, :project_token
 
   def receive_push
     project_id = data['project_id']
@@ -10,5 +11,5 @@ class Service::Kanbanery < Service
       'Content-Type' => 'application/json'
     
   end
-  
 end
+
