@@ -1,0 +1,18 @@
+Kanbanery
+======
+
+Install Notes
+-------------
+
+  1. project token - Your project GitHub token from Kanbanery
+  2. project id
+
+Developer Notes
+---------------
+
+data
+  - project_token
+  - project_id
+
+payload
+  - refer to docs/github_payload
