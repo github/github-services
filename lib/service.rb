@@ -251,7 +251,7 @@ class Service
         :version => '2.0.1',
         :longUrl => url,
         :login   => 'github',
-        :apiKey  => 'R_261d14760f4938f0cda9bea984b212e4'
+        :apiKey  => self.class.secrets['bitly']['key'] || 'R_261d14760f4938f0cda9bea984b212e4'
     end
 
     short = JSON.parse(res.body)
