@@ -246,12 +246,14 @@ class Service
   #
   # Returns the String URL response from bit.ly.
   def shorten_url(url)
+    bitly_key = secrets['bitly'] && secrets['bitly']['key']
+
     res = http_get do |req|
       req.url "http://api.bit.ly/shorten",
         :version => '2.0.1',
         :longUrl => url,
         :login   => 'github',
-        :apiKey  => self.class.secrets['bitly']['key'] || 'R_261d14760f4938f0cda9bea984b212e4'
+        :apiKey  => bitly_key || 'R_261d14760f4938f0cda9bea984b212e4'
     end
 
     short = JSON.parse(res.body)
