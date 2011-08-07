@@ -1,0 +1,23 @@
+Bugzilla
+========
+
+This service hook posts comments on Bugzilla bugs when commit messages
+reference a bug by id number.
+
+Bugs are recognised by the following formats, which are case-insensitive:
+  - Ticket 123
+  - Bug 123
+  - Tracker item 123
+
+Multiple bugs can also be specified by separating them with a comma,
+apersand, plus or "and":
+  - Bug 123, 124 and 125
+
+This hook requires Bugzilla version >= 3.4 to function correctly.
+
+Settings
+--------
+
+  - server_url - The URL for the Bugzilla installation, eg http://bugzilla.mozilla.org/
+  - username - Email address for Bugzilla user account
+  - password - Password for the user account
