@@ -1,0 +1,23 @@
+BugHerd
+=======
+
+BugHerd is the world's simplest bug tracker for the web. See: http://www.bugherd.com
+
+
+Install Notes
+-------------
+
+  1. url -- optional (defaults to http://www.bugherd.com)
+
+  2. project key -- you will find this key in BugHerd as you setup the BugHerd integration.
+
+
+Developer Notes
+---------------
+
+data
+  - url
+  - project_key
+
+payload
+  - refer to docs/github_payload
