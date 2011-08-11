@@ -6,7 +6,7 @@ class BugherdTest < Service::TestCase
   def test_push
     @stubs.post "/github_web_hook/KEY" do |env|
       assert_equal 'www.bugherd.com', env[:url].host
-      assert_equal 'application/json',
+      assert_equal 'application/x-www-form-urlencoded',
         env[:request_headers]['content-type']
       [200, {}, '']
     end
