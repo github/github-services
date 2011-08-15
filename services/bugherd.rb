@@ -5,7 +5,7 @@ class Service::Bugherd < Service
     if data['url'].present?
       url = data['url']
     else
-      url = 'http://www.bugherd.com/github_web_hook/' + data['project_key']
+      url = "http://www.bugherd.com/github_web_hook/#{data['project_key']}"
     end
     http_post url,
       :payload => JSON.generate(payload)
