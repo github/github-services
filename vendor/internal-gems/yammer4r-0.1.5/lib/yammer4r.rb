@@ -5,7 +5,7 @@ require 'yaml'
 require 'open-uri'
 
 #gem 'json', '>= 1.1.7'
-require 'json'
+#require 'json'
 
 #gem 'oauth', '>=0.3.5'
 require 'oauth'
