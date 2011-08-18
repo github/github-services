@@ -1,0 +1,19 @@
+Harvest
+========
+
+Install Notes
+-------------
+
+1. Applies the status to the currently clocked in project.  Future updates are expected to include more versatility.
+
+Developer Notes
+---------------
+
+data
+  - username (your email address)
+  - password (harvest password)
+  - subdomain (subdomain for your business ex. {subdomain}.harvestapp.com)
+  - ssl (boolean)
+
+payload
+  - refer to docs/github_payload
