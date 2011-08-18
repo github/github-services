@@ -14,18 +14,14 @@ Install Notes
 -------------
 
 1. Username and Password are your ScrumDo.com credentials.
-	
 2. The project slug can be found in the URL of your project.
 
-	Given this URL:
+    Given this URL:
 
-	      http://www.scrumdo.com/projects/project/acme-project/
+        http://www.scrumdo.com/projects/project/acme-project/
 
-	Your project slug is acme-project
+    Your project slug is `acme-project`
 
-	
-
-	
 Developer Notes
 ---------------
 
