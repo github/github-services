@@ -22,7 +22,7 @@ namespace :services do
         :schema     => svc.schema}
     end
     File.open file, 'w' do |io|
-      io << services.to_json
+      io << Yajl.dump(services, :pretty => true)
     end
   end
 end
