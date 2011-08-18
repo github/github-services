@@ -1,6 +1,6 @@
 class Service::Lighthouse < Service
   string  :subdomain, :project_id, :token
-  boolean :private, :chatty
+  boolean :private, :send_only_ticket_commits
 
   def receive_push
     # matches string with square braces with content starting with # and a digit.
@@ -8,7 +8,7 @@ class Service::Lighthouse < Service
     
     payload['commits'].each do |commit|
       next if commit['message'] =~ /^x /
-      next if data['chatty'] == false && (commit['message'] =~ check_for_lighthouse_flags).nil?
+      next if data['send_only_ticket_commits'] == false && (commit['message'] =~ check_for_lighthouse_flags).nil?
 
       commit_id = commit['id']
       added     = commit['added'].map    { |f| ['A', f] }
