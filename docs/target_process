@@ -1,0 +1,53 @@
+TargetProcess
+=============
+
+-------------------------------------------
+TargetProcess - GitHub Integration Overview
+-------------------------------------------
+
+Integration with TargetProcess allows GitHub user to change current bug states
+and add comments directly from their commit messages.
+
+--------------
+Install Notes
+--------------
+
+1. TargetProcess Requirements
+
+  - Requires TargetProcess version 2.21.x or above. Tested with 2.21.11.17621
+
+  - Your TargetProcess server should be accessible from the internet.
+
+  - Committer's email addresses in GitHub and TargetProcess should be the same.
+
+2. Settings in GitHub
+
+  In the GitHub integration config, the following settings should be provided:
+
+  - TargetProcess Server URL
+
+  - Administrator's account credentials to access your TargetProcess server.
+
+  - The project id from your TargetProcess project that the GitHub repository
+    should map to (this can be found on the "Projects" list within TargetProcess)
+
+---------------------
+Commit Message Syntax
+---------------------
+
+General comment format for changing bug states:
+
+
+	[comment] #<bugID>:<new state>
+
+
+Developer Notes
+---------------
+
+data
+-base_url
+-username
+-password
+-project_id
+
+
