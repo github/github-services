@@ -29,29 +29,19 @@ class Service::ActiveCollab < Service
     payload['commits'].each do |commit|
       author = commit['author'] || {}
       tiny_url = shorten_url(commit['url'])
-      status = "[#{repository}] #{tiny_url} #{author['name']} - #{commit['message']}"
-      statuses << status
+      statuses << "[#{repository}] #{tiny_url} #{author['name']} - #{commit['message']}"
     end
 
-    build_message = ""
+    build_message = statuses * "\n"
 
-    statuses.each do |status|
-      build_message = "#{build_message}#{status}\n"
+    http.url_prefix = data['url']
+    http.headers['Accept'] = 'application/xml'
+    
+    http.post do |req|
+      req.params['path_info'] = "projects/#{data['project_id']}/discussions/add"
+      req.params['token']     = data['token']
+      req.body = params(push_message, build_message)
     end
-
-    @req = Net::HTTP::Post.new("#{url.path}?path_info=projects/#{data['project_id']}/discussions/add&token=#{data['token']}", headers);
-    @req.set_form_data(params(push_message, build_message))
-    @response = Net::HTTP.new(url.host, url.port).start { |http| http.request(@req) }
-  end
-
-  def headers
-    {
-      "Accept"  =>  "application/xml"
-    }
-  end
-
-  def url
-    URI.parse(data['url'])
   end
 
   def params(name, message)
@@ -64,6 +54,4 @@ class Service::ActiveCollab < Service
       "discussion[visibility]" => 1,
     }
   end
-
-  attr_reader :response
 end
