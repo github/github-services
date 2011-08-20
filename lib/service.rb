@@ -292,18 +292,12 @@ class Service
   #
   # Returns the String URL response from bit.ly.
   def shorten_url(url)
-    bitly_key = secrets['bitly'] && secrets['bitly']['key']
-
-    res = http_get do |req|
-      req.url "http://api.bit.ly/shorten",
-        :version => '2.0.1',
-        :longUrl => url,
-        :login   => 'github',
-        :apiKey  => bitly_key || 'R_261d14760f4938f0cda9bea984b212e4'
+    res = Faraday.post("http://git.io", :url => url)
+    if res.status == 201
+      res.headers['location']
+    else
+      url
     end
-
-    short = JSON.parse(res.body)
-    short["errorCode"].zero? ? short["results"][url]["shortUrl"] : url
   rescue TimeoutError
     url
   end
