@@ -8,7 +8,7 @@ class Service::Unfuddle < Service
     branch      = payload['ref_name']
     before      = payload['before']
 
-    http.url_prefix = "http://#{data['subdomain']}.unfuddle.com"
+    http.url_prefix = "https://#{data['subdomain']}.unfuddle.com"
     http.basic_auth data['username'], data['password']
 
     # grab people data for matching author-id
@@ -64,13 +64,9 @@ class Service::Unfuddle < Service
       XML
 
       begin
-        res = http_post "/api/v1/repositories/#{u_repoid}/changesets.json" do |req|
+        res = http_post "/api/v1/repositories/#{u_repoid}/changesets.json?process_message_actions=true" do |req|
           req.headers['Content-Type'] = 'application/xml'
           req.body = changeset_xml
-        end
-        http.put res.headers['location'] do |req|
-          req.headers['Content-Type'] = 'application/xml'
-          req.body = "<request><process-message-actions>true</process-message-actions></request>"
         end
       end
     end
