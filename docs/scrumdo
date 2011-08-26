@@ -1,0 +1,34 @@
+ScrumDo
+=======
+
+ScrumDo is an agile/scrum project management site found at http://www.scrumdo.com  
+Integrating Github with ScrumDo lets you see commits in your project newsfeed, and allows you to update stories via commit messages.
+
+To update a story, type Story #(num) Status as part of your commit message.  Examples:  
+
+* Story #13 Done
+* Story #5 Doing
+* Story #3 Reviewing
+
+Install Notes
+-------------
+
+1. Username and Password are your ScrumDo.com credentials.
+2. The project slug can be found in the URL of your project.
+
+    Given this URL:
+
+        http://www.scrumdo.com/projects/project/acme-project/
+
+    Your project slug is `acme-project`
+
+Developer Notes
+---------------
+
+data
+  - username
+  - password
+  - project_slug
+
+payload
+  - refer to docs/github_payload

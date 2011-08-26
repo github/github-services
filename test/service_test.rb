@@ -21,18 +21,11 @@ class ServiceTest < Service::TestCase
 
   def test_url_shorten
     url = "http://github.com"
-    @stubs.get "/shorten" do |env|
-      assert_equal 'api.bit.ly', env[:url].host
-      assert_equal 'R_261d14760f4938f0cda9bea984b212e4',
-        env[:params]['apiKey']
-      assert_equal 'github', env[:params]['login']
-      assert_equal url, env[:params]['longUrl']
-      [200, {}, {
-        'errorCode' => 0,
-        'results' => {
-          url => {'shortUrl' => 'short'}
-        }
-      }.to_json]
+    @stubs.post "/" do |env|
+      assert_equal 'git.io', env[:url].host
+      data = Rack::Utils.parse_query(env[:body])
+      assert_equal url, data['url']
+      [201, {'Location' => 'short'}, '']
     end
 
     assert_equal 'short', @service.shorten_url(url)

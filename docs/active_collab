@@ -1,0 +1,22 @@
+ActiveCollab
+========
+
+Install Notes
+-------------
+
+1. Currently, you must specify in the configuration milestone and or category if you want the commits to be associated with them.
+   In the future, I plan for this to have some form of configuration via tags / branches, or something like that.
+2. URL, Project ID, and Token are required the others not so much.
+
+Developer Notes
+---------------
+
+data
+  - url             (called URL in /activecollab/public/index.php?path_info=people/:company_id/users/:user_id/api)
+  - token           (called Key in /activecollab/public/index.php?path_info=people/:company_id/users/:user_id/api)
+  - project_id      (in URL for /activecollab/public/index.php?path_info=projects/:project_id)
+  - milestone_id    (*OPTIONAL* in URL for /activecollab/public/index.php?path_info=projects/:project_id/milestones/:milestone_id)
+  - category_id     (*OPTIONAL* in URL for /activecollab/public/index.php?path_info=projects/:project_id/discussions&category_id=:category_id)
+
+payload
+  - refer to docs/github_payload

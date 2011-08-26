@@ -1,0 +1,12 @@
+BugHerd
+=======
+
+BugHerd is the world's simplest bug tracker for the web. See: http://www.bugherd.com
+
+BugHerd allows you to visually track issues on your website. Using the GitHub integration you can update tasks directly from GitHub commit messages.
+
+
+Install Notes
+-------------
+
+  1. project key -- you will find this key in BugHerd as you setup a GitHub integration in your project. For more info, see https://bugherd.tenderapp.com/kb/third-party-integrations/github

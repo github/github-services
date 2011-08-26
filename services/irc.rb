@@ -1,13 +1,14 @@
 class Service::IRC < Service
   string   :server, :port, :room, :nick
   password :password
-  boolean  :ssl, :message_without_join, :no_colors, :long_url
+  boolean  :ssl, :message_without_join, :no_colors, :long_url, :notice
   def receive_push
     return if distinct_commits.empty?
 
     rooms   = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
     botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
     url     = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
+    command = data['notice'].to_i == 1 ? 'NOTICE' : 'PRIVMSG'
 
     messages = []
     messages << "#{summary_message}: #{url}"
@@ -32,7 +33,7 @@ class Service::IRC < Service
       self.puts "JOIN #{room} #{pass}" unless without_join
 
       messages.each do |message|
-        self.puts "PRIVMSG #{room} :#{message}"
+        self.puts "#{command} #{room} :#{message}"
       end
 
       self.puts "PART #{room}" unless without_join

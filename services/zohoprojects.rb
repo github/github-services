@@ -2,6 +2,7 @@ class Service::ZohoProjects < Service
   string :project_id, :token
 
   def receive_push
+    http.ssl[:verify] = false
     res = http_post "https://projects.zoho.com/serviceHook",
       :pId       => data['project_id'],
       :authtoken => data['token'],

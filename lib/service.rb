@@ -158,6 +158,66 @@ class Service
       end
     end
 
+    # Public: Gets the Hash of secret configuration options.  These are set on
+    # the GitHub servers and never committed to git.
+    #
+    # Returns a Hash.
+    def secrets
+      @secrets ||=
+        (File.exist?(secret_file) && YAML.load_file(secret_file)) || {}
+    end
+
+    # Public: Gets the Hash of email configuration options.  These are set on
+    # the GitHub servers and never committed to git.
+    #
+    # Returns a Hash.
+    def email_config
+      @email_config ||=
+        (File.exist?(email_config_file) && YAML.load_file(email_config_file)) || {}
+    end
+
+    # Gets the path to the secret configuration file.
+    #
+    # Returns a String path.
+    def secret_file
+      @secret_file ||= File.expand_path("../../config/secrets.yml", __FILE__)
+    end
+
+    # Gets the path to the email configuration file.
+    #
+    # Returns a String path.
+    def email_config_file
+      @email_config_file ||= File.expand_path('../../config/email.yml', __FILE__)
+    end
+
+    # Sets the path to the secrets configuration file.
+    #
+    # secret_file - String path.
+    #
+    # Returns nothing.
+    attr_writer :secret_file
+
+    # Sets the default private configuration data for all Services.
+    #
+    # secrets - Configuration Hash.
+    #
+    # Returns nothing.
+    attr_writer :secrets
+
+    # Sets the path to the email configuration file.
+    #
+    # email_config_file - The String path.
+    #
+    # Returns nothing.
+    attr_writer :email_config_file
+
+    # Sets the default email configuration data for all Services.
+    #
+    # email_config - Email configuration Hash.
+    #
+    # Returns nothing.
+    attr_writer :email_config
+
     # Binds the current Service to the Sinatra App.
     #
     # Returns nothing.
@@ -190,26 +250,12 @@ class Service
   # Returns a Faraday::Connection.
   attr_writer :http
 
-  # Sets the path to the secrets configuration file.
-  #
-  # secret_file - String path.
-  #
-  # Returns nothing.
-  attr_writer :secret_file
-
   # Sets the private configuration data.
   #
   # secrets - Configuration Hash.
   #
   # Returns nothing.
   attr_writer :secrets
-
-  # Sets the path to the email configuration file.
-  #
-  # email_config_file - The String path.
-  #
-  # Returns nothing.
-  attr_writer :email_config_file
 
   # Sets the email configuration data.
   #
@@ -237,7 +283,7 @@ class Service
     @event   = event
     @data    = data
     @payload = payload || sample_payload
-    @http    = nil
+    @http = @secrets = @email_config = nil
   end
 
   # Public: Shortens the given URL with bit.ly.
@@ -246,16 +292,12 @@ class Service
   #
   # Returns the String URL response from bit.ly.
   def shorten_url(url)
-    res = http_get do |req|
-      req.url "http://api.bit.ly/shorten",
-        :version => '2.0.1',
-        :longUrl => url,
-        :login   => 'github',
-        :apiKey  => 'R_261d14760f4938f0cda9bea984b212e4'
+    res = http_post("http://git.io", :url => url)
+    if res.status == 201
+      res.headers['location']
+    else
+      url
     end
-
-    short = JSON.parse(res.body)
-    short["errorCode"].zero? ? short["results"][url]["shortUrl"] : url
   rescue TimeoutError
     url
   end
@@ -394,8 +436,7 @@ class Service
   #
   # Returns a Hash.
   def secrets
-    @secrets ||=
-      File.exist?(secret_file) ? YAML.load_file(secret_file) : {}
+    @secrets || Service.secrets
   end
 
   # Public: Gets the Hash of email configuration options.  These are set on
@@ -403,8 +444,7 @@ class Service
   #
   # Returns a Hash.
   def email_config
-    @email_config ||=
-      File.exist?(email_config_file) ? YAML.load_file(email_config_file) : {}
+    @email_config || Service.email_config
   end
 
   # Public: Raises a configuration error inside a service, and halts further
@@ -413,21 +453,6 @@ class Service
   # Raises a Service;:ConfigurationError.
   def raise_config_error(msg = "Invalid configuration")
     raise ConfigurationError, msg
-  end
-
-
-  # Gets the path to the secret configuration file.
-  #
-  # Returns a String path.
-  def secret_file
-    @secret_file ||= File.expand_path("../../config/secrets.yml", __FILE__)
-  end
-
-  # Gets the path to the email configuration file.
-  #
-  # Returns a String path.
-  def email_config_file
-    @email_config_file ||= File.expand_path('../../config/email.yml', __FILE__)
   end
 
   # Gets the path to the SSL Certificate Authority certs.  These were taken

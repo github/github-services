@@ -12,6 +12,7 @@ task :console do
 end
 
 namespace :services do
+  desc "Writes a JSON config to FILE || config/services.json"
   task :config do
     file = ENV["FILE"] || File.expand_path("../config/services.json", __FILE__)
     require File.expand_path("../config/load", __FILE__)
@@ -21,7 +22,7 @@ namespace :services do
         :schema     => svc.schema}
     end
     File.open file, 'w' do |io|
-      io << services.to_json
+      io << Yajl.dump(services, :pretty => true)
     end
   end
 end

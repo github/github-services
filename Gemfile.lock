@@ -14,7 +14,6 @@ GEM
       rack (>= 1.1.0, < 2)
     httparty (0.7.4)
       crack (= 0.1.8)
-    json (1.5.1)
     mash (0.1.1)
     mime-types (1.15)
     multipart-post (1.1.2)
@@ -39,6 +38,7 @@ GEM
     xmpp4r (0.5)
     xmpp4r-simple (0.8.4)
       xmpp4r (>= 0.3.0)
+    yajl-ruby (0.8.3)
 
 PLATFORMS
   ruby
@@ -48,7 +48,6 @@ DEPENDENCIES
   amqp (= 0.6.7)
   faraday (~> 0.7.0)
   httparty (= 0.7.4)
-  json (~> 1.5.1)
   mash (~> 0.1.1)
   mime-types (= 1.15)
   oauth (= 0.4.4)
@@ -61,3 +60,4 @@ DEPENDENCIES
   tmail (= 1.2.3.1)
   xml-simple (= 1.0.11)
   xmpp4r-simple (= 0.8.4)
+  yajl-ruby (= 0.8.3)
