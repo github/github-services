@@ -12,15 +12,13 @@ class Service::Talker < Service
     http.headers["X-Talker-Token"] = token
     http.url_prefix = data['url']
 
-    if data['digest'].to_i == 1
+    if data['digest'].to_i == 1 and commits.size > 1
       commit = commits.last
-      message = "[#{repository}/#{branch}] #{commit['message']} (+#{commits.size - 1} more commits...) - #{commit['author']['name']} #{commit['url']} )"
-
+      message = "#{commit['author']['name']} pushed #{commits.size} commits to [#{repository}/#{branch}] #{payload['compare']}"
       http_post 'messages.json', :message => message
     else
       commits.each do |commit|
-        message = "[#{repository}/#{branch}] #{commit['message']} - #{commit['author']['name']} #{commit['url']}"
-
+        message = "#{commit['author']['name']} pushed \"#{commit['message'].split("\n").first}\" -  #{commit['url']} to [#{repository}/#{branch}]"
         http_post 'messages.json', :message => message
       end
     end

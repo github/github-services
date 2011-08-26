@@ -23,6 +23,14 @@
       "owner" => { "name" => "Jonathan Enzinna", "email" => "jonnyfunfun@gmail.com" }
     },
 
+    "pusher" => {
+      "name" => "rtomayko"
+    },
+
+    "pusher" => {
+      "name" => "rtomayko"
+    },
+
     "commits" => [
       {
         "distinct"  => true,

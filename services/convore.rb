@@ -1,5 +1,5 @@
 class Service::Convore < Service
-  string :topic, :username
+  string :topic_id, :username
   password :password
 
   def receive_push

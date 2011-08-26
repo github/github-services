@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class MasterBranchTest < Service::TestCase
+class MasterbranchTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
@@ -17,7 +17,7 @@ class MasterBranchTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::MasterBranch, *args
+    super Service::Masterbranch, *args
   end
 end
 
