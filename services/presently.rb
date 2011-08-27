@@ -5,9 +5,6 @@ class Service::Presently < Service
   def receive_push
     repository = payload['repository']['name']
 
-    # :(
-    http.ssl[:verify] = false
-
     prefix = (data['group_name'].nil? || data['group_name'] == '') ? '' : "b #{data['group_name']} "
 
     payload['commits'].each do |commit|

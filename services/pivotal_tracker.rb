@@ -6,9 +6,6 @@ class Service::PivotalTracker < Service
     branch = data['branch'].to_s
     ref = payload["ref"].to_s
 
-    # need to figure out how to get the right equifax secure ca loaded
-    http.ssl[:verify] = false
-
     if branch.empty? || branch == ref.split("/").last
       notifier.call
     end

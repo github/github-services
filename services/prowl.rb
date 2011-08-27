@@ -2,9 +2,6 @@ class Service::Prowl < Service
   string :apikey
 
   def receive_push
-    # FIXME
-    http.ssl[:verify] = false
-
     url = URI.parse('https://api.prowlapp.com/publicapi/add')
     repository = payload['repository']['url'].split("/")
     event = [repository[-2], repository[-1]].join('/')
