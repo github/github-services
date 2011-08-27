@@ -6,8 +6,14 @@ class ActiveCollabTest < Service::TestCase
   end
 
   def test_push
-    @stubs.post "/foo/?path_info=projects/1/discussions/add&token=token" do |env|
+    @stubs.post "/foo" do |env|
+      query = Rack::Utils.parse_nested_query(env[:url].query)
+      body  = Rack::Utils.parse_nested_query(env[:body])
+      assert_equal '2', body['discussion']['milestone_id']
+      assert_equal '3', body['discussion']['parent_id']
       assert_equal 'activecollab.com', env[:url].host
+      assert_equal "projects/1/discussions/add", query['path_info']
+      assert_equal "token", query["token"]
       assert_equal 'application/xml', env[:request_headers]["Accept"]
       assert_match /grit/, env[:body]
       [200, {}, '{}']
