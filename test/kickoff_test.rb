@@ -6,12 +6,16 @@ class KickoffTest < Service::TestCase
   end
 
   def test_push
+    @stubs.post "/projects/a/chat" do |env|
+      assert_equal 'api.kickoffapp.com', env[:url].host
+      assert_equal 'token=b', env[:url].query
+      [200, {}, '']
+    end
+
     svc = service(
-      {'project_id' => '16112', 'project_token' => 'e402152277c5f9971d47f6f4840d8c89' },
+      {'project_id' => 'a', 'project_token' => 'b' },
       payload)
-    r = svc.receive_push
-    
-    assert_equal '200', r.code
+    svc.receive_push
   end
 
   def service(*args)
