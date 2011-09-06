@@ -33,7 +33,7 @@ class WebTest < Service::TestCase
     @stubs.post "/foo" do |env|
       assert_match /form/, env[:request_headers]['content-type']
       assert_equal 'abc.com', env[:url].host
-      assert_equal OpenSSL::HMAC.hexdigest(Service::Web::HMAC_DIGEST,
+      assert_equal 'sha1='+OpenSSL::HMAC.hexdigest(Service::Web::HMAC_DIGEST,
                                         'monkey', env[:body]),
         env[:request_headers]['X-Hub-Signature']
       body = Rack::Utils.parse_nested_query(env[:body])
@@ -72,7 +72,7 @@ class WebTest < Service::TestCase
     @stubs.post "/foo" do |env|
       assert_match /json/, env[:request_headers]['content-type']
       assert_equal 'abc.com', env[:url].host
-      assert_equal OpenSSL::HMAC.hexdigest(Service::Web::HMAC_DIGEST,
+      assert_equal 'sha1='+OpenSSL::HMAC.hexdigest(Service::Web::HMAC_DIGEST,
                                         'monkey', env[:body]),
         env[:request_headers]['X-Hub-Signature']
       assert_equal payload, JSON.parse(env[:body])
