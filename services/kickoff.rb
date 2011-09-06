@@ -21,9 +21,10 @@ class Service::Kickoff < Service
     e = REXML::Element.new("service")
     e.text = "github"
     doc.root.add(e)
-    
-    uri = URI.parse("http://api.kickoffapp.com/")
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.post('/projects/'+data['project_id'].to_s+'/chat?token='+data['project_token'].to_s, doc.to_s)
+
+    http_post "http://api.kickoffapp.com/projects/#{data['project_id']}/chat" do |req|
+      req.params[:token] = data['project_token']
+      req.body = doc.to_s
+    end
   end
 end
