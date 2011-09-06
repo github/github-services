@@ -22,7 +22,7 @@ class Service::Web < Service
 
     if !(secret = data['secret'].to_s).empty?
       http.headers['X-Hub-Signature'] =
-        OpenSSL::HMAC.hexdigest(HMAC_DIGEST, secret, body)
+        'sha1='+OpenSSL::HMAC.hexdigest(HMAC_DIGEST, secret, body)
     end
 
     http_post data['url'], body
