@@ -12,6 +12,11 @@ Install Notes
   3. token is your API token. get it from campfire's "Edit my Campfire
      account" screen
 
+  4. master_only is a boolean flag indicating whether only commits to master
+     should be announced
+
+  5. play_sound is a boolean flag indicating whether a sound should be played
+
 
 Developer Notes
 ---------------
@@ -20,6 +25,7 @@ data
   - subdomain
   - token
   - room
+  - master_only
   - play_sound
 
 payload
