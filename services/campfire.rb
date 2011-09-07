@@ -1,9 +1,11 @@
 class Service::Campfire < Service
   string :subdomain, :room, :token
-  boolean :play_sound
+  boolean :master_only, :play_sound
 
   def receive_push
     raise_config_error 'Missing campfire token' if data['token'].to_s.empty?
+
+    return if data['master_only'].to_i == 1 and branch_name != 'master'
 
     messages = []
     messages << "#{summary_message}: #{summary_url}"
