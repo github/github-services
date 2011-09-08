@@ -48,6 +48,24 @@ class CampfireTest < Service::TestCase
     assert_equal 4, svc.campfire.rooms.first.lines.size # 3 + summary
   end
 
+  def test_push_non_master_with_master_only
+    non_master_payload = payload
+    non_master_payload["ref"] = "refs/heads/non-master"
+    svc = service({"token" => "t", "subdomain" => "s", "room" => "r", "master_only" => 1}, non_master_payload)
+    svc.campfire = MockCampfire.new
+    svc.receive_push
+    assert_equal 0, svc.campfire.rooms.size
+  end
+
+  def test_push_non_master_without_master_only
+    non_master_payload = payload
+    non_master_payload["ref"] = "refs/heads/non-master"
+    svc = service({"token" => "t", "subdomain" => "s", "room" => "r", "master_only" => 0}, non_master_payload)
+    svc.campfire = MockCampfire.new
+    svc.receive_push
+    assert_equal 4, svc.campfire.rooms.first.lines.size # 3 + summary
+  end
+
   def service(*args)
     super Service::Campfire, *args
   end
