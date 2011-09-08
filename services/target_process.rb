@@ -5,7 +5,7 @@ class Service::TargetProcess < Service
   def receive_push
     # setup things for our REST calls
     http.ssl[:verify] = false
-    @server_url = data['base_url'].gsub(/\/$/,'')
+    http.url_prefix = data['base_url']
     http.basic_auth(data['username'], data['password'])
     @project_id = data['project_id']
     # And go!
@@ -43,7 +43,7 @@ private
 
   def execute_command(author, entity_id, command, commit_message)
     # get the user's id
-    res = http_get "%s/api/v1/Users" % @server_url, :include => '[Email]'
+    res = http_get "api/v1/Users", :include => '[Email]'
     valid_response?(res)
     author_id = nil
     Hash.from_xml(res.body)['Items']['User'].each do |u|
@@ -54,13 +54,13 @@ private
     end
     return if author_id.nil?
     # get Context data for our project
-    res = http_get "%s/api/v1/Context" % @server_url, :ids => @project_id
+    res = http_get "api/v1/Context", :ids => @project_id
     valid_response?(res)
     context_data = Hash.from_xml res.body
     acid = context_data['Context']['Acid']
     if !command.nil?
       # Gather the next state ID
-      res = http_get "%s/api/v1/Processes/%s/EntityStates" % [@server_url, context_data['Context']['Processes']['ProcessInfo']['Id']],
+      res = http_get "api/v1/Processes/%s/EntityStates" % [context_data['Context']['Processes']['ProcessInfo']['Id']],
           :acid => acid
       valid_response?(res)
       new_state = nil
@@ -73,14 +73,14 @@ private
       return if new_state.nil?
     end
     # get the assignable's type
-    res = http_get "%s/api/v1/Assignables/%s" % [@server_url, entity_id], {:include => '[EntityType]', :acid => acid}
+    res = http_get "api/v1/Assignables/%s" % entity_id, {:include => '[EntityType]', :acid => acid}
     valid_response?(res)
     assignable = Hash.from_xml res.body
     return if assignable.nil?
     entity_type = assignable['Assignable']['EntityType']['Name']
     # Make it happen
     http.headers['Content-Type'] = 'application/json'
-    valid_response?(http_post "%s/api/v1/Comments" % @server_url, "{General: {Id: #{entity_id}}, Description: '#{commit_message}', Owner: {Id: #{author_id}}}")
+    valid_response?(http_post "api/v1/Comments", "{General: {Id: #{entity_id}}, Description: '#{commit_message}', Owner: {Id: #{author_id}}}")
     if !command.nil?
       case entity_type
       when "UserStory"
@@ -92,7 +92,7 @@ private
       else
           return
       end
-      valid_response?(http_post "%s/api/v1/%s" % [@server_url, call], "{Id: #{entity_id}, EntityState: {Id: #{new_state}}}")
+      valid_response?(http_post "api/v1/%s" % call, "{Id: #{entity_id}, EntityState: {Id: #{new_state}}}")
     end
   end
 end
