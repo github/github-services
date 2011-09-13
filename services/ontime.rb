@@ -4,7 +4,7 @@ class Service::OnTime < Service
 	def receive_push
 		if data['ontime_url'].to_s.empty?
 			raise_config_error "No OnTime URL to connect to."
-		elsif data['api_key'].to_s.empty
+		elsif data['api_key'].to_s.empty?
 			raise_config_error "No API Key."
 		end
 		
