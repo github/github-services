@@ -18,7 +18,7 @@ class Service::OnTime < Service
 			# Look to see if there is a OnTime item id/type in the commit message
 			# [OnTime.<type>.<id>] [OnTime.defect.5] [ontime.d.5] [ontime.t.123] [ontime.task.123]
 			# This is a commit comment [ontime.defect.5] and it belongs also to [ontime.task.123]
-			ontime_item_ids = commit_msg.scan(/\[[\s]*ontime\.(defect|feature|task)\.([1-9][0-9]*)[\s]*\]/i)
+			ontime_item_ids = commit['message'].scan(/\[[\s]*ontime\.(defect|feature|task)\.([1-9][0-9]*)[\s]*\]/i)
 			
 			ontime_item_ids.each do |ot_item|
 				item['type'] 	= ot_item.at(0)
