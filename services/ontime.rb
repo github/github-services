@@ -8,7 +8,7 @@ class Service::OnTime < Service
 			raise_config_error "No API Key."
 		end
 		
-		owner 		= payload['repository']['owner']
+		owner 		= payload['repository']['owner']['name']
 		repo_name 	= payload['repository']['name']
 		
 		payload['commits'].each do |commit|
