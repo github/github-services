@@ -48,7 +48,7 @@ class Service::OnTime < Service
 					postdata['files'] << file_with_url
 				end
 				
-				http_post "/api/scm_files", postdata.to_json
+				http_post "/api/github", postdata.to_json
 			end
 		end
 	end
