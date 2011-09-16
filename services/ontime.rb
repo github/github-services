@@ -14,12 +14,18 @@ class Service::OnTime < Service
 		
 		#Hash the data
 		sha256 = Digest::SHA2.new(256)
-		hash = sha256.digest(payload.to_json + api_key)
+		hash = sha256.digest(payload.to_json + data['api_key'])
 		
 		result = http_post "api/scm_files", :payload => payload.to_json, :hash => hash, :source => :github
 		
-		if(result.status != 200)
-			raise_config_error "Post status returned: " + result.status
+		verify_response(result)
+	end
+	def verify_response(res)
+		case res.status
+			when 200..299
+			when 403, 401, 422 then raise_config_error("Invalid Credentials")
+			when 404, 301, 302 then raise_config_error("Invalid YouTrack URL")
+			else raise_config_error("HTTP: #{res.status}")
 		end
 	end
 end
