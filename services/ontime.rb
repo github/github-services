@@ -16,10 +16,18 @@ class Service::OnTime < Service
 		sha256 = Digest::SHA2.new(256)
 		hash = sha256.digest(payload.to_json + data['api_key'])
 		
-		result = http_post "api/scm_files", :payload => payload.to_json, :hash => hash, :source => :github
+		resp = http_get "api/version"
+		version = JSON.parse(resp.body)['data']
+
+		if version['major'] >= 11 and version['minor'] >= 0 and version['build'] >= 2
+			result = http_post "api/github", :payload => payload.to_json, :hash => hash, :source => :github
+		else
+			raise_config_error "Unexpected API version. Please update to the latest version of OnTime to use this service."
+		end
 		
 		verify_response(result)
 	end
+
 	def verify_response(res)
 		case res.status
 			when 200..299
