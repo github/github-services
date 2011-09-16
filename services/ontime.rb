@@ -48,8 +48,14 @@ class Service::OnTime < Service
 					postdata['files'] << file_with_url
 				end
 				
-				http_post "api/github", postdata.to_json
-				#test change
+				sha256 = Digest::SHA2.new(256)
+				hash = sha256.digest(postdata.to_json + api_key)
+				
+				result = http_post "api/scm_files", :postdata => postdata.to_json, :hash => hash, :source => :github
+				
+				if(result.status != 200)
+					raise_config_error "Post status returned: " + result.status
+				end
 			end
 		end
 	end
