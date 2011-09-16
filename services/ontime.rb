@@ -10,13 +10,15 @@ class Service::OnTime < Service
 		
 		#We're just going to send back the entire payload and process it in OnTime.
 		http.headers['Content-Type'] = 'application/json'
-		http.url_prefix = data['ontime_url']
+		#http.url_prefix = data['ontime_url']
 		
 		#Hash the data
 		sha256 = Digest::SHA2.new(256)
-		hash = sha256.digest(payload.to_json + data['api_key'])
+		#hash = sha256.digest(payload.to_json + data['api_key'])
 		
-		result = http_post "api/scm_files", :payload => payload.to_json, :hash => hash, :source => :github
+		#result = http_post "api/github", :payload => payload.to_json, :hash => hash, :source => :github
+		result = http_post "http://mahsamwin7/OT11/api/github", :test => "test"
+		puts result
 		
 		verify_response(result)
 	end
