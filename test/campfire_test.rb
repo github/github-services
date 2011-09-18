@@ -46,6 +46,7 @@ class CampfireTest < Service::TestCase
     assert_equal 't', svc.campfire.token
     assert_equal 'r', svc.campfire.rooms.first.name
     assert_equal 4, svc.campfire.rooms.first.lines.size # 3 + summary
+    assert svc.campfire.rooms.first.lines.first.match(/short/)
   end
 
   def test_push_non_master_with_master_only
@@ -67,7 +68,14 @@ class CampfireTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::Campfire, *args
+    svc = super(Service::Campfire, *args)
+    class << svc
+      def shorten_url(*args)
+        'short'
+      end
+    end
+
+    svc
   end
 end
 

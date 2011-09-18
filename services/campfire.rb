@@ -8,7 +8,7 @@ class Service::Campfire < Service
     return if data['master_only'].to_i == 1 and branch_name != 'master'
 
     messages = []
-    messages << "#{summary_message}: #{summary_url}"
+    messages << "#{summary_message}: #{shorten_url(summary_url)}"
     messages += commit_messages.first(8)
 
     if messages.first =~ /pushed 1 new commit/
