@@ -1,4 +1,4 @@
-class Service::GitLive < Service
+class Service::Sourcemint < Service
   self.title = 'sourcemint'
   def receive_push
     http_post 'http://api.sourcemint.com/actions/post-commit',

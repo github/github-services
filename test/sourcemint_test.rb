@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class AcunoteTest < Service::TestCase
+class SourcemintTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
@@ -17,7 +17,7 @@ class AcunoteTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::Acunote, *args
+    super Service::Sourcemint, *args
   end
 end
 
