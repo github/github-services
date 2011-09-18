@@ -13,7 +13,7 @@ class Service::Campfire < Service
 
     if messages.first =~ /pushed 1 new commit/
       messages.shift # drop summary message
-      messages.first << " (#{distinct_commits.first['url']})"
+      messages.first << " ( #{distinct_commits.first['url']} )"
     end
 
     play_sound = data['play_sound'].to_i == 1
