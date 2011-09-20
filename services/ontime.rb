@@ -9,19 +9,27 @@ class Service::OnTime < Service
 		end
 		
 		#We're just going to send back the entire payload and process it in OnTime.
-		http.headers['Content-Type'] = 'application/json'
-		#http.url_prefix = data['ontime_url']
+		#http.headers['Content-Type'] = 'application/json'
+		http.url_prefix = data['ontime_url']
 		
-		#Hash the data
-		sha256 = Digest::SHA2.new(256)
-		#hash = sha256.digest(payload.to_json + data['api_key'])
-		
-		#result = http_post "api/github", :payload => payload.to_json, :hash => hash, :source => :github
-		result = http_post "http://mahsamwin7/OT11/api/github", :test => "test"
-		puts result
+		#Hash the data, it has to be hexdigest in order to have the same hash value in .NET
+		hash_data = Digest::SHA256.hexdigest(payload.to_json + data['api_key'])
+
+		result = http_post "api/github", :payload => payload.to_json, :hash_data => hash_data, :source => :github
+
+		#resp = http_get "api/version"
+		#version = JSON.parse(resp.body)['data']
+
+		#if version['major'] >= 11 and version['minor'] >= 0 and version['build'] >= 2
+		#	result = http_post "api/github", :payload => payload.to_json, :hash => hash, :source => :github
+		#else
+		#	raise_config_error "Unexpected API version. Please update to the latest version of OnTime to use this service."
+		#end
+
 		
 		verify_response(result)
 	end
+
 	def verify_response(res)
 		case res.status
 			when 200..299
