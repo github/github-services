@@ -6,7 +6,7 @@
     "username" => "jamie.winsor",
     "password" => "passw0rd",
     "server_url" => "http://jira",
-"ontime_url" => "http://mahsamwin7/OT11/",
+"ontime_url" => "http://johnhwin7/OnTimeWeb/",
 "api_key" => "anything"
   },
 
@@ -33,7 +33,7 @@
       {
         "distinct"  => true,
         "removed"   => [],
-        "message"   => "[#WEB-249 status:31 resolution:1] stub git call for Grit#heads test",
+        "message"   => "[#WEB-249 status:31 resolution:1] stub git call for Grit#heads test[otd 2]",
         "added"     => [],
         "timestamp" => "2007-10-10T00:11:02-07:00",
         "modified"  => ["lib/grit/grit.rb", "test/helper.rb", "test/test_grit.rb"],
