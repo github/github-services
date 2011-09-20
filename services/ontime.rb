@@ -15,16 +15,16 @@ class Service::OnTime < Service
 		#Hash the data, it has to be hexdigest in order to have the same hash value in .NET
 		hash_data = Digest::SHA256.hexdigest(payload.to_json + data['api_key'])
 
-		result = http_post "api/github", :payload => payload.to_json, :hash_data => hash_data, :source => :github
+		#result = http_post "api/github", :payload => payload.to_json, :hash_data => hash_data, :source => :github
 
-		#resp = http_get "api/version"
-		#version = JSON.parse(resp.body)['data']
+		resp = http_get "api/version"
+		version = JSON.parse(resp.body)['data']
 
-		#if version['major'] >= 11 and version['minor'] >= 0 and version['build'] >= 2
-		#	result = http_post "api/github", :payload => payload.to_json, :hash => hash, :source => :github
-		#else
-		#	raise_config_error "Unexpected API version. Please update to the latest version of OnTime to use this service."
-		#end
+		if version['major'] >= 11 and version['minor'] >= 0 and version['build'] >= 2
+			result = http_post "api/github", :payload => payload.to_json, :hash_data => hash_data, :source => :github
+		else
+			raise_config_error "Unexpected API version. Please update to the latest version of OnTime to use this service."
+		end
 
 		
 		verify_response(result)
