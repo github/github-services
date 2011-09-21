@@ -3,5 +3,7 @@ class Service::AppHarbor < Service
   
   def receive_push
     raise_config_error 'Missing Create build URL' if data['create_build_url'].to_s.empty?
+
+    commit = distinct_commits.last
   end
 end
