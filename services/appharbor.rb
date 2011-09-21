@@ -15,6 +15,6 @@ class Service::AppHarbor < Service
       }
     }
 
-    http_post(data["create_build_url"], appharbor_message.to_json, 'Accept' => 'application/json')
+    http_post data["create_build_url"], appharbor_message.to_json, 'Accept' => 'application/json'
   end
 end
