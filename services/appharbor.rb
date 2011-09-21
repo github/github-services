@@ -5,6 +5,7 @@ class Service::AppHarbor < Service
     create_build_url = data['create_build_url']
 
     raise_config_error 'Missing Create build URL' if create_build_url.to_s.empty?
+    raise_config_error 'Invalid Create build URL' unless create_build_url.starts_with? "https://appharbor.com/application/"
 
     commit = distinct_commits.last
     appharbor_message = {
