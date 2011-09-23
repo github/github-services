@@ -1,8 +1,11 @@
 class Service::AppHarbor < Service
-  string :create_build_url
+  string :application_slug, :token
   
   def receive_push
-    create_build_url = data['create_build_url']
+    slug = data['application_slug']
+    token = data['token']
+
+    create_build_url = "https://appharbor.com/application/#{application_slug}/build?authorization=#{token}"
 
     raise_config_error 'Missing Create build URL' if create_build_url.to_s.empty?
     raise_config_error 'Invalid Create build URL' unless create_build_url.starts_with? "https://appharbor.com/application/"
