@@ -5,9 +5,7 @@
     "api_version" => "2.0.alpha1",
     "username" => "jamie.winsor",
     "password" => "passw0rd",
-    "server_url" => "http://jira",
-"ontime_url" => "http://johnhwin7/OnTimeWeb/",
-"api_key" => "anything"
+    "server_url" => "http://jira"
   },
 
   "payload" => {
@@ -22,7 +20,7 @@
     "repository" => {
       "name"  => "grit",
       "url"   => "http://github.com/mojombo/grit",
-      "owner" => { "name" => "mojombo", "email" => "Cathy.Oreilly@mycompany.com" }
+      "owner" => { "name" => "mojombo", "email" => "tom@mojombo.com" }
     },
 
     "pusher" => {
@@ -33,12 +31,12 @@
       {
         "distinct"  => true,
         "removed"   => [],
-        "message"   => "[#WEB-249 status:31 resolution:1] stub git call for Grit#heads test[otd 2 wl:5 hours]",
+        "message"   => "[#WEB-249 status:31 resolution:1] stub git call for Grit#heads test",
         "added"     => [],
         "timestamp" => "2007-10-10T00:11:02-07:00",
         "modified"  => ["lib/grit/grit.rb", "test/helper.rb", "test/test_grit.rb"],
         "url"       => "http://github.com/mojombo/grit/commit/06f63b43050935962f84fe54473a7c5de7977325",
-        "author"    => { "name" => "Tom Preston-Werner", "email" => "cathy.oreilly@mycompany.com", "username" => "cathyo"},
+        "author"    => { "name" => "Tom Preston-Werner", "email" => "tom@mojombo.com" },
         "id"        => "06f63b43050935962f84fe54473a7c5de7977325"
       },
       {
@@ -66,3 +64,4 @@
     ]
   }
 }
+
