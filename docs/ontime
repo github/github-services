@@ -1,0 +1,48 @@
+OnTime GitHub Integration
+=========================
+
+Install Notes
+-------------
+
+In order to properly configure OnTime and GitHub to work together a few settings have to be configured.
+
+  1. Log into your OnTime v11.0.2+ installation as the Administrator or with a user that has System Options privledges.
+
+  2. Open up "System Options" under the "Tools" menu and then go to the "API Security Settings" option in the left pane.
+
+  3. Make sure that "Enable GitHub Integration" is checked and that an API Key exists. If it doesn't then click "Generate a New API Key" to make one
+
+  4. Copy the API key and paste that into the OnTime service hook in your GitHub repository.
+
+NOTE: If you have a non-hosted installation of OnTime your installation must have access to the internet. Hosted accounts already have internet access.
+
+Usage
+-----
+
+When entering in commit messages in Git, any message that contains a specially formatted OnTime tag will attempted to be linked to the respective OnTime item. The tag is formatted as follows:
+
+    [otx id# (wl: # timeunit)]
+
+  * Where the x in otx can be:
+    * d for defects (i.e. otd)
+    * f for features (i.e. otf)
+    * t for tasks (i.e. ott)
+  * id# is the id number of the item that the commit links to
+  * wl: # timeunit is optional. When provided it will add a worklog entry to that item after the commit is pushed to github.
+    * # is some non-negative real number
+    * timeunit is a valid timeunit that is used in your installation, either fully spelled or abbreviated with respect to your OnTime timeunit pick list configuration
+
+A few examples of valid tags (assuming you have hours as a timeunit in OnTime and it's abbreviated spelling is 'hrs'):
+
+  * [otd 45]
+  * [otf 2]
+  * [otf 823 wl: 5 hours]
+  * [ott 92 wl: 8.3 hrs]
+
+Developer Notes
+---------------
+
+data
+  - ontime_url
+  - api_key
+
