@@ -9,13 +9,10 @@ class Service::OnTime < Service
 		end
 		
 		#We're just going to send back the entire payload and process it in OnTime.
-		#http.headers['Content-Type'] = 'application/json'
 		http.url_prefix = data['ontime_url']
 		
 		#Hash the data, it has to be hexdigest in order to have the same hash value in .NET
 		hash_data = Digest::SHA256.hexdigest(payload.to_json + data['api_key'])
-
-		#result = http_post "api/github", :payload => payload.to_json, :hash_data => hash_data, :source => :github
 
 		resp = http_get "api/version"
 		version = JSON.parse(resp.body)['data']
@@ -34,7 +31,7 @@ class Service::OnTime < Service
 		case res.status
 			when 200..299
 			when 403, 401, 422 then raise_config_error("Invalid Credentials")
-			when 404, 301, 302 then raise_config_error("Invalid YouTrack URL")
+			when 404, 301, 302 then raise_config_error("Invalid URL")
 			else raise_config_error("HTTP: #{res.status}")
 		end
 	end
