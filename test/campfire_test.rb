@@ -49,6 +49,13 @@ class CampfireTest < Service::TestCase
     assert svc.campfire.rooms.first.lines.first.match(/short/)
   end
 
+  def test_long_url
+    svc = service({"token" => "t", "subdomain" => "s", "room" => "r", "long_url" => "1"}, payload)
+    svc.campfire = MockCampfire.new
+    svc.receive_push
+    assert svc.campfire.rooms.first.lines.first.match(/github\.com/), "Summary url should not be shortened"
+  end
+
   def test_push_non_master_with_master_only
     non_master_payload = payload
     non_master_payload["ref"] = "refs/heads/non-master"
