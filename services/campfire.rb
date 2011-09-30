@@ -1,14 +1,15 @@
 class Service::Campfire < Service
   string :subdomain, :room, :token
-  boolean :master_only, :play_sound
+  boolean :master_only, :play_sound, :long_url
 
   def receive_push
     raise_config_error 'Missing campfire token' if data['token'].to_s.empty?
 
     return if data['master_only'].to_i == 1 and branch_name != 'master'
 
+    url = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
     messages = []
-    messages << "#{summary_message}: #{shorten_url(summary_url)}"
+    messages << "#{summary_message}: #{url}"
     messages += commit_messages.first(8)
 
     if messages.first =~ /pushed 1 new commit/
