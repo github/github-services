@@ -367,12 +367,8 @@ class Service
   # Yields a Faraday::Request instance.
   # Returns a Faraday::Response instance.
   def http_post(url = nil, body = nil, headers = nil)
-    http.post do |req|
-      req.url(url)                if url
-      req.headers.update(headers) if headers
-      req.body = body             if body
-      yield req if block_given?
-    end
+    block = block_given? ? Proc.new : nil
+    http_method :post, url, body, headers, &block
   end
 
   # Public: Makes an HTTP call.
