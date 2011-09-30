@@ -431,6 +431,9 @@ class Service
     end
   end
 
+  # Public: Checks for an SSL error, and re-raises a Services configuration error.
+  #
+  # Returns nothing.
   def check_ssl
     yield
   rescue OpenSSL::SSL::SSLError => e
