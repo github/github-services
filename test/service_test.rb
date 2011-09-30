@@ -31,6 +31,21 @@ class ServiceTest < Service::TestCase
     assert_equal 'short', @service.shorten_url(url)
   end
 
+  def test_ssl_check
+    http = @service.http
+    def http.post
+      raise OpenSSL::SSL::SSLError
+    end
+
+    @stubs.post "/" do |env|
+      raise "This stub should not be called"
+    end
+
+    assert_raises Service::ConfigurationError do
+      @service.http_post 'http://abc'
+    end
+  end
+
   def service(*args)
     super TestService, *args
   end

@@ -367,7 +367,7 @@ class Service
   # Yields a Faraday::Request instance.
   # Returns a Faraday::Response instance.
   def http_post(url = nil, body = nil, headers = nil)
-    block = block_given? ? Proc.new : nil
+    block = Proc.new if block_given?
     http_method :post, url, body, headers, &block
   end
 
@@ -399,11 +399,15 @@ class Service
   # Yields a Faraday::Request instance.
   # Returns a Faraday::Response instance.
   def http_method(method, url = nil, body = nil, headers = nil)
-    http.send(method) do |req|
-      req.url(url)                if url
-      req.headers.update(headers) if headers
-      req.body = body             if body
-      yield req if block_given?
+    block = Proc.new if block_given?
+
+    check_ssl do
+      http.send(method) do |req|
+        req.url(url)                if url
+        req.headers.update(headers) if headers
+        req.body = body             if body
+        block.call req if block
+      end
     end
   end
 
@@ -425,6 +429,12 @@ class Service
         b.adapter :net_http
       end
     end
+  end
+
+  def check_ssl
+    yield
+  rescue OpenSSL::SSL::SSLError => e
+    raise_config_error "Invalid SSL cert"
   end
 
   # Public: Gets the Hash of secret configuration options.  These are set on
