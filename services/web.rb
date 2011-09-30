@@ -10,8 +10,14 @@ class Service::Web < Service
     # new hooks should set content_type == 'json'
     :content_type
 
+  boolean :insecure_ssl # :(
+
   def receive_push
     http.url_prefix = data['url']
+
+    if data['insecure_ssl'].to_i == 1
+      http.ssl[:verify] = false
+    end
 
     body = if data['content_type'] == 'json'
       http.headers['content-type'] = 'application/json'
