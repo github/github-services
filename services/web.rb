@@ -11,13 +11,15 @@ class Service::Web < Service
     :content_type
 
   def receive_push
+    http.url_prefix = data['url']
+
     body = if data['content_type'] == 'json'
       http.headers['content-type'] = 'application/json'
       JSON.generate(payload)
     else
       http.headers['content-type'] = 'application/x-www-form-urlencoded'
       Faraday::Utils.build_nested_query(
-        :payload => JSON.generate(payload))
+        http.params.merge(:payload => JSON.generate(payload)))
     end
 
     if !(secret = data['secret'].to_s).empty?
@@ -25,7 +27,7 @@ class Service::Web < Service
         'sha1='+OpenSSL::HMAC.hexdigest(HMAC_DIGEST, secret, body)
     end
 
-    http_post data['url'], body
+    http_post '', body
   end
 end
 
