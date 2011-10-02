@@ -4,7 +4,7 @@ Email
 Install Notes
 -------------
 
-1. `address` (only one is allowed)
+1. `address` multiple addresses allowed (comma separated)
 2. `secret` fills out the Approved header to automatically approve the message
    in a read-only or moderated mailing list.
 3. `send_from_author` uses the commit author email address in the From address of the email.

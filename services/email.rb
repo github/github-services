@@ -2,6 +2,10 @@ class Service::Email < Service
   string :address, :secret
   boolean :send_from_author
 
+  def email_addresses
+    data['address'].split(/, */)
+  end
+
   def receive_push
     name_with_owner = File.join(payload['repository']['owner']['name'], payload['repository']['name'])
 
@@ -69,7 +73,7 @@ class Service::Email < Service
       message.set_content_type('text', 'plain', {:charset => 'UTF-8'})
       message.from = "#{commit['author']['name']} <#{commit['author']['email']}>" if data['send_from_author']
       message.reply_to = "#{commit['author']['name']} <#{commit['author']['email']}>" if data['send_from_author']
-      message.to      = data['address']
+      message.to      = email_addresses
       message.subject = "[#{name_with_owner}] #{first_commit_sha}: #{first_commit_title}"
       message.body    = body
       message.date    = Time.now
@@ -77,9 +81,9 @@ class Service::Email < Service
       message['Approved'] = data['secret'] if data['secret'].to_s.size > 0
 
       if data['send_from_author']
-        send_message message, "#{commit['author']['name']} <#{commit['author']['email']}>", data['address']
+        send_message message, "#{commit['author']['name']} <#{commit['author']['email']}>", email_addresses
       else
-        send_message message, "GitHub <noreply@github.com>", data['address']
+        send_message message, "GitHub <noreply@github.com>", email_addresses
       end
     end
   end
@@ -96,7 +100,7 @@ class Service::Email < Service
 
   def send_message(message, from, to)
     Net::SMTP.start(*smtp_settings) do |smtp|
-      smtp.send_message message.to_s, from, to
+      smtp.send_message message.to_s, from, *to
     end
   rescue Net::SMTPSyntaxError, Net::SMTPFatalError
     raise_config_error "Invalid email address"

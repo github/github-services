@@ -10,7 +10,21 @@ class EmailTest < Service::TestCase
 
     msg, from, to = svc.messages.shift
     assert_match "noreply@github.com", from
-    assert_equal 'a', to
+    assert_equal ['a'], to
+
+    assert_nil svc.messages.shift
+  end
+
+  def test_push_with_multiple_addresses
+    svc = service(
+      {'address' => 'a@foo.com, b@boo.com, d@lol.com'},
+      payload)
+
+    svc.receive_push
+
+    msg, from, to = svc.messages.shift
+    assert_match "noreply@github.com", from
+    assert_equal ['a@foo.com', 'b@boo.com', 'd@lol.com'], to
 
     assert_nil svc.messages.shift
   end
@@ -24,7 +38,7 @@ class EmailTest < Service::TestCase
 
     msg, from, to = svc.messages.shift
     assert_match 'tom@mojombo.com', from
-    assert_equal 'a', to
+    assert_equal ['a'], to
 
     assert_nil svc.messages.shift
   end
