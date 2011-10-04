@@ -4,4 +4,7 @@ class AppHarborTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
+
+  def test_push
+  end
 end
