@@ -25,9 +25,10 @@ class Service::App < Sinatra::Base
         boom.message
       rescue Service::TimeoutError => boom
         status 504
+        report_exception svc, boom
         "Service Timeout"
       rescue Object => boom
-        report_exception boom
+        report_exception svc, boom
         status 500
         "ERROR"
       end
@@ -54,7 +55,7 @@ class Service::App < Sinatra::Base
   # exception - An Exception instance.
   #
   # Returns nothing.
-  def report_exception(exception)
+  def report_exception(service, exception)
     backtrace = Array(exception.backtrace)[0..500]
 
     data = {
@@ -64,7 +65,8 @@ class Service::App < Sinatra::Base
       'server'    => settings.hostname,
       'message'   => exception.message[0..254],
       'backtrace' => backtrace.join("\n"),
-      'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0])
+      'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0]),
+      'service'   => service.class
     }
 
     if exception.kind_of?(Service::Error)
@@ -76,6 +78,11 @@ class Service::App < Sinatra::Base
     elsif !exception.kind_of?(Service::TimeoutError)
       data['original_class'] = data['class']
       data['class'] = 'Service::Error'
+    end
+
+    case service
+    when Service::Web
+      data['service_data'] = service.data.inspect
     end
 
     if settings.hostname =~ /^sh1\.(rs|stg)\.github\.com$/
