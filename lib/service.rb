@@ -64,7 +64,6 @@ class Service
           Service.stats.time "hook.time.#{hook_name}" do
             svc.send(event_method)
             Service.stats.increment "event.count.#{event}"
-            Service.stats.increment "hook.count.#{hook_name}"
           end
         end
 
