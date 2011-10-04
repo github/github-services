@@ -56,7 +56,7 @@ class Service::App < Sinatra::Base
   # exception - An Exception instance.
   #
   # Returns nothing.
-  def report_exception(service, data, exception)
+  def report_exception(service_class, service_data, exception)
     backtrace = Array(exception.backtrace)[0..500]
 
     data = {
@@ -67,7 +67,7 @@ class Service::App < Sinatra::Base
       'message'   => exception.message[0..254],
       'backtrace' => backtrace.join("\n"),
       'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0]),
-      'service'   => service.to_s
+      'service'   => service_class.to_s
     }
 
     if exception.kind_of?(Service::Error)
@@ -81,9 +81,9 @@ class Service::App < Sinatra::Base
       data['class'] = 'Service::Error'
     end
 
-    case service
+    case service_class
     when Service::Web
-      data['service_data'] = data.inspect
+      data['service_data'] = service_data.inspect
     end
 
     if settings.hostname =~ /^sh1\.(rs|stg)\.github\.com$/
