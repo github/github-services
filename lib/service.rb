@@ -19,16 +19,18 @@ class Service
 
     # Gets a StatsD client.
     def stats
-      if @stats.nil?
+      @stats ||= begin
         if (hash = secrets['statsd']) && url = hash[env]
           uri   = Addressable::URI.parse(url)
           stats = Statsd.new uri.host, uri.port 
           stats.namespace = 'services'
-          @stats = stats
+          stats
+        else
+          stats = Statsd.new '127.0.0.1', 8127
+          stats.namespace = 'services'
+          stats
         end
-        @stats ||= false
       end
-      @stats || nil
     end
 
     attr_writer :stats
@@ -59,13 +61,25 @@ class Service
       event_method = "receive_#{event}"
       if svc.respond_to?(event_method)
         Service::Timeout.timeout(20, TimeoutError) do
-          svc.send(event_method)
+          Service.stats.time "time.#{event}" do
+            svc.send(event_method)
+            Service.stats.increment "count.#{event}"
+          end
         end
 
         true
       else
         false
       end
+    rescue Service::ConfigurationError
+      Service.stats.increment "fail.config.#{event}"
+      raise
+    rescue Service::TimeoutError
+      Service.stats.increment "fail.timeout.#{event}"
+      raise
+    rescue
+      Service.stats.increment "fail.exception.#{event}"
+      raise
     end
 
     # Tracks the defined services.
