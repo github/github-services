@@ -13,6 +13,10 @@ class Service::Web < Service
   boolean :insecure_ssl # :(
 
   def receive_push
+    # set this so that basic auth is added,
+    # and GET params are added to the POST body
+    http.url_prefix = data['url']
+
     if data['insecure_ssl'].to_i == 1
       http.ssl[:verify] = false
     end

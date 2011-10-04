@@ -7,17 +7,18 @@ class WebTest < Service::TestCase
 
   def test_push
     svc = service({
-      'url' => 'http://monkey:secret@abc.com/foo?a=1',
+      'url' => 'http://monkey:secret@abc.com/foo/?a=1',
       'secret' => ''
     }, payload)
 
-    @stubs.post "/foo" do |env|
+    @stubs.post "/foo/" do |env|
       assert_equal 'Basic bW9ua2V5OnNlY3JldA==', env[:request_headers]['authorization']
       assert_match /form/, env[:request_headers]['content-type']
       assert_equal 'abc.com', env[:url].host
       params = Rack::Utils.parse_nested_query(env[:url].query)
       assert_equal({'a' => '1'}, params)
       body = Rack::Utils.parse_nested_query(env[:body])
+      assert_equal '1', body['a']
       recv = JSON.parse(body['payload'])
       assert_equal payload, recv
       assert_nil env[:request_headers]['X-Hub-Signature']
