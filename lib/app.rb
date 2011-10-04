@@ -81,8 +81,7 @@ class Service::App < Sinatra::Base
       data['class'] = 'Service::Error'
     end
 
-    case service_class
-    when Service::Web
+    if service_class == Service::Web
       data['service_data'] = service_data.inspect
     end
 
