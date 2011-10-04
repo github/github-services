@@ -17,6 +17,22 @@ class Service
       end
     end
 
+    # Gets a StatsD client.
+    def stats
+      if @stats.nil?
+        if (hash = secrets['statsd']) && url = hash[env]
+          uri   = Addressable::URI.parse(url)
+          stats = Statsd.new uri.host, uri.port 
+          stats.namespace = 'services'
+          @stats = stats
+        end
+        @stats ||= false
+      end
+      @stats || nil
+    end
+
+    attr_writer :stats
+
     # The SHA1 of the commit that was HEAD when the process started. This is
     # used in production to determine which version of the app is deployed.
     #

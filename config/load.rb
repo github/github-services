@@ -107,6 +107,7 @@ require 'rubyforge'
 require 'oauth'
 require 'yammer4r'
 require 'mq'
+require 'statsd'
 
 require File.expand_path('../../lib/service', __FILE__)
 require File.expand_path('../../lib/app', __FILE__)
