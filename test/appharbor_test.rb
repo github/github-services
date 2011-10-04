@@ -19,6 +19,7 @@ class AppHarborTest < Service::TestCase
       branch = branches[payload['ref'].sub(/\Arefs\/heads\//, '')]
       assert_not_nil branch
       assert_equal payload["after"], branch["commit_id"]
+      assert_equal payload["commits"].select{|c| c['id'] == payload["after"]}.first["message"], branch["commit_message"]
     end
 
     svc = service({"token" => token, "application_slug" => application_slug}, payload)
