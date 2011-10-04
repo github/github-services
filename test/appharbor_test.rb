@@ -11,6 +11,7 @@ class AppHarborTest < Service::TestCase
 
     @stubs.post "/application/#{application_slug}/build" do |env|
       assert_equal token, env[:params]["authorization"]
+      assert_equal 'application/json', env[:request_headers]["accept"]
     end
 
     svc = service({"token" => token, "application_slug" => application_slug}, payload)
