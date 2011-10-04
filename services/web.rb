@@ -13,8 +13,6 @@ class Service::Web < Service
   boolean :insecure_ssl # :(
 
   def receive_push
-    http.url_prefix = data['url']
-
     if data['insecure_ssl'].to_i == 1
       http.ssl[:verify] = false
     end
@@ -33,7 +31,7 @@ class Service::Web < Service
         'sha1='+OpenSSL::HMAC.hexdigest(HMAC_DIGEST, secret, body)
     end
 
-    http_post '', body
+    http_post data['url'], body
   end
 end
 
