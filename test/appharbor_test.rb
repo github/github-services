@@ -15,6 +15,9 @@ class AppHarborTest < Service::TestCase
 
       branches = JSON.parse(env[:body])['branches']
       assert_equal 1, branches.size
+
+      branch = branches[payload['ref'].sub(/\Arefs\/heads\//, '')]
+      assert_not_nil branch
     end
 
     svc = service({"token" => token, "application_slug" => application_slug}, payload)
