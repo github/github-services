@@ -1,4 +1,4 @@
-is_production = !!ENV['GEM_STRICT']
+is_production = ENV['RACK_ENV'] == 'production' || !!ENV['GEM_STRICT']
 services_root = File.expand_path('../../', __FILE__)
 
 if is_production

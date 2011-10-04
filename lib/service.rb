@@ -9,6 +9,26 @@ class Service
   end
 
   class << self
+    attr_accessor :root, :env, :host
+
+    %w(development test production staging fi).each do |m|
+      define_method "#{m}?" do
+        env == m
+      end
+    end
+
+    # The SHA1 of the commit that was HEAD when the process started. This is
+    # used in production to determine which version of the app is deployed.
+    #
+    # Returns the 40 char commit SHA1 string.
+    def current_sha
+      @current_sha ||=
+        `cd #{root}; git rev-parse HEAD 2>/dev/null || echo unknown`.
+        chomp.freeze
+    end
+
+    attr_writer :current_sha
+
     # Public: Processes an incoming Service event.
     #
     # event   - A symbol identifying the event type.  Example: :push
@@ -227,6 +247,13 @@ class Service
       super
     end
   end
+
+  # Determine #root from this file's location
+  self.root ||= File.expand_path('../..', __FILE__)
+  self.host ||= `hostname -s`.chomp
+
+  # Determine #env from the environment
+  self.env ||= ENV['RACK_ENV'] || ENV['GEM_STRICT'] ? 'production' : 'development'
 
   # Public: Gets the configuration data for this Service instance.
   #
