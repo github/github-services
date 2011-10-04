@@ -7,4 +7,8 @@ class AppHarborTest < Service::TestCase
 
   def test_push
   end
+
+  def service(*args)
+    super Service::AppHarbor, *args
+  end
 end
