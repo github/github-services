@@ -6,6 +6,15 @@ class AppHarborTest < Service::TestCase
   end
 
   def test_push
+    application_slug = "foo"
+    token = "bar"
+
+    @stubs.post "/application/#{application_slug}/build" do |env|
+      assert_equal token, env[:params]["authorization"]
+    end
+
+    svc = service({"token" => token, "application_slug" => application_slug}, payload)
+    svc.receive_push
   end
 
   def service(*args)
