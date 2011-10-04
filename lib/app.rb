@@ -10,6 +10,7 @@ class Service::App < Sinatra::Base
   # Returns nothing.
   def self.service(svc)
     post "/#{svc.hook_name}/:event" do
+      data = nil
       begin
         data    = JSON.parse(params[:data])
         payload = parse_payload(params[:payload])
@@ -25,10 +26,10 @@ class Service::App < Sinatra::Base
         boom.message
       rescue Service::TimeoutError => boom
         status 504
-        report_exception svc, boom
+        report_exception svc, data, boom
         "Service Timeout"
       rescue Object => boom
-        report_exception svc, boom
+        report_exception svc, data, boom
         status 500
         "ERROR"
       end
@@ -55,7 +56,7 @@ class Service::App < Sinatra::Base
   # exception - An Exception instance.
   #
   # Returns nothing.
-  def report_exception(service, exception)
+  def report_exception(service, data, exception)
     backtrace = Array(exception.backtrace)[0..500]
 
     data = {
@@ -66,7 +67,7 @@ class Service::App < Sinatra::Base
       'message'   => exception.message[0..254],
       'backtrace' => backtrace.join("\n"),
       'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0]),
-      'service'   => service.class
+      'service'   => service.to_s
     }
 
     if exception.kind_of?(Service::Error)
@@ -82,7 +83,7 @@ class Service::App < Sinatra::Base
 
     case service
     when Service::Web
-      data['service_data'] = service.data.inspect
+      data['service_data'] = data.inspect
     end
 
     if settings.hostname =~ /^sh1\.(rs|stg)\.github\.com$/
