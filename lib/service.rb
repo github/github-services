@@ -61,9 +61,10 @@ class Service
       event_method = "receive_#{event}"
       if svc.respond_to?(event_method)
         Service::Timeout.timeout(20, TimeoutError) do
-          Service.stats.time "time.#{event}" do
+          Service.stats.time "time.#{hook_name}" do
             svc.send(event_method)
             Service.stats.increment "count.#{event}"
+            Service.stats.increment "count.#{hook_name}"
           end
         end
 
@@ -72,13 +73,13 @@ class Service
         false
       end
     rescue Service::ConfigurationError
-      Service.stats.increment "fail.config.#{event}"
+      Service.stats.increment "fail.config.#{hook_name}"
       raise
     rescue Service::TimeoutError
-      Service.stats.increment "fail.timeout.#{event}"
+      Service.stats.increment "fail.timeout.#{hook_name}"
       raise
     rescue
-      Service.stats.increment "fail.exception.#{event}"
+      Service.stats.increment "fail.exception.#{hook_name}"
       raise
     end
 
