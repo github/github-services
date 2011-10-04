@@ -21,6 +21,9 @@ class Service::App < Sinatra::Base
           status 404
           status "#{svc.hook_name} Service does not respond to 'push' events"
         end
+      rescue Faraday::Error::ConnectionFailed => boom
+        status 400
+        boom.message
       rescue Service::ConfigurationError => boom
         status 400
         boom.message
