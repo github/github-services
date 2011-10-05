@@ -333,8 +333,6 @@ class Service
     if Service.const_defined?(helper_name)
       @helper = Service.const_get(helper_name)
       extend @helper
-    else
-      raise ArgumentError, "Invalid event: #{event.inspect}"
     end
 
     @event   = event.to_sym
@@ -533,7 +531,7 @@ class Service
   #
   # Returns a Hash payload.
   def sample_payload
-    @helper.sample_payload
+    @helper ? @helper.sample_payload : {}
   end
 
   # Raised when an unexpected error occurs during service hook execution.
