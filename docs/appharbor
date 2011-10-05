@@ -11,3 +11,5 @@ Install Notes
   2.  "token" is the value of the "authorization" parameter.
 
   3.  "application_slug" is your application's unique identifier.
+
+  4.  If your GitHub repository is private you need to add the "apphb" GitHub user as a collaborator. This enables AppHarbor to download the source code.
