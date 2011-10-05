@@ -16,7 +16,7 @@ class Service::Web < Service
     # set this so that basic auth is added,
     # and GET params are added to the POST body
     http.url_prefix = data['url']
-    http.headers['X-GitHub-Event'] = @event.to_s
+    http.headers['X-GitHub-Event'] = event.to_s
 
     if data['insecure_ssl'].to_i == 1
       http.ssl[:verify] = false
