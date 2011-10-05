@@ -14,7 +14,7 @@ class Service::App < Sinatra::Base
       begin
         data    = JSON.parse(params[:data])
         payload = parse_payload(params[:payload])
-        if svc.receive(:push, data, payload)
+        if svc.receive(params[:event], data, payload)
           status 200
           ""
         else
