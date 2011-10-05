@@ -6,7 +6,7 @@ Install Notes
 
 In order to properly configure OnTime and GitHub to work together a few settings have to be configured.
 
-1. Log into your OnTime v11.0.2+ installation as the Administrator or with a user that has System Options privledges.
+1. Log into your OnTime v11.1+ installation as the Administrator or with a user that has System Options privledges.
 
 2. Open up the "Tools" menu and click on "System Options" and then go to the "GitHub Integration" option in the left pane.
 
