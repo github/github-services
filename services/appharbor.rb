@@ -14,9 +14,9 @@ class Service::AppHarbor < Service
     appharbor_message = {
       :branches => {
         ref_name => {
-          :commit_id => commit["id"],
-          :commit_message => commit["message"],
-          :download_url => commit["url"].sub("commit", "tarball")
+          :commit_id => commit['id'],
+          :commit_message => commit['message'],
+          :download_url => commit['url'].sub('commit', 'tarball')
         }
       }
     }
