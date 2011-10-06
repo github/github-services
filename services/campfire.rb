@@ -1,4 +1,10 @@
 class Service::Campfire < Service
+  class << self
+    attr_accessor :campfire_class
+  end
+
+  self.campfire_class = Tinder::Campfire
+
   string :subdomain, :room, :token
   boolean :master_only, :play_sound, :long_url
 
@@ -25,8 +31,6 @@ class Service::Campfire < Service
 
     messages.each { |line| room.speak line }
     room.play "rimshot" if play_sound && room.respond_to?(:play)
-
-    campfire.logout
   rescue OpenSSL::SSL::SSLError => boom
     raise_config_error "SSL Error: #{boom}"
   rescue Tinder::AuthenticationFailed => boom
@@ -37,7 +41,7 @@ class Service::Campfire < Service
 
   attr_writer :campfire
   def campfire
-    @campfire ||= Tinder::Campfire.new(data['subdomain'], :ssl => true, :token => data['token'])
+    @campfire ||= self.class.campfire_class.new(data['subdomain'], :ssl => true, :token => data['token'])
   end
 
   def find_room
