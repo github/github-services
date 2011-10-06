@@ -115,7 +115,7 @@ EOH
     @category_id ||= begin
       name = data['category'].to_s
       name.downcase!
-      categories = ::Basecamp::Category.post_categories(project_id).detect { |c| c.name.downcase == name }
+      categories = ::Basecamp::Category.post_categories(project_id).select { |c| c.name.downcase == name }
       case categories.size
       when 1 then categories.first.id
       when 0 then raise_config_error("Invalid Category: #{name.downcase}")
