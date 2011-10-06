@@ -102,10 +102,11 @@ EOH
     @project_id ||= begin
       name = data['project'].to_s
       name.downcase!
-      if proj = ::Basecamp::Project.all.detect { |p| p.name.downcase == name }
-        proj.id
-      else
-        raise_config_error("Invalid Project: #{name.downcase}")
+      projects = ::Basecamp::Project.all.select { |p| p.name.downcase == name }
+      case projects.size
+      when 1 then projects.first.id
+      when 0 then raise_config_error("Invalid Project: #{name.downcase}")
+      else raise_config_error("Multiple projects named: #{name.downcase}")
       end
     end
   end
@@ -114,10 +115,11 @@ EOH
     @category_id ||= begin
       name = data['category'].to_s
       name.downcase!
-      if cat = ::Basecamp::Category.post_categories(project_id).detect { |c| c.name.downcase == name }
-        cat.id
-      else
-        raise_config_error("Invalid Category: #{data['category'].inspect}")
+      categories = ::Basecamp::Category.post_categories(project_id).detect { |c| c.name.downcase == name }
+      case categories.size
+      when 1 then categories.first.id
+      when 0 then raise_config_error("Invalid Category: #{name.downcase}")
+      else raise_config_error("Multiple categories named: #{name.downcase}")
       end
     end
   end
