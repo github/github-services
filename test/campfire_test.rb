@@ -17,32 +17,26 @@ class CampfireTest < Service::TestCase
 
     attr_reader :rooms
 
-    def initialize
-      @rooms = []
+    def initialize(subd, options = {})
+      @subdomain = subd
+      @rooms     = []
+      @options   = options
+      @token     = options[:token]
     end
 
-    attr_reader :token, :logged_out
-
-    def login(token, x)
-      @token = token
-    end
+    attr_reader :subdomain, :token
 
     def find_room_by_name(name)
       @rooms << (r=Room.new(name))
       r
     end
-
-    def logout
-      @logged_out = true
-    end
   end
 
   def test_push
     svc = service({"token" => "t", "subdomain" => "s", "room" => "r"}, payload)
-    svc.campfire = MockCampfire.new
     svc.receive_push
-    assert svc.campfire.logged_out
     assert_equal 1, svc.campfire.rooms.size
+    assert_equal 's', svc.campfire.subdomain
     assert_equal 't', svc.campfire.token
     assert_equal 'r', svc.campfire.rooms.first.name
     assert_equal 4, svc.campfire.rooms.first.lines.size # 3 + summary
@@ -51,7 +45,8 @@ class CampfireTest < Service::TestCase
 
   def test_long_url
     svc = service({"token" => "t", "subdomain" => "s", "room" => "r", "long_url" => "1"}, payload)
-    svc.campfire = MockCampfire.new
+    assert_equal 's', svc.campfire.subdomain
+    assert_equal 't', svc.campfire.token
     svc.receive_push
     assert svc.campfire.rooms.first.lines.first.match(/github\.com/), "Summary url should not be shortened"
   end
@@ -60,7 +55,8 @@ class CampfireTest < Service::TestCase
     non_master_payload = payload
     non_master_payload["ref"] = "refs/heads/non-master"
     svc = service({"token" => "t", "subdomain" => "s", "room" => "r", "master_only" => 1}, non_master_payload)
-    svc.campfire = MockCampfire.new
+    assert_equal 's', svc.campfire.subdomain
+    assert_equal 't', svc.campfire.token
     svc.receive_push
     assert_equal 0, svc.campfire.rooms.size
   end
@@ -69,9 +65,18 @@ class CampfireTest < Service::TestCase
     non_master_payload = payload
     non_master_payload["ref"] = "refs/heads/non-master"
     svc = service({"token" => "t", "subdomain" => "s", "room" => "r", "master_only" => 0}, non_master_payload)
-    svc.campfire = MockCampfire.new
+    assert_equal 's', svc.campfire.subdomain
+    assert_equal 't', svc.campfire.token
     svc.receive_push
     assert_equal 4, svc.campfire.rooms.first.lines.size # 3 + summary
+  end
+
+  def setup
+    Service::Campfire.campfire_class = MockCampfire
+  end
+
+  def teardown
+    Service::Campfire.campfire_class = Tinder::Campfire
   end
 
   def service(*args)
