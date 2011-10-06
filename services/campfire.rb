@@ -19,10 +19,6 @@ class Service::Campfire < Service
 
     play_sound = data['play_sound'].to_i == 1
 
-    if !campfire.login(data['token'], 'X')
-      raise_config_error 'Invalid campfire token'
-    end
-
     unless room = find_room
       raise_config_error 'No such campfire room'
     end
@@ -41,7 +37,7 @@ class Service::Campfire < Service
 
   attr_writer :campfire
   def campfire
-    @campfire ||= Tinder::Campfire.new(data['subdomain'], :ssl => true)
+    @campfire ||= Tinder::Campfire.new(data['subdomain'], :ssl => true, :token => data['token'])
   end
 
   def find_room
