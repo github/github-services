@@ -31,6 +31,10 @@ class Service::Campfire < Service
     room.play "rimshot" if play_sound && room.respond_to?(:play)
 
     campfire.logout
+  rescue OpenSSL::SSL::SSLError => boom
+    raise_config_error "SSL Error: #{boom}"
+  rescue Tinder::AuthenticationFailed => boom
+    raise_config_error "Authentication Error: #{boom}"
   rescue Faraday::Error::ConnectionFailed
     raise_config_error "Connection refused- invalid campfire subdomain."
   end
