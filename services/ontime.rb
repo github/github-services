@@ -1,6 +1,8 @@
 class Service::OnTime < Service
   string :ontime_url, :api_key
 
+  self.title = 'OnTime'
+
   def receive_push
     if data['ontime_url'].to_s.empty?
       raise_config_error "No OnTime URL to connect to."
