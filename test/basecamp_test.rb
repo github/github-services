@@ -2,34 +2,29 @@ require File.expand_path('../helper', __FILE__)
 
 class BasecampTest < Service::TestCase
   def test_receives_push
-    svc = service :push, {}, payload
+    svc = service :push, {'url' => 'https://foo.com', 'username' => 'monkey', 'password' => 'abc'}, payload
     svc.receive
 
-    assert msg = svc.basecamp.messages.shift
-    assert_equal 1, project_id = msg.shift
-    msg = msg.shift # now its the hash
-    assert_equal 2, msg[:category_id]
-    assert msg.key?(:title)
-    assert msg.key?(:body)
+    assert msg = svc.messages.shift
+    assert_equal 2, msg.category_id
+    assert msg.title.present?
+    assert msg.body.present?
   end
 
   def service(*args)
     svc = super Service::Basecamp, *args
-    svc.basecamp = Fakecamp.new
+
     svc.project_id  = 1
     svc.category_id = 2
+
+    def svc.messages
+      @messages ||= []
+    end
+
+    def svc.post_message(options = {})
+      messages << build_message(options)
+    end
+
     svc
-  end
-
-  class Fakecamp
-    attr_reader :messages
-
-    def initialize
-      @messages = []
-    end
-
-    def post_message(*args)
-      @messages << args
-    end
   end
 end

@@ -11,6 +11,9 @@ class Service::Basecamp < Service
     commits = payload['commits'].reject { |commit| commit['message'].to_s.strip == '' }
     return if commits.empty?
 
+    ::Basecamp.establish_connection! basecamp_domain,
+      data['username'], data['password'], data['ssl'].to_i == 1
+
     commits.each do |commit|
       gitsha        = commit['id']
       short_git_sha = gitsha[0..5]
@@ -51,7 +54,7 @@ h2. Changed paths
 EOH
       end
 
-      basecamp.post_message(project_id, :title => title, :body => body, :category_id => category_id)
+      post_message :title => title, :body => body
     end
 
   rescue SocketError => boom
@@ -76,21 +79,44 @@ EOH
   attr_writer :project_id
   attr_writer :category_id
 
-  def basecamp
-    @basecamp ||= ::Basecamp.new(data['url'], data['username'], data['password'], data['ssl'])
+  def basecamp_domain
+    @basecamp_domain ||= Addressable::URI.parse(data['url']).host
+  end
+
+  def build_message(options = {})
+    m = ::Basecamp::Message.new :project_id => project_id
+    m.category_id = category_id
+    options.each do |key, value|
+      m.send "#{key}=", value
+    end
+    m
+  end
+
+  def post_message(options = {})
+    build_message(options).save
   end
 
   def project_id
     @project_id ||= begin
-      proj = basecamp.projects.select { |p| p.name.downcase == data['project'].downcase }.first
-      proj ? proj.id : raise_config_error("Invalid Project: #{data['project'].downcase}")
+      name = data['project'].to_s
+      name.downcase!
+      if proj = ::Basecamp::Project.all.detect { |p| p.name.downcase == name }
+        proj.id
+      else
+        raise_config_error("Invalid Project: #{name.downcase}")
+      end
     end
   end
 
   def category_id
     @category_id ||= begin
-      cat = basecamp.message_categories(project_id).select { |category| category.name.downcase == data['category'].downcase }.first
-      cat ? cat.id : raise_config_error("Invalid Category: #{data['category'].inspect}")
+      name = data['category'].to_s
+      name.downcase!
+      if cat = ::Basecamp::Category.post_categories(project_id).detect { |c| c.name.downcase == name }
+        cat.id
+      else
+        raise_config_error("Invalid Category: #{data['category'].inspect}")
+      end
     end
   end
 end
