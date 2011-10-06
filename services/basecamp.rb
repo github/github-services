@@ -62,9 +62,9 @@ EOH
     end
   rescue RuntimeError => boom
     if boom.to_s =~ /\((?:403|401|422)\)/
-      raise_config_error "Invalid credentials"
+      raise_config_error "Invalid credentials: #{boom}"
     elsif boom.to_s =~ /\((?:404|301)\)/
-      raise_config_error "Invalid project URL"
+      raise_config_error "Invalid project URL: #{boom}"
     elsif boom.to_s == 'Unprocessable Entity (422)'
       # do nothing
     else
