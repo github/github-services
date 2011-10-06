@@ -84,14 +84,10 @@ require 'openssl'
 require 'cgi'
 #~ require 'date' # This is needed by the CIA service in ruby 1.8.7 or later
 
-# vendor
-require 'basecamp'
-require 'rubyforge'
-
 # bundled
 require 'mime/types'
 require 'xmlsimple'
-require 'activesupport'
+require 'active_resource'
 require 'rack'
 require 'sinatra/base'
 require 'tinder'
@@ -108,6 +104,10 @@ require 'oauth'
 require 'yammer4r'
 require 'mq'
 require 'statsd'
+
+# vendor
+require 'basecamp'
+require 'rubyforge'
 
 require File.expand_path('../../lib/service', __FILE__)
 require File.expand_path('../../lib/app', __FILE__)
