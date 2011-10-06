@@ -25,8 +25,6 @@ class Service::Campfire < Service
 
     messages.each { |line| room.speak line }
     room.play "rimshot" if play_sound && room.respond_to?(:play)
-
-    campfire.logout
   rescue OpenSSL::SSL::SSLError => boom
     raise_config_error "SSL Error: #{boom}"
   rescue Tinder::AuthenticationFailed => boom
