@@ -14,7 +14,7 @@ class Service::App < Sinatra::Base
       begin
         data    = JSON.parse(params[:data])
         payload = parse_payload(params[:payload])
-        if svc.receive(:push, data, payload)
+        if svc.receive(params[:event], data, payload)
           status 200
           ""
         else
@@ -49,9 +49,7 @@ class Service::App < Sinatra::Base
   #
   # Returns a Hash payload.
   def parse_payload(json)
-    payload = JSON.parse(json)
-    payload['ref_name'] = payload['ref'].to_s.sub(/\Arefs\/(heads|tags)\//, '')
-    payload
+    JSON.parse(json)
   end
 
   # Reports the given exception to Haystack.

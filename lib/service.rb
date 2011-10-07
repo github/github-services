@@ -58,8 +58,8 @@ class Service
     def receive(event, data, payload = nil)
       svc = new(event, data, payload)
 
-      event_method = "receive_#{event}"
-      if svc.respond_to?(event_method)
+      methods = ["receive_#{event}", "receive_event"]
+      if event_method = methods.detect { |m| svc.respond_to?(m) }
         Service::Timeout.timeout(20, TimeoutError) do
           Service.stats.time "hook.time.#{hook_name}" do
             svc.send(event_method)
@@ -333,11 +333,9 @@ class Service
     if Service.const_defined?(helper_name)
       @helper = Service.const_get(helper_name)
       extend @helper
-    else
-      raise ArgumentError, "Invalid event: #{event.inspect}"
     end
 
-    @event   = event
+    @event   = event.to_sym
     @data    = data
     @payload = payload || sample_payload
     @http = @secrets = @email_config = nil
@@ -533,7 +531,7 @@ class Service
   #
   # Returns a Hash payload.
   def sample_payload
-    @helper.sample_payload
+    @helper ? @helper.sample_payload : {}
   end
 
   # Raised when an unexpected error occurs during service hook execution.
