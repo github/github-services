@@ -41,7 +41,11 @@ class Service::Campfire < Service
 
   attr_writer :campfire
   def campfire
-    @campfire ||= self.class.campfire_class.new(data['subdomain'], :ssl => true, :token => data['token'])
+    @campfire ||= self.class.campfire_class.new(campfire_domain, :ssl => true, :token => data['token'])
+  end
+
+  def campfire_domain
+    data['subdomain'].to_s.sub /\.campfirenow\.com$/i, ''
   end
 
   def find_room

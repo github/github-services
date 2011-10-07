@@ -43,6 +43,17 @@ class CampfireTest < Service::TestCase
     assert svc.campfire.rooms.first.lines.first.match(/short/)
   end
 
+  def test_full_domain
+    svc = service({"token" => "t", "subdomain" => "s.campfirenow.com", "room" => "r"}, payload)
+    svc.receive_push
+    assert_equal 1, svc.campfire.rooms.size
+    assert_equal 's', svc.campfire.subdomain
+    assert_equal 't', svc.campfire.token
+    assert_equal 'r', svc.campfire.rooms.first.name
+    assert_equal 4, svc.campfire.rooms.first.lines.size # 3 + summary
+    assert svc.campfire.rooms.first.lines.first.match(/short/)
+  end
+
   def test_long_url
     svc = service({"token" => "t", "subdomain" => "s", "room" => "r", "long_url" => "1"}, payload)
     assert_equal 's', svc.campfire.subdomain
