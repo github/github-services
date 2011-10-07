@@ -12,6 +12,7 @@ class WebTest < Service::TestCase
     }, payload)
 
     @stubs.post "/foo/" do |env|
+      assert_equal 'push', env[:request_headers]['x-github-event']
       assert_equal 'Basic bW9ua2V5OnNlY3JldA==', env[:request_headers]['authorization']
       assert_match /form/, env[:request_headers]['content-type']
       assert_equal 'abc.com', env[:url].host
@@ -26,7 +27,7 @@ class WebTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc.receive_push
+    svc.receive_event
   end
 
   def test_push_with_secret
@@ -48,7 +49,7 @@ class WebTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc.receive_push
+    svc.receive_event
   end
 
   def test_push_as_json
@@ -68,7 +69,7 @@ class WebTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc.receive_push
+    svc.receive_event
   end
 
   def test_push_as_json_with_secret
@@ -89,7 +90,7 @@ class WebTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc.receive_push
+    svc.receive_event
   end
 
   def service(*args)

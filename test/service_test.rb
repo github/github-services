@@ -13,10 +13,6 @@ class ServiceTest < Service::TestCase
 
   def test_receive_valid_event
     assert TestService.receive :push, {}, {}
-
-    assert_raise ArgumentError do
-      TestService.receive :star, {}, {}
-    end
   end
 
   def test_url_shorten
