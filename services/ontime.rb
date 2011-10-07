@@ -17,9 +17,9 @@ class Service::OnTime < Service
 		resp = http_get "api/version"
 		version = JSON.parse(resp.body)['data']
 
-		if version['major'] >= 11 and version['minor'] >= 0 and version['build'] >= 2
+		if (version['major'] == 11 and version['minor'] > 1) or version['major'] > 11
 			result = http_post "api/github", :payload => payload.to_json, :hash_data => hash_data, :source => :github
-		else
+		else 
 			raise_config_error "Unexpected API version. Please update to the latest version of OnTime to use this service."
 		end
 
