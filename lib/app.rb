@@ -49,9 +49,7 @@ class Service::App < Sinatra::Base
   #
   # Returns a Hash payload.
   def parse_payload(json)
-    payload = JSON.parse(json)
-    payload['ref_name'] = payload['ref'].to_s.sub(/\Arefs\/(heads|tags)\//, '')
-    payload
+    JSON.parse(json)
   end
 
   # Reports the given exception to Haystack.
