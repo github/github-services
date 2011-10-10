@@ -8,7 +8,7 @@ class OnTimeTest < Service::TestCase
   def test_push
     @stubs.get "/api/version" do |env|
       assert_equal 'www.example.com', env[:url].host
-      [200, {}, '{"data":{"major":11,"minor":0,"build":2}}']
+      [200, {}, '{"data":{"major":12,"minor":0,"build":2}}']
     end
 
     @stubs.post "/api/github" do |env|
