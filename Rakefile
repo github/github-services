@@ -16,11 +16,11 @@ namespace :services do
   task :config do
     file = ENV["FILE"] || File.expand_path("../config/services.json", __FILE__)
     require File.expand_path("../config/load", __FILE__)
-    services = Service.services.inject({}) do |memo, svc|
-      memo.update svc.title => {
-        :name   => svc.hook_name,
-        :schema => svc.schema}
+    services = []
+    Service.services.each do |svc|
+      services << {:name => svc.hook_name, :title => svc.title, :schema => svc.schema}
     end
+    services.sort! { |x, y| x[:name] <=> y[:name] }
     File.open file, 'w' do |io|
       io << Yajl.dump(services, :pretty => true)
     end
