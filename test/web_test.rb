@@ -30,6 +30,20 @@ class WebTest < Service::TestCase
     svc.receive_event
   end
 
+  def test_push_without_scheme
+    svc = service({
+      'url' => 'abc.com/foo/?a=1',
+      'secret' => ''
+    }, payload)
+
+    @stubs.post "/foo/" do |env|
+      assert_equal 'abc.com', env[:url].host
+      [200, {}, '']
+    end
+
+    svc.receive_event
+  end
+
   def test_push_with_secret
     svc = service({
       'url'    => 'http://abc.com/foo',
