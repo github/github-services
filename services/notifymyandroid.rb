@@ -1,5 +1,6 @@
 class Service::NMA < Service
   string :apikey
+  self.title = 'Notify My Android'
 
   def receive_push
     url = URI.parse('https://www.notifymyandroid.com/publicapi/notify')
