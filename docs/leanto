@@ -1,0 +1,35 @@
+Lean-to
+=======
+
+The current version of Lean-To adds the ability to automatically link specific commits at GitHub with stories and bugs in your Lean-To projects.  This feature is currently experimental and is only enabled for internal Refactr projects. If you would like access to this experimental feature please email support@lean-to.com.
+
+Using the integration is as simple as tagging a Lean-To story or bug in your commit message:
+
+    This is my commit message.  I fixed a bug.
+    [Bug:7]
+
+When you push to GitHub it passes a list of commits to Lean-To which scans the commit messages for tags like `[Bug:7]`.  If tags are found, Lean-To will automatically add a note to the card with the commit message and a link back to the actual commit.  The tags may also contain a directive to change certain properties of the card:
+
+    Added feature foo. [Story:17, status:completed]
+
+In this example, Lean-To would add a note to the story and mark it as completed.  Lean-To also tries to match your GitHub account to a Lean-To account and will mark you as the owner of the story if you change the status of a story and it doesn't already have an owner. 
+
+GitHub integration is currently enabled for the **Milemarker**, **Lean-To**, **Realief**, and **Qualtrx** projects for internal testing.
+
+### Tag Syntax
+* Tags must start and end with square brackets, e.g. `[Story:1]`
+* Tags are case-insensitive so `[story:1]` is equivalent to `[Story:1]`
+* There must be a colon between 'Story' or 'Bug' and the number so `[Story:1]` is valid but `[bug7]` is not
+* Property directives are optional. They must be separated by a comma, and they must follow the card identifier, e.g. `[Bug:1, status:completed, actual:1]`
+* Valid status values are: '**not** started', '**in** progress', '**complete**d'
+* Only the bold portion of the status value is required so `[Bug:1, status:in progress]` is equivalent to `[Bug:1, status:in]`
+* Multiple tags may be specified in a single commit message so `[Story:3] [Bug:1, status:complete]` will add notes to both Story 3 and Bug 1
+* Acceptable card properties are: 'status', 'priority', 'iteration', 'estimate', and 'actual'
+* Card properties do not need to be in any order as long as they follow the card identifier. So `[Story:1, iteration:2, estimate:1/2]` is valid, but `[status:completed, Story:1]` is not.
+* Acceptable estimates are '0', '1/4', '0.25', '1/2', '0.5', '1', '2', '3', '5', '8', '13', '20', 40', and '80'. '0' will clear the estimate, and the rest will translate to their equivalent Lean-to estimate values.
+
+
+Install Notes
+-------------
+
+  1. Token - GitHub Service Hook Token for your Lean-to project. Get it by clicking "My Account" > "Projects & People" > "Enable API".
