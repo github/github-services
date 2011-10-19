@@ -6,6 +6,16 @@ module Service::IssueHelpers
     @issue ||= self.class.objectify(payload['issue'])
   end
 
+  def summary_message
+    "[%s] %s - %s. %s" % [
+      repo.name,
+      issue.title,
+      issue.user.login,
+      issue.html_url]
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
   def self.sample_payload
     {
       "action" => "opened",

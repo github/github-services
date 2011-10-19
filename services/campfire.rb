@@ -23,47 +23,10 @@ class Service::Campfire < Service
   end
 
   def receive_pull_request
-    return unless opened?
-
-    messages = []
-
-    begin
-      messages  = [
-        "[%s] %s - %s. %s -> %s %s" % [
-          repo.name,
-          pull.title,
-          pull.user.login,
-          pull.base.label, pull.head.label,
-          pull.html_url
-        ]
-      ]
-    rescue
-      raise_config_error "Unable to build message: #{$!.to_s}"
-    end
-
-    send_messages messages
+    send_messages summary_message if opened?
   end
 
-  def receive_issues
-    return unless opened?
-
-    messages = []
-
-    begin
-      messages  = [
-        "[%s] %s - %s. %s" % [
-          repo.name,
-          issue.title,
-          issue.user.login,
-          issue.html_url
-        ]
-      ]
-    rescue
-      raise_config_error "Unable to build message: #{$!.to_s}"
-    end
-
-    send_messages messages
-  end
+  alias receive_issues receive_pull_request
 
   def send_messages(messages)
     raise_config_error 'Missing campfire token' if data['token'].to_s.empty?
@@ -76,7 +39,7 @@ class Service::Campfire < Service
       raise_config_error 'No such campfire room'
     end
 
-    messages.each { |line| room.speak line }
+    Array(messages).each { |line| room.speak line }
     room.play "rimshot" if play_sound && room.respond_to?(:play)
   rescue OpenSSL::SSL::SSLError => boom
     raise_config_error "SSL Error: #{boom}"
