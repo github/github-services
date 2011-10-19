@@ -29,12 +29,13 @@ class Service::Campfire < Service
 
     begin
       messages  = [
-        "%s wants someone to merge %d %s into %s from %s:\n%s\n%s\n%s" % [
+        # [github] "Fix xss tests" by technoweenie. github:master -> github:fix-xss-tests https://github.com/github/github/pull/1800
+        "[%s] %s by %s. %s -> %s %s" % [
+          repo.name,
+          pull.title.inspect,
           pull.user.login,
-          pull.commits,
-          pull.commits == 1 ? :commit : :commits,
           pull.base.label, pull.head.label,
-          pull.title, pull.body, pull.html_url
+          pull.html_url
         ]
       ]
     rescue
@@ -51,10 +52,11 @@ class Service::Campfire < Service
 
     begin
       messages  = [
-        "New issue on %s by %s: %s\n%s\n%s" % [
-          "#{repo.owner.login}/#{repo.name}",
+        "[%s] %s by %s. %s" % [
+          repo.name,
+          issue.title.inspect,
           issue.user.login,
-          issue.title, issue.body, issue.html_url
+          issue.html_url
         ]
       ]
     rescue

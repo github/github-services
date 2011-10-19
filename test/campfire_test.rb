@@ -51,7 +51,7 @@ class CampfireTest < Service::TestCase
     assert_equal 't', svc.campfire.token
     assert_equal 'r', svc.campfire.rooms.first.name
     assert_equal 1, svc.campfire.rooms.first.lines.size # 3 + summary
-    assert_match /new issue on mojombo\/grit by mojombo/i, svc.campfire.rooms.first.lines.first
+    assert_match /\[grit\] "booya" by mojombo/i, svc.campfire.rooms.first.lines.first
   end
 
   def test_pull
@@ -62,7 +62,7 @@ class CampfireTest < Service::TestCase
     assert_equal 't', svc.campfire.token
     assert_equal 'r', svc.campfire.rooms.first.name
     assert_equal 1, svc.campfire.rooms.first.lines.size # 3 + summary
-    assert_match /mojombo wants someone to merge 1 commit into mojombo:master from foo:feature/i, svc.campfire.rooms.first.lines.first
+    assert_match /\[grit\] "booya" by mojombo. mojombo:master -> foo:feature/i, svc.campfire.rooms.first.lines.first
   end
 
   def test_full_domain
