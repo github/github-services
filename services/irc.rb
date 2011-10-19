@@ -2,6 +2,7 @@ class Service::IRC < Service
   string   :server, :port, :room, :nick
   password :password
   boolean  :ssl, :message_without_join, :no_colors, :long_url, :notice
+
   def receive_push
     return if distinct_commits.empty?
 
@@ -12,6 +13,16 @@ class Service::IRC < Service
     messages += commit_messages.first(3)
     send_messages messages
   end
+
+  def receive_pull_request 
+    return unless opened?
+
+    url  = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
+
+    send_messages "#{summary_message}: #{url}"
+  end
+
+  alias receive_issues receive_pull_request
 
   def send_messages(messages)
     rooms   = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}

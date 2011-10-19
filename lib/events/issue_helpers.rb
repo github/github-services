@@ -6,6 +6,10 @@ module Service::IssueHelpers
     @issue ||= self.class.objectify(payload['issue'])
   end
 
+  def summary_url
+    issue.html_url
+  end
+
   def summary_message
     "[%s] %s - %s. %s" % [
       repo.name,

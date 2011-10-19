@@ -6,6 +6,10 @@ module Service::PullRequestHelpers
     @pull ||= self.class.objectify(payload['pull_request'])
   end
 
+  def summary_url
+    pull.html_url
+  end
+
   def summary_message
     "[%s] %s - %s. %s -> %s %s" % [
       repo.name,
