@@ -29,7 +29,6 @@ class Service::Campfire < Service
 
     begin
       messages  = [
-        # [github] "Fix xss tests" by technoweenie. github:master -> github:fix-xss-tests https://github.com/github/github/pull/1800
         "[%s] %s - %s. %s -> %s %s" % [
           repo.name,
           pull.title,
