@@ -1,18 +1,9 @@
 module Service::IssueHelpers
-  def action
-    payload['action'].to_s
-  end
-
-  def opened?
-    action == 'opened'
-  end
+  include Service::HelpersWithRepo,
+    Service::HelpersWithActions
 
   def issue
     @issue ||= self.class.objectify(payload['issue'])
-  end
-
-  def repo
-    @repo ||= self.class.objectify(payload['repository'])
   end
 
   def self.sample_payload

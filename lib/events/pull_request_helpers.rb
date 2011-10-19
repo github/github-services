@@ -1,18 +1,9 @@
 module Service::PullRequestHelpers
-  def action
-    payload['action'].to_s
-  end
-
-  def opened?
-    action == 'opened'
-  end
+  include Service::HelpersWithRepo,
+    Service::HelpersWithActions
 
   def pull
     @pull ||= self.class.objectify(payload['pull_request'])
-  end
-
-  def repo
-    @repo ||= self.class.objectify(payload['repository'])
   end
 
   def self.sample_payload
