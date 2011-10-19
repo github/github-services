@@ -1,4 +1,5 @@
 require 'faraday'
+require 'ostruct'
 
 # Represents a single triggered Service call.  Each Service tracks the event
 # type, the configuration data, and the payload for the current call.
@@ -240,6 +241,13 @@ class Service
       @email_config_file ||= File.expand_path('../../config/email.yml', __FILE__)
     end
 
+    def objectify(hash)
+      hash.each do |key, value|
+        hash[key] = objectify(value) if value.is_a?(Hash)
+      end
+      OpenStruct.new hash
+    end
+
     # Sets the path to the secrets configuration file.
     #
     # secret_file - String path.
@@ -329,7 +337,7 @@ class Service
   attr_writer :ca_file
 
   def initialize(event = :push, data = {}, payload = nil)
-    helper_name = "#{event.to_s.capitalize}Helpers"
+    helper_name = "#{event.to_s.classify}Helpers"
     if Service.const_defined?(helper_name)
       @helper = Service.const_get(helper_name)
       extend @helper

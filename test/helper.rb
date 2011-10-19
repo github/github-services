@@ -27,8 +27,17 @@ class Service::TestCase < Test::Unit::TestCase
     "Basic " + ["#{user}:#{pass}"].pack("m*").strip
   end
 
-  def payload
+  def push_payload
     Service::PushHelpers.sample_payload
+  end
+  alias payload push_payload
+
+  def pull_payload
+    Service::PullRequestHelpers.sample_payload
+  end
+
+  def issues_payload
+    Service::IssueHelpers.sample_payload
   end
 end
 

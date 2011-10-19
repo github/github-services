@@ -43,6 +43,28 @@ class CampfireTest < Service::TestCase
     assert svc.campfire.rooms.first.lines.first.match(/short/)
   end
 
+  def test_issues
+    svc = service(:issues, {"token" => "t", "subdomain" => "s", "room" => "r"}, issues_payload)
+    svc.receive_issues
+    assert_equal 1, svc.campfire.rooms.size
+    assert_equal 's', svc.campfire.subdomain
+    assert_equal 't', svc.campfire.token
+    assert_equal 'r', svc.campfire.rooms.first.name
+    assert_equal 1, svc.campfire.rooms.first.lines.size # 3 + summary
+    assert_match /new issue on mojombo\/grit by mojombo/i, svc.campfire.rooms.first.lines.first
+  end
+
+  def test_pull
+    svc = service(:pull_request, {"token" => "t", "subdomain" => "s", "room" => "r"}, pull_payload)
+    svc.receive_pull_request
+    assert_equal 1, svc.campfire.rooms.size
+    assert_equal 's', svc.campfire.subdomain
+    assert_equal 't', svc.campfire.token
+    assert_equal 'r', svc.campfire.rooms.first.name
+    assert_equal 1, svc.campfire.rooms.first.lines.size # 3 + summary
+    assert_match /mojombo wants someone to merge 1 commit into mojombo:master from foo:feature/i, svc.campfire.rooms.first.lines.first
+  end
+
   def test_full_domain
     svc = service({"token" => "t", "subdomain" => "s.campfirenow.com", "room" => "r"}, payload)
     svc.receive_push

@@ -9,10 +9,6 @@ class Service::Campfire < Service
   boolean :master_only, :play_sound, :long_url
 
   def receive_push
-    raise_config_error 'Missing campfire token' if data['token'].to_s.empty?
-
-    return if data['master_only'].to_i == 1 and branch_name != 'master'
-
     url = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
     messages = []
     messages << "#{summary_message}: #{url}"
@@ -22,6 +18,56 @@ class Service::Campfire < Service
       messages.shift # drop summary message
       messages.first << " ( #{distinct_commits.first['url']} )"
     end
+
+    send_messages messages
+  end
+
+  def receive_pull_request
+    return unless opened?
+
+    messages = []
+
+    begin
+      messages  = [
+        "%s wants someone to merge %d %s into %s from %s:\n%s\n%s\n%s" % [
+          pull.user.login,
+          pull.commits,
+          pull.commits == 1 ? :commit : :commits,
+          pull.base.label, pull.head.label,
+          pull.title, pull.body, pull.html_url
+        ]
+      ]
+    rescue
+      raise_config_error "Unable to build message: #{$!.to_s}"
+    end
+
+    send_messages messages
+  end
+
+  def receive_issues
+    return unless opened?
+
+    messages = []
+
+    begin
+      messages  = [
+        "New issue on %s by %s: %s\n%s\n%s" % [
+          "#{repo.owner.login}/#{repo.name}",
+          issue.user.login,
+          issue.title, issue.body, issue.html_url
+        ]
+      ]
+    rescue
+      raise_config_error "Unable to build message: #{$!.to_s}"
+    end
+
+    send_messages messages
+  end
+
+  def send_messages(messages)
+    raise_config_error 'Missing campfire token' if data['token'].to_s.empty?
+
+    return if data['master_only'].to_i == 1 and branch_name != 'master'
 
     play_sound = data['play_sound'].to_i == 1
 
