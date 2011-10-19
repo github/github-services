@@ -5,14 +5,18 @@ class Service::IRC < Service
   def receive_push
     return if distinct_commits.empty?
 
-    rooms   = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
-    botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
-    url     = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
-    command = data['notice'].to_i == 1 ? 'NOTICE' : 'PRIVMSG'
+    url  = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
 
     messages = []
     messages << "#{summary_message}: #{url}"
     messages += commit_messages.first(3)
+    send_messages messages
+  end
+
+  def send_messages(messages)
+    rooms   = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
+    botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
+    command = data['notice'].to_i == 1 ? 'NOTICE' : 'PRIVMSG'
 
     self.puts "PASS #{data['password']}" if data['password'] && !data['password'].empty?
     self.puts "NICK #{botname}"
@@ -32,7 +36,7 @@ class Service::IRC < Service
       room, pass = room.split("::")
       self.puts "JOIN #{room} #{pass}" unless without_join
 
-      messages.each do |message|
+      Array(messages).each do |message|
         self.puts "#{command} #{room} :#{message}"
       end
 
