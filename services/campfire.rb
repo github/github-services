@@ -30,9 +30,9 @@ class Service::Campfire < Service
     begin
       messages  = [
         # [github] "Fix xss tests" by technoweenie. github:master -> github:fix-xss-tests https://github.com/github/github/pull/1800
-        "[%s] %s by %s. %s -> %s %s" % [
+        "[%s] %s - %s. %s -> %s %s" % [
           repo.name,
-          pull.title.inspect,
+          pull.title,
           pull.user.login,
           pull.base.label, pull.head.label,
           pull.html_url
@@ -52,9 +52,9 @@ class Service::Campfire < Service
 
     begin
       messages  = [
-        "[%s] %s by %s. %s" % [
+        "[%s] %s - %s. %s" % [
           repo.name,
-          issue.title.inspect,
+          issue.title,
           issue.user.login,
           issue.html_url
         ]
