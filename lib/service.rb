@@ -5,6 +5,9 @@ require 'ostruct'
 # type, the configuration data, and the payload for the current call.
 class Service
   dir = File.expand_path '..', __FILE__
+  Dir["#{dir}/events/helpers/*.rb"].each do |helper|
+    require helper
+  end
   Dir["#{dir}/events/*.rb"].each do |helper|
     require helper
   end
