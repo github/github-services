@@ -26,6 +26,7 @@ class Service::YouTrack < Service
 
   def process_commit(commit)
     author = nil
+    commit["message"] = [commit["message"]] unless commit["message"].is_a?(Array)
     commit["message"].each{ |commit_line|
       issue_id = commit_line[/( |^)#(\w+-\d+) /, 2]
       next if issue_id.nil?
@@ -36,7 +37,7 @@ class Service::YouTrack < Service
 
       command = commit_line[/( |^)#\w+-\d+ (.+)/, 2].strip
       command = "Fixed" if command.nil?
-      commentString = "Commit made by '''" + commit["author"]["name"] + "''' on ''" + commit["timestamp"] + "''\n" + commit["url"] + "\n\n{quote}" + commit["message"] + "{quote}"  
+      commentString = "Commit made by '''" + commit["author"]["name"] + "''' on ''" + commit["timestamp"] + "''\n" + commit["url"] + "\n\n{quote}" + commit["message"].to_s + "{quote}"  
       execute_command(author, issue_id, command, commentString)
     }
   end
