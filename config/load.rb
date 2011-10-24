@@ -104,6 +104,7 @@ require 'oauth'
 require 'yammer4r'
 require 'mq'
 require 'statsd'
+require 'twilio-ruby'
 
 # vendor
 require 'basecamp'

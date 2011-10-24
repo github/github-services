@@ -6,3 +6,4 @@ config/services.json
 /bin
 vendor/gems
 .bundle
+docs/payload_data
