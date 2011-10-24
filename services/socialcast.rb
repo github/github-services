@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Service::Socialcast < Service
   string   :api_domain, :group_id, :username
   password :password
