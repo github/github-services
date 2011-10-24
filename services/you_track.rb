@@ -26,8 +26,7 @@ class Service::YouTrack < Service
 
   def process_commit(commit)
     author = nil
-    commit["message"] = [commit["message"]] unless commit["message"].is_a?(Array)
-    commit["message"].each{ |commit_line|
+    commit["message"].split("\n").each{ |commit_line|
       issue_id = commit_line[/( |^)#(\w+-\d+) /, 2]
       next if issue_id.nil?
 
