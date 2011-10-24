@@ -8,6 +8,8 @@ class Service::Campfire < Service
   string :subdomain, :room, :token
   boolean :master_only, :play_sound, :long_url
 
+  default_events :push, :pull_request, :issues
+
   def receive_push
     url = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
     messages = []
