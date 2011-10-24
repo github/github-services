@@ -1,7 +1,7 @@
 require 'base64'
 require 'bigdecimal'
 require 'date'
-require 'jcode'
+require 'jcode' if RUBY_VERSION < '1.9'
 require 'time'
 require 'rexml/document'
 

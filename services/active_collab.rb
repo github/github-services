@@ -1,6 +1,6 @@
 require 'bigdecimal'
 require 'date'
-require 'jcode'
+require 'jcode' if RUBY_VERSION < '1.9'
 require 'net/http'
 require 'net/https'
 require 'time'

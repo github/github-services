@@ -79,7 +79,7 @@ class Service::Bugzilla < Service
 
   def post_bug_comment(bug, repository, commit_messages)
     # Post a comment on an individual bug
-    if commit_messages.length == 0:
+    if commit_messages.length == 0
       return
     end
     if commit_messages.length > 1
@@ -132,7 +132,7 @@ class Service::Bugzilla < Service
     def comment(first_line_only=false)
       # Comment contents for a commit
       output = "#{@url}\n"
-      if first_line_only:
+      if first_line_only
         output += @message.lines.first.strip
       else
         output += @message.strip
