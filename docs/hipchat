@@ -1,6 +1,11 @@
 HipChat
 =======
 
+Note: This service currently enables all of the available hook events including
+commit comments, downloads, forks, fork applies, wiki updates, issues, issue
+comments, member adds, pull requests, pushes, and watches. A full list with
+descriptions can be found here: https://github.com/blog/964-all-of-the-hooks
+
 Install Notes
 -------------
 
