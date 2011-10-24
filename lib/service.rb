@@ -93,6 +93,19 @@ class Service
       @services ||= []
     end
 
+    # Gets the default events that this Service will listen for.  This defines
+    # the default event configuration when Hooks are created on GitHub.  By
+    # default, GitHub Hooks will only send `push` events.
+    #
+    # Returns an Array of Strings (or Symbols).
+    def default_events(*events)
+      if events.empty?
+        @default_events ||= [:push]
+      else
+        @default_events = events
+      end
+    end
+
     # Gets the current schema for the data attributes that this Service
     # expects.  This schema is used to generate the GitHub repository admin
     # interface.  The attribute types loosely to HTML input elements.
