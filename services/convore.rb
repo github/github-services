@@ -7,7 +7,7 @@ class Service::Convore < Service
 
     repository  = payload['repository']['name']
     owner       = payload['repository']['owner']['name']
-    branch      = payload['ref_name']
+    branch      = branch_name
     commits     = payload['commits']
     compare_url = payload['compare']
     commits.reject! { |commit| commit['message'].to_s.strip == '' }

@@ -4,7 +4,7 @@ class Service::Talker < Service
 
   def receive_push
     repository = payload['repository']['name']
-    branch     = payload['ref_name']
+    branch     = branch_name
     commits    = payload['commits']
     token      = data['token']
 

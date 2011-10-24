@@ -9,7 +9,7 @@ class Service::StatusNet < Service
 
     if data['digest'] == '1'
       commit = payload['commits'][-1]
-      tiny_url = shorten_url(payload['repository']['url'] + '/commits/' + payload['ref_name'])
+      tiny_url = shorten_url("#{payload['repository']['url']}/commits/#{ref_name}")
       statuses.push "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{payload['commits'].length} commits"
     else
       payload['commits'].each do |commit|

@@ -12,7 +12,7 @@ class AMQPTest < Service::TestCase
         'owner' => {'name' => 'owner'},
         'name'  => 'owner/repo'
       },
-      'ref_name' => 'ref',
+      'ref' => 'refs/heads/ref',
       'commits' => [{
         'author' => {'email' => 'author@email.com'},
         'sha' => 'sha'

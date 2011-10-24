@@ -3,7 +3,7 @@ class Service::Rubyforge < Service
   password :password
   def receive_push
     repository = payload['repository']['name']
-    branch     = payload['ref_name']
+    branch     = ref_name
     payload['commits'].each do |commit|
       id        = commit['id']
       group_id  = data['groupid']

@@ -17,13 +17,13 @@ class Service::Notifo < Service
         http_post "send_notification",
           'to' => subscriber,
           'msg' => "#{author['name']}:  \"#{commit['message'].slice(0,40)}\" (+#{extras} more commits)",
-          'title' => "#{payload['repository']['name']}/#{payload['ref_name']}",
+          'title' => "#{payload['repository']['name']}/#{ref_name}",
           'uri' => payload['compare']
       else
         http_post "send_notification",
           'to' => subscriber,
           'msg' => "#{author['name']}:  \"#{commit['message']}\"",
-          'title' => "#{payload['repository']['name']}/#{payload['ref_name']}",
+          'title' => "#{payload['repository']['name']}/#{ref_name}",
           'uri' => commit['url']
       end
     end

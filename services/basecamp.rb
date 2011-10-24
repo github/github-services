@@ -6,7 +6,7 @@ class Service::Basecamp < Service
   def receive_push
     repository      = payload['repository']['name']
     name_with_owner = File.join(payload['repository']['owner']['name'], repository)
-    branch          = payload['ref_name']
+    branch          = ref_name
 
     commits = payload['commits'].reject { |commit| commit['message'].to_s.strip == '' }
     return if commits.empty?

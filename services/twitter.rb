@@ -9,7 +9,7 @@ class Service::Twitter < Service
     if data['digest'] == '1'
       commit = payload['commits'][-1]
       author = commit['author'] || {}
-      tiny_url = shorten_url(payload['repository']['url'] + '/commits/' + payload['ref_name'])
+      tiny_url = shorten_url("#{payload['repository']['url']}/commits/#{ref_name}")
       status = "[#{repository}] #{tiny_url} #{author['name']} - #{payload['commits'].length} commits"
       status.length >= 140 ? statuses << status[0..136] + '...' : statuses << status
     else

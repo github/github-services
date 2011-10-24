@@ -4,7 +4,7 @@ class Service::Grmble < Service
   def receive_push
     http.url_prefix = data['room_api_url'].to_s
     repository = payload[ 'repository' ][ 'name' ]
-    branch = payload[ 'ref_name' ]
+    branch  = branch_name
     commits = payload[ 'commits' ]
 
     commits.each do |commit|

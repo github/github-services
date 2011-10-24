@@ -10,7 +10,7 @@ class Service::FogBugz < Service
     http.ssl[:verify] = false
 
     repository  = payload['repository']['name']
-    branch      = payload['ref_name']
+    branch      = branch_name
     before      = payload['before']
 
     payload['commits'].each do |commit|

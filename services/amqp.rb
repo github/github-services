@@ -29,7 +29,7 @@ class Service::AMQP < Service
     # Generate the push routing key
     owner = payload['repository']['owner']['name']
     repo  = payload['repository']['name']
-    ref   = payload['ref_name']
+    ref   = ref_name
     routing_key = "github.push.#{owner}.#{repo}.#{ref}"
 
     # Assemble the push message

@@ -5,7 +5,7 @@ class Service::Unfuddle < Service
   def receive_push
     u_repoid    = data['repo_id'].to_i
     repository  = payload['repository']['name']
-    branch      = payload['ref_name']
+    branch      = branch_name
     before      = payload['before']
 
     http.url_prefix = "https://#{data['subdomain']}.unfuddle.com"

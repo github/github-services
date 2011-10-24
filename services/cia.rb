@@ -12,9 +12,9 @@ class Service::CIA < Service
 
     branch =
       if !(branch = data['branch'].to_s).empty?
-        branch % payload['ref_name']
+        branch % branch_name
       else
-        payload['ref_name']
+        ref_name
       end
 
     commits = payload['commits']
