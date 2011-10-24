@@ -8,8 +8,8 @@ class Service::Yammer < Service
     repository = payload['repository']['name']
 
     if data['digest'] == '1'
-      commit = payload['commits'][-1]
-      tiny_url = shorten_url(payload['repository']['url'] + '/commits/' + payload['ref_name'])
+      commit   = payload['commits'][-1]
+      tiny_url = shorten_url("#{payload['repository']['url']}/commits/#{payload['ref_name']}")
       statuses << "@#{commit['author']['name']} pushed #{payload['commits'].length}.  #{tiny_url} \##{repository}"
     else
       payload['commits'].each do |commit|
