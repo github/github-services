@@ -86,13 +86,13 @@ module Yammer
         when 200..201
           response
         when 400
-          raise "400 Bad request"
+          raise "Bad Request: #{response.body}"
         when 401
           raise  "Authentication failed. Check your username and password"
         when 503
           raise "503: Service Unavailable"
         else
-          raise "Error. HTTP Response #{response.code}"
+          raise "Error. HTTP Response #{response.code}: #{response.body}"
         end   
     end
 
