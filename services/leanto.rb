@@ -2,7 +2,7 @@ class Service::Leanto < Service
   string :token
 
   def receive_push
-    res = http_post "https://www.lean-to.com/api/%s/commit" %
+    res = http_post "http://www.lean-to.com/api/%s/commit" %
       [ data['token'] ],
       {'payload' => payload.to_json}
 
