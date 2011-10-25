@@ -44,7 +44,7 @@ private
   def execute_command(author, entity_id, command, commit_message)
     return if command.nil?
     # get the user's id
-    res = http_get "api/v1/Users", {:where = "(Email eq '%s')" % author}
+    res = http_get "api/v1/Users", {:where => "(Email eq '%s')" % author}
     valid_response?(res)
     author_id = begin Hash.from_xml(res.body)['Items']['User']['Id'] rescue nil end
     return if author_id.nil?
