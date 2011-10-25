@@ -4,7 +4,7 @@ Twilio
 Allows you to setup a GitHub repository to send out SMS messages on git pushes.
 Currently the SMS message is built to say:
 
-"#{payload['pusher']['name']} has pushed #{payload['commits'].size} commit(s) to #{payload['repository']['name']}"
+[pusher name] has pushed [# commits] commit(s) to [repository name]
 
 Install Notes
 -------------
