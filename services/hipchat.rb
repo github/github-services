@@ -2,10 +2,15 @@ class Service::HipChat < Service
   string :auth_token, :room
   boolean :notify
 
-  def receive_push
+  default_events :commit_comment, :download, :fork, :fork_apply, :gollum,
+    :issues, :issue_comment, :member, :public, :pull_request, :push, :watch
+
+  def receive_event
     # make sure we have what we need
     raise_config_error "Missing 'auth_token'" if data['auth_token'].to_s == ''
     raise_config_error "Missing 'room'" if data['room'].to_s == ''
+
+    http.headers['X-GitHub-Event'] = event.to_s
 
     res = http_post "https://api.hipchat.com/v1/webhooks/github",
       :auth_token => data['auth_token'],

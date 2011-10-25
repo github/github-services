@@ -13,13 +13,15 @@ class TargetProcessTest < Service::TestCase
       [200, {}, '<Context Acid="ZOMG"><Processes><ProcessInfo Id="OMGWTFBBQ" Name="U mad bro"></ProcessInfo></Processes></Context>']
     end
 
-    @stubs.get "/tp/api/v1/Users?include=%5BEmail%5D" do |env|
+    @stubs.get "/tp/api/v1/Users?where=(Email%20eq%20'jonnyfunfun@gmail.com')" do |env|
       assert_equal basic_auth('uz0r', 'p455w0rd'), env[:request_headers]['authorization']
+      assert_equal "(Email eq 'jonnyfunfun@gmail.com')", env[:params]['where']
       [200, {}, '<Items><User Id="31337"><Email>jonnyfunfun@gmail.com</Email></User><User Id="3"><Email>foobar@snafu.com</Email></User></Items>']
     end
 
-    @stubs.get "/tp/api/v1/Processes/OMGWTFBBQ/EntityStates" do |env|
+    @stubs.get "/tp/api/v1/Processes/OMGWTFBBQ/EntityStates?where(Name%20eq%20'fubar')%20and%20(EntityType.Name%20eq%20'Bug')" do |env|
       assert_equal 'ZOMG', env[:params]['acid']
+      assert_equal "(Name eq 'fubar') and (EntityType.Name eq 'Bug')", env[:params]['where']
       assert_equal basic_auth('uz0r', 'p455w0rd'), env[:request_headers]['authorization']
       [200, {}, '<Items><EntityState Name="fubar" Id="21"/><EntityState Name="not me" Id="0"/></Items>']
     end
