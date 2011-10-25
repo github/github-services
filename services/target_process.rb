@@ -42,57 +42,33 @@ private
   end
 
   def execute_command(author, entity_id, command, commit_message)
+    return if command.nil?
     # get the user's id
-    res = http_get "api/v1/Users", :include => '[Email]'
+    res = http_get "api/v1/Users", {:where = "(Email eq '%s')" % author}
     valid_response?(res)
-    author_id = nil
-    Hash.from_xml(res.body)['Items']['User'].each do |u|
-      if u['Email'] == author
-        author_id = u['Id']
-        break
-      end
-    end
+    author_id = begin Hash.from_xml(res.body)['Items']['User']['Id'] rescue nil end
     return if author_id.nil?
     # get Context data for our project
     res = http_get "api/v1/Context", :ids => @project_id
     valid_response?(res)
     context_data = Hash.from_xml res.body
     acid = context_data['Context']['Acid']
-    if !command.nil?
-      # Gather the next state ID
-      res = http_get "api/v1/Processes/%s/EntityStates" % [context_data['Context']['Processes']['ProcessInfo']['Id']],
-          :acid => acid
-      valid_response?(res)
-      new_state = nil
-      Hash.from_xml(res.body)['Items']['EntityState'].each do |s|
-        if s['Name'] == command
-          new_state = s['Id']
-          break
-        end
-      end
-      return if new_state.nil?
-    end
     # get the assignable's type
     res = http_get "api/v1/Assignables/%s" % entity_id, {:include => '[EntityType]', :acid => acid}
     valid_response?(res)
     assignable = Hash.from_xml res.body
     return if assignable.nil?
     entity_type = assignable['Assignable']['EntityType']['Name']
+    # Gather next state's ID
+    res = http_get "api/v1/Processes/%s/EntityStates" % [context_data['Context']['Processes']['ProcessInfo']['Id']],
+        {:where => "(Name eq %s) and (EntityType.Name eq %s)" % [command, entity_state], :acid => acid}
+    valid_response?(res)
+    new_state = begin Hash.from_xml(res.body)['Items']['EntityState']['Id'] rescue nil end
     # Make it happen
     http.headers['Content-Type'] = 'application/json'
     valid_response?(http_post "api/v1/Comments", "{General: {Id: #{entity_id}}, Description: '#{commit_message}', Owner: {Id: #{author_id}}}")
-    if !command.nil?
-      case entity_type
-      when "UserStory"
-          call = "UserStories"
-      when "Bug"
-          call = "Bugs"
-      when "Task"
-          call = "Tasks"
-      else
-          return
-      end
-      valid_response?(http_post "api/v1/%s" % call, "{Id: #{entity_id}, EntityState: {Id: #{new_state}}}")
+    if !command.nil? and !new_state.nil?
+      valid_response?(http_post "api/v1/%s" % ((entity_type == "UserStory") ? "UserStories" : entity_type+'s'), "{Id: #{entity_id}, EntityState: {Id: #{new_state}}}")
     end
   end
 end
