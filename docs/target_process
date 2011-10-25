@@ -14,7 +14,7 @@ Install Notes
 
 1. TargetProcess Requirements
 
-  - Requires TargetProcess version 2.22 or above.
+  - Requires TargetProcess version 2.22.4.19887 or newer.
 
   - Your TargetProcess must should be accessible from the internet.
 
@@ -42,7 +42,7 @@ General comment format for adding comments and/or changing entity states:
 	Eg: Fixed out of memory exceptions #1221:Fixed
 
 
-The entire line will appear as a comment in your User Story, Bug, or Task; and the entity's
+The entire line will appear as a comment in your User Story, Bug, Feature, or Task; and the entity's
 state will be changed to the state name, if specified.  A new state is not required, and an
 Assignable's state will not change unless it is specified.  Entity ID is required.  This 
 text sequence can appear anywhere in your commit message.
