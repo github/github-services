@@ -11,11 +11,15 @@ module Service::PullRequestHelpers
   end
 
   def summary_message
+    base_ref = pull.base.label.split(':').last
+    head_ref = pull.head.label.split(':').last
+
     "[%s] %s opened pull request #%d (%s -> %s): %s. %s" % [
       repo.name,
       pull.user.login,
       pull.number,
-      pull.base.label.split(':').last, pull.head.label.split(':').last,
+      base_ref,
+      head_ref != base_ref ? head_ref : pull.head.label,
       pull.title,
       pull.html_url]
   rescue
