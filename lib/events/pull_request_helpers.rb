@@ -15,7 +15,7 @@ module Service::PullRequestHelpers
       repo.name,
       pull.user.login,
       pull.number,
-      pull.base.label.split(':').last, pull.head.label,
+      pull.base.label.split(':').last, pull.head.label.split(':').last,
       pull.title,
       pull.html_url]
   rescue
