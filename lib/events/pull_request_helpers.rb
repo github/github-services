@@ -11,11 +11,12 @@ module Service::PullRequestHelpers
   end
 
   def summary_message
-    "[%s] %s - %s. %s -> %s %s" % [
+    "[%s] Pull Request #%d (%s -> %s): %s - @%s. %s" % [
       repo.name,
+      pull.number,
+      pull.base.label.split(':').last, pull.head.label,
       pull.title,
       pull.user.login,
-      pull.base.label, pull.head.label,
       pull.html_url]
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"

@@ -11,8 +11,9 @@ module Service::IssueHelpers
   end
 
   def summary_message
-    "[%s] %s - %s. %s" % [
+    "[%s] Issue #%d: %s - @%s. %s" % [
       repo.name,
+      issue.number,
       issue.title,
       issue.user.login,
       issue.html_url]
