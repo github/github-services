@@ -43,7 +43,7 @@ class Service::CIA < Service
   def deliver(message)
     xmlrpc_server.call("hub.deliver", message)
   rescue StandardError => err
-    if $!.to_s =~ /content\-type/i
+    if $!.to_s =~ /content\-type/i || $!.to_s =~ /HTTP\-Error/i
       raise_config_error "Check the CIA Address: #{$!.message}"
     else
       raise
