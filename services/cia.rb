@@ -21,12 +21,12 @@ class Service::CIA < Service
 
     if commits.size > 5
       message = build_cia_commit(repository, branch, payload['after'], commits.last, commits.size - 1)
-      xmlrpc_server.call("hub.deliver", message)
+      deliver(message)
     else
       commits.each do |commit|
         sha1 = commit['id']
         message = build_cia_commit(repository, branch, sha1, commit)
-        xmlrpc_server.call("hub.deliver", message)
+        deliver(message)
       end
     end
   end
@@ -37,6 +37,16 @@ class Service::CIA < Service
       XMLRPC::Client.new2(
         (address = data['address'].to_s).present? ?
           address : 'http://cia.vc')
+    end
+  end
+  
+  def deliver(message)
+    xmlrpc_server.call("hub.deliver", message)
+  rescue StandardError => err
+    if $!.to_s =~ /content\-type/i
+      raise_config_error "Check the CIA Address: #{$!.message}"
+    else
+      raise
     end
   end
 
