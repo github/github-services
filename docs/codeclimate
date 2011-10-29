@@ -1,0 +1,19 @@
+Code Climate
+============
+
+Install Notes
+-------------
+
+1. Create an account at https://codeclimate.com
+2. Enter your Token (see instructions below)
+
+To get your Token: Log into your Code Climate account, click the gear icon at the top-right, then click the Integration tab.
+
+Developer Notes
+---------------
+
+data
+  - token
+
+payload
+  - refer to docs/github_payload
