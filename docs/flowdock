@@ -1,7 +1,8 @@
 Flowdock
 ==========
 
-Broadcast this project's commits to the Influx of your flow.
+Broadcast this project's commits, pull requests, and issues and their
+respective comments to Flowdock.
 
 Install Notes
 -------------
