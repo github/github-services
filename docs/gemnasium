@@ -1,0 +1,22 @@
+Gemnasium
+=========
+
+Install Notes
+-------------
+
+Gemnasium notifies you when new versions are released for your GitHub repositories' gem dependencies.
+
+----
+
+1.  Enter your GitHub name
+2.  Create an account on [gemnasium.com](http://gemnasium.com/)
+3.  Enter your API key (from [gemnasium.com/account](http://gemnasium.com/account))
+4.  Check "Active"
+5.  Click "Update Settings"
+
+Developer Notes
+---------------
+
+    data
+      - name
+      - token
