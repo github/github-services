@@ -31,7 +31,8 @@ class TwilioTest < Service::TestCase
       'account_sid' => 'account_sid',
       'auth_token' => 'auth_token',
       'from_phone' => '+12223334444',
-      'to_phone' => '+15556667777'
+      'to_phone' => '+15556667777',
+      'master_only' => '0'
     }
     @payload = {
       "after"   => "a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
@@ -67,17 +68,43 @@ class TwilioTest < Service::TestCase
       ]
     }
   end
-  
-  def test_push    
+
+  def test_push
     svc = service(@data, @payload)
     assert_equal 1, @payload['commits'].size
     assert_equal 'rtomayko', @payload['pusher']['name']
     assert_equal 'grit', @payload['repository']['name']
-    
+
     @stubs.post "/2010-04-01/Accounts/account_sid/SMS/Messages.json" do |env|
       [200, {}, '']
     end
-    
+
+    twilio_response = svc.receive_push
+    assert twilio_response.is_a?(Twilio::REST::Message)
+    assert_equal 'rtomayko has pushed 1 commit(s) to grit', twilio_response.body
+  end
+
+  def test_push_master_only_on_non_master
+    non_master_payload = @payload
+    non_master_payload["ref"] = "refs/heads/non-master"
+
+    data_with_master_only = @data
+    data_with_master_only['master_only'] = 1
+
+    svc = service(data_with_master_only, non_master_payload)
+    twilio_response = svc.receive_push
+    assert_equal twilio_response, nil
+  end
+
+  def test_push_master_only_on_master
+    data_with_master_only = @data
+    data_with_master_only['master_only'] = 1
+
+    @stubs.post "/2010-04-01/Accounts/account_sid/SMS/Messages.json" do |env|
+      [200, {}, '']
+    end
+
+    svc = service(data_with_master_only, @payload)
     twilio_response = svc.receive_push
     assert twilio_response.is_a?(Twilio::REST::Message)
     assert_equal 'rtomayko has pushed 1 commit(s) to grit', twilio_response.body
