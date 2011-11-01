@@ -27,7 +27,7 @@ class Service::Gemnasium < Service
   end
 
   def url
-    "http://gemnasium.com/repositories/hook"
+    "https://gemnasium.com/repositories/hook"
   end
 
   def headers
