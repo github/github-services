@@ -4,6 +4,10 @@ class Service::MWAPI < Service
   password :pass
   # A MediaWiki hook. Given the URL to the MediaWiki install's API, a page name, a user name and a password to the user, will post a commit log on the wiki.
   def receive_push
+    return if data['user'] == nil
+    return if data['pass'] == nil
+    return if data['url'] == nil
+    return if data['title'] == nil
     # The line we add looks like: <msg> <commit URL>
     line_add = "\n* #{summary_message}: #{summary_url}"
     # Log in to the install.
