@@ -12,7 +12,8 @@ class Service::MWAPI < Service
     # Good. Fetch page if it exists somehow.
     page_text = mw.get(data['title'])
     if page_text == nil
-      mw.create(data['title'], ' ', :summary => 'Creating page -- did not exist during push')
+      mw.create(data['title'], '<!-- autocreated -->', :summary => 'Creating page -- did not exist during push')
+      page_text = ""
     end
     # Append our line to the end of the page_text
     page_text << line_add
