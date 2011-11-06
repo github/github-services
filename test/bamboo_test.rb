@@ -32,6 +32,30 @@ class BambooTest < Service::TestCase
     @stubs.verify_stubbed_calls
   end
 
+  def test_triggers_compound_build
+    @stubs.post "/api/rest/login.action" do |env|
+      assert_equal "username=admin&password=pwd", env[:body]
+      [200, {}, '<response><auth>TOKEN123</auth></response>']
+    end
+    @stubs.post "/api/rest/executeBuild.action" do |env|
+      assert_equal "auth=TOKEN123&buildKey=ABC", env[:body]
+      [200, {}, '<response></response>']
+    end
+    @stubs.post "/api/rest/executeBuild.action" do |env|
+      assert_equal "auth=TOKEN123&buildKey=A", env[:body]
+      [200, {}, '<response></response>']
+    end
+    @stubs.post "/api/rest/logout.action" do |env|
+      assert_equal "auth=TOKEN123", env[:body]
+      [200, {}, '']
+    end
+
+    svc = service :push, compound_data1, payload
+    svc.receive
+
+    @stubs.verify_stubbed_calls
+  end
+
   def test_triggers_build_with_context_path
     @stubs.post "/context/api/rest/login.action" do |env|
       assert_equal "username=admin&password=pwd", env[:body]
@@ -149,6 +173,15 @@ class BambooTest < Service::TestCase
   def data
     {
       "build_key" => "ABC",
+      "base_url" => EXAMPLE_BASE_URL,
+      "username" => "admin",
+      "password" => 'pwd'
+    }
+  end
+
+  def compound_data1
+    {
+      "build_key" => "ABC,master:A,rel-1-patches:B,rel-2-patches:C",
       "base_url" => EXAMPLE_BASE_URL,
       "username" => "admin",
       "password" => 'pwd'
