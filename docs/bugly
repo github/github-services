@@ -10,8 +10,11 @@ Install Notes
 -------------
 
   1. 'token' (REQUIRED) is an API token with read/write access to the 
-     account/project. Go to Control Panel, Users, click on a user, 
-     click the API Tokens tab, then click New token to create a new token.
+     account/project. Click the '+' sign in the lower left corner of
+     your Bugly account, then click New token to create a new token
+     for your user. Or click Quick Access, then the user you wish to
+     create a token for, then click the API tokens tab, then click
+     New API token.
 
   2. 'account_name' (REQUIRED) is your Bugly account name. It would be 
      'foobar' in the following URL: http://foobar.bug.ly/
