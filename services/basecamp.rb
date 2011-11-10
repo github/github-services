@@ -4,6 +4,8 @@ class Service::Basecamp < Service
   boolean  :ssl
 
   def receive_push
+    raise_config_error "Invalid basecamp domain" if basecamp_domain.nil?
+
     repository      = payload['repository']['name']
     name_with_owner = File.join(payload['repository']['owner']['name'], repository)
     branch          = ref_name
