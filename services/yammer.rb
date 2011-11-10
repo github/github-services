@@ -35,6 +35,12 @@ class Service::Yammer < Service
 
   def send_message(params)
     yammer.message(:post, params)
+  rescue RuntimeError => boom
+    if boom.to_s =~ /Bad Request/i
+      raise_config_error boom.to_s
+    else
+      raise
+    end
   end
 
   def yammer
