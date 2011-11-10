@@ -28,8 +28,7 @@ class Service::App < Sinatra::Base
         status 400
         boom.message
       rescue Service::TimeoutError => boom
-        status 504
-        report_exception svc, data, boom
+        status 400
         "Service Timeout"
       rescue Object => boom
         report_exception svc, data, boom
