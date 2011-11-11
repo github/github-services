@@ -12,6 +12,8 @@ class Service::Gemnasium < Service
 
   def user
     data["user"].strip
+  rescue
+    raise_config_error "Invalid user value"
   end
 
   def signature
@@ -20,6 +22,8 @@ class Service::Gemnasium < Service
 
   def token
     data["token"].strip.downcase
+  rescue
+    raise_config_error "Invalid token value"
   end
 
   def body
