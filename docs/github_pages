@@ -1,0 +1,18 @@
+GitHub Pages
+============
+
+GitHub Pages is a service hook that lets you trigger Pages rebuilds from repository events. Just pick the events you want to trigger a rebuild with.
+
+
+Developer Notes
+---------------
+
+data
+  - gollum
+  - issues
+  - issue_comment
+  - push
+  - commit_comment
+
+payload
+  - refer to docs/github_payload
