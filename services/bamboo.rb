@@ -15,28 +15,25 @@ class Service::Bamboo < Service
   end
 
   def trigger_build(token, ref)
-    #Split build_keys by comma
-    build_key.split(',').each { |branchKey|
-    
-        #See if the split result is just a key or a branch:key 
-        parts = branchKey.split(':')
-        key = parts[0]
-        if (parts.length == 2)
-            branch = parts[0]
-            key = parts[1]
-            
-            #Has a branch, verify it matches the branch for the commit
-            if (branch != ref.split("/").last)
-                next                
-            end
-        end
+    commit_branch = ref.split('/').last
+
+    build_key.split(',').each do |branch_key|
+      #See if the split result is just a key or a branch:key 
+      parts = branch_key.split(':')
+      key = parts[0]
+      if parts.length == 2
+        branch = parts[0]
+        key = parts[1]
         
-        #Start the build
-        res = http_post "api/rest/executeBuild.action",
-          "auth=#{CGI.escape(token)}&buildKey=#{CGI.escape(key)}"
-        msg = XmlSimple.xml_in(res.body)
-        raise_config_error msg["error"] if msg["error"]
-    }
+        #Has a branch, verify it matches the branch for the commit
+        next unless branch == commit_branch
+      end
+      
+      res = http_post "api/rest/executeBuild.action",
+        :auth => token, :buildKey => key
+      msg = XmlSimple.xml_in(res.body)
+      raise_config_error msg["error"] if msg["error"]
+    end
   end
 
   def authenticated
