@@ -14,11 +14,11 @@ class BambooTest < Service::TestCase
 
   def test_triggers_build
     @stubs.post "/api/rest/login.action" do |env|
-      assert_equal "username=admin&password=pwd", env[:body]
+      assert_params env[:body], :username => 'admin', :password => 'pwd'
       [200, {}, '<response><auth>TOKEN123</auth></response>']
     end
     @stubs.post "/api/rest/executeBuild.action" do |env|
-      assert_equal "auth=TOKEN123&buildKey=ABC", env[:body]
+      assert_params env[:body], :auth => "TOKEN123", :buildKey => "ABC"
       [200, {}, '<response></response>']
     end
     @stubs.post "/api/rest/logout.action" do |env|
@@ -34,15 +34,15 @@ class BambooTest < Service::TestCase
 
   def test_triggers_compound_build
     @stubs.post "/api/rest/login.action" do |env|
-      assert_equal "username=admin&password=pwd", env[:body]
+      assert_params env[:body], :username => 'admin', :password => 'pwd'
       [200, {}, '<response><auth>TOKEN123</auth></response>']
     end
     @stubs.post "/api/rest/executeBuild.action" do |env|
-      assert_equal "auth=TOKEN123&buildKey=ABC", env[:body]
+      assert_params env[:body], :auth => "TOKEN123", :buildKey => "ABC"
       [200, {}, '<response></response>']
     end
     @stubs.post "/api/rest/executeBuild.action" do |env|
-      assert_equal "auth=TOKEN123&buildKey=A", env[:body]
+      assert_params env[:body], :auth => "TOKEN123", :buildKey => "A"
       [200, {}, '<response></response>']
     end
     @stubs.post "/api/rest/logout.action" do |env|
@@ -58,11 +58,11 @@ class BambooTest < Service::TestCase
 
   def test_triggers_build_with_context_path
     @stubs.post "/context/api/rest/login.action" do |env|
-      assert_equal "username=admin&password=pwd", env[:body]
+      assert_params env[:body], :username => 'admin', :password => 'pwd'
       [200, {}, '<response><auth>TOKEN123</auth></response>']
     end
     @stubs.post "/context/api/rest/executeBuild.action" do |env|
-      assert_equal "auth=TOKEN123&buildKey=ABC", env[:body]
+      assert_params env[:body], :auth => "TOKEN123", :buildKey => "ABC"
       [200, {}, '<response></response>']
     end
     @stubs.post "/context/api/rest/logout.action" do |env|
@@ -79,11 +79,11 @@ class BambooTest < Service::TestCase
 
   def test_passes_build_error
     @stubs.post "/api/rest/login.action" do |env|
-      assert_equal "username=admin&password=pwd", env[:body]
+      assert_params env[:body], :username => 'admin', :password => 'pwd'
       [200, {}, '<response><auth>TOKEN123</auth></response>']
     end
     @stubs.post "/api/rest/executeBuild.action" do |env|
-      assert_equal "auth=TOKEN123&buildKey=ABC", env[:body]
+      assert_params env[:body], :auth => "TOKEN123", :buildKey => "ABC"
       [200, {}, '<response><error>oh hai</error></response>']
     end
     @stubs.post "/api/rest/logout.action" do |env|
@@ -186,6 +186,23 @@ class BambooTest < Service::TestCase
       "username" => "admin",
       "password" => 'pwd'
     }
+  end
+
+  # Assert the value of the params.
+  #
+  # body     - A String of form-encoded params: "a=1&b=2"
+  # expected - A Hash of String keys and values to match against the body.
+  #
+  # Raises Test::Unit::AssertionFailedError if the assertion doesn't match.
+  # Returns nothing.
+  def assert_params(body, expected)
+    params = Rack::Utils.parse_query(body)
+    expected.each do |key, expected_value|
+      assert value = params.delete(key.to_s), "#{key} not in #{params.inspect}"
+      assert_equal expected_value, value, "#{key} = #{value.inspect}, not #{expected_value.inspect}"
+    end
+
+    assert params.empty?, "params has other values: #{params.inspect}"
   end
 
   def service(*args)

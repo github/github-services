@@ -44,8 +44,7 @@ class Service::Bamboo < Service
   end
 
   def login
-    res = http_post "api/rest/login.action",
-      "username=#{CGI.escape(username)}&password=#{CGI.escape(password)}"
+    res = http_post "api/rest/login.action", :username => username, :password => password
     case res.status
       when 200..204
         XmlSimple.xml_in(res.body)['auth'].first
