@@ -1,5 +1,5 @@
 class Service::Bugzilla < Service
-  string   :server_url, :username
+  string   :server_url, :username, :integration_branch
   password :password
   boolean  :central_repository
 
@@ -14,6 +14,10 @@ class Service::Bugzilla < Service
     if data['password'].to_s.empty?
       raise_config_error "password not set"
     end
+
+    # Don't operate on these commits unless this is our "integration" (i.e. main) branch,
+    # as defined by the user. If no integration_branch is set, we operate on all commits.
+    return unless integration_branch?
 
     # Post comments on all bugs identified in commits
     repository = payload['repository']['url'].to_s
@@ -38,6 +42,18 @@ class Service::Bugzilla < Service
     if data['central_repository']
       close_bugs(bugs_to_close)
     end
+  end
+
+  # Name of the branch for this payload; nil if it isn't branch-related.
+  def branch
+    return @branch if defined?(@branch)
+
+    matches = payload['ref'].match(/^refs\/heads\/(.*)$/)
+    @branch = matches ? matches[1] : nil
+  end
+
+  def integration_branch?
+    data['integration_branch'].to_s.empty? or data['integration_branch'].to_s == branch.to_s
   end
 
   attr_writer :xmlrpc_client # Can define own server for testing
@@ -139,6 +155,5 @@ class Service::Bugzilla < Service
       end
       return output
     end
-
   end
 end

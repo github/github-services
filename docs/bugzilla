@@ -13,6 +13,14 @@ Multiple bugs can also be specified by separating them with a comma,
 apersand, plus or "and":
   - Bug 123, 124 and 125
 
+If the "Integration Branch" option is filled in, only commits to that branch
+will result in bugs being modified. This is useful for disabling premature bug
+closing/comments when working on feature branches.
+
+If "Integration Branch" is not set, commits to *all* branches will be
+processed. If you only want to update Bugzilla when you push to your "main"
+branch: you probably want to set this to "master".
+
 If the central repository option is enabled and there is a "fix",
 "close", or "address" before the bug then that bug is closed.
 
@@ -27,8 +35,11 @@ and >= 4.0 to be able to close bugs.
 Settings
 --------
 
-  - server_url - The URL for the Bugzilla installation, eg http://bugzilla.mozilla.org/
+  - server_url - The URL for the Bugzilla installation,
+    eg `https://bugzilla.mozilla.org/`
   - username - Email address for Bugzilla user account
   - password - Password for the user account
-  - central_repository - Set to true to enable closing bugs and commenting on commits that were
-    already pushed to another user's repository
+  - integration_branch - If entered, only commits to this branch will result
+    in bugs being closed
+  - central_repository - Set to true to enable closing bugs and commenting on
+    commits that were already pushed to another user's repository
