@@ -20,6 +20,40 @@ class BugzillaTest < Service::TestCase
     assert @server.bug_posts[3].include? '5057e76a11abd02e83b7d3d3171c4b68d9c88480'
   end
 
+  # Verify pushes will be processed on all commits if no integration branch is specified.
+  def test_integration_branch_is_optional
+    modified_payload = modify_payload(payload)
+    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'central_repository' => true}, modified_payload)
+    svc.xmlrpc_client = @server
+    svc.receive_push
+
+    assert @server.closed_bugs.include?(1)
+    assert @server.bug_posts.include?(4)
+  end
+
+  # Verify commits are only processed if they are in our integration branch.
+  def test_integration_branch
+    # No commits should be processed for this push because we're only listening for
+    # commits landing on the "master" branch.
+    modified_payload = modify_payload(payload).merge({'ref' => 'refs/heads/development'})
+    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'integration_branch' => 'master', 'central_repository' => true}, modified_payload)
+    svc.xmlrpc_client = @server
+    svc.receive_push
+
+    assert @server.closed_bugs.length == 0
+    assert @server.bug_posts.length == 0
+
+    # This time, we should close a bug and post 4 comments because these commits were
+    # pushed to our integration branch.
+    modified_payload = modify_payload(payload).merge({'ref' => 'refs/heads/master'})
+    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'integration_branch' => 'master', 'central_repository' => true}, modified_payload)
+    svc.xmlrpc_client = @server
+    svc.receive_push
+
+    assert @server.closed_bugs.include?(1)
+    assert @server.bug_posts.include?(4)
+  end
+
   def test_central_push
     #test pushing to a central repository
     modified_payload = modify_payload(payload)
