@@ -4,7 +4,8 @@ class Service::Bamboo < Service
 
   def receive_push
     verify_config
-    authenticated { |token| trigger_build(token) }
+    branch = payload['ref']
+    authenticated { |token| trigger_build(token, branch) }
   rescue SocketError => e
     if e.to_s =~ /getaddrinfo: Name or service not known/
       raise_config_error("Invalid Bamboo host name")
@@ -13,11 +14,29 @@ class Service::Bamboo < Service
     end
   end
 
-  def trigger_build(token)
-    res = http_post "api/rest/executeBuild.action",
-      "auth=#{CGI.escape(token)}&buildKey=#{CGI.escape(build_key)}"
-    msg = XmlSimple.xml_in(res.body)
-    raise_config_error msg["error"] if msg["error"]
+  def trigger_build(token, ref)
+    #Split build_keys by comma
+    build_key.split(',').each { |branchKey|
+    
+        #See if the split result is just a key or a branch:key 
+        parts = branchKey.split(':')
+        key = parts[0]
+        if (parts.length == 2)
+            branch = parts[0]
+            key = parts[1]
+            
+            #Has a branch, verify it matches the branch for the commit
+            if (branch != ref.split("/").last)
+                next                
+            end
+        end
+        
+        #Start the build
+        res = http_post "api/rest/executeBuild.action",
+          "auth=#{CGI.escape(token)}&buildKey=#{CGI.escape(key)}"
+        msg = XmlSimple.xml_in(res.body)
+        raise_config_error msg["error"] if msg["error"]
+    }
   end
 
   def authenticated
