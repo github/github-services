@@ -17,7 +17,7 @@ class EmailTest < Service::TestCase
 
   def test_multiple_addresses
     svc = service(
-      {'addresses' => ' a b '},
+      {'addresses' => ' a b c'},
       payload)
 
     svc.receive_push
@@ -30,6 +30,7 @@ class EmailTest < Service::TestCase
     assert_match "noreply@github.com", from
     assert_equal 'b', to
 
+    # 3rd address ignored
     assert_nil svc.messages.shift
   end
 

@@ -65,7 +65,7 @@ class Service::Email < Service
     commit = payload['commits'].last # assume that the last committer is also the pusher
 
     begin
-      data['addresses'].split(' ').each do |address|
+      data['addresses'].split(' ').slice(0, 2).each do |address|
         message = TMail::Mail.new
         message.set_content_type('text', 'plain', {:charset => 'UTF-8'})
         message.from = "#{commit['author']['name']} <#{commit['author']['email']}>" if data['send_from_author']
