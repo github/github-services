@@ -1,5 +1,5 @@
 class Service::Email < Service
-  string :address, :secret
+  string :addresses, :secret
   boolean :send_from_author
 
   def receive_push
@@ -65,28 +65,30 @@ class Service::Email < Service
     commit = payload['commits'].last # assume that the last committer is also the pusher
 
     begin
-      message = TMail::Mail.new
-      message.set_content_type('text', 'plain', {:charset => 'UTF-8'})
-      message.from = "#{commit['author']['name']} <#{commit['author']['email']}>" if data['send_from_author']
-      message.reply_to = "#{commit['author']['name']} <#{commit['author']['email']}>" if data['send_from_author']
-      message.to      = data['address']
-      message.subject = "[#{name_with_owner}] #{first_commit_sha}: #{first_commit_title}"
-      message.body    = body
-      message.date    = Time.now
-
-      message['Approved'] = data['secret'] if data['secret'].to_s.size > 0
-
-      if data['send_from_author']
-        send_message message, "#{commit['author']['name']} <#{commit['author']['email']}>", data['address']
-      else
-        send_message message, "GitHub <noreply@github.com>", data['address']
+      data['addresses'].split(' ').each do |address|
+        message = TMail::Mail.new
+        message.set_content_type('text', 'plain', {:charset => 'UTF-8'})
+        message.from = "#{commit['author']['name']} <#{commit['author']['email']}>" if data['send_from_author']
+        message.reply_to = "#{commit['author']['name']} <#{commit['author']['email']}>" if data['send_from_author']
+        message.to      = address
+        message.subject = "[#{name_with_owner}] #{first_commit_sha}: #{first_commit_title}"
+        message.body    = body
+        message.date    = Time.now
+  
+        message['Approved'] = data['secret'] if data['secret'].to_s.size > 0
+  
+        if data['send_from_author']
+          send_message message, "#{commit['author']['name']} <#{commit['author']['email']}>", address
+        else
+          send_message message, "GitHub <noreply@github.com>", address
+        end
       end
     end
   end
 
   def smtp_settings
     @smtp_settings ||= begin
-      args = [ email_config['address'], (email_config['port'] || 25).to_i, (email_config['domain'] || 'localhost.localdomain') ]
+      args = [ email_config['addresses'], (email_config['port'] || 25).to_i, (email_config['domain'] || 'localhost.localdomain') ]
       if email_config['authentication']
         args.push email_config['user_name'], email_config['password'], email_config['authentication']
       end
