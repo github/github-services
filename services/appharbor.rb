@@ -8,7 +8,7 @@ class Service::AppHarbor < Service
     raise_config_error 'Missing application slug' if slugs.to_s.empty?
     raise_config_error 'Missing token' if token.to_s.empty?
 
-    post_appharbor_message(slugs, token)
+    slugs.split(",").each{|slug| post_appharbor_message(slug, token)}
   end
 
 private

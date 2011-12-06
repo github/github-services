@@ -9,6 +9,10 @@ class AppHarborTest < Service::TestCase
     test_push 'foo', 'bar'
   end
 
+  def test_multiple_slugs_push
+    test_push 'foo,bar', 'baz'
+  end
+
   def service(*args)
     super Service::AppHarbor, *args
   end
