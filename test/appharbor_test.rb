@@ -16,8 +16,10 @@ class AppHarborTest < Service::TestCase
 private
 
   def test_push(application_slugs, token)
-    @stubs.post "/application/#{application_slugs}/build" do |env|
-      verify_appharbor_payload(token, env)
+    application_slugs.split(",").each do |slug|
+      @stubs.post "/application/#{slug}/build" do |env|
+        verify_appharbor_payload(token, env)
+      end
     end
 
     svc = service({'token' => token, 'application_slugs' => application_slugs}, payload)
