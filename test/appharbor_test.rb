@@ -15,12 +15,12 @@ class AppHarborTest < Service::TestCase
 
 private
 
-  def test_push(application_slug, token)
-    @stubs.post "/application/#{application_slug}/build" do |env|
+  def test_push(application_slugs, token)
+    @stubs.post "/application/#{application_slugs}/build" do |env|
       verify_appharbor_payload(token, env)
     end
 
-    svc = service({'token' => token, 'application_slug' => application_slug}, payload)
+    svc = service({'token' => token, 'application_slugs' => application_slugs}, payload)
     svc.receive_push
 
     @stubs.verify_stubbed_calls
