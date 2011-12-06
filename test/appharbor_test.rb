@@ -5,10 +5,17 @@ class AppHarborTest < Service::TestCase
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
 
-  def test_push
-    application_slug = 'foo'
-    token = 'bar'
+  def test_single_slug_push
+    test_push 'foo', 'bar'
+  end
 
+  def service(*args)
+    super Service::AppHarbor, *args
+  end
+
+private
+
+  def test_push(application_slug, token)
     @stubs.post "/application/#{application_slug}/build" do |env|
       verify_appharbor_payload(token, env)
     end
@@ -18,12 +25,6 @@ class AppHarborTest < Service::TestCase
 
     @stubs.verify_stubbed_calls
   end
-
-  def service(*args)
-    super Service::AppHarbor, *args
-  end
-
-private
 
   def verify_appharbor_payload(token, env)
     assert_equal token, env[:params]['authorization']
