@@ -30,4 +30,5 @@ The secrets.yml file should include an entry for the consumer keys github needs 
       key: <get it from twitter> 
       secret: <get it from twitter>
 
-The domain name can be taken from the CNAME file automatically
+The domain field is required. It contains custom domain or '<repository_owner>.github.com'
+The custom domain name can be taken from the CNAME file automatically.
