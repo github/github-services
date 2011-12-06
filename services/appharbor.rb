@@ -13,8 +13,8 @@ class Service::AppHarbor < Service
 
 private
 
-  def post_appharbor_message(slugs, token)
-    create_build_url = "https://appharbor.com/application/#{slugs}/build?authorization=#{token}"
+  def post_appharbor_message(slug, token)
+    create_build_url = "https://appharbor.com/application/#{slug}/build?authorization=#{token}"
 
     commit = distinct_commits.last
     appharbor_message = {
