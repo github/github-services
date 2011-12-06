@@ -24,6 +24,8 @@ class AppHarborTest < Service::TestCase
 
     svc = service({'token' => token, 'application_slug' => application_slug}, payload)
     svc.receive_push
+
+    @stubs.verify_stubbed_calls
   end
 
   def service(*args)
