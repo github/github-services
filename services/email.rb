@@ -1,5 +1,5 @@
 class Service::Email < Service
-  string :addresses, :secret
+  string :address, :secret
   boolean :send_from_author
 
   def receive_push
@@ -65,7 +65,7 @@ class Service::Email < Service
     commit = payload['commits'].last # assume that the last committer is also the pusher
 
     begin
-      data['addresses'].split(' ').slice(0, 2).each do |address|
+      data['address'].split(' ').slice(0, 2).each do |address|
         message = TMail::Mail.new
         message.set_content_type('text', 'plain', {:charset => 'UTF-8'})
         message.from = "#{commit['author']['name']} <#{commit['author']['email']}>" if data['send_from_author']
@@ -88,7 +88,7 @@ class Service::Email < Service
 
   def smtp_settings
     @smtp_settings ||= begin
-      args = [ email_config['addresses'], (email_config['port'] || 25).to_i, (email_config['domain'] || 'localhost.localdomain') ]
+      args = [ email_config['address'], (email_config['port'] || 25).to_i, (email_config['domain'] || 'localhost.localdomain') ]
       if email_config['authentication']
         args.push email_config['user_name'], email_config['password'], email_config['authentication']
       end
