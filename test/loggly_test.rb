@@ -1,4 +1,4 @@
-class JiraTest < Service::TestCase
+class LogglyTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
