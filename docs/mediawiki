@@ -1,0 +1,11 @@
+MediaWiki Hook
+
+1. URL is the location of your api.php (http://en.wikipedia.org/w/api.php, for example)
+2. Title is the page title where to log the commits. (User:Awesome22/Commits to my awesome project)
+3. User is the username on the wiki. (Awesome22)
+4. Password is the password to the username. (my5uper$ecretP4ssword)
+
+The page will be created if it doesn't yet exist.
+
+Sample output (which will be on-wiki):
+* [grit] rtomayko pushed 3 new commits to master: http://github.com/mojombo/grit/compare/4c8124f...a47fd41
