@@ -6,6 +6,7 @@ class Service::AgileZen < Service
     raise_config_error "Missing 'project_id'" if data['project_id'].to_s == ''
 
     http.headers['X-Zen-ApiKey'] = data['api_key']
+    http.headers['Content-Type'] = 'application/json'
 
     res = http_post "https://agilezen.com/api/v1/projects/#{data['project_id']}/changesets/github",
       JSON.generate(payload)
