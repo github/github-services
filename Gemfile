@@ -12,7 +12,7 @@ gem "tilt",          "~> 1.2.1"
 gem "tinder",        "1.7.0"
 gem "tmail",         "1.2.7.1"
 gem "xml-simple",    "1.0.11", :require => 'xmlsimple'
-gem "xmpp4r-simple", "0.8.4"
+gem "xmpp4r-simple", "0.8.8", :git => "https://github.com/blaine/xmpp4r-simple.git"
 #gem "yammer4r",      "0.1.5"
 gem "ruby-hmac",     "0.4.0"
 gem "thin",          "1.2.2"
