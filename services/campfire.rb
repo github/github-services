@@ -33,7 +33,7 @@ class Service::Campfire < Service
   def send_messages(messages)
     raise_config_error 'Missing campfire token' if data['token'].to_s.empty?
 
-    return if data['master_only'].to_i == 1 and branch_name != 'master'
+    return if data['master_only'].to_i == 1 && respond_to?(:branch_name) && branch_name != 'master'
 
     play_sound = data['play_sound'].to_i == 1
 
