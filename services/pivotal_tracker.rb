@@ -3,10 +3,10 @@ class Service::PivotalTracker < Service
 
   def receive_push
     token = data['token']
-    branch = data['branch'].to_s
+    branches = data['branch'].to_s.split(/\s+/)
     ref = payload["ref"].to_s
 
-    if branch.empty? || branch == ref.split("/").last
+    if branches.empty? || branches.include?(ref.split("/").last)
       notifier.call
     end
   end
