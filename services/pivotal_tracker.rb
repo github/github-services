@@ -6,18 +6,9 @@ class Service::PivotalTracker < Service
     branches = data['branch'].to_s.split(/\s+/)
     ref = payload["ref"].to_s
 
-    if branches.empty? || branches.include?(ref.split("/").last)
-      notifier.call
-    end
+    notify if branches.empty? || branches.include?(ref.split("/").last)
   end
 
-  attr_writer :notifier
-
-  def notifier
-    @notifier ||= Proc.new { notify }
-  end
-
-  private
   def notify
     endpoint = data.fetch('endpoint') { 'https://www.pivotaltracker.com/services/v3/github_commits' }
     res = http_post endpoint do |req|

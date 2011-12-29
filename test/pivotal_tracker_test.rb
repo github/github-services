@@ -8,7 +8,6 @@ class PivotalTrackerTest < Service::TestCase
 
   def test_mismatched_branch
     svc = service({"branch" => "abc"}, payload)
-    svc.notifier = Proc.new { raise }
     assert_nothing_raised { svc.receive_push }
   end
 
@@ -50,7 +49,6 @@ class PivotalTrackerTest < Service::TestCase
 
   def test_none_of_many_branches
     svc = service({"branch" => "topic bad_idea"}, payload)
-    svc.notifier = Proc.new { raise }
     assert_nothing_raised { svc.receive_push }
   end
 
