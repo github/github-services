@@ -1,5 +1,5 @@
 class Service::PivotalTracker < Service
-  string :token, :branch
+  string :token, :branch, :endpoint
 
   def receive_push
     token = data['token']
@@ -19,7 +19,7 @@ class Service::PivotalTracker < Service
 
   private
   def notify
-    res = http_post 'https://www.pivotaltracker.com/services/v3/github_commits' do |req|
+    res = http_post data['endpoint'].presence || 'https://www.pivotaltracker.com/services/v3/github_commits' do |req|
       req.params[:token] = data['token']
       req.body = {:payload => payload.to_json}
     end
