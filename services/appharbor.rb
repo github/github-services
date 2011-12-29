@@ -2,13 +2,16 @@ class Service::AppHarbor < Service
   string :application_slug, :token
   
   def receive_push
-    slugs = data['application_slugs']
+    slugs = data['application_slug']
     token = data['token']
 
     raise_config_error 'Missing application slug' if slugs.to_s.empty?
     raise_config_error 'Missing token' if token.to_s.empty?
 
-    slugs.split(",").each{|slug| post_appharbor_message(slug, token)}
+    slugs.split(",").each do |slug|
+      slug.strip!
+      post_appharbor_message(slug, token)
+    end
   end
 
 private

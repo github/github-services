@@ -26,7 +26,7 @@ private
       end
     end
 
-    svc = service({'token' => token, 'application_slugs' => application_slugs}, payload)
+    svc = service({'token' => token, 'application_slug' => application_slugs}, payload)
     svc.receive_push
 
     @stubs.verify_stubbed_calls
