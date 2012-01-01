@@ -11,11 +11,7 @@ class TrajectoryTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service({'api_key' => 'test_api_key'})
+    svc = Service::Trajectory.new(:push, {'api_key' => 'test_api_key'})
     svc.receive_push
-  end
-
-  def service(*args)
-    super Service::Trajectory, *args
   end
 end
