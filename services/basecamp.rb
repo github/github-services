@@ -65,10 +65,12 @@ EOH
     else
       raise
     end
-  rescue ActiveResource::Redirection => boom
-    raise_config_error "Invalid project URL: #{boom}"
+  rescue ActiveResource::UnauthorizedAccess => boom
+    raise_config_error "Unauthorized. Verify the project URL and credentials."
   rescue ActiveResource::ForbiddenAccess => boom
     raise_config_error boom.to_s
+  rescue ActiveResource::Redirection => boom
+    raise_config_error "Invalid project URL: #{boom}"
   rescue RuntimeError => boom
     if boom.to_s =~ /\((?:403|401|422)\)/
       raise_config_error "Invalid credentials: #{boom}"
