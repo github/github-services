@@ -65,6 +65,8 @@ EOH
     else
       raise
     end
+  rescue ActiveResource::Redirection => boom
+    raise_config_error "Invalid project URL: #{boom}"
   rescue ActiveResource::ForbiddenAccess => boom
     raise_config_error boom.to_s
   rescue RuntimeError => boom
