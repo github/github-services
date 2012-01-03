@@ -48,8 +48,8 @@ class Service::Web < Service
     end
 
     http_post url, body
-  rescue Addressable::URI::InvalidURIError => err
-    raise_config_error err.to_s
+  rescue Addressable::URI::InvalidURIError, Errno::EHOSTUNREACH
+    raise_config_error $!.to_s
   end
 end
 
