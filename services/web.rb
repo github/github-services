@@ -50,6 +50,12 @@ class Service::Web < Service
     http_post url, body
   rescue Addressable::URI::InvalidURIError, Errno::EHOSTUNREACH
     raise_config_error $!.to_s
+  rescue SocketError
+    if $!.to_s =~ /getaddrinfo:/
+      raise_config_error "Invalid host name."
+    else
+      raise
+    end
   rescue EOFError
     raise_config_error "Invalid server response. Make sure the URL uses the correct protocol."
   end
