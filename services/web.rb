@@ -50,6 +50,8 @@ class Service::Web < Service
     http_post url, body
   rescue Addressable::URI::InvalidURIError, Errno::EHOSTUNREACH
     raise_config_error $!.to_s
+  rescue EOFError
+    raise_config_error "Invalid server response. Make sure the URL uses the correct protocol."
   end
 end
 
