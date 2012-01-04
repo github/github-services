@@ -119,7 +119,7 @@ class Service::Email < Service
   end
 
   def smtp_settings
-    settings = [smtp_address, smtp_port, smtp_domain]
+    settings = [smtp_domain]
 
     if smtp_authentication
       settings.push smtp_user_name, smtp_password, smtp_authentication
