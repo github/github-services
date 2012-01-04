@@ -10,7 +10,8 @@ class Service::PivotalTracker < Service
   end
 
   def notify
-    endpoint = data.fetch('endpoint') { 'https://www.pivotaltracker.com/services/v3/github_commits' }
+    endpoint = data['endpoint'].to_s
+    endpoint = 'https://www.pivotaltracker.com/services/v3/github_commits' if endpoint.empty?
     res = http_post endpoint do |req|
       req.params[:token] = data['token']
       req.body = {:payload => payload.to_json}

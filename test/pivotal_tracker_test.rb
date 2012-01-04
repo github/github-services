@@ -19,7 +19,7 @@ class PivotalTrackerTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service({"branch" => "master"}, payload)
+    svc = service({"branch" => "master", 'endpoint' => ''}, payload)
     svc.receive_push
   end
 
