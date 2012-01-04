@@ -53,7 +53,7 @@ class EmailTest < Service::TestCase
       {'address' => 'a'},
       'payload')
     svc.email_config = {'address' => 'a', 'port' => '1', 'domain' => 'd'}
-    assert_equal ['a', 1, 'd'], svc.smtp_settings
+    assert_equal ['d'], svc.smtp_settings
   end
 
   def test_smtp_settings_with_auth
@@ -62,7 +62,7 @@ class EmailTest < Service::TestCase
       'payload')
     svc.email_config = {'address' => 'a', 'port' => '1', 'domain' => 'd',
       'authentication' => 'au', 'user_name' => 'u', 'password' => 'p'}
-    assert_equal ['a', 1, 'd', 'u', 'p', 'au'], svc.smtp_settings
+    assert_equal ['d', 'u', 'p', 'au'], svc.smtp_settings
   end
 
   def service(*args)
