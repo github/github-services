@@ -74,9 +74,9 @@ class Service::Email < Service
         message.subject = "[#{name_with_owner}] #{first_commit_sha}: #{first_commit_title}"
         message.body    = body
         message.date    = Time.now
-  
+
         message['Approved'] = data['secret'] if data['secret'].to_s.size > 0
-  
+
         if data['send_from_author']
           send_message message, "#{commit['author']['name']} <#{commit['author']['email']}>", address
         else
@@ -86,21 +86,71 @@ class Service::Email < Service
     end
   end
 
+  def smtp_address
+    @smtp_address ||= email_config['address']
+  end
+
+  def smtp_port
+    @smtp_port ||= (email_config['port'] || 25).to_i
+  end
+
+  def smtp_domain
+    @smtp_domain ||= email_config['domain'] || 'localhost.localdomain'
+  end
+
+  def smtp_authentication
+    @smtp_authentication ||= email_config['authentication']
+  end
+
+  def smtp_user_name
+    @smtp_user_name ||= email_config['user_name']
+  end
+
+  def smtp_password
+    @smtp_password ||= email_config['password']
+  end
+
+  def smtp_enable_starttls_auto?
+    @smtp_enable_starttls_auto ||= email_config['enable_starttls_auto']
+  end
+
+  def smtp_openssl_verify_mode
+    @smtp_openssl_verify_mode ||= email_config['openssl_verify_mode']
+  end
+
   def smtp_settings
-    @smtp_settings ||= begin
-      args = [ email_config['address'], (email_config['port'] || 25).to_i, (email_config['domain'] || 'localhost.localdomain') ]
-      if email_config['authentication']
-        args.push email_config['user_name'], email_config['password'], email_config['authentication']
-      end
-      args
+    settings = [smtp_domain]
+
+    if smtp_authentication
+      settings.push smtp_user_name, smtp_password, smtp_authentication
     end
+
+    settings
   end
 
   def send_message(message, from, to)
-    Net::SMTP.start(*smtp_settings) do |smtp|
+    smtp = Net::SMTP.new(smtp_address, smtp_port)
+
+    configure_tls(smtp) if smtp_enable_starttls_auto?
+
+    smtp.start(*smtp_settings) do |smtp|
       smtp.send_message message.to_s, from, to
     end
   rescue Net::SMTPSyntaxError, Net::SMTPFatalError
     raise_config_error "Invalid email address"
+  end
+
+  def configure_tls(smtp)
+    if smtp_openssl_verify_mode
+      if openssl_verify_mode.kind_of?(String)
+        openssl_verify_mode = "OpenSSL::SSL::VERIFY_#{openssl_verify_mode.upcase}".constantize
+      end
+
+      context = Net::SMTP.default_ssl_context
+      context.verify_mode = openssl_verify_mode
+      smtp.enable_starttls_auto(context)
+    else
+      smtp.enable_starttls_auto
+    end
   end
 end
