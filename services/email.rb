@@ -118,6 +118,10 @@ class Service::Email < Service
     @smtp_openssl_verify_mode ||= email_config['openssl_verify_mode']
   end
 
+  def smtp_logging?
+    @smtp_logging ||= email_config['enable_logging']
+  end
+
   def smtp_settings
     settings = [smtp_domain]
 
@@ -132,6 +136,8 @@ class Service::Email < Service
     smtp = Net::SMTP.new(smtp_address, smtp_port)
 
     configure_tls(smtp) if smtp_enable_starttls_auto?
+
+    smtp.debug_output = ::Logger.new($stdout) if smtp_logging?
 
     smtp.start(*smtp_settings) do |smtp|
       smtp.send_message message.to_s, from, to
