@@ -104,11 +104,19 @@ EOH
     build_message(options).save
   end
 
+  def all_projects
+    Array(::Basecamp::Project.all)
+  end
+
+  def all_categories
+    Array(::Basecamp::Category.post_categories(project_id))
+  end
+
   def project_id
     @project_id ||= begin
       name = data['project'].to_s
       name.downcase!
-      projects = ::Basecamp::Project.all.select { |p| p.name.downcase == name }
+      projects = all_projects.select { |p| p.name.downcase == name }
       case projects.size
       when 1 then projects.first.id
       when 0 then raise_config_error("Invalid Project: #{name.downcase}")
@@ -121,7 +129,7 @@ EOH
     @category_id ||= begin
       name = data['category'].to_s
       name.downcase!
-      categories = ::Basecamp::Category.post_categories(project_id).select { |c| c.name.downcase == name }
+      categories = all_categories.select { |c| c.name.downcase == name }
       case categories.size
       when 1 then categories.first.id
       when 0 then raise_config_error("Invalid Category: #{name.downcase}")
