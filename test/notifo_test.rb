@@ -27,6 +27,15 @@ class NotifoTest < Service::TestCase
     svc.receive_push
   end
 
+  def test_push_with_empty_commits
+    data = payload
+    data['commits'] = []
+
+    svc = service({'subscribers' => 'a,b'}, data)
+    svc.secrets = {'notifo' => {'apikey' => 'a'}}
+    svc.receive_push
+  end
+
   def service(*args)
     super Service::Notifo, *args
   end
