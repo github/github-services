@@ -3,17 +3,49 @@ class Service::Email < Service
   boolean :send_from_author
 
   def receive_push
+    configure_mail_defaults unless mail_configured?
+
     addresses.each do |address|
       send_message_to address
     end
   end
 
-  def addresses
-    data['address'].split(' ').slice(0, 2)
+  def send_message_to(address)
+    send_mail mail_message(address)
   end
 
-  def send_message_to(address)
-    send_message mail_message(address), from_address, address
+  def send_mail(mail)
+    mail.deliver!
+  end
+
+  def configure_mail_defaults
+    my = self
+
+    Mail.defaults do
+      delivery_method :smtp,
+        :address              => my.smtp_address,
+        :port                 => my.smtp_port,
+        :domain               => my.smtp_domain,
+        :user_name            => my.smtp_user_name,
+        :password             => my.smtp_password,
+        :authentication       => my.smtp_authentication,
+        :enable_starttls_auto => my.smtp_enable_starttls_auto?,
+        :openssl_verify_mode  => my.smtp_openssl_verify_mode
+    end
+
+    mail_configured!
+  end
+
+  def mail_configured?
+    defined?(@@mail_configured) && @@mail_configured
+  end
+
+  def mail_configured!
+    @@mail_configured = true
+  end
+
+  def addresses
+    data['address'].split(' ').slice(0, 2)
   end
 
   def mail_message(address)
@@ -203,7 +235,7 @@ class Service::Email < Service
   end
 
   def smtp_enable_starttls_auto?
-    @smtp_enable_starttls_auto ||= email_config['enable_starttls_auto']
+    @smtp_enable_starttls_auto ||= (email_config['enable_starttls_auto'] && true)
   end
 
   def smtp_openssl_verify_mode
@@ -216,43 +248,5 @@ class Service::Email < Service
 
   def noreply_address
     @noreply_address ||= email_config['noreply_address'] || "GitHub <noreply@github.com>"
-  end
-
-  def smtp_settings
-    settings = [smtp_domain]
-
-    if smtp_authentication
-      settings.push smtp_user_name, smtp_password, smtp_authentication
-    end
-
-    settings
-  end
-
-  def send_message(message, from, to)
-    smtp = Net::SMTP.new(smtp_address, smtp_port)
-
-    configure_tls(smtp) if smtp_enable_starttls_auto?
-
-    smtp.debug_output = ::Logger.new($stdout) if smtp_logging?
-
-    smtp.start(*smtp_settings) do |smtp|
-      smtp.send_message message.to_s, from, to
-    end
-  rescue Net::SMTPSyntaxError, Net::SMTPFatalError
-    raise_config_error "Invalid email address"
-  end
-
-  def configure_tls(smtp)
-    if smtp_openssl_verify_mode
-      if openssl_verify_mode.kind_of?(String)
-        openssl_verify_mode = "OpenSSL::SSL::VERIFY_#{openssl_verify_mode.upcase}".constantize
-      end
-
-      context = Net::SMTP.default_ssl_context
-      context.verify_mode = openssl_verify_mode
-      smtp.enable_starttls_auto(context)
-    else
-      smtp.enable_starttls_auto
-    end
   end
 end

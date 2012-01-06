@@ -48,31 +48,14 @@ class EmailTest < Service::TestCase
     assert_nil svc.messages.shift
   end
 
-  def test_smtp_settings
-    svc = service(
-      {'address' => 'a'},
-      'payload')
-    svc.email_config = {'address' => 'a', 'port' => '1', 'domain' => 'd'}
-    assert_equal ['d'], svc.smtp_settings
-  end
-
-  def test_smtp_settings_with_auth
-    svc = service(
-      {'address' => 'a'},
-      'payload')
-    svc.email_config = {'address' => 'a', 'port' => '1', 'domain' => 'd',
-      'authentication' => 'au', 'user_name' => 'u', 'password' => 'p'}
-    assert_equal ['d', 'u', 'p', 'au'], svc.smtp_settings
-  end
-
   def service(*args)
     svc = super Service::Email, *args
     def svc.messages
       @messages ||= []
     end
 
-    def svc.send_message(msg, from, to)
-      messages << [msg, from, to]
+    def svc.send_mail(mail)
+      messages << [mail.to_s, mail.from.first, mail.to.first]
     end
     svc
   end
