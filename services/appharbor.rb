@@ -17,9 +17,9 @@ class Service::AppHarbor < Service
 private
 
   def post_appharbor_message(slug, token)
+    return unless commit = distinct_commits.last
     create_build_url = "https://appharbor.com/application/#{slug}/build?authorization=#{token}"
 
-    commit = distinct_commits.last
     appharbor_message = {
       :branches => {
         ref_name => {

@@ -159,13 +159,13 @@ module Service::PushHelpers
   end
 
   def commits
-    payload['commits']
+    Array(payload['commits'])
   end
 
   def distinct_commits
-    payload['distinct_commits'] ||= commits.select do |commit|
+    payload['distinct_commits'] ||= Array(commits.select do |commit|
       commit['distinct'] and !commit['message'].to_s.strip.empty?
-    end
+    end)
   end
 
   def receive
