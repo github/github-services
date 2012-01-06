@@ -112,6 +112,7 @@ class Service::Email < Service
           #{commit['url']}
       Author: #{commit_author}
       Date:   #{timestamp} (#{timestamp.strftime('%a, %d %b %Y')})
+
     EOH
 
     if changed_paths.size > 0
