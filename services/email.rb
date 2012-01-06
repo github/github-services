@@ -7,15 +7,6 @@ class Net::SMTP
     end
     getok("MAIL FROM:<#{from_addr}>")
   end
-
-  def rcptto(to_addr)
-    to_addr = to_addr[/<([^>]+)>/, 1] if to_addr.include?('<')
-
-    if $SAFE > 0
-      raise SecurityError, 'tainted to_addr' if to_addr.tainted?
-    end
-    getok("RCPT TO:#{to_addr}")
-  end
 end
 
 class Service::Email < Service
