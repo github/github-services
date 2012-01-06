@@ -1,20 +1,20 @@
 class Net::SMTP
   def mailfrom(from_addr)
+    from_addr = from_addr[/<([^>]+)>/, 1] if from_addr.include?('<')
+
     if $SAFE > 0
       raise SecurityError, 'tainted from_addr' if from_addr.tainted?
     end
-    getok("MAIL FROM:#{escape(from_addr)}")
+    getok("MAIL FROM:<#{from_addr}>")
   end
 
   def rcptto(to_addr)
+    to_addr = to_addr[/<([^>]+)>/, 1] if to_addr.include?('<')
+
     if $SAFE > 0
       raise SecurityError, 'tainted to_addr' if to_addr.tainted?
     end
-    getok("RCPT TO:#{escape(to_addr)}")
-  end
-
-  def escape(address)
-    address.include?('<') ? address : "<#{address}>"
+    getok("RCPT TO:#{to_addr}")
   end
 end
 
