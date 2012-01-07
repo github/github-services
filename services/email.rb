@@ -151,7 +151,11 @@ class Service::Email < Service
   end
 
   def mail_subject
-    "[#{name_with_owner}] #{first_commit_sha}: #{first_commit_title}"
+    if first_commit
+      "[#{name_with_owner}] #{first_commit_sha}: #{first_commit_title}"
+    else
+      "[#{name_with_owner}]"
+    end
   end
 
   def secret_header
