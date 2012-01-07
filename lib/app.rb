@@ -31,7 +31,7 @@ class Service::App < Sinatra::Base
         status 400
         "Service Timeout"
       rescue Object => boom
-        report_exception svc, data, boom
+        report_exception svc, data, boom, params[:event], payload
         status 500
         "ERROR"
       end
@@ -56,7 +56,7 @@ class Service::App < Sinatra::Base
   # exception - An Exception instance.
   #
   # Returns nothing.
-  def report_exception(service_class, service_data, exception)
+  def report_exception(service_class, service_data, exception, event, payload)
     backtrace = Array(exception.backtrace)[0..500]
 
     data = {
@@ -67,8 +67,10 @@ class Service::App < Sinatra::Base
       'message'   => exception.message[0..254],
       'backtrace' => backtrace.join("\n"),
       'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0]),
-      'service'   => service_class.to_s
+      'service'   => service_class.to_s,
     }
+    data['event'] = event if event
+    data['payload'] = payload.inspect if payload
 
     if exception.kind_of?(Service::Error)
       if exception.original_exception
