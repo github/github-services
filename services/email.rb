@@ -105,7 +105,7 @@ class Service::Email < Service
 
     timestamp = Date.parse(commit['timestamp'])
 
-    commit_author = "#{author['name']} <#{author['email']}>"
+    commit_author = "#{commit['author']['name']} <#{commit['author']['email']}>"
 
     text = align(<<-EOH)
       Commit: #{gitsha}
@@ -169,7 +169,7 @@ class Service::Email < Service
   def author_address
     "#{author_name} <#{author_email}>"
   end
-  
+
   def author
     commit = last_commit || {}
     commit['author'] || commit['committer'] || payload['pusher']
