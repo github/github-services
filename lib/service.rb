@@ -75,13 +75,13 @@ class Service
       else
         false
       end
-    rescue Service::ConfigurationError, Errno::EHOSTUNREACH, Errno::ECONNRESET, SocketError => err
+    rescue Service::ConfigurationError, Errno::EHOSTUNREACH, Errno::ECONNRESET, SocketError, Net::SMTPFatalError => err
       Service.stats.increment "hook.fail.config.#{hook_name}"
       if !err.is_a?(Service::Error)
-        err = Service::Error.new(err)
+        raise_config_error err
+      else
+        raise err
       end
-
-      raise err
     rescue Service::TimeoutError
       Service.stats.increment "hook.fail.timeout.#{hook_name}"
       raise
