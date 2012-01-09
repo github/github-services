@@ -11,7 +11,13 @@ class TrajectoryTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = Service::Trajectory.new(:push, {'api_key' => 'test_api_key'})
+    svc = service({'api_key' => 'test_api_key'}, payload)
     svc.receive_push
+
+    @stubs.verify_stubbed_calls
+  end
+
+  def service(*args)
+    super Service::Trajectory, *args
   end
 end
