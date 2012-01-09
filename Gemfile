@@ -10,7 +10,7 @@ gem "oauth",         "0.4.4"
 gem "sinatra",       "~> 1.2.6"
 gem "tilt",          "~> 1.2.1"
 gem "tinder",        "1.7.0"
-gem "tmail",         "1.2.7.1"
+gem "mail",          "~>2.3"
 gem "xml-simple",    "1.0.11", :require => 'xmlsimple'
 gem "xmpp4r-simple", "0.8.8"
 #gem "yammer4r",      "0.1.5"
