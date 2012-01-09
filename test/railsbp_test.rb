@@ -39,7 +39,7 @@ class RailsbpTest < Service::TestCase
   end
 
   def data
-    { "token" => "xAAQZtJhYHGagsed1kYR" }
+    { "token" => "xAAQZtJhYHGagsed1kYR", 'railsbp_url' => '' }
   end
 
   def payload

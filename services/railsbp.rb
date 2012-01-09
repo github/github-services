@@ -6,7 +6,11 @@ class Service::Railsbp < Service
   end
 
   def railsbp_url
-    data["railsbp_url"].try(:strip) || "https://railsbp.com"
+    if !(url = data["railsbp_url"].to_s).empty?
+      url.strip
+    else
+      "https://railsbp.com"
+    end
   end
 
   def token
