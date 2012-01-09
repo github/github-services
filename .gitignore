@@ -7,3 +7,4 @@ config/services.json
 vendor/gems
 .bundle
 docs/payload_data
+.rvmrc
