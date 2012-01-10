@@ -11,7 +11,7 @@ class Service::Ducksboard < Service
     # webhook key sanity check
     webhook_key = check_webhook_key(data)
 
-    url = "https://webhooks.ducksboard.local/#{webhook_key}"
+    url = "https://webhooks.ducksboard.com/#{webhook_key}"
 
     http.headers['content-type'] = 'application/x-www-form-urlencoded'
     body = Faraday::Utils.build_nested_query(
