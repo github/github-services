@@ -1,0 +1,13 @@
+Ducksboard
+==========
+
+Get commits, issues and other real-time notifications in your Ducksboard GitHub widgets.
+
+More info at http://ducksboard.com/.
+
+Install Notes
+-------------
+
+See https://ducksboard.jira.com/wiki/display/webhooks/GitHub for detailed instructions.
+
+  Webhook Key can be found in the widget settings, "Webhook Support" tab.
