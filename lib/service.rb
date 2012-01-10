@@ -75,7 +75,7 @@ class Service
       else
         false
       end
-    rescue Service::ConfigurationError, Errno::EHOSTUNREACH, Errno::ECONNRESET, SocketError, Net::SMTPFatalError => err
+    rescue Service::ConfigurationError, Errno::EHOSTUNREACH, Errno::ECONNRESET, SocketError, Net::ProtocolError => err
       Service.stats.increment "hook.fail.config.#{hook_name}"
       if !err.is_a?(Service::Error)
         err = ConfigurationError.new(err)
