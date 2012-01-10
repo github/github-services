@@ -14,8 +14,7 @@ class Service::Ducksboard < Service
     url = "https://webhooks.ducksboard.local/#{webhook_key}"
 
     http.headers['content-type'] = 'application/x-www-form-urlencoded'
-    body = Faraday::Utils.build_nested_query(
-      http.params.merge(:payload => JSON.generate(payload)))
+    body = http.params.merge(:payload => JSON.generate(payload))
 
     http_post url, body
 
