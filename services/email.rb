@@ -152,7 +152,7 @@ class Service::Email < Service
 
   def mail_subject
     if first_commit
-      "[#{name_with_owner}] #{first_commit_sha}: #{first_commit_title}"
+      "[#{name_with_owner}] #{first_commit_sha.slice(0, 6)}: #{first_commit_title}"
     else
       "[#{name_with_owner}]"
     end
