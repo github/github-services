@@ -208,7 +208,7 @@ class Service::Email < Service
   end
 
   def first_commit_sha
-    first_commit[:id]
+    first_commit['id']
   end
 
   def first_commit_title(limit = 50)
