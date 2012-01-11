@@ -28,7 +28,7 @@ private
   def process_commit(commit)
     author = commit["author"]["email"]    
     commit["message"].split("\n").each { |commit_line|
-      parts = commit_line.match(/(\s|^)#(\d+):?([^\s]+)?(.*)/)
+      parts = commit_line.match(/(\s|^)#(\d+)(:[^\s]+)?(\s|$)/)
       next if parts.nil?
       entity_id = parts[2].strip
       next if entity_id.nil? or entity_id.length == 0
