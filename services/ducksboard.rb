@@ -1,6 +1,8 @@
 class Service::Ducksboard < Service
   string :webhook_key
 
+  default_events :push, :issues, :fork, :watch
+
   def receive_push
     # As simple as it can get: just build a ducksboard webhooks url from
     # the webhook_key config param and send the whole payload, ducksboard
