@@ -13,12 +13,10 @@ class Service::Talker < Service
     http.url_prefix = data['url']
 
     if data['digest'].to_i == 1 and commits.size > 1
-      commit = commits.last
-      message = "#{commit['author']['name']} pushed #{commits.size} commits to [#{repository}/#{branch}] #{payload['compare']}"
-      http_post 'messages.json', :message => message
+      http_post 'messages.json', :message => "#{summary_message} – #{summary_url}"
     else
-      commits.each do |commit|
-        message = "#{commit['author']['name']} pushed \"#{commit['message'].split("\n").first}\" -  #{commit['url']} to [#{repository}/#{branch}]"
+      http_post 'messages.json', :message => "#{pusher_name} pushed the following commits:"
+      commit_messages.each do |message|
         http_post 'messages.json', :message => message
       end
     end
