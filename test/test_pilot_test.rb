@@ -17,7 +17,7 @@ class TestPilotTest < Service::TestCase
 
   def test_posts_payload
     @stubs.post '/callbacks/github' do |env|
-      assert_equal env[:body]['token'], token
+      assert_equal Rack::Utils.parse_query(env[:body])['token'], @svc.token
       assert_equal payload, JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
     end
     @svc.receive_push
@@ -33,7 +33,7 @@ class TestPilotTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::Travis, *args
+    super Service::TestPilot, *args
   end
 
   def data

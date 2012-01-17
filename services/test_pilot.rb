@@ -3,11 +3,15 @@ class Service::TestPilot < Service
 
   def receive_push
     http.ssl[:verify] = false
-    http_post test_pilot_url, {:payload => payload.to_json}.merge(authentication_token)
+    http_post test_pilot_url, {:payload => payload.to_json}.merge(authentication_param)
   end
 
   def test_pilot_url
     "http://testpilot.me/callbacks/github"
+  end
+
+  def token
+    data['token'].strip
   end
 
   protected
