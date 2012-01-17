@@ -3,7 +3,9 @@ class Service::TestPilot < Service
 
   def receive_push
     http.ssl[:verify] = false
-    http_post test_pilot_url, {:payload => payload.to_json}.merge(authentication_param)
+    http.params ||= {}
+    http.params.merge!(authentication_param)
+    http_post test_pilot_url, :payload => payload.to_json
   end
 
   def test_pilot_url
@@ -11,12 +13,16 @@ class Service::TestPilot < Service
   end
 
   def token
-    data['token'].strip
+    data['token'].to_s.strip
   end
 
   protected
 
   def authentication_param
+    if token.empty?
+      raise_config_error "Needs a token"
+    end
+
     {:token => token}
   end
 end
