@@ -21,4 +21,11 @@ class Service::Talker < Service
       end
     end
   end
+  
+  #Include the commit url in the message
+  def format_commit_message(commit)
+    short = commit['message'].split("\n", 2).first
+    "[#{repo_name}/#{branch_name}] #{short} - #{commit['author']['name']} #{commit['url']}"
+  end
+
 end
