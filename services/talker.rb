@@ -29,6 +29,13 @@ class Service::Talker < Service
     say summary_message
   end
 
+  def receive_issues
+    return unless opened?
+
+    prepare_http
+    say summary_message
+  end
+
   private
     def prepare_http
       http.ssl[:verify] = false

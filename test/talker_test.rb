@@ -38,6 +38,12 @@ class TalkerTest < Service::TestCase
     svc.receive_pull_request
   end
 
+  def test_issues
+    stub_message_posting
+    svc = service(:issues, {}, issues_payload)
+    svc.receive_issues
+  end
+
   def service(event, options = {}, *args)
     default_options = {'url' => 'https://s.talkerapp.com/room/1', 'token' => 't'}
     super Service::Talker, event, default_options.merge(options), *args
