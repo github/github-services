@@ -12,16 +12,21 @@ class Service::Talker < Service
     http.headers["X-Talker-Token"] = token
     http.url_prefix = data['url']
 
-    http_post 'messages.json', :message => "#{summary_message} – #{summary_url}"
+    say "#{summary_message} – #{summary_url}"
     if data['digest'].to_i == 0
       if distinct_commits.size == 1
         commit = distinct_commits.first
-        http_post 'messages.json', :message => format_commit_message(commit)
+        say format_commit_message(commit)
       else
         distinct_commits.each do |commit|
-          http_post 'messages.json', :message => "#{format_commit_message(commit)} – #{commit['url']}"
+          say "#{format_commit_message(commit)} – #{commit['url']}"
         end
       end
     end
   end
+
+  private
+    def say(message)
+      http_post 'messages.json', :message => message
+    end
 end
