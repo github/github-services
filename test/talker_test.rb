@@ -6,14 +6,14 @@ class TalkerTest < Service::TestCase
   end
 
   def test_push_with_digest_on
-    expect_message_posting
+    stub_message_posting
 
     svc = service(:push, {'digest' => '1'}, push_payload)
     svc.receive_push
   end
 
   def test_push_with_digest_off_and_several_distinct_commits
-    expect_message_posting
+    stub_message_posting
 
     payload = push_payload
     assert payload['commits'].size > 1
@@ -23,7 +23,7 @@ class TalkerTest < Service::TestCase
   end
 
   def test_push_with_digest_off_and_a_single_distinct_commit
-    expect_message_posting
+    stub_message_posting
 
     payload = push_payload
     payload['commits'] = [payload['commits'].first]
@@ -33,7 +33,7 @@ class TalkerTest < Service::TestCase
   end
 
   def test_pull_request
-    expect_message_posting
+    stub_message_posting
     svc = service(:pull_request, {}, pull_payload)
     svc.receive_pull_request
   end
@@ -44,7 +44,7 @@ class TalkerTest < Service::TestCase
   end
 
   private
-    def expect_message_posting
+    def stub_message_posting
       @stubs.post "/room/1/messages.json" do |env|
         assert_equal 's.talkerapp.com', env[:url].host
         assert_equal 't', env[:request_headers]['x-talker-token']
