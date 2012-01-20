@@ -6,11 +6,8 @@ class Service::Talker < Service
     repository = payload['repository']['name']
     branch     = branch_name
     commits    = payload['commits']
-    token      = data['token']
 
-    http.ssl[:verify] = false
-    http.headers["X-Talker-Token"] = token
-    http.url_prefix = data['url']
+    prepare_http
 
     say "#{summary_message} – #{summary_url}"
     if data['digest'].to_i == 0
@@ -25,7 +22,20 @@ class Service::Talker < Service
     end
   end
 
+  def receive_pull_request
+    return unless opened?
+
+    prepare_http
+    say summary_message
+  end
+
   private
+    def prepare_http
+      http.ssl[:verify] = false
+      http.headers["X-Talker-Token"] = data['token']
+      http.url_prefix = data['url']
+    end
+
     def say(message)
       http_post 'messages.json', :message => message
     end

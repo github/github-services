@@ -8,7 +8,7 @@ class TalkerTest < Service::TestCase
   def test_push_with_digest_on
     expect_message_posting
 
-    svc = service({'digest' => '1'}, push_payload)
+    svc = service(:push, {'digest' => '1'}, push_payload)
     svc.receive_push
   end
 
@@ -18,7 +18,7 @@ class TalkerTest < Service::TestCase
     payload = push_payload
     assert payload['commits'].size > 1
 
-    svc = service({'digest' => '0'}, payload)
+    svc = service(:push, {'digest' => '0'}, payload)
     svc.receive_push
   end
 
@@ -28,13 +28,19 @@ class TalkerTest < Service::TestCase
     payload = push_payload
     payload['commits'] = [payload['commits'].first]
 
-    svc = service({'digest' => '0'}, payload)
+    svc = service(:push, {'digest' => '0'}, payload)
     svc.receive_push
   end
 
-  def service(options, *args)
+  def test_pull_request
+    expect_message_posting
+    svc = service(:pull_request, {}, pull_payload)
+    svc.receive_pull_request
+  end
+
+  def service(event, options = {}, *args)
     default_options = {'url' => 'https://s.talkerapp.com/room/1', 'token' => 't'}
-    super Service::Talker, default_options.merge(options), *args
+    super Service::Talker, event, default_options.merge(options), *args
   end
 
   private
