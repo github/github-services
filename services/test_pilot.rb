@@ -3,7 +3,6 @@ class Service::TestPilot < Service
 
   def receive_push
     http.ssl[:verify] = false
-    http.params ||= {}
     http.params.merge!(authentication_param)
     http_post test_pilot_url, :payload => payload.to_json
   end
@@ -15,8 +14,6 @@ class Service::TestPilot < Service
   def token
     data['token'].to_s.strip
   end
-
-  protected
 
   def authentication_param
     if token.empty?
