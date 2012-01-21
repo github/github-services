@@ -12,12 +12,12 @@ class TestPilotTest < Service::TestCase
 
   def data
     {
-      'token' => 'pHDyK9RkyHaBdJqqEcs'
+      'token' => 'TOKEN'
     }
   end
 
   def test_reads_token_from_data
-    assert_equal "pHDyK9RkyHaBdJqqEcs", @svc.token
+    assert_equal "TOKEN", @svc.token
   end
 
   def test_constructs_post_receive_url
@@ -43,11 +43,11 @@ class TestPilotTest < Service::TestCase
 
   def test_strips_whitespace_from_form_values
     data = {
-      'token' => 'pHDyK9RkyHaBdJqqEcs  '
+      'token' => 'TOKEN  '
     }
 
     svc = service(data, payload)
-    assert_equal 'pHDyK9RkyHaBdJqqEcs', svc.token
+    assert_equal 'TOKEN', svc.token
   end
 end
 
