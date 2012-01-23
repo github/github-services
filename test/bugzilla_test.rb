@@ -13,6 +13,7 @@ class BugzillaTest < Service::TestCase
 
     assert !@server.bug_posts.include?(4) # fake server says this was already pushed somewhere else
     assert @server.closed_bugs.length == 0 # shouldn't close any bugs because this isn't the central repository
+    assert @server.bug_posts[1].include? ' master at ' # check that branch name is included
     assert @server.bug_posts[1].include? 'Commits' #check for plural
     assert @server.bug_posts[1].include? '5057e76a11abd02e83b7d3d3171c4b68d9c88480'
     assert @server.bug_posts[1].include? 'a47fd41f3aa4610ea527dcc1669dfdb9c15c5425'
