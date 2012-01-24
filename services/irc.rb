@@ -31,6 +31,7 @@ class Service::IRC < Service
 
     self.puts "PASS #{data['password']}" if data['password'] && !data['password'].empty?
     self.puts "NICK #{botname}"
+    self.puts "MSG NICKSERV IDENTIFY #{data['nickservidentify']}" data['nickservidentify'] && !data['nickservidentify'].empty?
     self.puts "USER #{botname} 8 * :GitHub IRCBot"
 
     loop do
