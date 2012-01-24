@@ -16,8 +16,8 @@ class Service::Talker < Service
       http_post 'messages.json', :message => "#{summary_message} – #{summary_url}"
     else
       http_post 'messages.json', :message => "#{pusher_name} pushed the following commits:"
-      commit_messages.each do |message|
-        http_post 'messages.json', :message => message
+      commits.each do |commit|
+        http_post 'messages.json', :message => "#{format_commit_message(commit)} - #{commit['url']}"
       end
     end
   end
