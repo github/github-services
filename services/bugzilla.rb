@@ -32,7 +32,7 @@ class Service::Bugzilla < Service
         # Don't include commits already mentioned
         commit_messages = commits.select{|c| !bug_mentions_commit?(bug, c)}.collect{|c| c.comment}
       end
-      post_bug_comment(bug, repository, commit_messages)
+      post_bug_comment(bug, repository, commit_messages, branch.to_s)
       if commits.collect{|c| c.closes}.any?
         bugs_to_close << bug
       end
@@ -93,15 +93,16 @@ class Service::Bugzilla < Service
     false
   end
 
-  def post_bug_comment(bug, repository, commit_messages)
+  def post_bug_comment(bug, repository, commit_messages, branch_name)
     # Post a comment on an individual bug
     if commit_messages.length == 0
       return
     end
+    branch_str = branch_name.empty? ? "" : "#{branch_name} at "
     if commit_messages.length > 1
-      message = "Commits pushed to #{repository}\n\n"
+      message = "Commits pushed to #{branch_str}#{repository}\n\n"
     else
-      message = "Commit pushed to #{repository}\n\n"
+      message = "Commit pushed to #{branch_str}#{repository}\n\n"
     end
     message += commit_messages.join("\n\n")
     begin
