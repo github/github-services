@@ -61,12 +61,12 @@ private
     entity_type = assignable['Assignable']['EntityType']['Name']
     # Gather next state's ID
     res = http_get "api/v1/Processes/%s/EntityStates" % [context_data['Context']['Processes']['ProcessInfo']['Id']],
-        {:where => "(Name eq %s) and (EntityType.Name eq %s)" % [command, entity_state], :acid => acid}
+        {:where => "(Name eq '%s') and (EntityType.Name eq '%s')" % [command, entity_type], :acid => acid}
     valid_response?(res)
     new_state = begin Hash.from_xml(res.body)['Items']['EntityState']['Id'] rescue nil end
     # Make it happen
     http.headers['Content-Type'] = 'application/json'
-    valid_response?(http_post "api/v1/Comments", "{General: {Id: #{entity_id}}, Description: '#{commit_message}', Owner: {Id: #{author_id}}}")
+    valid_response?(http_post "api/v1/Comments", "{General: {Id: #{entity_id}}, Description: '#{commit_message.gsub("'","\'")}', Owner: {Id: #{author_id}}}")
     if !command.nil? and !new_state.nil?
       valid_response?(http_post "api/v1/%s" % ((entity_type == "UserStory") ? "UserStories" : entity_type+'s'), "{Id: #{entity_id}, EntityState: {Id: #{new_state}}}")
     end
