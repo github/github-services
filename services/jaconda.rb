@@ -22,3 +22,4 @@ class Service::Jaconda < Service
     end
   end
 end
+

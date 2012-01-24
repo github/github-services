@@ -13,7 +13,7 @@ module Service::PushHelpers
   end
 
   def ref
-    payload['ref']
+    payload['ref'].to_s
   end
 
   def base_ref
