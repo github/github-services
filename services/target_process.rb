@@ -37,11 +37,11 @@ private
       else
           command = parts[3].strip
       end
-      execute_command(author, entity_id, command, commit_line)
+      execute_command(author, entity_id, command, commit_line, commit["url"])
     }
   end
 
-  def execute_command(author, entity_id, command, commit_message)
+  def execute_command(author, entity_id, command, commit_message, commit_url)
     return if command.nil?
     # get the user's id
     res = http_get "api/v1/Users", {:where => "(Email eq '%s')" % author}
@@ -66,6 +66,7 @@ private
     new_state = begin Hash.from_xml(res.body)['Items']['EntityState']['Id'] rescue nil end
     # Make it happen
     http.headers['Content-Type'] = 'application/json'
+    commit_message = "#{commit_message}\nCommit: #{commit_url}"
     valid_response?(http_post "api/v1/Comments", "{General: {Id: #{entity_id}}, Description: '#{commit_message.gsub("'","\'")}', Owner: {Id: #{author_id}}}")
     if !command.nil? and !new_state.nil?
       valid_response?(http_post "api/v1/%s" % ((entity_type == "UserStory") ? "UserStories" : entity_type+'s'), "{Id: #{entity_id}, EntityState: {Id: #{new_state}}}")
