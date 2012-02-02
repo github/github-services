@@ -37,7 +37,8 @@ private
       else
           command = parts[3].strip
       end
-      execute_command(author, entity_id, command, commit_line, commit["url"])
+      commit_url = commit["url"]
+      execute_command(author, entity_id, command, commit_line, commit_url)
     }
   end
 
