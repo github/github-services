@@ -1,4 +1,5 @@
 class Service::Stackmob < Service
+  string :token 
 
   TOKEN_KEY = 'token'
   BASE_URL = "https://deploy.stackmob.com/callback"
