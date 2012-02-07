@@ -18,7 +18,7 @@ Install Notes
 9.  Enable `message_without_join' to keep the GitHub IRC bot from
     joining and immediately leaving the channel for each push.
 10. Enable `no_colors` to disable colors in the messages sent by the
-    Github IRC bot.
+    GitHub IRC bot.
 
 
 Developer Notes

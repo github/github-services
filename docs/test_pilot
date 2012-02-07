@@ -8,7 +8,7 @@ Install Notes
 -------------
 
   1.  Create an account at http://testpilot.me
-  2.  Authorize TestPilot to connect with your Github account.
+  2.  Authorize TestPilot to connect with your GitHub account.
   3.  After your repositories have been synced, activate the repository you want to test.
       TestPilot will automatically add necessary token above for your project, alternatively you can
       find the token under your account page at http://testpilot.me/my/account
