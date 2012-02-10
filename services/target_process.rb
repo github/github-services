@@ -27,6 +27,7 @@ private
 
   def process_commit(commit)
     author = commit["author"]["email"]    
+    commit_url = commit["url"]
     commit["message"].split("\n").each { |commit_line|
       parts = commit_line.match(/(\s|^)#(\d+)(:[^\s]+)?(\s|$)/)
       next if parts.nil?
@@ -37,7 +38,6 @@ private
       else
           command = parts[3].strip
       end
-      commit_url = commit["url"]
       execute_command(author, entity_id, command, commit_line, commit_url)
     }
   end
@@ -67,7 +67,7 @@ private
     new_state = begin Hash.from_xml(res.body)['Items']['EntityState']['Id'] rescue nil end
     # Make it happen
     http.headers['Content-Type'] = 'application/json'
-    commit_message = "#{commit_message}\nCommit: #{commit_url}"
+    commit_message = "#{commit_message}<br/>Commit: #{commit_url}"
     valid_response?(http_post "api/v1/Comments", "{General: {Id: #{entity_id}}, Description: '#{commit_message.gsub("'","\'")}', Owner: {Id: #{author_id}}}")
     if !command.nil? and !new_state.nil?
       valid_response?(http_post "api/v1/%s" % ((entity_type == "UserStory") ? "UserStories" : entity_type+'s'), "{Id: #{entity_id}, EntityState: {Id: #{new_state}}}")
