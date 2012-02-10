@@ -1,11 +1,11 @@
 # This is a set of common helpers for Push events.
 module Service::PushHelpers
   def created?
-    payload['created'] or !!(payload['before'] =~ /0{40}/)
+    payload['created'] || !!(payload['before'] =~ /0{40}/)
   end
 
   def deleted?
-    payload['deleted'] or !!(payload['after'] =~ /0{40}/)
+    payload['deleted'] || !!(payload['after'] =~ /0{40}/)
   end
 
   def forced?
@@ -13,7 +13,7 @@ module Service::PushHelpers
   end
 
   def ref
-    payload['ref']
+    payload['ref'].to_s
   end
 
   def base_ref

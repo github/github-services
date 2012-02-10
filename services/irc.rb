@@ -29,8 +29,9 @@ class Service::IRC < Service
     botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
     command = data['notice'].to_i == 1 ? 'NOTICE' : 'PRIVMSG'
 
-    self.puts "PASS #{data['password']}" if data['password'] && !data['password'].empty?
+    self.puts "PASS #{data['password']}" if !data['password'].to_s.empty?
     self.puts "NICK #{botname}"
+    self.puts "MSG NICKSERV IDENTIFY #{data['nickservidentify']}" if !data['nickservidentify'].to_s.empty?
     self.puts "USER #{botname} 8 * :GitHub IRCBot"
 
     loop do

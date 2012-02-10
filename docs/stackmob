@@ -1,0 +1,18 @@
+StackMob Deploy
+==============
+
+Deploys this Repository to StackMob after each push.
+
+Install Notes:
+-------------
+
+  1. Token - Your [StackMob GitHub Token](https://stackmob.com/platform/account/versioncontrol/settings)
+
+Developer Notes
+---------------
+
+data
+  - token
+
+payload
+  - refer to docs/github_payload

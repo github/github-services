@@ -45,6 +45,25 @@ class IRCTest < Service::TestCase
     assert_nil msgs.shift
   end
 
+  def test_push_with_nickserv
+    svc = service({'room' => 'r', 'nick' => 'n', 'nickservidentify' => 'booya'},
+      payload)
+
+    svc.receive_push
+    msgs = svc.writable_io.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_equal "MSG NICKSERV IDENTIFY booya", msgs.shift
+    assert_match "USER n", msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+
   def test_pull_request
     svc = service(:pull_request, {'room' => 'r', 'nick' => 'n'}, pull_payload)
 

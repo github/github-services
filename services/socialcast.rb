@@ -4,10 +4,10 @@ class Service::Socialcast < Service
   password :password
   def receive_push
     repository  = payload['repository']['name']
-    group_id    = (data['group_id'].nil? || data['group_id'] == '') ? '' : data['group_id'] 
+    group_id    = (data['group_id'].nil? || data['group_id'] == '') ? '' : data['group_id']
     kind_symbol = Hash["added" => "+", "modified" => "Δ", "removed" => "-"]
     s_if_plural = (payload['commits'].length > 1) ? 's' : ''
-    title       = "#{payload['commits'].length} commit#{s_if_plural} pushed to Github repo [#{repository}]"
+    title       = "#{payload['commits'].length} commit#{s_if_plural} pushed to GitHub repo [#{repository}]"
     message     = ""
 
     payload['commits'].each_with_index do |commit, i|
