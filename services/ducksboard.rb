@@ -3,6 +3,9 @@ class Service::Ducksboard < Service
 
   default_events :push, :issues, :fork, :watch
 
+  # don't feed more than 5 ducksboard webhook endpoints with an event
+  DUCKS_MAX_KEYS = 5
+
   def receive_push
     # As simple as it can get: just build a ducksboard webhooks url from
     # the webhook_key config param and send the whole payload, ducksboard
@@ -10,15 +13,17 @@ class Service::Ducksboard < Service
     # Why not using a POST-receive url then? Because we are interested in
     # more events than just pushes!
 
-    # webhook key sanity check
-    webhook_key = check_webhook_key(data)
+    # webhook keys extraction and sanity check
+    webhook_keys = parse_webhook_key(data)
 
-    url = "https://webhooks.ducksboard.com/#{webhook_key}"
+    webhook_keys.each do |key|
+      url = "https://webhooks.ducksboard.com/#{key}"
 
-    http.headers['content-type'] = 'application/x-www-form-urlencoded'
-    body = http.params.merge(:payload => JSON.generate(payload))
+      http.headers['content-type'] = 'application/x-www-form-urlencoded'
+      body = http.params.merge(:payload => JSON.generate(payload))
 
-    http_post url, body
+      http_post url, body
+    end
 
   rescue EOFError
     raise_config_error "Invalid server response."
@@ -28,24 +33,30 @@ class Service::Ducksboard < Service
   alias receive_fork receive_push
   alias receive_watch receive_push
 
-  def check_webhook_key(data)
-    # the webhook key is required
+  def parse_webhook_key(data)
+    # the webhook key param is required
     if !data['webhook_key']
       raise_config_error "Invalid webhook key"
     end
 
-    # we do accept ducksboard webhook urls from which the key will be extracted
-    webhook_key = data['webhook_key']
-    if webhook_key =~ /^https\:\/\/webhooks\.ducksboard\.com\//
-      webhook_key = URI.parse(webhook_key).path[1..-1]
+    # we accept many webhook keys separated by spaces, but never more
+    # than DUCKS_MAX_KEYS
+    keys = data['webhook_key'].split[0, DUCKS_MAX_KEYS].collect do |key|
+      # we do accept ducksboard webhook urls from which the key
+      # will be extracted
+      if key =~ /^https\:\/\/webhooks\.ducksboard\.com\//
+        key = URI.parse(key).path[1..-1]
+      end
+
+      # only alphanumeric hex keys are valid
+      if key !~ /^[a-fA-F0-9]+$/
+        raise_config_error "Invalid webhook key"
+      end
+
+      key
     end
 
-    # only alphanumeric hex keys are valid
-    if webhook_key !~ /^[a-fA-F0-9]+$/
-      raise_config_error "Invalid webhook key"
-    end
-
-    webhook_key
+    keys
   end
 
 end
