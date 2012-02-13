@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem "activeresource", "~> 3.0.0"
+gem "activeresource", "~> 3.2.1"
 gem "amqp",          "0.6.7", :require => 'mq'
 gem "httparty",      "0.7.4"
 gem 'yajl-ruby',     '1.1.0', :require => 'yajl/json_gem'
