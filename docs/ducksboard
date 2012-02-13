@@ -10,4 +10,4 @@ Install Notes
 
 See https://ducksboard.jira.com/wiki/display/webhooks/GitHub for detailed instructions.
 
-The required "Webhook Key" can be found in the Ducksboard widget settings, under the "Advanced Settings" tab.
+The required "Webhook Key" can be found in the Ducksboard widget settings, under the "Advanced Settings" tab. Up to 5 different keys, separated by SPACES, can be provided if many widgets must be updated from this repository.
