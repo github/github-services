@@ -13,15 +13,11 @@ class Service::Ducksboard < Service
     # Why not using a POST-receive url then? Because we are interested in
     # more events than just pushes!
 
-    # webhook keys extraction and sanity check
-    webhook_keys = parse_webhook_key(data)
+    http.headers['content-type'] = 'application/x-www-form-urlencoded'
+    body = http.params.merge(:payload => JSON.generate(payload))
 
-    webhook_keys.each do |key|
+    parse_webhook_key(data).each do |key|
       url = "https://webhooks.ducksboard.com/#{key}"
-
-      http.headers['content-type'] = 'application/x-www-form-urlencoded'
-      body = http.params.merge(:payload => JSON.generate(payload))
-
       http_post url, body
     end
 
