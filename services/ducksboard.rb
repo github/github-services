@@ -7,14 +7,13 @@ class Service::Ducksboard < Service
   DUCKS_MAX_KEYS = 5
 
   def receive_push
-    # As simple as it can get: just build a ducksboard webhooks url from
-    # the webhook_key config param and send the whole payload, ducksboard
-    # will know what to do with it.
-    # Why not using a POST-receive url then? Because we are interested in
-    # more events than just pushes!
+    # Build Ducksboard webhook urls from the webhook_key config param,
+    # then send a JSON containing the event type and payload to such
+    # url.
 
     http.headers['content-type'] = 'application/x-www-form-urlencoded'
-    body = http.params.merge(:payload => JSON.generate(payload))
+    body = http.params.merge(
+      :content => JSON.generate(:event => event, :payload => payload))
 
     parse_webhook_key(data).each do |key|
       url = "https://webhooks.ducksboard.com/#{key}"
