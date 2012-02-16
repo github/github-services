@@ -3,22 +3,28 @@ class DucksboardTest < Service::TestCase
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
 
-  def test_receive
+  def receive_helper(event)
     # Our service is pretty simple, and so is the test: just check that
-    # the original payload is received on our side, where the parsing
-    # will happen.
-    svc = service({
-      'webhook_key' => '1234abcd'
-    }, payload)
+    # the original payload and event are received on our side,
+    # where the parsing will happen.
+    svc = service(event, {'webhook_key' => '1234abcd'}, payload)
 
     @stubs.post '/1234abcd' do |env|
       body = Rack::Utils.parse_nested_query(env[:body])
-      recv = JSON.parse(body['payload'])
-      assert_equal payload, recv
+      recv = JSON.parse(body['content'])
+      assert_equal recv['payload'], payload
+      assert_equal recv['event'], event.to_s
       [200, {}, '']
     end
 
-    svc.receive
+    event_method = "receive_#{event}"
+    svc.send(event_method)
+  end
+
+  def test_receive
+    [:push, :issues, :fork, :watch].each do |event|
+      receive_helper event
+    end
   end
 
   def test_webhook_key_through_url
@@ -28,8 +34,8 @@ class DucksboardTest < Service::TestCase
 
     @stubs.post '/abcd1234' do |env|
       body = Rack::Utils.parse_nested_query(env[:body])
-      recv = JSON.parse(body['payload'])
-      assert_equal payload, recv
+      recv = JSON.parse(body['content'])
+      assert_equal recv['payload'], payload
       [200, {}, '']
     end
 
@@ -48,8 +54,8 @@ class DucksboardTest < Service::TestCase
       @stubs.post "/#{endpoint}" do |env|
         posted << endpoint
         body = Rack::Utils.parse_nested_query(env[:body])
-        recv = JSON.parse(body['payload'])
-        assert_equal payload, recv
+        recv = JSON.parse(body['content'])
+        assert_equal recv['payload'], payload
         [200, {}, '']
       end
     end
