@@ -1,19 +1,18 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activemodel (3.2.1)
-      activesupport (= 3.2.1)
-      builder (~> 3.0.0)
-    activeresource (3.2.1)
-      activemodel (= 3.2.1)
-      activesupport (= 3.2.1)
-    activesupport (3.2.1)
-      i18n (~> 0.6)
-      multi_json (~> 1.0)
+    activemodel (3.0.10)
+      activesupport (= 3.0.10)
+      builder (~> 2.1.2)
+      i18n (~> 0.5.0)
+    activeresource (3.0.10)
+      activemodel (= 3.0.10)
+      activesupport (= 3.0.10)
+    activesupport (3.0.10)
     addressable (2.2.6)
     amqp (0.6.7)
       eventmachine (>= 0.12.4)
-    builder (3.0.0)
+    builder (2.1.2)
     crack (0.1.8)
     daemons (1.1.0)
     eventmachine (0.12.10)
@@ -27,7 +26,7 @@ GEM
     http_parser.rb (0.5.3)
     httparty (0.7.4)
       crack (= 0.1.8)
-    i18n (0.6.0)
+    i18n (0.5.0)
     json (1.6.1)
     jwt (0.1.3)
       json (>= 1.2.4)
@@ -85,7 +84,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activeresource (~> 3.2.1)
+  activeresource (~> 3.0.0)
   amqp (= 0.6.7)
   faraday (= 0.7.5.pre)
   httparty (= 0.7.4)
