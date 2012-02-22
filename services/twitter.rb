@@ -3,7 +3,9 @@ class Service::Twitter < Service
   boolean :digest
 
   def receive_push
-    statuses   = [ ]
+    return unless payload['commits']
+    
+    statuses   = []
     repository = payload['repository']['name']
 
     if data['digest'] == '1'
