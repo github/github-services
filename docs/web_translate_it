@@ -3,7 +3,7 @@ Web Translate It
 
 This service notify Web Translate It of pushes to your public repository. Web Translate It will then refresh the language file(s) if they have been updated.
 
-More info: https://webtranslateit.com/documentation/wikis/github-integration
+More info: http://docs.webtranslateit.com/github-integration/
 
 Install Notes
 -------------
