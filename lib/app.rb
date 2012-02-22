@@ -10,6 +10,8 @@ class Service::App < Sinatra::Base
   # Returns nothing.
   def self.service(svc)
     post "/#{svc.hook_name}/:event" do
+      boom = nil
+      time = Time.now.to_i
       data = nil
       begin
         data    = JSON.parse(params[:data])
@@ -34,6 +36,11 @@ class Service::App < Sinatra::Base
         report_exception svc, data, boom, params[:event], payload
         status 500
         "ERROR"
+      ensure
+        if (Time.now.to_i - time) > 9
+          boom ||= RuntimeError.new("Long Service Hook")
+          report_exception svc, data, boom, params[:event], payload
+        end
       end
     end
   end
