@@ -11,7 +11,7 @@ class Service::App < Sinatra::Base
   def self.service(svc)
     post "/#{svc.hook_name}/:event" do
       boom = nil
-      time = Time.now.to_i
+      time = Time.now.to_f
       data = nil
       begin
         data    = JSON.parse(params[:data])
@@ -33,13 +33,17 @@ class Service::App < Sinatra::Base
         status 400
         "Service Timeout"
       rescue Object => boom
-        report_exception svc, data, boom, params[:event], payload
+        report_exception svc, data, boom, 
+          :event => params[:event], :payload => payload.inspect
         status 500
         "ERROR"
       ensure
-        if (Time.now.to_i - time) > 9
+        duration = Time.now.to_f - time
+        if duration > 9
           boom ||= RuntimeError.new("Long Service Hook")
-          report_exception svc, data, boom, params[:event], payload
+          report_exception svc, data, boom, 
+            :event => params[:event], :payload => payload.inspect,
+            :duration => "#{duration}s" 
         end
       end
     end
@@ -63,7 +67,7 @@ class Service::App < Sinatra::Base
   # exception - An Exception instance.
   #
   # Returns nothing.
-  def report_exception(service_class, service_data, exception, event, payload)
+  def report_exception(service_class, service_data, exception, options = {})
     backtrace = Array(exception.backtrace)[0..500]
 
     data = {
@@ -75,9 +79,7 @@ class Service::App < Sinatra::Base
       'backtrace' => backtrace.join("\n"),
       'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0]),
       'service'   => service_class.to_s,
-    }
-    data['event'] = event if event
-    data['payload'] = payload.inspect if payload
+    }.update(options)
 
     if exception.kind_of?(Service::Error)
       if exception.original_exception
