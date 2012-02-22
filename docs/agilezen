@@ -12,6 +12,7 @@ Install Notes
 
 1. **API Key** - This is your AgileZen API key.
 2. **Project ID** - This is the project's numeric ID (the number in the project's URL on AgileZen) to associate with the repository.
+3. **Branches** - This is a space-separated list of branches to watch commits for. Commits to other branches will not be notified to AgileZen.
 
 Need Help?
 ----------
