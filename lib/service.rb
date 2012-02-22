@@ -501,10 +501,12 @@ class Service
   # Returns a Faraday::Connection instance.
   def http(options = {})
     @http ||= begin
-      options[:timeout]            ||= 6
-      options[:ssl]                ||= {}
-      options[:ssl][:ca_file]      ||= ca_file
-      options[:ssl][:verify_depth] ||= 5
+      req = options[:request] ||= {}
+      req[:open_timeout] ||= 3
+      req[:timeout] ||= 10
+      ssl = options[:ssl] ||= {}
+      ssl[:ca_file] ||= ca_file
+      ssl[:verify_depth] ||= 5
 
       Faraday.new(options) do |b|
         b.request :url_encoded
