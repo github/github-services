@@ -22,10 +22,12 @@ For more details about Nodejitsu, go to http://nodejitsu.com
 If you are having issues with deploying a payload you can simply: 
 
 ```
-curl -X POST -H "Content-Type: application/json" http://username:password@github.jit.su/deploy --data "{\"a\": \"b\"}" 
+curl -X POST -H "Content-Type: application/json" \
+ http://username:password@github.jit.su/deploy \
+ --data "{\"payload\": {\"a\": \"b\"}}"
 ```
 
-Replacing `"{\"a\": \"b\"}"` with a real payload ([sample])
+Replacing `"{\"payload\": {\"a\": \"b\"}}"` with a real payload ([sample])
 
 Developer Notes
 ---------------
