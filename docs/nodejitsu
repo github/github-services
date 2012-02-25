@@ -1,0 +1,27 @@
+Nodejitsu
+=========
+
+Nodejitsu – Intelligent, scalable Node.js clouds.
+
+Install Notes
+-------------
+
+  1.  Create an account
+  2.  Enter your credentials
+      - Username
+      - Password
+      - Enter the host of your Nodejitsu installation (defaults to http://github.jit.su), the protocol-prefix is optional and defaults to "http://".
+
+  3.  Check the "Active" checkbox and click "Update Settings".
+  4.  Click on the "Nodejitsu" service name and then click the "Test Hook" link.
+  5.  You should receive an email from Nodejitsu once the build has completed
+
+For more details about Nodejitsu, go to http://nodejitsu.com
+
+Developer Notes
+---------------
+
+data
+  - password
+  - username
+  - domain
