@@ -19,6 +19,14 @@ Install Notes
 
 For more details about Nodejitsu, go to http://nodejitsu.com
 
+If you are having issues with deploying a payload you can simply: 
+
+```
+curl -X POST -H "Content-Type: application/json" http://username:password@github.jit.su/deploy --data "{\"a\": \"b\"}" 
+```
+
+Replacing `"{\"a\": \"b\"}"` with a real payload ([sample])
+
 Developer Notes
 ---------------
 
@@ -27,3 +35,5 @@ data
   - username
   - domain
   - branch
+
+[eg]: https://gist.github.com/653aee9cf1232f3acb5c
