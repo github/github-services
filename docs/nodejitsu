@@ -10,6 +10,7 @@ Install Notes
   2.  Enter your credentials
       - Username
       - Password
+      - Branch, if specified will only deploy from this branch
       - Enter the host of your Nodejitsu installation (defaults to http://github.jit.su), the protocol-prefix is optional and defaults to "http://".
 
   3.  Check the "Active" checkbox and click "Update Settings".
@@ -25,3 +26,4 @@ data
   - password
   - username
   - domain
+  - branch

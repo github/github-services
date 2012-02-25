@@ -1,9 +1,10 @@
 # based on the travis.rb service
 class Service::Nodejitsu < Service
-  string :subdomain, :username
+  string :subdomain, :username, :branch 
   password :password
 
   def receive_push
+    return if branch.to_s != '' && branch != branch_name
     http.ssl[:verify] = false
     http.basic_auth username, password
     http_post nodejitsu_url, :payload => payload.to_json
@@ -19,6 +20,10 @@ class Service::Nodejitsu < Service
     else
       data['username']
     end.strip
+  end
+
+  def branch
+    data['branch'].strip
   end
 
   def password
