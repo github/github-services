@@ -6,7 +6,7 @@ class Service::Nodejitsu < Service
   def receive_push
     http.ssl[:verify] = false
     http.basic_auth username, password
-    http_post nodejitsu_url, :payload => payload.to_json, :data => data.to_json
+    http_post nodejitsu_url, :payload => payload.to_json
   end
 
   def nodejitsu_url
