@@ -24,10 +24,10 @@ If you are having issues with deploying a payload you can simply:
 ```
 curl -X POST -H "Content-Type: application/json" \
  http://username:password@github.jit.su/deploy \
- --data "{\"payload\": {\"foo\": \"bar\"}}"
+ --data "{\"payload\": {\"ref\": \"/refs/head/master\", \"repository\": {\"url\": \"https://github.com/dscape/nano\", \"name\": \"nano\"}}}"
 ```
 
-Replacing `"{\"payload\": {\"foo\": \"bar\"}}"` with a real payload ([sample])
+Replacing `"{\"payload\": ...` with a real payload ([sample])
 
 Developer Notes
 ---------------
