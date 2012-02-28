@@ -15,7 +15,7 @@ class Service::Rally < Service
     @branch    = payload['ref'].split('/')[-1]  # most of the time it'll be refs/heads/master ==> master
     repo       = payload['repository']['name']
     repo_owner = payload['repository']['owner']['name']
-    @chgset_uri = 'http://github.com/%s/%s' % [repo_owner, repo] 
+    @chgset_uri = 'https://github.com/%s/%s' % [repo_owner, repo] 
     
     http.ssl[:verify] = false
     if server =~ /^https?:\/\//   # if they have http:// or https://, leave server value unchanged

@@ -119,10 +119,12 @@ class RallyTest < Service::TestCase
   end
 
   def artifact_query_response(req)
-    fmt_id = req.to_s.split('?')[1].split('&')[1].split('=')[1]
-    art_id = URI.decode(fmt_id).scan(/FormattedID = "([A-Z]+\d+)"/).first.first
-    resp = {"Errors" => [], "Warnings" => [], "TotalResultCount" => 0}.merge(ART_QUERY_RESULT[art_id])
-    resp["TotalResultCount"] = ART_QUERY_RESULT[art_id]["Results"].length
+    resp = {"Errors" => [], "Warnings" => [], "TotalResultCount" => 0}
+    if URI.decode(req.to_s.split('?')[1]) =~ /query=\(FormattedID = ([A-Z]{1,2}\d+)\)/
+      art_id = $1
+      resp = resp.merge(ART_QUERY_RESULT[art_id])
+      resp["TotalResultCount"] = ART_QUERY_RESULT[art_id]["Results"].length
+    end
     return JSON.generate({"QueryResult" => resp})
   end
 
