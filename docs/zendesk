@@ -1,0 +1,26 @@
+Zendesk
+=======
+
+This service hook allows you to update tickets in Zendesk with private comments when you reference the tickets in your commit messages or issues. A Zendesk ticket reference is on the format ZD#123 where 123 is the id of the ticket you wish to update.
+
+Install Notes
+-------------
+
+  1. The subdomain is your Zendesk subdomain, i.e. "subdomain" if you visit https://subdomain.zendesk.com
+
+  2. Username is the email address of the user you wish to authenticate as
+
+  3. Password is either the password of the user, or your Zendesk API token from "Settings / Channel / API". Remember to adjust the username if you use the API token.
+
+
+Developer Notes
+---------------
+
+data
+  - subdomain
+  - username
+  - password
+
+payload
+  - refer to docs/github_payload
+
