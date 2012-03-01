@@ -14,7 +14,6 @@ class Service::Jaconda < Service
     res = http_post "https://#{data['subdomain']}.jaconda.im/api/v2/rooms/#{data['room_id']}/notify/github.json",
       :payload => JSON.generate(payload),
       :digest => data['digest'],
-      :branch_name => branch_name,
       :event => event
 
     if res.status < 200 || res.status > 299
