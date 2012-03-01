@@ -3,10 +3,7 @@ class Service::Packagist < Service
 
   def receive_push
     http.ssl[:verify] = false
-    r = http_post packagist_url, :payload => payload.to_json, :username => user, :apiToken => token
-    puts r.body
-    puts r.status
-    puts r.headers
+    http_post packagist_url, :payload => payload.to_json, :username => user, :apiToken => token
   end
 
   def packagist_url
