@@ -27,3 +27,4 @@ data
   - subdomain
   - username    (Unfuddle API account holder)
   - password    (Unfuddle API account password)
+  - ssl         (Unfuddle account with SSL support)
