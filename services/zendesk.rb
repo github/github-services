@@ -10,11 +10,11 @@ class Service::Zendesk < Service
    data['subdomain'].to_s.empty?
   end
 
-  def service_url(subdomain)
+  def service_url(subdomain, ticket_id)
     if subdomain =~ /\./
-      url = "https://#{subdomain}/api/v2/integrations/github"
+      url = "https://#{subdomain}/api/v2/integrations/github?ticket_id=#{ticket_id}"
     else
-      url = "https://#{subdomain}.zendesk.com/api/v2/integrations/github"
+      url = "https://#{subdomain}.zendesk.com/api/v2/integrations/github?ticket_id=#{ticket_id}"
     end
 
     begin
@@ -29,22 +29,19 @@ class Service::Zendesk < Service
   def receive_event
     raise_config_error "Missing or bad configuration" if invalid_request?
 
-    if payload.inspect =~ /zd#(\d+)/i    
+    if payload.inspect =~ /zd#(\d+)/i
       ticket_id = $1
     else
       return
     end
 
-    http.basic_auth data['username'], data['password']
+    http.basic_auth(data['username'], data['password'])
     http.headers['Content-Type'] = 'application/json'
-    http.headers['Accept'] = 'application/json'  
+    http.headers['Accept'] = 'application/json'
     http.headers['X-GitHub-Event'] = event.to_s
 
-    url = service_url(data['subdomain'])
-    res = http_post(url,
-      :ticket_id => ticket_id,
-      :payload => JSON.generate(payload)
-    )
+    url = service_url(data['subdomain'], ticket_id)
+    res = http_post(url, { :payload => payload }.to_json)
 
     if res.status != 201
       raise_config_error("Unexpected response code:#{res.status}")
