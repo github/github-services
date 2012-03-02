@@ -8,7 +8,7 @@ class Service::Unfuddle < Service
     repository  = payload['repository']['name']
     branch      = branch_name
     before      = payload['before']
-    # use https for accounts that require SSL
+    # use https for accounts that support SSL
     scheme      = "http#{(data['ssl'].to_i == 1 && 's') || ''}"
 
     http.url_prefix = "#{scheme}://#{data['subdomain']}.unfuddle.com"
