@@ -1,8 +1,10 @@
 Pachube
 =======
 
-Publishes number of distinct commits per push to a [Pachube](https://pachube.com/) feed.
-Datastreams are created / updated for each repository name.
+Publishes number of distinct commits per push as well as number of modified,
+removed and added files to a [Pachube](https://pachube.com/) feed. Datastreams
+are created / updated for each repository name. The data is taken for only one
+selected branch.
 
 Install Notes
 -------------
@@ -17,7 +19,7 @@ Developer Notes
 data
   - api_key
   - feed_id
+  - track_branch
 
 payload
   - refer to docs/github_payload
-
