@@ -81,6 +81,12 @@ You can test your service in a ruby irb console:
     svc.receive_push
     ```
 
+You can also use this one-liner in the shell instead:
+
+  ```bash
+  bundle exec ruby -r config/load.rb -r services/myservice.rb -e \
+    "Service::MyService.new(:push, {'foo' => 'bar'}).receive_push"
+  ```
 You can also test your hook with the Sinatra web service:
 
 1. Start the github-services Sinatra server with `ruby github-services.rb`. By
