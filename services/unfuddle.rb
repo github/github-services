@@ -1,17 +1,17 @@
 class Service::Unfuddle < Service
   string   :subdomain, :repo_id, :username
   password :password
-  boolean  :ssl
+  boolean  :httponly
 
   def receive_push
     u_repoid    = data['repo_id'].to_i
     repository  = payload['repository']['name']
     branch      = branch_name
     before      = payload['before']
-    # use https for accounts that support SSL
-    scheme      = "http#{(data['ssl'].to_i == 1 && 's') || ''}"
+    # use https by default since most accounts support SSL
+    protocol    = data['httponly'].to_i == 1 ? 'http' : 'https'
 
-    http.url_prefix = "#{scheme}://#{data['subdomain']}.unfuddle.com"
+    http.url_prefix = "#{protocol}://#{data['subdomain']}.unfuddle.com"
     http.basic_auth data['username'], data['password']
 
     # grab people data for matching author-id
