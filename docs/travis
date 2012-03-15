@@ -13,6 +13,7 @@ Install Notes
       Optional steps:
       - Enter the username who the travis-token belongs to (defaults to the repository owner)
       - Enter the host of your Travis installation (defaults to http://travis-ci.org), the protocol-prefix is optional and defaults to "http://".
+      - Enter a space-separated list of branches to watch. Commits to other branches will not be notified to Travis. If no branches are specified, Travis will be notified of all commits.
 
   3.  Check the "Active" checkbox and click "Update Settings".
   4.  Click on the "Travis" service name and then click the "Test Hook" link.
@@ -28,5 +29,6 @@ data
   - token
   - user
   - domain
+  - branches
 
 The token has to belong to the user, of course.
