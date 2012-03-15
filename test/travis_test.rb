@@ -79,6 +79,110 @@ class TravisTest < Service::TestCase
     assert_equal "travis-ci.org", svc.domain
   end
 
+  def test_unspecified_branch
+    data = {
+      'user' => 'kronn',
+      'token' => '5373dd4a3648b88fa9acb8e46ebc188a',
+      'domain' => 'my-travis-ci.heroku.com',
+      'branches' => ''
+    }
+    payload = {"ref" => "refs/heads/foo"}
+    @stubs.post("/builds") { |e| [200, {}, ''] }
+
+    svc = service(data, payload)
+    svc.receive_push
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_matching_branch
+    data = {
+      'user' => 'kronn',
+      'token' => '5373dd4a3648b88fa9acb8e46ebc188a',
+      'domain' => 'my-travis-ci.heroku.com',
+      'branches' => 'foo'
+    }
+    payload = {"ref" => "refs/heads/foo"}
+    @stubs.post("/builds") { |e| [200, {}, ''] }
+
+    svc = service(data, payload)
+    svc.receive_push
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_unmatching_branch
+    data = {
+      'user' => 'kronn',
+      'token' => '5373dd4a3648b88fa9acb8e46ebc188a',
+      'domain' => 'my-travis-ci.heroku.com',
+      'branches' => 'foo'
+    }
+    payload = {"ref" => "refs/heads/bar"}
+    @stubs.post("/builds") { |e| [200, {}, ''] }
+
+    svc = service(data, payload)
+    svc.receive_push
+
+    # Test that no post fired
+    begin
+      @stubs.verify_stubbed_calls
+    rescue RuntimeError
+    else
+      assert_true false
+    end
+  end
+
+  def test_matching_branch_of_many
+    data = {
+      'user' => 'kronn',
+      'token' => '5373dd4a3648b88fa9acb8e46ebc188a',
+      'domain' => 'my-travis-ci.heroku.com',
+      'branches' => 'baz foo'
+    }
+    payload = {"ref" => "refs/heads/foo"}
+    @stubs.post("/builds") { |e| [200, {}, ''] }
+
+    svc = service(data, payload)
+    svc.receive_push
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_unmatching_branch_of_many
+    data = {
+      'user' => 'kronn',
+      'token' => '5373dd4a3648b88fa9acb8e46ebc188a',
+      'domain' => 'my-travis-ci.heroku.com',
+      'branches' => 'baz foo'
+    }
+    payload = {"ref" => "refs/heads/bar"}
+    @stubs.post("/builds") { |e| [200, {}, ''] }
+
+    svc = service(data, payload)
+    svc.receive_push
+
+    # Test that no post fired
+    begin
+      @stubs.verify_stubbed_calls
+    rescue RuntimeError
+    else
+      assert_true false
+    end
+  end
+
+  def test_matching_tag
+    data = {
+      'user' => 'kronn',
+      'token' => '5373dd4a3648b88fa9acb8e46ebc188a',
+      'domain' => 'my-travis-ci.heroku.com',
+      'branches' => 'foo'
+    }
+    payload = {"ref" => "refs/tags/foo"}
+    @stubs.post("/builds") { |e| [200, {}, ''] }
+
+    svc = service(data, payload)
+    svc.receive_push
+    @stubs.verify_stubbed_calls
+  end
+
   def service(*args)
     super Service::Travis, *args
   end

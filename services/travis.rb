@@ -1,7 +1,11 @@
 class Service::Travis < Service
-  string :domain, :user, :token
+  string :domain, :user, :token, :branches
 
   def receive_push
+    branches = data['branches'].to_s.split(/\s+/)
+    ref = payload["ref"].to_s
+    return unless branches.empty? || branches.include?(ref.split("/").last)
+
     http.ssl[:verify] = false
     http.basic_auth user, token
     http_post travis_url, :payload => payload.to_json
