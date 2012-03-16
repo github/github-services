@@ -5,25 +5,16 @@ class Service::AgileBench < Service
     token, project_id =
      data['token'].to_s.strip, data['project_id'].to_s.strip
 
-    raise_config_error "Invalid Token" if !token.present?
-    raise_config_error "Invalid Project ID" if !project_id.present?
+    raise_config_error "Invalid Token" if token.to_s.empty?
+    raise_config_error "Invalid Project ID" if project_id.to_s.empty?
 
-    response = {:token => token,
-                :project_id => project_id}
+    response = { :token       => token,
+                 :payload     => payload }
 
-    if payload["commits"]
-      response.merge!({ :commit => {
-                          :message => payload['commits'].last["message"]
-                        },
-                        :github_user => {
-                          :username => payload['commits'].last["committer"]["username"],
-                          :email => payload['commits'].last["committer"]["email"]
-                        }
-      })
-    end
+    puts "response: " + response.to_json
 
-    http_post "http://93.181.168.171:9393/",
-      {:data => response.to_json}
+    res = http_post "http://212.127.65.121:9393/project/#{project_id}",
+      { :data => response.to_json }
   end
 end
 
