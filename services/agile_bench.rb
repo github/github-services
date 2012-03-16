@@ -5,8 +5,8 @@ class Service::AgileBench < Service
     token, project_id =
      data['token'].to_s.strip, data['project_id'].to_s.strip
 
-    raise_config_error "Invalid Token" if token.to_s.empty?
-    raise_config_error "Invalid Project ID" if project_id.to_s.empty?
+    raise_config_error "Invalid Token" if !token.present?
+    raise_config_error "Invalid Project ID" if !project_id.present?
 
     response = { :token       => token,
                  :payload     => payload }
