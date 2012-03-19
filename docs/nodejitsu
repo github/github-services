@@ -11,23 +11,13 @@ Install Notes
       - Username
       - Password
       - Branch, if specified will only deploy from this branch
-      - Enter the host of your Nodejitsu installation (defaults to http://github.jit.su), the protocol-prefix is optional and defaults to "http://".
+      - Enter the host of your Nodejitsu installation (defaults to https://webhooks.nodejitsu.com), the protocol-prefix is optional and defaults to "https://".
 
   3.  Check the "Active" checkbox and click "Update Settings".
   4.  Click on the "Nodejitsu" service name and then click the "Test Hook" link.
-  5.  You should receive an email from Nodejitsu once the build has completed
 
-For more details about Nodejitsu, go to http://nodejitsu.com
-
-If you are having issues with deploying a payload you can simply: 
-
-```
-curl -X POST -H "Content-Type: application/json" \
- http://username:password@github.jit.su/deploy \
- --data "{\"payload\": {\"ref\": \"/refs/head/master\", \"repository\": {\"url\": \"https://github.com/dscape/nano\", \"name\": \"nano\"}}}"
-```
-
-Replacing `"{\"payload\": ...` with a real payload ([sample])
+For more details about Nodejitsu, go to http://nodejitsu.com. 
+If you want to know if your deploy was successful or why it failed please refer to out [API documentation of the Nodejitsu Web-hook API](https://gist.github.com/72995cb95b73e05b79f9)
 
 Developer Notes
 ---------------
@@ -37,5 +27,3 @@ data
   - username
   - domain
   - branch
-
-[eg]: https://gist.github.com/653aee9cf1232f3acb5c

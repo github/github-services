@@ -31,7 +31,7 @@ class Service::Nodejitsu < Service
   end
 
   def scheme
-    domain_parts.size == 1 ? 'http' : domain_parts.first
+    domain_parts.size == 1 ? 'https' : domain_parts.first
   end
 
   def domain
@@ -42,7 +42,7 @@ class Service::Nodejitsu < Service
 
   def full_domain
     if data['domain'].to_s == ''
-      'http://github.jit.su'
+      'https://webhooks.nodejitsu.com'
     else
       data['domain']
     end.strip
