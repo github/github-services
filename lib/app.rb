@@ -24,13 +24,13 @@ class Service::App < Sinatra::Base
           status "#{svc.hook_name} Service does not respond to 'push' events"
         end
       rescue Faraday::Error::ConnectionFailed => boom
-        status 400
+        status 503
         boom.message
       rescue Service::ConfigurationError => boom
         status 400
         boom.message
       rescue Service::TimeoutError => boom
-        status 400
+        status 504
         "Service Timeout"
       rescue Object => boom
         report_exception svc, data, boom, 
