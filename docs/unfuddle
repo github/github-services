@@ -27,3 +27,4 @@ data
   - subdomain
   - username    (Unfuddle API account holder)
   - password    (Unfuddle API account password)
+  - httponly    (Unfuddle accounts mostly support HTTPS; HTTP can be used for accounts where HTTPS is not supported)
