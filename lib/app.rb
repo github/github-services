@@ -1,6 +1,5 @@
 # The Sinatra App that handles incoming events.
 class Service::App < Sinatra::Base
-
   set :hostname, lambda { %x{hostname} }
 
   # Hooks the given Service to a Sinatra route.
@@ -14,7 +13,7 @@ class Service::App < Sinatra::Base
       time = Time.now.to_f
       data = nil
       begin
-        data    = JSON.parse(params[:data])
+        data = JSON.parse(params[:data])
         payload = parse_payload(params[:payload])
         if svc.receive(params[:event], data, payload)
           status 200
@@ -29,21 +28,21 @@ class Service::App < Sinatra::Base
       rescue Service::ConfigurationError => boom
         status 400
         boom.message
-      rescue Service::TimeoutError => boom
+      rescue Timeout::Error, Service::TimeoutError => boom
         status 504
         "Service Timeout"
       rescue Service::MissingError => boom
         status 404
         boom.message
       rescue Object => boom
-        report_exception svc, data, boom, 
+        report_exception svc, data, boom,
           :event => params[:event], :payload => payload.inspect
         status 500
         "ERROR"
       ensure
         duration = Time.now.to_f - time
-        if duration > 9
-          boom ||= RuntimeError.new("Long Service Hook")
+        if svc != Service::Web && duration > 9
+          boom ||= Service::TimeoutError.new("Long Service Hook")
           report_exception svc, data, boom, 
             :event => params[:event], :payload => payload.inspect,
             :duration => "#{duration}s" 
@@ -71,29 +70,20 @@ class Service::App < Sinatra::Base
   #
   # Returns nothing.
   def report_exception(service_class, service_data, exception, options = {})
-    backtrace = Array(exception.backtrace)[0..500]
+    error = (exception.respond_to?(:original_exception) &&
+      exception.original_exception) || exception
+    backtrace = Array(error.backtrace)[0..500]
 
     data = {
       'app'       => 'github-services',
       'type'      => 'exception',
-      'class'     => exception.class.to_s,
+      'class'     => error.class.to_s,
       'server'    => settings.hostname,
-      'message'   => exception.message[0..254],
+      'message'   => error.message[0..254],
       'backtrace' => backtrace.join("\n"),
-      'rollup'    => Digest::MD5.hexdigest(exception.class.to_s + backtrace[0]),
+      'rollup'    => Digest::MD5.hexdigest(error.class.to_s + backtrace[0]),
       'service'   => service_class.to_s,
     }.update(options)
-
-    if exception.kind_of?(Service::Error)
-      if exception.original_exception
-        data['original_class'] = exception.original_exception.to_s
-        data['backtrace'] = exception.original_exception.backtrace.join("\n")
-        data['message'] = exception.original_exception.message[0..254]
-      end
-    elsif !exception.kind_of?(Service::TimeoutError)
-      data['original_class'] = data['class']
-      data['class'] = 'Service::Error'
-    end
 
     if service_class == Service::Web
       data['service_data'] = service_data.inspect
