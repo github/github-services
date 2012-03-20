@@ -4,7 +4,7 @@ class Service::Web < Service
   string :url,
     # adds a X-Hub-Signature of the body content
     # X-Hub-Signature: sha1=....
-    :secret, 
+    :secret,
 
     # old hooks send form params ?payload=JSON(...)
     # new hooks should set content_type == 'json'
@@ -49,10 +49,10 @@ class Service::Web < Service
 
     http_post url, body
   rescue Addressable::URI::InvalidURIError, Errno::EHOSTUNREACH
-    raise_config_error $!.to_s
+    raise_missing_error $!.to_s
   rescue SocketError
     if $!.to_s =~ /getaddrinfo:/
-      raise_config_error "Invalid host name."
+      raise_missing_error "Invalid host name."
     else
       raise
     end

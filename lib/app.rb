@@ -32,6 +32,9 @@ class Service::App < Sinatra::Base
       rescue Service::TimeoutError => boom
         status 504
         "Service Timeout"
+      rescue Service::MissingError => boom
+        status 404
+        boom.message
       rescue Object => boom
         report_exception svc, data, boom, 
           :event => params[:event], :payload => payload.inspect

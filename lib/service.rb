@@ -548,6 +548,10 @@ class Service
     raise ConfigurationError, msg
   end
 
+  def raise_missing_error(msg = "Remote endpoint not found")
+    raise MissingError, msg
+  end
+
   # Gets the path to the SSL Certificate Authority certs.  These were taken
   # from: http://curl.haxx.se/ca/cacert.pem
   #
@@ -579,6 +583,9 @@ class Service
   # Raised when a service hook fails due to bad configuration. Services that
   # fail with this exception may be automatically disabled.
   class ConfigurationError < Error
+  end
+
+  class MissingError < Error
   end
 end
 
