@@ -23,11 +23,19 @@ class Service::Nodejitsu < Service
   end
 
   def branch
-    data['branch'].strip
+    if data['branch'].to_s == ''
+      data['branch']
+    else
+       'master'
+    end.strip
   end
 
   def password
-    data['password'].strip
+    if data['password'].to_s == ''
+      data['password']
+    else
+       ''
+    end.strip
   end
 
   def scheme
