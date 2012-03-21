@@ -11,7 +11,7 @@ class Service::Nodejitsu < Service
   end
 
   def nodejitsu_url
-    "#{scheme}://#{domain}/deploy"
+    "#{scheme}://#{domain}/1/deploy"
   end
 
   def username
