@@ -17,7 +17,7 @@ Install Notes
   4.  Click on the "Nodejitsu" service name and then click the "Test Hook" link.
 
 For more details about Nodejitsu, go to http://nodejitsu.com. 
-If you want to know if your deploy was successful or why it failed please refer to out [API documentation of the Nodejitsu Web-hook API](https://gist.github.com/72995cb95b73e05b79f9)
+If you want to know if your deploy was successful or why it failed please refer to out [API documentation of the Nodejitsu Web-hook API](http://webhooks.nodejitu.com)
 
 Developer Notes
 ---------------
