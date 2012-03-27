@@ -23,11 +23,11 @@ class Service::Pushover < Service
 
     if commits == 1
       title = "#{payload["pusher"]["name"]} pushed to #{repo}"
-      message = "#{latest_message}\n#{latest_url}"
+      message = latest_message
     else
       title = "#{payload["pusher"]["name"]} pushed #{commits} " +
         "commit#{commits == 1 ? '' : 's'} to #{repo}"
-      message = "Latest: #{latest_message}\n#{latest_url}"
+      message = "Latest: #{latest_message}"
     end
 
     http_post url.to_s,
@@ -35,6 +35,8 @@ class Service::Pushover < Service
       :user => data["user_key"],
       :device => data["device_name"],
       :title => title,
-      :message => message
+      :message => message,
+      :url => latest_url,
+      :url_title => "View commit on GitHub"
   end
 end
