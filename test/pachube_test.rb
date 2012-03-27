@@ -13,7 +13,14 @@ class PachubeTest < Service::TestCase
   end
 
   def test_require_feed_id
-    svc = service({'api_key' => 'abcd1234'}, payload)
+    svc = service({'api_key' => 'abcd1234', 'track_branch' => 'xyz'}, payload)
+    assert_raises Service::ConfigurationError do
+      svc.receive_push
+    end
+  end
+
+  def test_require_branch
+    svc = service({'api_key' => 'abcd1234', 'feed_id' => '123'}, payload)
     assert_raises Service::ConfigurationError do
       svc.receive_push
     end
@@ -29,7 +36,7 @@ class PachubeTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service({'api_key' => 'abcd1234', 'feed_id' => '1234'}, payload)
+    svc = service({'api_key' => 'abcd1234', 'feed_id' => '1234', 'track_branch' => 'xyz'}, payload)
     svc.receive_push
   end
 
