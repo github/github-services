@@ -105,6 +105,8 @@ require 'yammer4r'
 require 'mq'
 require 'statsd'
 require 'twilio-ruby'
+require 'right_aws'
+require 'right_http_connection'
 
 # vendor
 require 'basecamp'
