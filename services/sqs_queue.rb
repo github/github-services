@@ -19,8 +19,11 @@ class Service::SqsQueue < Service
       raise_config_error "You must define an SQS queue."
     end
 
+    # Encode payload to JSON
+    payload_json_data = JSON.generate(payload)
+
     # Send payload to SQS queue
-    notify_sqs( access_key(), secret_key(), queue_name(), payload )
+    notify_sqs( access_key(), secret_key(), queue_name(), payload_json_data )
   end
 
   # notify_sqs()
