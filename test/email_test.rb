@@ -1,6 +1,10 @@
 require File.expand_path('../helper', __FILE__)
 
 class EmailTest < Service::TestCase
+  def setup
+    @stubs = Faraday::Adapter::Test::Stubs.new
+  end
+
   def test_push
     svc = service(
       {'address' => 'a'},
@@ -44,6 +48,25 @@ class EmailTest < Service::TestCase
     msg, from, to = svc.messages.shift
     assert_match 'tom@mojombo.com', from
     assert_equal 'a', to
+
+    assert_nil svc.messages.shift
+  end
+
+  def test_show_diff
+    payload['commits'].each do |commit|
+      @stubs.get commit['url'].sub(/http:\/\/[^\/]+/, '')+".diff" do |env|
+        [200, {}, 'This is my diff']
+      end
+    end
+
+    svc = service(
+      {'address' => 'a', 'show_diff' => '1'},
+      payload)
+
+    svc.receive_push
+
+    msg, from, to = svc.messages.shift
+    assert_match 'This is my diff', msg
 
     assert_nil svc.messages.shift
   end
