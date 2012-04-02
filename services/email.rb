@@ -101,7 +101,7 @@ class Service::Email < Service
     modified = commit['modified'].map { |f| ['M', f] }
 
     changed_paths = (added + removed + modified).sort_by { |(char, file)| file }
-    changed_paths = changed_paths.collect { |entry| entry * ' ' }.join("\n  ")
+    changed_paths = changed_paths.collect { |entry| entry * ' ' }.join("\n    ")
 
     timestamp = Date.parse(commit['timestamp'])
 
