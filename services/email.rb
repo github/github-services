@@ -133,10 +133,14 @@ class Service::Email < Service
 
     if data['show_diff']
       begin
-        patch_resp = http_get commit['url'] + ".diff" # Github currently doesn't support Accept headers
+        patch_resp = http_get commit['url'] + ".diff" do |req| # Github currently doesn't support Accept headers
+          req[:timeout] = '4' # seconds
+        end
         case patch_resp.status
         when 301, 302, 303, 307, 308
-          patch_resp = http_get patch_resp.headers['location']
+          patch_resp = http_get patch_resp.headers['location'] do |req|
+            req[:timeout] = '4' # seconds
+          end
         end
         if patch_resp.success?
           text << patch_resp.body
