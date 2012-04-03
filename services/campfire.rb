@@ -5,7 +5,7 @@ class Service::Campfire < Service
 
   self.campfire_class = Tinder::Campfire
 
-  string :subdomain, :room, :token
+  string :subdomain, :room, :token, :sound
   boolean :master_only, :play_sound, :long_url
 
   default_events :push, :pull_request, :issues
@@ -36,13 +36,14 @@ class Service::Campfire < Service
     return if data['master_only'].to_i == 1 && respond_to?(:branch_name) && branch_name != 'master'
 
     play_sound = data['play_sound'].to_i == 1
+    sound = data['sound'].blank? ? 'rimshot' : data['sound']
 
     unless room = find_room
       raise_config_error 'No such campfire room'
     end
 
     Array(messages).each { |line| room.speak line }
-    room.play "rimshot" if play_sound && room.respond_to?(:play)
+    room.play sound if play_sound && room.respond_to?(:play)
   rescue OpenSSL::SSL::SSLError => boom
     raise_config_error "SSL Error: #{boom}"
   rescue Tinder::AuthenticationFailed => boom

@@ -17,6 +17,9 @@ Install Notes
 
   5. play_sound is a boolean flag indicating whether a sound should be played
 
+  6. sound is the sound that should be played if play_sound is
+     true. defaults to 'rimshot'
+
 
 Developer Notes
 ---------------
@@ -25,6 +28,7 @@ data
   - subdomain
   - token
   - room
+  - sound
   - master_only
   - play_sound
 
