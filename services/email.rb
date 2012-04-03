@@ -132,21 +132,25 @@ class Service::Email < Service
     EOH
 
     if data['show_diff']
-      patch_resp = http_get commit['url'] + ".diff" # Why doesn't this use accept headers?
-      case patch_resp.status
-      when 301, 302, 303, 307, 308
-        patch_resp = http_get patch_resp.headers['location']
+      begin
+        patch_resp = http_get commit['url'] + ".diff" # Github currently doesn't support Accept headers
+        case patch_resp.status
+        when 301, 302, 303, 307, 308
+          patch_resp = http_get patch_resp.headers['location']
+        end
+        if patch_resp.success?
+          text << patch_resp.body
+        else
+          raise "Status: #{patch_resp.status}"
+        end
+      rescue => msg
+        text << "There was an error trying to read the diff from github.com (#{msg})"
       end
-      if patch_resp.status == 200
-        text << patch_resp.body << <<-EOH
+      text << <<-EOH
 
 
-
-        EOH
-        text << "================================================================\n"
-      else
-        raise_config_error "Got #{patch_resp.status} and not 200"
-      end
+      EOH
+      text << "================================================================\n"
     end
 
     text
