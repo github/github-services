@@ -47,7 +47,7 @@ private
     # get the user's id
     res = http_get "api/v1/Users", {:where => "(Email eq '%s')" % author}
     valid_response?(res)
-    author_id = begin Hash.from_xml(res.body)['Items']['User']['Id'] rescue nil end
+    author_id = begin Hash.from_xml(res.body)['Users']['User']['Id'] rescue nil end
     return if author_id.nil?
     # get Context data for our project
     res = http_get "api/v1/Context", :ids => @project_id
@@ -64,7 +64,7 @@ private
     res = http_get "api/v1/Processes/%s/EntityStates" % [context_data['Context']['Processes']['ProcessInfo']['Id']],
         {:where => "(Name eq '%s') and (EntityType.Name eq '%s')" % [command, entity_type], :acid => acid}
     valid_response?(res)
-    new_state = begin Hash.from_xml(res.body)['Items']['EntityState']['Id'] rescue nil end
+    new_state = begin Hash.from_xml(res.body)['EntityStates']['EntityState']['Id'] rescue nil end
     # Make it happen
     http.headers['Content-Type'] = 'application/json'
     commit_message = "#{commit_message}<br />Commit: #{commit_url}"
