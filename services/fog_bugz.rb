@@ -22,7 +22,7 @@ class Service::FogBugz < Service
       bug_list = []
       message.split("\n").each do |line|
         # match variants of bugids or cases
-        if (line =~ /\s*(?:Bug[zs]*\s*IDs*\s*|Case[s]*)[#:; ]+((\d+[ ,:;#]*)+)/i)
+        if (line =~ /\s*(?:Bug[zs]*\s*(IDs*)?\s*|Case[s]*|Ticket[s]*)[#:; ]+((\d+[ ,:;#]*)+)/i)
           bug_list << $1.to_i
         end
       end
