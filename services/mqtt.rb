@@ -1,8 +1,6 @@
 class Service::MQTT < Service
   string :broker, :port, :topic
-  
-  require 'mqtt'
-  
+
   self.title = 'MQTT'
 
   def receive_push
