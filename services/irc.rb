@@ -1,10 +1,11 @@
 class Service::IRC < Service
-  string   :server, :port, :room, :nick
+  string   :server, :port, :room, :nick, :branch_regexes
   password :password
   boolean  :ssl, :message_without_join, :no_colors, :long_url, :notice
 
   def receive_push
     return if distinct_commits.empty?
+    return unless branch_name_matches?
 
     url  = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
 
@@ -116,5 +117,14 @@ class Service::IRC < Service
         "\002#{repo_name}:\002 \00307#{branch_name}\003 \00303#{author}\003 * " +
         "\002#{sha1[0..6]}\002 (#{files.size} files in #{dirs.size} dirs): #{short}"
     end
+  end
+  
+  def branch_name_matches?
+    return true if data['branch_regexes'].nil?
+    branch_regexes = data['branch_regexes'].split(',')
+    branch_regexes.each do |regex|
+      return true if Regexp.new(regex) =~ branch_name
+    end
+    false
   end
 end
