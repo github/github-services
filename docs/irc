@@ -19,6 +19,16 @@ Install Notes
     joining and immediately leaving the channel for each push.
 10. Enable `no_colors` to disable colors in the messages sent by the
     GitHub IRC bot.
+11. Enable Active and Notice checkboxes
+12. Configure your IRC channel to allow external messages (/mode #yourchannelname -n).
+
+For troubleshooting, run the following curl command to get diagnostic information from GitHub. 
+
+    # Replace 
+    # USERNAME:PASSWORD with your GitHub username and password. Username is your full username as used when signing in. 
+    # USERNAME/REPONAME with your repo name as it shows in github. 
+    
+    $ curl -u "USERNAME:PASSWORD" -in https://api.github.com/repos/USERNAME/REPONAME/hooks
 
 
 Developer Notes
