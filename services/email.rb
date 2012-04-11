@@ -131,6 +131,32 @@ class Service::Email < Service
 
     EOH
 
+    if data['show_diff']
+      begin
+        patch_resp = http_get commit['url'] + ".diff" do |req| # Github currently doesn't support Accept headers
+          req[:timeout] = '4' # seconds
+        end
+        case patch_resp.status
+        when 301, 302, 303, 307, 308
+          patch_resp = http_get patch_resp.headers['location'] do |req|
+            req[:timeout] = '4' # seconds
+          end
+        end
+        if patch_resp.success?
+          text << patch_resp.body
+        else
+          raise "Status: #{patch_resp.status}"
+        end
+      rescue => msg
+        text << "There was an error trying to read the diff from github.com (#{msg})"
+      end
+      text << <<-EOH
+
+
+      EOH
+      text << "================================================================\n"
+    end
+
     text
   end
 

@@ -8,6 +8,7 @@ Install Notes
 2. `secret` fills out the Approved header to automatically approve the message
    in a read-only or moderated mailing list.
 3. `send_from_author` uses the commit author email address in the From address of the email.
+4. `show_diff` puts the diffs for each commit in the email.
 
 Developer Notes
 ---------------
@@ -16,6 +17,7 @@ data
   - address(es)
   - secret
   - send_from_author
+  - show_diff
 
 payload
   - refer to docs/github_payload
