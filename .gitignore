@@ -8,3 +8,4 @@ vendor/gems
 .bundle
 docs/payload_data
 .rvmrc
+.project
