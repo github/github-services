@@ -20,17 +20,26 @@ class Service::PubAlert < Service
     raise_config_error "Missing 'auth_token'" if data['auth_token'].to_s == ''
     raise_config_error "Missing 'repo_name'" if data['repo_name'].to_s == ''
 
-    notify_email = data['notify_email'].split(/[, ]/).compact.reject {|s| s.nil? or s.empty? }[0]
-    notify_event notify_email, data['repo_name'] if notify_email
-
     # Set our headers
     http.headers['X-GitHub-Event'] = event.to_s #this should be 'public' anyway
 
-    res = http_post "#{data['remote_url']}",
-            {:auth_token => data['auth_token'],
-             :repo_name => data['repo_name']}
-    if res.status < 200 || res.status > 299
-      raise_config_error
+    begin
+      res = http_post "#{data['remote_url']}",
+              {:auth_token => data['auth_token'],
+               :repo_name => data['repo_name']}
+      if res.status < 200 || res.status > 299
+        raise_config_error
+      end
+    rescue URI::Error => e
+      raise_config_error "Not able to send a POST request to #{data['remote_url']}. Reason being:%s" % e.message
+    end
+
+    notify_email = data['notify_email'].split(/[, ]/).compact.reject {|s| s.nil? or s.empty? }[0]
+
+    begin
+      notify_event notify_email, data['repo_name'] if notify_email
+    rescue Net::SMTPError => e
+      raise_config_error "Not able to shoot email to #{notify_email}. Reason being:%s" % e.message
     end
   end
 
