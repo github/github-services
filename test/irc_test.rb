@@ -44,6 +44,90 @@ class IRCTest < Service::TestCase
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
   end
+  
+  def test_push_with_empty_branch_regex
+    svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => ''}, payload)
+    
+    svc.receive_push
+    msgs = svc.writable_io.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match "USER n", msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+  
+  def test_push_with_single_matching_branch_regex
+    svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => 'mast*'}, payload)
+
+    svc.receive_push
+    msgs = svc.writable_io.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match "USER n", msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+  
+  def test_push_with_single_mismatching_branch_regex
+    svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => '^ticket*'}, payload)
+
+    svc.receive_push
+    msgs = svc.writable_io.string.split("\n")
+    assert_nil msgs.shift
+  end
+  
+  def test_push_with_multiple_branch_regexes_where_all_match
+    svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => 'mast*,^ticket*'}, payload)
+
+    svc.receive_push
+    msgs = svc.writable_io.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match "USER n", msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+
+  def test_push_with_multiple_branch_regexes_where_one_matches
+    svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => 'mast*,^ticket*'}, payload)
+
+    svc.receive_push
+    msgs = svc.writable_io.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match "USER n", msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+
+  def test_push_with_multiple_branch_regexes_where_none_match
+    svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => '^feature*,^ticket*'}, payload)
+
+    svc.receive_push
+    msgs = svc.writable_io.string.split("\n")
+    assert_nil msgs.shift
+  end
 
   def test_push_with_nickserv
     svc = service({'room' => 'r', 'nick' => 'n', 'nickservidentify' => 'booya'},

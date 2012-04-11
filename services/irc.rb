@@ -121,6 +121,7 @@ class Service::IRC < Service
   
   def branch_name_matches?
     return true if data['branch_regexes'].nil?
+    return true if data['branch_regexes'].strip == ""
     branch_regexes = data['branch_regexes'].split(',')
     branch_regexes.each do |regex|
       return true if Regexp.new(regex) =~ branch_name
