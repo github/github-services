@@ -20,7 +20,8 @@ class Service::PubAlert < Service
     raise_config_error "Missing 'auth_token'" if data['auth_token'].to_s == ''
     raise_config_error "Missing 'repo_name'" if data['repo_name'].to_s == ''
 
-    notify_event data['notify_email'], data['repo_name'] if data['repo_name'].to_s.size > 0
+    notify_email = data['notify_email'].split(/[, ]/).compact.reject {|s| s.nil? or s.empty? }[0]
+    notify_event notify_email, data['repo_name'] if notify_email
 
     # Set our headers
     http.headers['X-GitHub-Event'] = event.to_s #this should be 'public' anyway
