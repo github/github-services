@@ -11,7 +11,7 @@ end
 
 class Service::Email < Service
   string :address, :secret
-  boolean :send_from_author
+  boolean :send_from_author, :show_diff
 
   def receive_push
     configure_mail_defaults unless mail_configured?
