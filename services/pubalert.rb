@@ -31,7 +31,10 @@ class Service::PubAlert < Service
         raise_config_error
       end
     rescue URI::Error => e
-      raise_config_error "Not able to send a POST request to #{data['remote_url']}. Reason being:%s" % e.message
+      #Ideally this should be logged somewhere. Or the Error need to be
+      #raised as a config_error but since emailing the 'Public' event
+      #(if an email-address is specified) should also be done, this is supresessed.
+      #raise_config_error "Not able to send a POST request to #{data['remote_url']}. Reason being:%s" % e.message
     end
 
     notify_email = data['notify_email'].split(/[, ]/).compact.reject {|s| s.nil? or s.empty? }[0]
