@@ -5,80 +5,148 @@ class ShiningPandaTest < Service::TestCase
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
 
-  def test_post_payload
+  def test_receive_push_without_parameters
     @stubs.post '/shiningpanda.org/job/pygments/build' do |env|
       form = Rack::Utils.parse_query(env[:body])
-      assert_equal 'github', form['from']
       assert_equal 'PWFm8c2T', form['token']
-      assert_equal 'payload_content', JSON.parse(form['payload'])
+      assert_equal 'Triggered by a push of omansion (commit: 83d9205e73c25092ce7cb7ce530d2414e6d068cb)', form['cause']
     end
-    svc = service(data, 'payload_content')
+    svc = service(data, payload)
+    svc.receive_push
+  end
+
+  def test_receive_push_with_parameters
+    @stubs.post '/shiningpanda.org/job/pygments/buildWithParameters' do |env|
+      form = Rack::Utils.parse_query(env[:body])
+      assert_equal 'PWFm8c2T', form['token']
+      assert_equal 'Triggered by a push of omansion (commit: 83d9205e73c25092ce7cb7ce530d2414e6d068cb)', form['cause']
+      assert_equal 'bar', form['foo']
+    end
+    svc = service(data.merge({'parameters' => 'foo=bar'}), payload)
     svc.receive_push
   end
   
-  def test_requires_workspace
-    svc = service :push, { 'job' => 'pygments', 'token' => 'PWFm8c2T' }, 'payload'
+  def test_workspace_missing
+    svc = service({ 'job' => 'pygments', 'token' => 'PWFm8c2T' }, payload)
     assert_raise Service::ConfigurationError do
       svc.receive_push
     end
   end
 
-  def test_requires_job
-    svc = service :push, { 'workspace' => 'shiningpanda.org', 'token' => 'PWFm8c2T' }, 'payload'
+  def test_workspace_nil
+    svc = service(data.merge({'workspace' => nil}), payload)
+    assert_raise Service::ConfigurationError do
+      svc.receive_push
+    end
+  end
+
+  def test_workspace_blank
+    svc = service(data.merge({'workspace' => ''}), payload)
     assert_raise Service::ConfigurationError do
       svc.receive_push
     end
   end
   
-  def test_requires_token
-    svc = service :push, { 'workspace' => 'shiningpanda.org', 'job' => 'pygments' }, 'payload'
+  def test_job_missing
+    svc = service({ 'workspace' => 'shiningpanda.org', 'token' => 'PWFm8c2T' }, payload)
+    assert_raise Service::ConfigurationError do
+      svc.receive_push
+    end
+  end
+
+  def test_job_nil
+    svc = service(data.merge({'job' => nil}), payload)
     assert_raise Service::ConfigurationError do
       svc.receive_push
     end
   end
   
-  def test_without_parameters
+  def test_job_blank
+    svc = service(data.merge({'job' => ''}), payload)
+    assert_raise Service::ConfigurationError do
+      svc.receive_push
+    end
+  end
+  
+  def test_token_missing
+    svc = service({ 'workspace' => 'shiningpanda.org', 'job' => 'pygments' }, payload)
+    assert_raise Service::ConfigurationError do
+      svc.receive_push
+    end
+  end
+
+  def test_token_nil
+    svc = service(data.merge({'token' => nil}), payload)
+    assert_raise Service::ConfigurationError do
+      svc.receive_push
+    end
+  end
+  
+  def test_token_blank
+    svc = service(data.merge({'token' => ''}), payload)
+    assert_raise Service::ConfigurationError do
+      svc.receive_push
+    end
+  end
+  
+  def test_url_without_parameters
     svc = service(data, payload)
     assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/build", svc.url
   end
 
-  def test_blank_parameters
+  def test_url_nil_parameters
+    svc = service(data.merge({'parameters' => nil}), payload)
+    assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/build", svc.url
+  end
+  
+  def test_url_blank_parameters
     svc = service(data.merge({'parameters' => ''}), payload)
     assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/build", svc.url
   end
   
-  def test_with_parameters
+  def test_url_with_parameters
     svc = service(data.merge({'parameters' => 'foo=bar'}), payload)
-    assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/buildWithParameters?foo=bar", svc.url
+    assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/buildWithParameters", svc.url
   end
   
-  def test_strip_workspace
+  def test_url_strip_workspace
     svc = service(data.merge({'workspace' => ' shiningpanda.org '}), payload)
     assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/build", svc.url
   end
 
-  def test_strip_job
+  def test_url_strip_job
     svc = service(data.merge({'job' => ' pygments '}), payload)
     assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/build", svc.url
-  end
-
-  def test_strip_token
-    svc = service(data.merge({'token' => ' PWFm8c2T '}), payload)
-    assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/build?token=PWFm8c2T", svc.url
   end
 
   def test_strip_token
     @stubs.post '/shiningpanda.org/job/pygments/build' do |env|
       assert_equal 'PWFm8c2T', Rack::Utils.parse_query(env[:body])['token']
     end
-    svc = service(data.merge({'token' => ' PWFm8c2T '}), 'payload_content')
+    svc = service(data.merge({'token' => ' PWFm8c2T '}), payload)
     svc.receive_push
+  end
+
+  def test_multi_valued_parameter
+    svc = service(data.merge({'parameters' => 'foo=bar&foo=toto'}), payload)
+    assert_raise Service::ConfigurationError do
+      svc.receive_push
+    end
   end
   
   def service(*args)
     super Service::ShiningPanda, *args
   end
 
+  def payload
+    {
+      'after'  => '83d9205e73c25092ce7cb7ce530d2414e6d068cb',
+      'pusher' => {
+        'name'   => 'omansion',
+      }
+    }
+  end
+  
   def data
     {
       'workspace' => 'shiningpanda.org',
