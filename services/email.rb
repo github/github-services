@@ -14,6 +14,10 @@ class Service::Email < Service
   boolean :send_from_author, :show_diff
 
   def receive_push
+    send_message
+  end
+
+  def send_message
     configure_mail_defaults unless mail_configured?
 
     addresses.each do |address|
