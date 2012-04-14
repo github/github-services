@@ -71,6 +71,28 @@ class EmailTest < Service::TestCase
     assert_nil svc.messages.shift
   end
 
+  def test_issues
+    svc = service(:issue,
+      {'address' => 'a', 'send_issues' => '1'},
+      issues_payload)
+    svc.receive_issue
+    msg, from, to = svc.messages.shift
+    assert_match 'noreply@github.com', from
+    assert_equal 'a', to
+    assert_match /\[grit\] mojombo opened issue #5: booya./i, msg
+  end
+
+  def test_pull_requests
+    svc = service(:pull_request,
+      {'address' => 'a', 'send_pull_requests' => '1'},
+      pull_payload)
+    svc.receive_pull_request
+    msg, from, to = svc.messages.shift
+    assert_match 'noreply@github.com', from
+    assert_equal 'a', to
+    assert_match /\[grit\] mojombo opened pull request #5: booya \(master...feature\)/i, msg
+  end
+
   def service(*args)
     svc = super Service::Email, *args
     def svc.messages

@@ -12,8 +12,21 @@ end
 class Service::Email < Service
   string :address, :secret
   boolean :send_from_author, :show_diff
+  boolean :send_pull_requests, :send_issues
 
   def receive_push
+    send_message
+  end
+
+  def receive_pull_request
+    send_message if data['send_pull_requests']
+  end
+
+  def receive_issue
+    send_message if data['send_issues']
+   end
+
+  def send_message
     configure_mail_defaults unless mail_configured?
 
     addresses.each do |address|
@@ -62,16 +75,44 @@ class Service::Email < Service
   def mail_message(address)
     my = self
 
+    if @event == :push
+      from = my.from_address
+      subject = my.mail_subject
+      body = my.text_body
+    else
+      from = my.noreply_address
+      subject = my.summary_message
+      if @event == :issues
+        body << <<-EOM
+See #{my.html_url}
+
+#{my.title}
+
+#{my.body}
+EOM
+      elsif @event == :pull_request
+        body << <<-EOM
+See #{my.html_url}
+
+#{my.sender.login} #{my.action} #{my.title}
+
+#{my.body}
+EOM
+      else
+        body = my.summary_url
+      end
+    end
+
     Mail.new do
       to       address
-      from     my.from_address
-      reply_to my.from_address
-      subject  my.mail_subject
+      from     from
+      reply_to from
+      subject  subject
       headers  my.secret_header
 
       text_part do
         content_type 'text/plain; charset=UTF-8'
-        body         my.text_body
+        body         body
       end
     end
   end
