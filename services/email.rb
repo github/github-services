@@ -82,7 +82,25 @@ class Service::Email < Service
     else
       from = my.noreply_address
       subject = my.summary_message
-      body = my.summary_url
+      if @event == :issues
+        body << <<-EOM
+See #{my.html_url}
+
+#{my.title}
+
+#{my.body}
+EOM
+      elsif @event == :pull_request
+        body << <<-EOM
+See #{my.html_url}
+
+#{my.sender.login} #{my.action} #{my.title}
+
+#{my.body}
+EOM
+      else
+        body = my.summary_url
+      end
     end
 
     Mail.new do
