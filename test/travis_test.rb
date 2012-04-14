@@ -25,16 +25,16 @@ class TravisTest < Service::TestCase
   end
 
   def test_reads_default_domain_when_not_in_config
-    assert_equal "pings.travis-ci.org", @svc.domain
+    assert_equal "notify.travis-ci.org", @svc.domain
   end
 
   def test_constructs_post_receive_url
-    assert_equal 'http://pings.travis-ci.org', @svc.travis_url
+    assert_equal 'http://notify.travis-ci.org', @svc.travis_url
   end
 
   def test_posts_payload
     @stubs.post '/' do |env|
-      assert_equal 'http://pings.travis-ci.org', env[:url].to_s
+      assert_equal 'http://notify.travis-ci.org', env[:url].to_s
       assert_equal basic_auth('kronn', '5373dd4a3648b88fa9acb8e46ebc188a'),
         env[:request_headers]['authorization']
       assert_equal payload, JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
@@ -67,7 +67,7 @@ class TravisTest < Service::TestCase
 
     assert_equal 'mojombo', svc.user
     assert_equal '5373dd4a3648b88fa9acb8e46ebc188a', svc.token
-    assert_equal 'pings.travis-ci.org', svc.domain
+    assert_equal 'notify.travis-ci.org', svc.domain
     assert_equal 'http', svc.scheme
   end
 
@@ -82,7 +82,7 @@ class TravisTest < Service::TestCase
 
   def test_defaults_to_pings_travis_ci_domain
     svc = service(basic_config.reject{ |key,v| key == 'domain' }, payload)
-    assert_equal "pings.travis-ci.org", svc.domain
+    assert_equal "notify.travis-ci.org", svc.domain
   end
 
   def service(*args)

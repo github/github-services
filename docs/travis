@@ -10,8 +10,8 @@ Install Notes
   1.  Create an account at http://travis-ci.org (you can sign in with GitHub)
   2.  Enter your credentials
       - The token which you can find on the Travis profile page
-      - optional: Enter the username who the travis-token belongs to (defaults to the repository owner)
-      - optional: Enter the host of your Travis installation (defaults to http://travis-ci.org), the protocol-prefix is optional and defaults to "http://".
+      - optional: Enter the username who the Travis token belongs to (defaults to the repository owner)
+      - optional: Enter the host of your Travis installation (defaults to http://notify.travis-ci.org), the protocol-prefix is optional and defaults to "http://".
   3.  Make sure the "Active" checkbox is ticked, and click "Update Settings".
   4.  Click on the "Travis" service name and then click the "Test Hook" link.
   5.  You should receive an email from Travis once the build has completed

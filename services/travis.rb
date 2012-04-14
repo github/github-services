@@ -37,7 +37,7 @@ class Service::Travis < Service
     if data['domain'].present?
       data['domain']
     else
-      'http://pings.travis-ci.org'
+      'http://notify.travis-ci.org'
     end.strip
   end
 
