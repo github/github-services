@@ -1,0 +1,22 @@
+Public
+========
+
+Install Notes
+-------------
+
+1. `remote_url` (Required) Remote Web-Service Url which listens to `post` sent from github
+2. `auth_token` (Required) Authentication Token to be used by the POST URL
+3. `repo_name` (Required) Repo Name which this Public Hook is associated with
+4. `notify_email` (Optional) Email Address(1) to intimate that Public Event is generated
+
+Developer Notes
+---------------
+
+data
+  - remote_url
+  - auth_token
+  - repo_name
+  - notify_email
+
+payload
+  - empty (refer to http://developer.github.com/v3/events/types/#publicevent)
