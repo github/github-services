@@ -1,5 +1,5 @@
 class Service::Travis < Service
-  string :domain, :user, :token
+  string :user, :token, :domain
 
   def receive_push
     http.ssl[:verify] = false
@@ -8,7 +8,7 @@ class Service::Travis < Service
   end
 
   def travis_url
-    "#{scheme}://#{domain}/builds"
+    "#{scheme}://#{domain}"
   end
 
   def user
@@ -34,10 +34,10 @@ class Service::Travis < Service
   protected
 
   def full_domain
-    if data['domain'].to_s == ''
-      'http://travis-ci.org'
-    else
+    if data['domain'].present?
       data['domain']
+    else
+      'http://notify.travis-ci.org'
     end.strip
   end
 
