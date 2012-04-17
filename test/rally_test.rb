@@ -22,7 +22,7 @@ class RallyTest < Service::TestCase
   end
 
    # For now, test is totally happy-path. 
-   # In future should test for empty data values (server, username, password, workspace)
+   # In future should test for empty data values (server, username, password, workspace, repository)
    # raise_config_error on bad form values(server, username, password, workspace)
    # graceful failure on inability to create scmrepository, changeset, change based on Rally credentials
    # test for no payload
@@ -32,13 +32,13 @@ class RallyTest < Service::TestCase
 
   def test_push
 
-    @stubs.get '/slm/webservice/1.29/Subscription.js?fetch=Name,Workspaces,Workspace&pretty=true' do |env|
+    @stubs.get '/slm/webservice/1.30/Subscription.js?fetch=Name,Workspaces,Workspace&pretty=true' do |env|
         assert_equal 'crubble.rallydev.com', env[:url].host
         subs = { 'Name'     => "Omicron Bacan Fluffies",
                  'Errors'   => [],
                  'Warnings' => [],
                  'Workspaces' => [ {"Name" => "Chloroformer",
-                                    "_ref" => "https://crubble.rallydev.com/slm/webservice/1.29/workspace/662372755.js",
+                                    "_ref" => "https://crubble.rallydev.com/slm/webservice/1.30/workspace/662372755.js",
                                     "_refObjectName" => "Chlorformer",
                                    }
                                  ]
@@ -46,72 +46,74 @@ class RallyTest < Service::TestCase
         [200, {}, JSON.generate({"Subscription" => subs})]
     end
 
-    @stubs.get '/slm/webservice/1.29/scmrepository.js' do |env|
+    @stubs.get '/slm/webservice/1.30/scmrepository.js' do |env|
         repo = {"Errors"   => [], 
                 "Warnings" => [], 
                 "TotalResultCount" => 1, "StartIndex" => 1, "PageSize" => 20, 
                 "Results" => [
-                             { 
-                               "Name"  => "Reservoir Dogs", 
-                               "_type" => "SCMRepository",
-                               "_ref"  => "https://trial.rallydev.com/slm/webservice/1.29/scmrepository/11432875342.js"  
-                             } 
-                           ]
+                              { 
+                                "Name"  => "Reservoir Dogs", 
+                                "_type" => "SCMRepository",
+                                "_ref"  => "https://trial.rallydev.com/slm/webservice/1.30/scmrepository/11432875342.js"  
+                              } 
+                             ]
                } 
         [200, {}, JSON.generate({"QueryResult" => repo})]
     end
 
-    @stubs.get '/slm/webservice/1.29/hierarchicalrequirement.js' do |env|
+    @stubs.get '/slm/webservice/1.30/hierarchicalrequirement.js' do |env|
         result = artifact_query_response(env[:url])
         [200, {}, result]
     end
 
-    @stubs.get '/slm/webservice/1.29/defect.js' do |env|
+    @stubs.get '/slm/webservice/1.30/defect.js' do |env|
         result = artifact_query_response(env[:url])
         [200, {}, result]
     end
 
-    @stubs.get '/slm/webservice/1.29/task.js' do |env|
+    @stubs.get '/slm/webservice/1.30/task.js' do |env|
         result = artifact_query_response(env[:url])
         [200, {}, result]
     end
 
-    @stubs.get '/slm/webservice/1.29/testcase.js' do |env|
+    @stubs.get '/slm/webservice/1.30/testcase.js' do |env|
         result = artifact_query_response(env[:url])
         [200, {}, result]
     end
 
-    @stubs.get '/slm/webservice/1.29/user.js' do |env|
+    @stubs.get '/slm/webservice/1.30/user.js' do |env|
         assert_equal 'crubble.rallydev.com', env[:url].host
         assert_equal 'https',                env[:url].scheme
         user_item = { "Name"     => "Romeo",
                       "UserName" => "romeo_must_die",
-                      "_ref"     => "https://crubble.rallydev.com/slm/webservice/1.29/user/919235435.js"
+                      "_ref"     => "https://crubble.rallydev.com/slm/webservice/1.30/user/919235435.js"
                     }
         user_result = {"Errors" => [], "Warnings" => [], "TotalResultCount" => 1, 'Results' => [user_item]}
         [200, {}, JSON.generate({'QueryResult' => user_result})]
     end
 
-    @stubs.post '/slm/webservice/1.29/scmrepository/create.js' do |env|
-      repo_result = {'Object' => {"" => 'http://x.y.z/foo/scmrepository/4433556.js'}}
+    @stubs.post '/slm/webservice/1.30/scmrepository/create.js' do |env|
+      repo_result = {'Object' => {"_ref" => 'http://x.y.z/foo/scmrepository/4433556.js'}}
       [200, {}, JSON.generate({'CreateResult' => repo_result})]
     end
 
-    @stubs.post '/slm/webservice/1.29/Changeset/create.js' do |env|
+    @stubs.post '/slm/webservice/1.30/Changeset/create.js' do |env|
       chgset_result = {"Object" => {"_ref" => 'http://x.y.z/foo/changeset/639214.js'}}
       [200, {}, JSON.generate({'CreateResult' => chgset_result})]
     end
 
-    @stubs.post '/slm/webservice/1.29/Change/create.js' do |env|
+    @stubs.post '/slm/webservice/1.30/Change/create.js' do |env|
       chg_result = {"Object" => {"_ref" => 'http://x.y.z/foo/change/7366456.js'}}
       [200, {}, JSON.generate({'CreateResult' => chg_result})]
     end
 
 
-    data = { 'server'    => 'crubble', 
-             'username'  => 'romeo_must_die', 
-             'password'  => 'Plantrachette', 
-             'workspace' => 'Chloroformer'}
+    data = { 'server'     => 'crubble', 
+             'username'   => 'romeo_must_die', 
+             'password'   => 'Plantrachette', 
+             'workspace'  => 'Chloroformer',
+             'repository' => 'Reservoir Dogs'
+           }
     payload = rally_test_payload()
 
     svc = service(data, payload)
@@ -133,14 +135,14 @@ class RallyTest < Service::TestCase
         { "after"   => "a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
           "ref"     => "refs/heads/master",
           "before"  => "4c8124ffcf4039d292442eeccabdeca5af5c5017",
-          "compare" => "http://github.com/kipster-t/powalla/compare/4c8124ffcf4039d292442eeccabdeca5af5c5017...a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
+          "compare" => "https://github.com/kipster-t/powalla/compare/4c8124ffcf4039d292442eeccabdeca5af5c5017...a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
           "forced"  => false,
           "created" => false,
           "deleted" => false,
 
           "repository" => {
             "name"  => "powalla",
-            "url"   => "http://github.com/kipster-t/powalla",
+            "url"   => "https://github.com/kipster-t/powalla",
             "owner" => { "name" => "kipster-t", "email" => "klehman@rallydev.com" }
           },
 
@@ -157,7 +159,7 @@ class RallyTest < Service::TestCase
               "added"     => ["bus/pricing-model.txt"],
               "modified"  => ["lib/grit/grit.rb", "test/helper.rb", "test/test_grit.rb"],
               "removed"   => [],
-              "url"       => "http://github.com/kipster-t/powalla/commit/06f63b43050935962f84fe54473a7c5de7977325",
+              "url"       => "https://github.com/kipster-t/powalla/commit/06f63b43050935962f84fe54473a7c5de7977325",
               "distinct"  => true
             },
             {
@@ -168,7 +170,7 @@ class RallyTest < Service::TestCase
               "added"     => [],
               "modified"  => ["test/test_grit.rb"],
               "removed"   => ["test/test_grotty.rb", "test/test_joobbar.rb"],
-              "url"       => "http://github.com/kipster-t/powalla/commit/5057e76a11abd02e83b7d3d3171c4b68d9c88480",
+              "url"       => "https://github.com/kipster-t/powalla/commit/5057e76a11abd02e83b7d3d3171c4b68d9c88480",
               "distinct"  => true
             },
             {
@@ -179,7 +181,7 @@ class RallyTest < Service::TestCase
               "added"     => ["docs/messieurs.pdf"],
               "modified"  => ["README", "lib/grit/commiteur.rb"],
               "removed"   => ["too_gritty.rb"],
-              "url"       => "http://github.com/kipster-t/powalla/commit/a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
+              "url"       => "https://github.com/kipster-t/powalla/commit/a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
               "distinct"  => true
             }
           ]
