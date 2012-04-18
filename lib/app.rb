@@ -1,5 +1,7 @@
 # The Sinatra App that handles incoming events.
 class Service::App < Sinatra::Base
+  JSON_TYPE = "application/vnd.github-services+json"
+
   set :hostname, lambda { %x{hostname} }
 
   # Hooks the given Service to a Sinatra route.
@@ -59,6 +61,19 @@ class Service::App < Sinatra::Base
   # Returns a Tuple of a String event, a Service::Meta, a data Hash, and a
   # payload Hash.
   def parse_request
+    case request.content_type
+    when JSON_TYPE then parse_json_request
+    else parse_http_request
+    end
+  end
+
+  def parse_json_request
+    req = JSON.parse(request.body.read)
+    [params[:event], Service::Meta.from(req['meta']),
+     req['data'], req['payload']]
+  end
+
+  def parse_http_request
     data = JSON.parse(params[:data])
     payload = JSON.parse(params[:payload])
     [params[:event], nil, data, payload]
