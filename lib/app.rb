@@ -4,7 +4,7 @@ class Service::App < Sinatra::Base
 
   # Hooks the given Service to a Sinatra route.
   #
-  # svc - Service instance.
+  # svc - Service class.
   #
   # Returns nothing.
   def self.service(svc)
