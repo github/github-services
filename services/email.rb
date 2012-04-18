@@ -15,6 +15,15 @@ class Service::Email < Service
 
   def receive_push
     extend PushEmail
+    deliver_to_addresses
+  end
+
+  def receive_public
+    extend PublicEmail
+    deliver_to_addresses
+  end
+
+  def deliver_to_addresses
     configure_mail_defaults unless mail_configured?
 
     addresses.each do |address|
@@ -139,7 +148,27 @@ class Service::Email < Service
     @noreply_address ||= email_config['noreply_address'] || "GitHub <noreply@github.com>"
   end
 
+  module RepositoryEmailHelpers
+    def name_with_owner
+      File.join(owner_name, repository_name)
+    end
+
+    def owner_name
+      payload['repository']['owner']['name']
+    end
+
+    def repository_name
+      payload['repository']['name']
+    end
+
+    def repo_url
+      payload['repository']['url']
+    end
+  end
+
   module PushEmail
+    include RepositoryEmailHelpers
+
     # Public
     def mail_subject
       if first_commit
@@ -250,10 +279,6 @@ class Service::Email < Service
       payload['ref']
     end
 
-    def repo_url
-      payload['repository']['url']
-    end
-
     def author_address
       "#{author_name} <#{author_email}>"
     end
@@ -275,18 +300,6 @@ class Service::Email < Service
       payload['commits'].last # assume that the last committer is also the pusher
     end
 
-    def name_with_owner
-      File.join(owner_name, repository_name)
-    end
-
-    def owner_name
-      payload['repository']['owner']['name']
-    end
-
-    def repository_name
-      payload['repository']['name']
-    end
-
     def first_commit_sha
       first_commit['id']
     end
@@ -299,6 +312,25 @@ class Service::Email < Service
 
     def first_commit
       payload['commits'].first
+    end
+  end
+
+  module PublicEmail
+    include RepositoryEmailHelpers
+
+    # Public
+    def mail_subject
+      "#{name_with_owner} has changed from Private to Public"
+    end
+
+    # Public
+    def mail_body
+      "#{name_with_owner} has changed from Private to Public\n\n#{repo_url}"
+    end
+
+    # Public
+    def mail_from
+      noreply_address
     end
   end
 end

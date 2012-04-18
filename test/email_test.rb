@@ -19,6 +19,21 @@ class EmailTest < Service::TestCase
     assert_nil svc.messages.shift
   end
 
+  def test_public
+    svc = service({'address' => 'a'}, payload)
+
+    svc.receive_public
+
+    msg, from, to, subject = svc.messages.shift
+    assert_match "noreply@github.com", from
+    assert_equal 'a', to
+    assert_match "mojombo/grit has changed from Private to Public", subject
+    assert_match subject, msg
+    assert_match "github.com/mojombo/grit", msg
+
+    assert_nil svc.messages.shift
+  end
+
   def test_multiple_address
     svc = service(
       {'address' => ' a b c'},
@@ -78,7 +93,7 @@ class EmailTest < Service::TestCase
     end
 
     def svc.send_mail(mail)
-      messages << [mail.to_s, mail.from.first, mail.to.first]
+      messages << [mail.to_s, mail.from.first, mail.to.first, mail.subject]
     end
     svc
   end
