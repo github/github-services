@@ -44,9 +44,9 @@ class Service::App < Sinatra::Base
         duration = Time.now.to_f - time
         if svc != Service::Web && duration > 9
           boom ||= Service::TimeoutError.new("Long Service Hook")
-          report_exception svc, data, boom, 
+          report_exception svc, data, boom,
             :event => event, :payload => payload.inspect,
-            :duration => "#{duration}s" 
+            :duration => "#{duration}s"
         end
       end
     end
