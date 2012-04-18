@@ -84,5 +84,3 @@ class EmailTest < Service::TestCase
   end
 end
 
-
-

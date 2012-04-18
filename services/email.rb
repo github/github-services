@@ -14,6 +14,7 @@ class Service::Email < Service
   boolean :send_from_author, :show_diff
 
   def receive_push
+    extend PushEmail
     configure_mail_defaults unless mail_configured?
 
     addresses.each do |address|
@@ -64,123 +65,15 @@ class Service::Email < Service
 
     Mail.new do
       to       address
-      from     my.from_address
-      reply_to my.from_address
+      from     my.mail_from
+      reply_to my.mail_from
       subject  my.mail_subject
       headers  my.secret_header
 
       text_part do
         content_type 'text/plain; charset=UTF-8'
-        body         my.text_body
+        body         my.mail_body
       end
-    end
-  end
-
-
-  def text_body
-    body = commits.inject(repository_text) do |text, commit|
-      text << commit_text(commit)
-    end
-
-    body << compare_text unless single_commit?
-
-    body
-  end
-
-  def repository_text
-    align(<<-EOH)
-      Branch: #{branch_ref}
-      Home:   #{repo_url}
-    EOH
-  end
-
-  def commit_text(commit)
-    gitsha   = commit['id']
-    added    = commit['added'].map    { |f| ['A', f] }
-    removed  = commit['removed'].map  { |f| ['R', f] }
-    modified = commit['modified'].map { |f| ['M', f] }
-
-    changed_paths = (added + removed + modified).sort_by { |(char, file)| file }
-    changed_paths = changed_paths.collect { |entry| entry * ' ' }.join("\n    ")
-
-    timestamp = Date.parse(commit['timestamp'])
-
-    commit_author = "#{commit['author']['name']} <#{commit['author']['email']}>"
-
-    text = align(<<-EOH)
-      Commit: #{gitsha}
-          #{commit['url']}
-      Author: #{commit_author}
-      Date:   #{timestamp} (#{timestamp.strftime('%a, %d %b %Y')})
-
-    EOH
-
-    if changed_paths.size > 0
-      text << align(<<-EOH)
-        Changed paths:
-          #{changed_paths}
-
-      EOH
-    end
-
-    text << align(<<-EOH)
-      Log Message:
-      -----------
-      #{commit['message']}
-
-
-    EOH
-
-    if data['show_diff']
-      begin
-        patch_resp = http_get commit['url'] + ".diff" do |req| # Github currently doesn't support Accept headers
-          req[:timeout] = '4' # seconds
-        end
-        case patch_resp.status
-        when 301, 302, 303, 307, 308
-          patch_resp = http_get patch_resp.headers['location'] do |req|
-            req[:timeout] = '4' # seconds
-          end
-        end
-        if patch_resp.success?
-          text << patch_resp.body
-        else
-          raise "Status: #{patch_resp.status}"
-        end
-      rescue => msg
-        text << "There was an error trying to read the diff from github.com (#{msg})"
-      end
-      text << <<-EOH
-
-
-      EOH
-      text << "================================================================\n"
-    end
-
-    text
-  end
-
-  def compare_text
-    "Compare: #{payload['compare']}"
-  end
-
-  def single_commit?
-    first_commit == last_commit
-  end
-
-  def branch_ref
-    payload['ref']
-  end
-
-  def repo_url
-    payload['repository']['url']
-  end
-
-  def mail_subject
-    if first_commit
-      "[#{name_with_owner}] #{first_commit_sha.slice(0, 6)}: #{first_commit_title}"
-    else
-      "[#{name_with_owner}]"
     end
   end
 
@@ -188,73 +81,22 @@ class Service::Email < Service
     secret ? {'Approved' => secret} : {}
   end
 
-  def from_address
-    send_from_author? ? author_address : noreply_address
-  end
-
-  def send_from_author?
-    data['send_from_author']
-  end
-
-  def author_address
-    "#{author_name} <#{author_email}>"
-  end
-
-  def author
-    commit = last_commit || {}
-    commit['author'] || commit['committer'] || payload['pusher']
-  end
-
-  def author_name
-    author['name']
-  end
-
-  def author_email
-    author['email']
-  end
-
-  def last_commit
-    payload['commits'].last # assume that the last committer is also the pusher
-  end
-
   def secret
     data['secret'] if data['secret'].to_s.size > 0
-  end
-
-  def name_with_owner
-    File.join(owner_name, repository_name)
-  end
-
-  def owner_name
-    payload['repository']['owner']['name']
-  end
-
-  def repository_name
-    payload['repository']['name']
-  end
-
-  def first_commit_sha
-    first_commit['id']
-  end
-
-  def first_commit_title(limit = 50)
-    title_line = first_commit['message'][/\A[^\n]+/] || ''
-
-    title_line.length > limit ? shorten(title_line, limit) : title_line
   end
 
   def shorten(text, limit)
     text.slice(0, limit) << '...'
   end
 
-  def first_commit
-    payload['commits'].first
-  end
-
   def align(text, indent = '  ')
     margin = text[/\A\s+/].size
 
     text.gsub(/^\s{#{margin}}/, indent)
+  end
+
+  def send_from_author?
+    data['send_from_author']
   end
 
   def smtp_address
@@ -295,5 +137,168 @@ class Service::Email < Service
 
   def noreply_address
     @noreply_address ||= email_config['noreply_address'] || "GitHub <noreply@github.com>"
+  end
+
+  module PushEmail
+    # Public
+    def mail_subject
+      if first_commit
+        "[#{name_with_owner}] #{first_commit_sha.slice(0, 6)}: #{first_commit_title}"
+      else
+        "[#{name_with_owner}]"
+      end
+    end
+
+    # Public
+    def mail_body
+      body = commits.inject(repository_text) do |text, commit|
+        text << commit_text(commit)
+      end
+
+      body << compare_text unless single_commit?
+
+      body
+    end
+
+    # Public
+    def mail_from
+      send_from_author? ? author_address : noreply_address
+    end
+
+    def repository_text
+      align(<<-EOH)
+        Branch: #{branch_ref}
+        Home:   #{repo_url}
+      EOH
+    end
+
+    def commit_text(commit)
+      gitsha   = commit['id']
+      added    = commit['added'].map    { |f| ['A', f] }
+      removed  = commit['removed'].map  { |f| ['R', f] }
+      modified = commit['modified'].map { |f| ['M', f] }
+
+      changed_paths = (added + removed + modified).sort_by { |(char, file)| file }
+      changed_paths = changed_paths.collect { |entry| entry * ' ' }.join("\n    ")
+
+      timestamp = Date.parse(commit['timestamp'])
+
+      commit_author = "#{commit['author']['name']} <#{commit['author']['email']}>"
+
+      text = align(<<-EOH)
+        Commit: #{gitsha}
+            #{commit['url']}
+        Author: #{commit_author}
+        Date:   #{timestamp} (#{timestamp.strftime('%a, %d %b %Y')})
+
+      EOH
+
+      if changed_paths.size > 0
+        text << align(<<-EOH)
+          Changed paths:
+            #{changed_paths}
+
+        EOH
+      end
+
+      text << align(<<-EOH)
+        Log Message:
+        -----------
+        #{commit['message']}
+
+
+      EOH
+
+      if data['show_diff']
+        begin
+          patch_resp = http_get commit['url'] + ".diff" do |req| # Github currently doesn't support Accept headers
+            req[:timeout] = '4' # seconds
+          end
+          case patch_resp.status
+          when 301, 302, 303, 307, 308
+            patch_resp = http_get patch_resp.headers['location'] do |req|
+              req[:timeout] = '4' # seconds
+            end
+          end
+          if patch_resp.success?
+            text << patch_resp.body
+          else
+            raise "Status: #{patch_resp.status}"
+          end
+        rescue => msg
+          text << "There was an error trying to read the diff from github.com (#{msg})"
+        end
+        text << <<-EOH
+
+
+        EOH
+        text << "================================================================\n"
+      end
+
+      text
+    end
+
+    def compare_text
+      "Compare: #{payload['compare']}"
+    end
+
+    def single_commit?
+      first_commit == last_commit
+    end
+
+    def branch_ref
+      payload['ref']
+    end
+
+    def repo_url
+      payload['repository']['url']
+    end
+
+    def author_address
+      "#{author_name} <#{author_email}>"
+    end
+
+    def author
+      commit = last_commit || {}
+      commit['author'] || commit['committer'] || payload['pusher']
+    end
+
+    def author_name
+      author['name']
+    end
+
+    def author_email
+      author['email']
+    end
+
+    def last_commit
+      payload['commits'].last # assume that the last committer is also the pusher
+    end
+
+    def name_with_owner
+      File.join(owner_name, repository_name)
+    end
+
+    def owner_name
+      payload['repository']['owner']['name']
+    end
+
+    def repository_name
+      payload['repository']['name']
+    end
+
+    def first_commit_sha
+      first_commit['id']
+    end
+
+    def first_commit_title(limit = 50)
+      title_line = first_commit['message'][/\A[^\n]+/] || ''
+
+      title_line.length > limit ? shorten(title_line, limit) : title_line
+    end
+
+    def first_commit
+      payload['commits'].first
+    end
   end
 end
