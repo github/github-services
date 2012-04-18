@@ -154,7 +154,7 @@ class Service::Email < Service
     end
 
     def owner_name
-      payload['repository']['owner']['name']
+      payload['repository']['owner']['login']
     end
 
     def repository_name
@@ -312,6 +312,11 @@ class Service::Email < Service
 
     def first_commit
       payload['commits'].first
+    end
+
+    # must be a difference with push payloads
+    def owner_name
+      payload['repository']['owner']['name']
     end
   end
 
