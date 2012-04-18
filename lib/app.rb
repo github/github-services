@@ -15,8 +15,8 @@ class Service::App < Sinatra::Base
       time = Time.now.to_f
       data = nil
       begin
-        event, meta, data, payload = parse_request
-        if svc.receive(event, data, payload, meta)
+        event, data, payload = parse_request
+        if svc.receive(event, data, payload)
           status 200
           ""
         else
@@ -58,8 +58,7 @@ class Service::App < Sinatra::Base
 
   # Parses the request data into Service properties.
   #
-  # Returns a Tuple of a String event, a Service::Meta, a data Hash, and a
-  # payload Hash.
+  # Returns a Tuple of a String event, a data Hash, and a payload Hash.
   def parse_request
     case request.content_type
     when JSON_TYPE then parse_json_request
@@ -69,14 +68,13 @@ class Service::App < Sinatra::Base
 
   def parse_json_request
     req = JSON.parse(request.body.read)
-    [params[:event], Service::Meta.from(req['meta']),
-     req['data'], req['payload']]
+    [params[:event], req['data'], req['payload']]
   end
 
   def parse_http_request
     data = JSON.parse(params[:data])
     payload = JSON.parse(params[:payload])
-    [params[:event], nil, data, payload]
+    [params[:event], data, payload]
   end
 
   # Reports the given exception to Haystack.

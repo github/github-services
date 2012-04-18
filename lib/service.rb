@@ -57,13 +57,11 @@ class Service
     # event   - A symbol identifying the event type.  Example: :push
     # data    - A Hash with the configuration data for the Service.
     # payload - A Hash with the unique payload data for this Service instance.
-    # meta    - A Service::Meta instance with basic meta data about the
-    #           triggered event.
     #
     # Returns true if the Service responded to the event, or false if the
     # Service does not respond to this event.
-    def receive(event, data, payload = nil, meta = nil)
-      svc = new(event, data, payload, meta)
+    def receive(event, data, payload = nil)
+      svc = new(event, data, payload)
 
       methods = ["receive_#{event}", "receive_event"]
       if event_method = methods.detect { |m| svc.respond_to?(m) }
@@ -315,12 +313,6 @@ class Service
   # Determine #env from the environment
   self.env ||= ENV['RACK_ENV'] || ENV['GEM_STRICT'] ? 'production' : 'development'
 
-  # Public: A Service::Meta instance with basic meta data about the triggered
-  # event.
-  #
-  # Returns a Service::Meta
-  attr_reader :meta
-
   # Public: Gets the configuration data for this Service instance.
   #
   # Returns a Hash.
@@ -364,7 +356,7 @@ class Service
   # Returns nothing.
   attr_writer :ca_file
 
-  def initialize(event = :push, data = {}, payload = nil, meta = nil)
+  def initialize(event = :push, data = {}, payload = nil)
     helper_name = "#{event.to_s.classify}Helpers"
     if Service.const_defined?(helper_name)
       @helper = Service.const_get(helper_name)
@@ -374,7 +366,6 @@ class Service
     @event = event.to_sym
     @data = data
     @payload = payload || sample_payload
-    @meta = meta
     @http = @secrets = @email_config = nil
   end
 
