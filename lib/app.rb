@@ -94,7 +94,7 @@ class Service::App < Sinatra::Base
       'server'    => settings.hostname,
       'message'   => error.message[0..254],
       'backtrace' => backtrace.join("\n"),
-      'rollup'    => Digest::MD5.hexdigest(error.class.to_s + backtrace[0]),
+      'rollup'    => Digest::MD5.hexdigest("#{error.class}#{backtrace[0]}"),
       'service'   => service_class.to_s,
     }.update(options)
 
