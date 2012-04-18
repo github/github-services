@@ -14,10 +14,19 @@ class Service
     end
   end
 
-  [
-    User = Struct.new(:id, :login, :gravatar_id),
-    Repository = Struct.new(:id, :source_id, :name, :owner),
-  ].each do |struct|
-    struct.extend StructLoading
+  class User < Struct.new(:id, :login, :gravatar_id)
+    extend StructLoading
+
+    def url
+      "https://github.com/#{login}"
+    end
+  end
+
+  class Repository < Struct.new(:id, :source_id, :name, :owner)
+    extend StructLoading
+
+    def url
+      owner.url << "/#{name}"
+    end
   end
 end
