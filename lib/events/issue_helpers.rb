@@ -1,5 +1,5 @@
 module Service::IssueHelpers
-  include Service::HelpersWithRepo,
+  include Service::HelpersWithMeta,
     Service::HelpersWithActions
 
   def issue
@@ -13,7 +13,7 @@ module Service::IssueHelpers
   def summary_message
     "[%s] %s %s issue #%d: %s. %s" % [
       repo.name,
-      issue.user.login,
+      sender.login,
       action,
       issue.number,
       issue.title,
@@ -23,7 +23,7 @@ module Service::IssueHelpers
   end
 
   def self.sample_payload
-    {
+    Service::HelpersWithMeta.sample_payload.merge(
       "action" => "opened",
       "issue" => {
         "number" => 5,
@@ -31,12 +31,7 @@ module Service::IssueHelpers
         "title" => "booya",
         "body"  => "boom town",
         "user" => { "login" => "mojombo" }
-      },
-      "repository" => {
-        "name"  => "grit",
-        "url"   => "http://github.com/mojombo/grit",
-        "owner" => { "login" => "mojombo" }
       }
-    }
+    )
   end
 end

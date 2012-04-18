@@ -1,5 +1,5 @@
 module Service::PullRequestHelpers
-  include Service::HelpersWithRepo,
+  include Service::HelpersWithMeta,
     Service::HelpersWithActions
 
   def pull
@@ -16,7 +16,7 @@ module Service::PullRequestHelpers
 
     "[%s] %s %s pull request #%d: %s (%s...%s) %s" % [
       repo.name,
-      pull.user.login,
+      sender.login,
       action,
       pull.number,
       pull.title,
@@ -28,7 +28,7 @@ module Service::PullRequestHelpers
   end
 
   def self.sample_payload
-    {
+    Service::HelpersWithMeta.sample_payload.merge(
       "action" => "opened",
       "pull_request" => {
         "number" => 5,
@@ -39,13 +39,8 @@ module Service::PullRequestHelpers
         "user" => { "login" => "mojombo" },
         "head" => {"label" => "foo:feature"},
         "base" => {"label" => "mojombo:master"}
-      },
-      "repository" => {
-        "name"  => "grit",
-        "url"   => "http://github.com/mojombo/grit",
-        "owner" => { "login" => "mojombo" }
       }
-    }
+    )
   end
 end
 

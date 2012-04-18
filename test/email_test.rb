@@ -20,7 +20,7 @@ class EmailTest < Service::TestCase
   end
 
   def test_public
-    svc = service({'address' => 'a'}, payload)
+    svc = service({'address' => 'a'}, basic_payload)
 
     svc.receive_public
 

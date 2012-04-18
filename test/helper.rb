@@ -39,5 +39,9 @@ class Service::TestCase < Test::Unit::TestCase
   def issues_payload
     Service::IssueHelpers.sample_payload
   end
+
+  def basic_payload
+    Service::HelpersWithMeta.sample_payload
+  end
 end
 
