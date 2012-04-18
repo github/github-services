@@ -25,6 +25,10 @@ class Service
   class Repository < Struct.new(:id, :source_id, :name, :owner)
     extend StructLoading
 
+    def name_with_owner
+      @name_with_owner ||= "#{owner.login}/#{name}"
+    end
+
     def url
       owner.url << "/#{name}"
     end

@@ -69,6 +69,7 @@ class ServiceAppTest < Test::Unit::TestCase
 
     assert_equal "https://github.com/github", svc.meta.repository.owner.url
     assert_equal "https://github.com/github/octocat", svc.meta.repository.url
+    assert_equal "github/octocat", svc.meta.repository.name_with_owner
   end
 
   def test_nagios_check
