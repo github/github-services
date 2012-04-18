@@ -4,7 +4,7 @@ Jabber
 Install Notes
 -------------
 
-  1. user is the Jabber ID (e.g.: myusername@jabber.org).  Multiple users can be added by separating them with commas.  Currently, there is a maximum of 25 users. 
+  1. user is the Jabber ID (e.g.: myusername@jabber.org).  Multiple users can be added by separating them with commas.
   2. muc is the Jabber ID (e.g.: talks@conference.jabber.org/Nick). Multiple conferences can be added by separating them with commas.
 
 Developer Notes

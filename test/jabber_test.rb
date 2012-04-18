@@ -8,7 +8,6 @@ class JabberTest < Service::TestCase
       def initialize(conference)
         @conference = conference
       end
-      def active?() true end
     end
 
     attr_accessor :accept_subscriptions
@@ -26,9 +25,6 @@ class JabberTest < Service::TestCase
   def test_push
     svc = service({'user' => 'a,b , c , b', 'muc' => 'e,f , g, f'}, payload)
     svc.im = FakeJabber.new
-    svc.mucs['e'] = FakeJabber::Client.new('e')
-    svc.mucs['f'] = FakeJabber::Client.new('f')
-    svc.mucs['g'] = FakeJabber::Client.new('g')
     svc.receive_push
 
     assert svc.im.accept_subscriptions
@@ -45,17 +41,17 @@ class JabberTest < Service::TestCase
     assert_equal 'c', msg[0]
     assert_equal :chat, msg[2]
 
-    #assert msg = svc.im.delivered.shift
-    #assert_equal 'e', msg[0]
-    #assert_equal :groupchat, msg[2]
+    assert msg = svc.im.delivered.shift
+    assert_equal 'e', msg[0]
+    assert_equal :groupchat, msg[2]
 
-    #assert msg = svc.im.delivered.shift
-    #assert_equal 'f', msg[0]
-    #assert_equal :groupchat, msg[2]
+    assert msg = svc.im.delivered.shift
+    assert_equal 'f', msg[0]
+    assert_equal :groupchat, msg[2]
 
-    #assert msg = svc.im.delivered.shift
-    #assert_equal 'g', msg[0]
-    #assert_equal :groupchat, msg[2]
+    assert msg = svc.im.delivered.shift
+    assert_equal 'g', msg[0]
+    assert_equal :groupchat, msg[2]
 
     assert_nil svc.im.delivered.shift
   end
