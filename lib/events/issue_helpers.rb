@@ -11,9 +11,10 @@ module Service::IssueHelpers
   end
 
   def summary_message
-    "[%s] %s opened issue #%d: %s. %s" % [
+    "[%s] %s %s issue #%d: %s. %s" % [
       repo.name,
       issue.user.login,
+      action,
       issue.number,
       issue.title,
       issue.html_url]

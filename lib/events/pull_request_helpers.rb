@@ -14,9 +14,10 @@ module Service::PullRequestHelpers
     base_ref = pull.base.label.split(':').last
     head_ref = pull.head.label.split(':').last
 
-    "[%s] %s opened pull request #%d: %s (%s...%s) %s" % [
+    "[%s] %s %s pull request #%d: %s (%s...%s) %s" % [
       repo.name,
       pull.user.login,
+      action,
       pull.number,
       pull.title,
       base_ref,
