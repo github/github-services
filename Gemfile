@@ -20,5 +20,6 @@ gem "faraday",                "0.7.5.pre"
 gem "rake",                   "0.8.7"
 gem "statsd-ruby",            "0.3.0.github.1"
 gem "twilio-ruby",            "3.4.2"
+gem "rack-test", :require => false
 gem "right_aws",              "3.0.3"
 gem "right_http_connection",  "1.3.0"

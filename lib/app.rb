@@ -13,9 +13,8 @@ class Service::App < Sinatra::Base
       time = Time.now.to_f
       data = nil
       begin
-        data = JSON.parse(params[:data])
-        payload = parse_payload(params[:payload])
-        if svc.receive(params[:event], data, payload)
+        event, meta, data, payload = parse_request
+        if svc.receive(event, data, payload, meta)
           status 200
           ""
         else
@@ -36,7 +35,7 @@ class Service::App < Sinatra::Base
         boom.message
       rescue Object => boom
         report_exception svc, data, boom,
-          :event => params[:event], :payload => payload.inspect
+          :event => event, :payload => payload.inspect
         status 500
         "ERROR"
       ensure
@@ -44,7 +43,7 @@ class Service::App < Sinatra::Base
         if svc != Service::Web && duration > 9
           boom ||= Service::TimeoutError.new("Long Service Hook")
           report_exception svc, data, boom, 
-            :event => params[:event], :payload => payload.inspect,
+            :event => event, :payload => payload.inspect,
             :duration => "#{duration}s" 
         end
       end
@@ -55,13 +54,14 @@ class Service::App < Sinatra::Base
     "ok"
   end
 
-  # Parses the incoming payload and massages any properties.
+  # Parses the request data into Service properties.
   #
-  # json - JSON String.
-  #
-  # Returns a Hash payload.
-  def parse_payload(json)
-    JSON.parse(json)
+  # Returns a Tuple of a String event, a Service::Meta, a data Hash, and a
+  # payload Hash.
+  def parse_request
+    data = JSON.parse(params[:data])
+    payload = JSON.parse(params[:payload])
+    [params[:event], nil, data, payload]
   end
 
   # Reports the given exception to Haystack.
