@@ -25,7 +25,7 @@ class Service::Campfire < Service
   end
 
   def receive_pull_request
-    send_messages summary_message
+    send_messages summary_message if opened?
   end
 
   alias receive_issues receive_pull_request
