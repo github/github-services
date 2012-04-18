@@ -24,6 +24,10 @@ class Service::Email < Service
   end
 
   def deliver_to_addresses
+    if addresses.size.zero?
+      raise_config_error "Invalid addresses: #{data['address'].inspect}"
+    end
+
     configure_mail_defaults unless mail_configured?
 
     addresses.each do |address|
@@ -66,7 +70,7 @@ class Service::Email < Service
   end
 
   def addresses
-    data['address'].split(' ').slice(0, 2)
+    @addresses ||= data['address'].to_s.split(' ').slice(0, 2)
   end
 
   def mail_message(address)
