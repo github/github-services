@@ -4,51 +4,47 @@ class Service::Rally < Service
   string   :server, :username, :workspace, :repository
   password :password
 
-  attr_accessor :wksp_ref, :repo_ref, :user_cache, :chgset_uri
-  attr_reader   :art_type, :branch, :artifact_detector
+  attr_accessor :wksp_ref, :user_cache
 
   def receive_push
     server     = data['server']
     username   = data['username']
     password   = data['password']
     workspace  = data['workspace']
-    @branch    = payload['ref'].split('/')[-1]  # most of the time it'll be refs/heads/master ==> master
+    scm_repository = data['repository']
+    raise_config_error("No Server value specified")    if server.nil?    or server.strip.length == 0
+    raise_config_error("No UserName value specified")  if username.nil?  or username.strip.length == 0
+    raise_config_error("No Password value specified")  if password.nil?  or password.strip.length == 0
+    raise_config_error("No Workspace value specified") if workspace.nil? or workspace.strip.length == 0
+    branch     = payload['ref'].split('/')[-1]  # most of the time it'll be refs/heads/master ==> master
     repo       = payload['repository']['name']
     repo_owner = payload['repository']['owner']['name']
-    @chgset_uri = 'https://github.com/%s/%s' % [repo_owner, repo] 
+    chgset_uri = 'https://github.com/%s/%s' % [repo_owner, repo] 
     
     http.ssl[:verify] = false
     if server =~ /^https?:\/\//   # if they have http:// or https://, leave server value unchanged
-      http.url_prefix = "#{server}/slm/webservice/1.29"
+      http.url_prefix = "#{server}/slm/webservice/1.30"
     else
       server = "#{server}.rallydev.com" if server !~ /\./ # leave unchanged if '.' in server
-      http.url_prefix = "https://#{server}/slm/webservice/1.29"
+      http.url_prefix = "https://#{server}/slm/webservice/1.30"
     end
     http.basic_auth(username, password)
     http.headers['Content-Type'] = 'application/json'
     http.headers['X-RallyIntegrationVendor']  = 'Rally'
     http.headers['X-RallyIntegrationName']    = 'GitHub-Service'
-    http.headers['X-RallyIntegrationVersion'] = '1.0'
+    http.headers['X-RallyIntegrationVersion'] = '1.1'
 
+    # create the repo in Rally if it doesn't already exist
     @wksp_ref = validateWorkspace(workspace)
-    @repo_ref = getOrCreateRepo(repo, repo_owner)
-
-    @art_type = { 'D' => 'defect', 'DE' => 'defect', 'DS' => 'defectsuite', 
-                 'TA' => 'task',   'TC' => 'testcase',
-                  'S' => 'hierarchicalrequirement', 
-                 'US' => 'hierarchicalrequirement'
-                }
-    formatted_id_pattern = '^(%s)\d+[\.:;]?$' % @art_type.keys.join('|') # '^(D|DE|DS|TA|TC|S|US)\d+[\.:;]?$'
-    @artifact_detector = Regexp.compile(formatted_id_pattern)
-
+    repo_ref = getOrCreateRepo(scm_repository, repo, repo_owner)
     @user_cache = {}
     payload['commits'].each do |commit|
       artifact_refs = snarfArtifacts(commit['message'])
-      addChangeset(commit, artifact_refs)
+      addChangeset(commit, repo_ref, artifact_refs, chgset_uri, branch)
     end
   end
 
-  def addChangeset(commit, artifact_refs)
+  def addChangeset(commit, repo_ref, artifact_refs, chgset_uri, branch)
       author = commit['author']['email']
       if !@user_cache.has_key?(author)
         user = rallyQuery('User', 'Name,UserName', 'UserName = "%s"' % [author])
@@ -57,13 +53,13 @@ class Service::Rally < Service
         @user_cache[author] = user_ref
       end
       user_ref = @user_cache[author]
-      message = commit['message']
-      message = message[0..3999] unless message.size <= 4000
-      changeset = { 'SCMRepository'   => @repo_ref,
+      message = commit['message'][0..3999]  # message max size is 4000 characters
+      changeset = { 'SCMRepository'   => repo_ref,
                     'Revision'        => commit['id'],
-                    'Author'          => user_ref,
                     'CommitTimestamp' => Time.iso8601(commit['timestamp']).strftime("%FT%H:%M:%S.00Z"),
-                    'Uri'             => @chgset_uri,
+                    'Author'          => user_ref,
+                    'Message'         => message,                   
+                    'Uri'             => chgset_uri,
                     'Artifacts'       => artifact_refs # [{'_ref' => 'defect/1324.js'}, {}...]
                   }
       changeset.delete('Author') if user_ref == ""
@@ -84,7 +80,7 @@ class Service::Rally < Service
       commit['removed'].each  { |rem| changes << {'Action' => 'R', 'PathAndFilename' => rem } }
       changes.each do |change|
           change['Changeset'] = chgset_ref
-          change['Uri'] = '%s/blob/%s/%s' % [@chgset_uri, @branch, change['PathAndFilename']]
+          change['Uri'] = '%s/blob/%s/%s' % [chgset_uri, branch, change['PathAndFilename']]
           chg_item = rallyCreate('Change', change)
       end
   end
@@ -99,10 +95,11 @@ class Service::Rally < Service
       return itemRef(target_workspace[0])
   end
 
-  def getOrCreateRepo(repo, repo_owner)
-      repo_item = rallyQuery('SCMRepository', 'Name', 'Name = "%s"' % repo)
+  def getOrCreateRepo(scm_repository, repo, repo_owner)
+      scm_repository = scm_repository == nil ? repo : scm_repository
+      repo_item = rallyQuery('SCMRepository', 'Name', 'Name = "%s"' % scm_repository)
       return itemRef(repo_item) unless repo_item.nil?
-      repo_info = { 'Workspace' => @wksp_ref, 'Name' => repo, 'SCMType' => 'GitHub',
+      repo_info = { 'Workspace' => @wksp_ref, 'Name' => scm_repository, 'SCMType' => 'GitHub',
                     'Description' => 'GitHub-Service push changesets',
                     'Uri' => 'http://github.com/%s/%s' % [repo_owner, repo] 
                   }
@@ -114,7 +111,8 @@ class Service::Rally < Service
 
   def rallyWorkspaces()
       response = @http.get('Subscription.js?fetch=Name,Workspaces,Workspace&pretty=true')
-      raise_config_error('config error') unless response.success?
+      raise_config_error('Config error: credentials not valid for Rally endpoint') if response.status == 401
+      raise_config_error('Config error: Unable to obtain your Rally subscription info') unless response.success?
       qr =  JSON.parse(response.body)
       begin
           workspaces = qr['Subscription']['Workspaces']
@@ -146,14 +144,20 @@ class Service::Rally < Service
   end
 
   def snarfArtifacts(message)
+      art_type = { 'D' => 'defect', 'DE' => 'defect', 'DS' => 'defectsuite', 
+                  'TA' => 'task',   'TC' => 'testcase',
+                   'S' => 'hierarchicalrequirement', 
+                  'US' => 'hierarchicalrequirement'
+                 }
+      formatted_id_pattern = '^(%s)\d+[\.:;]?$' % art_type.keys.join('|') # '^(D|DE|DS|TA|TC|S|US)\d+[\.:;]?$'
+      artifact_detector = Regexp.compile(formatted_id_pattern)
       words = message.gsub(',', ' ').gsub('\r\n', '\n').gsub('\n', ' ').gsub('\t', ' ').split(' ')
-      #rally_formatted_ids = words.select { |word| word =~ /^(D|DE|DS|TA|TC|S|US)\d+[\.:;]?$/ } 
-      rally_formatted_ids = words.select { |word| @artifact_detector.match(word) } 
+      rally_formatted_ids = words.select { |word| artifact_detector.match(word) } 
       artifacts = [] # actually, just the refs
       rally_formatted_ids.uniq.each do |fmtid|
           next unless fmtid =~ /^(([A-Z]{1,2})\d+)[\.:;]?$/
           fmtid, prefix  = $1, $2
-          entity = @art_type[prefix]
+          entity = art_type[prefix]
           artifact = rallyQuery(entity, 'Name', 'FormattedID = "%s"' % fmtid)
           next if artifact.nil?
           art_ref = itemRef(artifact)
