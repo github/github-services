@@ -364,7 +364,7 @@ class Service
     end
 
     @event = event.to_sym
-    @data = data
+    @data = data || {}
     @payload = payload || sample_payload
     @http = @secrets = @email_config = nil
   end
