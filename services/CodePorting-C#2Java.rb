@@ -193,6 +193,8 @@ class Service::CodePortingCSharp2Java < Service
   end
   
   def receive_push
+    response = ""
+	
 	return if Array(payload['commits']).size == 0
 	
     check_configuration_options(data)
@@ -200,18 +202,26 @@ class Service::CodePortingCSharp2Java < Service
 	perform_login
 	
 	if (token == "")
-		
+		response = "Unable to login at the moment :( "
 	else
 		get_repo_code
-		create_new_project_and_port
+		response = create_new_project_and_port
 	end
+	
+	response
   end
 
   def create_new_project_and_port
 	result = post_source_to_copdeporting
 	if (result == "True")
-		port_code
+		result = port_code
+		if (result == "")
+		  result = "Unable to port code on CodePorting :("
+		end
+	else
+	  result = "Unable to upload source repository to CodePorting"
 	end
+	result
   end
   
   def perform_login
