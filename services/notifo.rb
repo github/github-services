@@ -8,7 +8,14 @@ class Service::Notifo < Service
     http.basic_auth 'github', secrets['notifo']['apikey']
     http.url_prefix = "https://api.notifo.com/v1"
 
-    data['subscribers'].gsub(/\s/, '').split(',').each do |subscriber|
+    subscribers = data['subscribers'].to_s
+
+    if subscribers.empty?
+      raise_config_error "No subscribers: #{subscribers.inspect}"
+      return
+    end
+
+    subscribers.gsub(/\s/, '').split(',').each do |subscriber|
       http_post "subscribe_user", :username => subscriber
 
       commit = payload['commits'].last;

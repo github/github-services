@@ -20,7 +20,7 @@ class Service::Travis < Service
   end
 
   def token
-    data['token'].strip
+    data['token'].to_s.strip
   end
 
   def scheme

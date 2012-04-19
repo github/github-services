@@ -15,7 +15,7 @@ class Service::IRC < Service
     send_messages messages
   end
 
-  def receive_pull_request 
+  def receive_pull_request
     return unless opened?
 
     url  = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
@@ -26,7 +26,13 @@ class Service::IRC < Service
   alias receive_issues receive_pull_request
 
   def send_messages(messages)
-    rooms   = data['room'].gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
+    rooms = data['room'].to_s
+    if rooms.empty?
+      raise_config_error "No rooms: #{rooms.inspect}"
+      return
+    end
+
+    rooms   = rooms.gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
     botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
     command = data['notice'].to_i == 1 ? 'NOTICE' : 'PRIVMSG'
 
