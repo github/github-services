@@ -5,7 +5,7 @@ require File.expand_path("../service/structs", __FILE__)
 # Represents a single triggered Service call.  Each Service tracks the event
 # type, the configuration data, and the payload for the current call.
 class Service
-  dir = File.expand_path '..', __FILE__
+  dir = File.expand_path '../service', __FILE__
   Dir["#{dir}/events/helpers/*.rb"].each do |helper|
     require helper
   end
