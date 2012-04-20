@@ -58,8 +58,7 @@ class Service
     # data    - A Hash with the configuration data for the Service.
     # payload - A Hash with the unique payload data for this Service instance.
     #
-    # Returns true if the Service responded to the event, or false if the
-    # Service does not respond to this event.
+    # Returns the Service instance if it responds to this event, or nil.
     def receive(event, data, payload = nil)
       svc = new(event, data, payload)
 
@@ -72,9 +71,7 @@ class Service
           end
         end
 
-        true
-      else
-        false
+        svc
       end
     rescue Service::ConfigurationError, Errno::EHOSTUNREACH, Errno::ECONNRESET, SocketError, Net::ProtocolError => err
       Service.stats.increment "hook.fail.config.#{hook_name}"
@@ -572,7 +569,7 @@ class Service
     string.strip!
     if string =~ /^[a-z]+\:\/\//
       uri = Addressable::URI.parse(string)
-      uri.password = "*" * uri.password.size
+      uri.password = "*" * uri.password.size if uri.password
       uri.to_s
     else
       string

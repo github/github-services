@@ -6,45 +6,45 @@ class Service::App < Sinatra::Base
 
   # Hooks the given Service to a Sinatra route.
   #
-  # svc - Service class.
+  # svc_class - Service class.
   #
   # Returns nothing.
-  def self.service(svc)
-    post "/#{svc.hook_name}/:event" do
+  def self.service(svc_class)
+    post "/#{svc_class.hook_name}/:event" do
       boom = nil
       time = Time.now.to_f
       data = nil
       begin
         event, data, payload = parse_request
-        if svc.receive(event, data, payload)
-          status 200
-          ""
+        if svc = svc_class.receive(event, data, payload)
+          log_service_request svc, 200
+          "OK"
         else
-          status 404
-          status "#{svc.hook_name} Service does not respond to 'push' events"
+          log_service_request svc, 200
+          "#{svc_class.hook_name} Service does not respond to 'push' events"
         end
       rescue Faraday::Error::ConnectionFailed => boom
-        status 503
+        log_service_request svc, 503
         boom.message
       rescue Service::ConfigurationError => boom
-        status 400
+        log_service_request svc, 400
         boom.message
       rescue Timeout::Error, Service::TimeoutError => boom
-        status 504
+        log_service_request svc, 504
         "Service Timeout"
       rescue Service::MissingError => boom
-        status 404
+        log_service_request svc, 404
         boom.message
       rescue Object => boom
-        report_exception svc, data, boom,
+        report_exception svc_class, data, boom,
           :event => event, :payload => payload.inspect
-        status 500
+        log_service_request svc, 500
         "ERROR"
       ensure
         duration = Time.now.to_f - time
-        if svc != Service::Web && duration > 9
+        if svc_class != Service::Web && duration > 9
           boom ||= Service::TimeoutError.new("Long Service Hook")
-          report_exception svc, data, boom,
+          report_exception svc_class, data, boom,
             :event => event, :payload => payload.inspect,
             :duration => "#{duration}s"
         end
@@ -75,6 +75,10 @@ class Service::App < Sinatra::Base
     data = JSON.parse(params[:data])
     payload = JSON.parse(params[:payload])
     [params[:event], data, payload]
+  end
+
+  def log_service_request(svc, code)
+    status code
   end
 
   # Reports the given exception to Haystack.

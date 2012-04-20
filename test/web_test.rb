@@ -122,7 +122,7 @@ class WebTest < Service::TestCase
 
   def test_log_message
     data = {
-      'url'          => 'http://user:pass@abc.com/def',
+      'url'          => 'http://abc.com/def',
       'secret'       => 'monkey',
       'content_type' => 'json'
     }
