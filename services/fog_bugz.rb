@@ -1,5 +1,6 @@
 class Service::FogBugz < Service
   string :cvssubmit_url, :fb_repoid, :fb_version
+  white_list :cvssubmit_url, :fb_repoid, :fb_version
 
   def receive_push
     if (fb_url = data['cvssubmit_url']).blank?

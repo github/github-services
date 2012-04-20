@@ -1,6 +1,7 @@
 class Service::Talker < Service
   string  :url, :token
   boolean :digest
+  white_list :url
 
   def receive_push
     repository = payload['repository']['name']

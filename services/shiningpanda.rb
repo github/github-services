@@ -1,5 +1,6 @@
 class Service::ShiningPanda < Service
   string :workspace, :job, :token, :parameters
+  white_list :workspace, :job, :parameters
 
   def receive_push
     if workspace.empty?

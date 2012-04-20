@@ -2,6 +2,7 @@ class Service::Unfuddle < Service
   string   :subdomain, :repo_id, :username
   password :password
   boolean  :httponly
+  white_list :subdomain, :repo_id, :username
 
   def receive_push
     u_repoid    = data['repo_id'].to_i

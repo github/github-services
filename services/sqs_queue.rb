@@ -1,7 +1,7 @@
 class Service::SqsQueue < Service
-
-  string   :aws_access_key, :sqs_queue_name
+  string :aws_access_key, :sqs_queue_name
   password :aws_secret_key
+  white_list :aws_access_key, :sqs_queue_name
 
   # receive_push()
   def receive_push

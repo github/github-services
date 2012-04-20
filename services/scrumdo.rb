@@ -1,7 +1,6 @@
 class Service::ScrumDo < Service
-  string :username
-  string :password
-  string :project_slug
+  string :username, :password, :project_slug
+  white_list :project_slug, :username
 
   def receive_push
     username = data["username"]
@@ -15,7 +14,6 @@ class Service::ScrumDo < Service
     if res.status < 200 || res.status > 299
       raise_config_error
     end
-    
   end
 end
 

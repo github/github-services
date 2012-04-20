@@ -1,5 +1,6 @@
 class Service::Trac < Service
   string :url, :token
+  white_list :url
 
   def receive_push
     http.ssl[:verify] = false

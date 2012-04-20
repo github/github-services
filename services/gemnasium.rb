@@ -1,5 +1,6 @@
 class Service::Gemnasium < Service
   string :user, :token
+  white_list :user
 
   def receive_push
     http.basic_auth(user, signature)

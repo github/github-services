@@ -1,5 +1,6 @@
 class Service::AgileBench < Service
   string :token, :project_id
+  white_list :project_id
 
   def receive_push
     ensure_required_data

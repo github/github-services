@@ -2,6 +2,7 @@ class Service::Bugzilla < Service
   string   :server_url, :username, :integration_branch
   password :password
   boolean  :central_repository
+  white_list :server_url, :username, :integration_branch
 
   def receive_push
     # Check for settings

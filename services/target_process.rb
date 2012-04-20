@@ -1,6 +1,7 @@
 class Service::TargetProcess < Service
   string    :base_url, :username, :project_id
   password  :password
+  white_list :base_url, :username, :project_id
 
   def receive_push
     # setup things for our REST calls
@@ -13,7 +14,7 @@ class Service::TargetProcess < Service
         |commit| process_commit(commit)
     }
   end
-  
+
 private
   def valid_response?(res)
     case res.status

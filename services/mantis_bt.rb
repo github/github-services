@@ -1,5 +1,6 @@
 class Service::MantisBT < Service
   string :url, :api_key
+  white_list :url
 
   def receive_push
     http.ssl[:verify] = false

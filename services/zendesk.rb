@@ -3,6 +3,7 @@ class Service::Zendesk < Service
   default_events :commit_comment, :issues, :issue_comment, :pull_request, :push
   string   :subdomain, :username
   password :password
+  white_list :subdomain, :username
 
   def invalid_request?
    data['username'].to_s.empty? or

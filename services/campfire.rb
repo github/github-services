@@ -7,6 +7,7 @@ class Service::Campfire < Service
 
   string :subdomain, :room, :token, :sound
   boolean :master_only, :play_sound, :long_url
+  white_list :subdomain, :room
 
   default_events :push, :pull_request, :issues
 

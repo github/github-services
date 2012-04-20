@@ -2,6 +2,7 @@ class Service::StatusNet < Service
   string   :server, :username
   password :password
   boolean  :digest
+  white_list :server, :username
 
   def receive_push
     repository = payload['repository']['name']

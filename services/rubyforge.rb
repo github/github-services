@@ -1,6 +1,8 @@
 class Service::Rubyforge < Service
   string   :groupid, :username
   password :password
+  white_list :groupid, :username
+
   def receive_push
     repository = payload['repository']['name']
     branch     = ref_name

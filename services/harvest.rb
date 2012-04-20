@@ -9,6 +9,7 @@ class Service::Harvest < Service
   string    :subdomain, :username
   password  :password
   boolean   :ssl
+  white_list :subdomain, :username
 
   def receive_push
     if data['username'].to_s.empty?

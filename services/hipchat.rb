@@ -1,6 +1,7 @@
 class Service::HipChat < Service
   string :auth_token, :room
   boolean :notify
+  white_list :room
 
   default_events :commit_comment, :download, :fork, :fork_apply, :gollum,
     :issues, :issue_comment, :member, :public, :pull_request, :push, :watch

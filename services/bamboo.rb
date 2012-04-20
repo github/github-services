@@ -1,6 +1,7 @@
 class Service::Bamboo < Service
   string   :base_url, :build_key, :username
   password :password
+  white_list :base_url, :build_key, :username
 
   def receive_push
     verify_config
@@ -24,11 +25,11 @@ class Service::Bamboo < Service
       if parts.length == 2
         branch = parts[0]
         key = parts[1]
-        
+
         #Has a branch, verify it matches the branch for the commit
         next unless branch == commit_branch
       end
-      
+
       res = http_post "api/rest/executeBuild.action",
         :auth => token, :buildKey => key
       msg = XmlSimple.xml_in(res.body)

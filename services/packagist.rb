@@ -1,5 +1,6 @@
 class Service::Packagist < Service
   string :domain, :user, :token
+  white_list :domain, :user
 
   def receive_push
     http.ssl[:verify] = false

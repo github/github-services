@@ -2,6 +2,8 @@
 class Service::Socialcast < Service
   string   :api_domain, :group_id, :username
   password :password
+  white_list :api_domain, :group_id, :username
+
   def receive_push
     repository  = payload['repository']['name']
     group_id    = (data['group_id'].nil? || data['group_id'] == '') ? '' : data['group_id']

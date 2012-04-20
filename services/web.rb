@@ -10,6 +10,8 @@ class Service::Web < Service
     # new hooks should set content_type == 'json'
     :content_type
 
+  white_list :url, :content_type
+
   boolean :insecure_ssl # :(
 
   def receive_event

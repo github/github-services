@@ -1,6 +1,6 @@
 class Service::Pushover < Service
-  string :user_key
-  string :device_name
+  string :user_key, :device_name
+  white_list :device_name
 
   def receive_push
     if !payload["commits"].any?

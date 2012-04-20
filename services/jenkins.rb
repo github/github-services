@@ -1,5 +1,6 @@
 class Service::Jenkins < Service
   string :jenkins_hook_url
+  white_list :jenkins_hook_url
 
   def receive_push
     if data['jenkins_hook_url'].present?

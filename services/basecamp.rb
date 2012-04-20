@@ -3,6 +3,8 @@ class Service::Basecamp < Service
   password :password
   boolean  :ssl
 
+  white_list :url, :project, :category, :username
+
   def receive_push
     raise_config_error "Invalid basecamp domain" if basecamp_domain.nil?
 

@@ -1,5 +1,6 @@
 class Service::Grmble < Service
   string :room_api_url, :token
+  white_list :room_api_url
 
   def receive_push
     http.url_prefix = data['room_api_url'].to_s

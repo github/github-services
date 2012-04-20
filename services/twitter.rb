@@ -4,7 +4,7 @@ class Service::Twitter < Service
 
   def receive_push
     return unless payload['commits']
-    
+
     statuses   = []
     repository = payload['repository']['name']
 
