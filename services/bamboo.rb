@@ -5,7 +5,7 @@ class Service::Bamboo < Service
   def receive_push
     verify_config
     branch = payload['ref']
-    authenticated { |token| trigger_build(token, branch) }
+    trigger_build(branch)
   rescue SocketError => e
     if e.to_s =~ /getaddrinfo: Name or service not known/
       raise_config_error("Invalid Bamboo host name")
@@ -14,48 +14,40 @@ class Service::Bamboo < Service
     end
   end
 
-  def trigger_build(token, ref)
+  def trigger_build(ref)
+    # Post body is empty but Bamboo REST expects this to be set (in 3.x)
+    http.headers['Content-Type'] = 'application/xml'
+
     commit_branch = ref.split('/').last
 
     build_key.split(',').each do |branch_key|
-      #See if the split result is just a key or a branch:key 
+      #See if the split result is just a key or a branch:key
       parts = branch_key.split(':')
       key = parts[0]
       if parts.length == 2
         branch = parts[0]
         key = parts[1]
-        
+
         #Has a branch, verify it matches the branch for the commit
         next unless branch == commit_branch
       end
-      
-      res = http_post "api/rest/executeBuild.action",
-        :auth => token, :buildKey => key
-      msg = XmlSimple.xml_in(res.body)
-      raise_config_error msg["error"] if msg["error"]
+
+      res = http_post "rest/api/latest/queue/#{key}"
+      handle_response(res)
     end
   end
 
-  def authenticated
-    token = login
-    yield token
-  ensure
-    logout(token)
-  end
-
-  def login
-    res = http_post "api/rest/login.action", :username => username, :password => password
-    case res.status
+  def handle_response(response)
+    case response.status
       when 200..204
-        XmlSimple.xml_in(res.body)['auth'].first
+        "Ok"
       when 403, 401, 422 then raise_config_error("Invalid credentials")
       when 404, 301 then raise_config_error("Invalid Bamboo project URL")
-    end
-  end
-
-  def logout(token)
-    return unless token
-    http_post "api/rest/logout.action", "auth=#{CGI.escape(token)}"
+      else
+        maybe_xml = response.body
+        msg = (XmlSimple.xml_in(maybe_xml) if maybe_xml =~ /<?xml/) || {}
+        raise_config_error msg["message"] if msg["message"]
+      end
   end
 
   def verify_config
@@ -64,6 +56,7 @@ class Service::Bamboo < Service
     end
     http.ssl[:verify] = false
     http.url_prefix   = base_url
+    http.basic_auth(username, password)
   end
 
   def base_url
