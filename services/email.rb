@@ -12,6 +12,7 @@ end
 class Service::Email < Service
   string :address, :secret
   boolean :send_from_author, :show_diff
+  white_list :address
 
   def receive_push
     extend PushEmail

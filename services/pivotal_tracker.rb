@@ -1,5 +1,6 @@
 class Service::PivotalTracker < Service
   string :token, :branch, :endpoint
+  white_list :endpoint, :branch
 
   def receive_push
     token = data['token']

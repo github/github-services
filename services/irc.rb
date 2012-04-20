@@ -2,6 +2,7 @@ class Service::IRC < Service
   string   :server, :port, :room, :nick, :branch_regexes
   password :password
   boolean  :ssl, :message_without_join, :no_colors, :long_url, :notice
+  white_list :server, :port, :room, :nick
 
   def receive_push
     return if distinct_commits.empty?

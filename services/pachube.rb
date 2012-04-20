@@ -1,7 +1,6 @@
 class Service::Pachube < Service
-  string :api_key
-  string :feed_id
-  string :track_branch
+  string :api_key, :feed_id, :track_branch
+  white_list :feed_id, :track_branch
 
   def receive_push
     raise_config_error "Missing api_key" if data['api_key'].to_s.empty?

@@ -113,4 +113,4 @@ require 'basecamp'
 require 'rubyforge'
 
 require File.expand_path('../../lib/service', __FILE__)
-require File.expand_path('../../lib/app', __FILE__)
+require File.expand_path('../../lib/service/app', __FILE__)

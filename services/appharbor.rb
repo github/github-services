@@ -1,6 +1,7 @@
 class Service::AppHarbor < Service
   string :application_slug, :token
-  
+  white_list :application_slug
+
   def receive_push
     slugs = data['application_slug']
     token = data['token']

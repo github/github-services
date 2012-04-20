@@ -1,5 +1,6 @@
 class Service::Railsbp < Service
   string :railsbp_url, :token
+  white_list :railsbp_url
 
   def receive_push
     http_post railsbp_url, :token => token, :payload => payload.to_json

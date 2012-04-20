@@ -2,6 +2,7 @@ class Service::Twilio < Service
   string   :account_sid, :from_phone, :to_phone
   boolean  :master_only
   password :auth_token
+  white_list :account_sid, :from_phone, :to_phone
 
   def receive_push
     check_configuration_options(data)

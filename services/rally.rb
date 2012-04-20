@@ -3,6 +3,7 @@ require 'time'
 class Service::Rally < Service
   string   :server, :username, :workspace, :repository
   password :password
+  white_list :server, :workspace, :repository
 
   attr_accessor :wksp_ref, :user_cache
 
@@ -19,8 +20,8 @@ class Service::Rally < Service
     branch     = payload['ref'].split('/')[-1]  # most of the time it'll be refs/heads/master ==> master
     repo       = payload['repository']['name']
     repo_owner = payload['repository']['owner']['name']
-    chgset_uri = 'https://github.com/%s/%s' % [repo_owner, repo] 
-    
+    chgset_uri = 'https://github.com/%s/%s' % [repo_owner, repo]
+
     http.ssl[:verify] = false
     if server =~ /^https?:\/\//   # if they have http:// or https://, leave server value unchanged
       http.url_prefix = "#{server}/slm/webservice/1.30"
@@ -58,7 +59,7 @@ class Service::Rally < Service
                     'Revision'        => commit['id'],
                     'CommitTimestamp' => Time.iso8601(commit['timestamp']).strftime("%FT%H:%M:%S.00Z"),
                     'Author'          => user_ref,
-                    'Message'         => message,                   
+                    'Message'         => message,
                     'Uri'             => chgset_uri,
                     'Artifacts'       => artifact_refs # [{'_ref' => 'defect/1324.js'}, {}...]
                   }

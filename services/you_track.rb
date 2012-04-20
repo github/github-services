@@ -1,6 +1,7 @@
 class Service::YouTrack < Service
   string   :base_url, :committers, :username
   password :password
+  white_list :base_url, :username, :committers
 
   def receive_push
     http.ssl[:verify] = false

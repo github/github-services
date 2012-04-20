@@ -1,5 +1,6 @@
 class Service::Redmine < Service
   string :address, :project, :api_key
+  white_list :address, :project
 
   def receive_push
     http.ssl[:verify] = false

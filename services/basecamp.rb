@@ -3,6 +3,8 @@ class Service::Basecamp < Service
   password :password
   boolean  :ssl
 
+  white_list :url, :project, :category, :username
+
   def receive_push
     raise_config_error "Invalid basecamp domain" if basecamp_domain.nil?
 
@@ -88,7 +90,8 @@ EOH
   attr_writer :category_id
 
   def basecamp_domain
-    @basecamp_domain ||= Addressable::URI.parse(data['url']).host
+    @basecamp_domain ||= Addressable::URI.parse(data['url'].to_s).host
+  rescue Addressable::URI::InvalidURIError
   end
 
   def build_message(options = {})

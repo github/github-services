@@ -29,6 +29,7 @@ end
 
 class Service::Jabber < Service
   string :user
+  white_list :user
 
   def receive_push
     # Accept any friend request

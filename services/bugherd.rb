@@ -1,5 +1,6 @@
 class Service::Bugherd < Service
   string :project_key
+  white_list :project_key
 
   def receive_push
     if data['url'].present?

@@ -1,7 +1,8 @@
 # based on the travis.rb service
 class Service::Nodejitsu < Service
-  string :subdomain, :username, :branch 
+  string :subdomain, :username, :branch
   password :password
+  white_list :subdomain, :username, :branch
 
   def receive_push
     return if branch.to_s != '' && branch != branch_name

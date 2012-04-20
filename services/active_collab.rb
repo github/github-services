@@ -9,6 +9,7 @@ require 'uri'
 
 class Service::ActiveCollab < Service
   string  :url, :token, :project_id, :milestone_id, :category_id
+  white_list :url, :project_id, :milestone_id, :category_id
 
   def receive_push
     if data['url'].to_s.empty?

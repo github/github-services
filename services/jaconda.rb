@@ -1,6 +1,7 @@
 class Service::Jaconda < Service
   string  :subdomain, :room_id, :room_token
   boolean :digest
+  white_list :subdomain, :room_id
 
   default_events :commit_comment, :download, :fork, :fork_apply, :gollum,
     :issues, :issue_comment, :member, :public, :pull_request, :push, :watch

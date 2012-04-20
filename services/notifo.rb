@@ -1,5 +1,6 @@
 class Service::Notifo < Service
   string :subscribers
+  white_list :subscribers
 
   def receive_push
     return if Array(payload['commits']).size == 0

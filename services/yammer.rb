@@ -2,6 +2,7 @@ class Service::Yammer < Service
   string :group_id, :consumer_key, :consumer_secret,
     :access_token, :access_secret
   boolean :digest
+  white_list :group_id
 
   def receive_push
     statuses   = [ ]

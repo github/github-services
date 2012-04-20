@@ -1,5 +1,6 @@
 class Service::OnTime < Service
   string :ontime_url, :api_key
+  white_list :ontime_url
 
   self.title = 'OnTime'
 

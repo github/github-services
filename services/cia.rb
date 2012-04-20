@@ -1,6 +1,7 @@
 class Service::CIA < Service
   string :address, :project, :branch
   boolean :long_url
+  white_list :address, :project, :branch
 
   def receive_push
     repository =

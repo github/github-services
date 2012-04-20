@@ -1,5 +1,6 @@
 class Service::GetLocalization < Service
   string :project_name, :project_token
+  white_list :project_name
 
   def receive_push
     project_name = data['project_name']

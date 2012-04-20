@@ -1,5 +1,6 @@
 class Service::Boxcar < Service
   string :subscribers
+  white_list :subscribers
 
   def receive_push
     http_post \

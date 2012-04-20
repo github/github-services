@@ -1,8 +1,8 @@
-require 'uri'
 class Service::Zendesk < Service
   default_events :commit_comment, :issues, :issue_comment, :pull_request, :push
   string   :subdomain, :username
   password :password
+  white_list :subdomain, :username
 
   def invalid_request?
    data['username'].to_s.empty? or
@@ -18,8 +18,8 @@ class Service::Zendesk < Service
     end
 
     begin
-      URI.parse(url)
-    rescue URI::InvalidURIError
+      Addressable::URI.parse(url)
+    rescue Addressable::URI::InvalidURIError
       raise_config_error("Invalid subdomain #{subdomain}")
     end
 

@@ -1,5 +1,6 @@
 class Service::FriendFeed < Service
   string :nickname, :remotekey
+  white_list :nickname
 
   def receive_push
     repository = payload['repository']['name']

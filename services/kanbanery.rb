@@ -1,5 +1,6 @@
 class Service::Kanbanery < Service
   string :project_id, :project_token
+  white_list :project_id
 
   def receive_push
     project_id = data['project_id']
@@ -9,7 +10,6 @@ class Service::Kanbanery < Service
       payload.to_json,
       'X-Kanbanery-ProjectGitHubToken' => token,
       'Content-Type' => 'application/json'
-    
   end
 end
 

@@ -5,7 +5,7 @@ require File.expand_path("../service/structs", __FILE__)
 # Represents a single triggered Service call.  Each Service tracks the event
 # type, the configuration data, and the payload for the current call.
 class Service
-  dir = File.expand_path '..', __FILE__
+  dir = File.expand_path '../service', __FILE__
   Dir["#{dir}/events/helpers/*.rb"].each do |helper|
     require helper
   end
@@ -58,8 +58,7 @@ class Service
     # data    - A Hash with the configuration data for the Service.
     # payload - A Hash with the unique payload data for this Service instance.
     #
-    # Returns true if the Service responded to the event, or false if the
-    # Service does not respond to this event.
+    # Returns the Service instance if it responds to this event, or nil.
     def receive(event, data, payload = nil)
       svc = new(event, data, payload)
 
@@ -72,9 +71,7 @@ class Service
           end
         end
 
-        true
-      else
-        false
+        svc
       end
     rescue Service::ConfigurationError, Errno::EHOSTUNREACH, Errno::ECONNRESET, SocketError, Net::ProtocolError => err
       Service.stats.increment "hook.fail.config.#{hook_name}"
@@ -123,7 +120,7 @@ class Service
     #   FooService.schema
     #   # => [[:string, :token]]
     #
-    # Returns an Array of [Symbol, String] tuples.
+    # Returns an Array of [Symbol attribute type, Symbol attribute name] tuples.
     def schema
       @schema ||= []
     end
@@ -184,6 +181,21 @@ class Service
     def boolean(*attrs)
       add_to_schema :boolean, attrs
     end
+
+    # Public: get a list of attributes that are approved for logging.  Don't
+    # add things like tokens or passwords here.
+    #
+    # Returns an Array of String attribute names.
+    def white_listed
+      @white_listed ||= []
+    end
+
+    def white_list(*attrs)
+      attrs.each do |attr|
+        white_listed << attr.to_s
+      end
+    end
+
 
     # Adds the given attributes to the Service's data schema.
     #
@@ -523,6 +535,47 @@ class Service
     yield
   rescue OpenSSL::SSL::SSLError => e
     raise_config_error "Invalid SSL cert"
+  end
+
+  # Public: Builds a log message for this Service request.  Respects the white
+  # listed attributes in the Service schema.
+  #
+  # Returns a String.
+  def log_message(status = 0)
+    "[%s] %03d %s/%s %s" % [Time.now.utc.to_s(:db), status,
+      self.class.hook_name, @event, JSON.generate(log_data)]
+  end
+
+  # Public: Builds a sanitized Hash of the Data hash without passwords.
+  #
+  # Returns a Hash.
+  def log_data
+    @log_data ||= self.class.white_listed.inject({}) do |hash, key|
+      if value = data[key]
+        hash.update key => sanitize_log_value(value)
+      else
+        hash
+      end
+    end
+  end
+
+  # Attempts to sanitize passwords out of URI strings.
+  #
+  # value - The String attribute value.
+  #
+  # Returns a sanitized String.
+  def sanitize_log_value(value)
+    string = value.to_s
+    string.strip!
+    if string =~ /^[a-z]+\:\/\//
+      uri = Addressable::URI.parse(string)
+      uri.password = "*" * uri.password.size if uri.password
+      uri.to_s
+    else
+      string
+    end
+  rescue Addressable::URI::InvalidURIError
+    string
   end
 
   # Public: Gets the Hash of secret configuration options.  These are set on

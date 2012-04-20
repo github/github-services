@@ -1,6 +1,7 @@
 class Service::Jira < Service
   string   :server_url, :api_version, :username
   password :password
+  white_list :api_version, :server_url, :username
 
   def receive_push
     payload['commits'].each do |commit|
