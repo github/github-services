@@ -119,4 +119,4 @@ class Service::App < Sinatra::Base
   end
 end
 
-Dir["#{File.dirname(__FILE__)}/../services/**/*.rb"].each { |service| load service }
+Dir["#{File.dirname(__FILE__)}/../../services/**/*.rb"].each { |service| load service }
