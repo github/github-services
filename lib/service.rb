@@ -555,11 +555,30 @@ class Service
   def log_data
     @log_data ||= self.class.white_listed.inject({}) do |hash, key|
       if value = data[key]
-        hash.update key => value
+        hash.update key => sanitize_log_value(value)
       else
         hash
       end
     end
+  end
+
+  # Attempts to sanitize passwords out of URI strings.
+  #
+  # value - The String attribute value.
+  #
+  # Returns a sanitized String.
+  def sanitize_log_value(value)
+    string = value.to_s
+    string.strip!
+    if string =~ /^[a-z]+\:\/\//
+      uri = Addressable::URI.parse(string)
+      uri.password = "*" * uri.password.size
+      uri.to_s
+    else
+      string
+    end
+  rescue Addressable::URI::InvalidURIError
+    string
   end
 
   # Public: Gets the Hash of secret configuration options.  These are set on
