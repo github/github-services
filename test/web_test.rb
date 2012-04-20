@@ -107,6 +107,30 @@ class WebTest < Service::TestCase
     svc.receive_event
   end
 
+  def test_log_data
+    data = {
+      'url'          => 'http://user:pass@abc.com/def',
+      'secret'       => 'monkey',
+      'content_type' => 'json'
+    }
+
+    svc = service(data, payload)
+    assert_equal 2, svc.log_data.size, svc.log_data.inspect
+    assert_equal data['url'], svc.log_data['url']
+    assert_equal data['content_type'], svc.log_data['content_type']
+  end
+
+  def test_log_message
+    data = {
+      'url'          => 'http://user:pass@abc.com/def',
+      'secret'       => 'monkey',
+      'content_type' => 'json'
+    }
+
+    svc = service(data, payload)
+    assert_match /^\[[^\]]+\] 200 web\/push \{/, svc.log_message(200)
+  end
+
   def service(*args)
     super Service::Web, *args
   end

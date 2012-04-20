@@ -540,6 +540,28 @@ class Service
     raise_config_error "Invalid SSL cert"
   end
 
+  # Public: Builds a log message for this Service request.  Respects the white
+  # listed attributes in the Service schema.
+  #
+  # Returns a String.
+  def log_message(status = 0)
+    "[%s] %03d %s/%s %s" % [Time.now.utc.to_s(:db), status,
+      self.class.hook_name, @event, JSON.generate(log_data)]
+  end
+
+  # Public: Builds a sanitized Hash of the Data hash without passwords.
+  #
+  # Returns a Hash.
+  def log_data
+    @log_data ||= self.class.white_listed.inject({}) do |hash, key|
+      if value = data[key]
+        hash.update key => value
+      else
+        hash
+      end
+    end
+  end
+
   # Public: Gets the Hash of secret configuration options.  These are set on
   # the GitHub servers and never committed to git.
   #
