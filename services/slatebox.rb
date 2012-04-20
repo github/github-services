@@ -1,6 +1,7 @@
 class Service::Slatebox < Service
   string :app_id, :token
-  
+  white_list :app_id
+
   def receive_push
     slugs = data['app_id']
     token = data['token']
