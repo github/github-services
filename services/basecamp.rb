@@ -90,7 +90,8 @@ EOH
   attr_writer :category_id
 
   def basecamp_domain
-    @basecamp_domain ||= Addressable::URI.parse(data['url']).host
+    @basecamp_domain ||= Addressable::URI.parse(data['url'].to_s).host
+  rescue Addressable::URI::InvalidURIError
   end
 
   def build_message(options = {})
