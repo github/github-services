@@ -123,7 +123,7 @@ class Service
     #   FooService.schema
     #   # => [[:string, :token]]
     #
-    # Returns an Array of [Symbol, String] tuples.
+    # Returns an Array of [Symbol attribute type, Symbol attribute name] tuples.
     def schema
       @schema ||= []
     end
@@ -184,6 +184,21 @@ class Service
     def boolean(*attrs)
       add_to_schema :boolean, attrs
     end
+
+    # Public: get a list of attributes that are approved for logging.  Don't
+    # add things like tokens or passwords here.
+    #
+    # Returns an Array of String attribute names.
+    def white_listed
+      @white_listed ||= []
+    end
+
+    def white_list(*attrs)
+      attrs.each do |attr|
+        white_listed << attr.to_s
+      end
+    end
+
 
     # Adds the given attributes to the Service's data schema.
     #
