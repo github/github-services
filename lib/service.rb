@@ -2,6 +2,18 @@ require 'faraday'
 require 'ostruct'
 require File.expand_path("../service/structs", __FILE__)
 
+module Faraday
+  def Connection.URI(url)
+    if url.respond_to?(:host)
+      url
+    elsif url.respond_to?(:to_str)
+      Addressable::URI.parse(url)
+    else
+      raise ArgumentError, "bad argument (expected URI object or URI string)"
+    end
+  end
+end
+
 # Represents a single triggered Service call.  Each Service tracks the event
 # type, the configuration data, and the payload for the current call.
 class Service
