@@ -30,16 +30,13 @@ class Service::CodePortingCSharp2Java < Service
   end
   
   def perform_login
-	uri = URI.parse("https://apps.codeporting.com")
-	http = Net::HTTP.new(uri.host, uri.port)
-	http.use_ssl = true
-	http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-	path = '/csharp2java/v0/UserSignin'
-	data = "LoginName=#{username}&Password=#{password}"
+	http.ssl[:verify] = false
+    data = "LoginName=#{username}&Password=#{password}"
 	headers = {
 		'Content-Type' => 'application/x-www-form-urlencoded'
 	}
-	resp, data = http.post(path, data, headers)
+    resp, data = http_post "https://apps.codeporting.com/csharp2java/v0/UserSignin", data, headers
+
 	doc = REXML::Document.new(data)
 	retValue = ""
 	doc.each_element('//return') { |item| 
@@ -56,17 +53,12 @@ class Service::CodePortingCSharp2Java < Service
   end
   
   def process_on_codeporting
-	uri = URI.parse("https://apps.codeporting.com")
-	http_porting = Net::HTTP.new(uri.host, uri.port)
-	http_porting.use_ssl = true
-	http_porting.verify_mode = OpenSSL::SSL::VERIFY_NONE
-	path_porting = '/csharp2java/v0/githubpluginsupport'
-	data_porting = "token=#{token}&ProjectName=#{project_name}&RepoKey=#{repo_key}&TarRepoKey=#{target_repo_key}&Username=#{username}&Password=#{password}&GithubUserId=#{userid}"
-	
-	headers_porting = {
+	http.ssl[:verify] = false
+    data = "token=#{token}&ProjectName=#{project_name}&RepoKey=#{repo_key}&TarRepoKey=#{target_repo_key}&Username=#{username}&Password=#{password}&GithubUserId=#{userid}"
+	headers = {
 		'Content-Type' => 'application/x-www-form-urlencoded'
 	}
-	resp, data = http_porting.post(path_porting, data_porting, headers_porting)
+    resp, data = http_post "https://apps.codeporting.com/csharp2java/v0/githubpluginsupport", data, headers
 
 	doc = REXML::Document.new(data)
 	retValue = ""
