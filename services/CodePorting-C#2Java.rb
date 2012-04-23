@@ -19,10 +19,10 @@ class Service::CodePortingCSharp2Java < Service
 		raise_config_error "#{response}"
 	else
 		response = process_on_codeporting
-		if (response == "")
-			raise_config_error 'Problem performed with errors, porting will be performed again on next commit.'
-		else
+		if (response == "True")
 			#process successful
+		else
+			raise_config_error 'Porting performed with errors, porting will be performed again on next commit.'
 		end
 	end
 	
