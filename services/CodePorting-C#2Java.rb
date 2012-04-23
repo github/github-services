@@ -31,11 +31,11 @@ class Service::CodePortingCSharp2Java < Service
   
   def perform_login
 	http.ssl[:verify] = false
-    data = "LoginName=#{username}&Password=#{password}"
+    postdata = "LoginName=#{username}&Password=#{password}"
 	headers = {
 		'Content-Type' => 'application/x-www-form-urlencoded'
 	}
-    resp, data = http_post "https://apps.codeporting.com/csharp2java/v0/UserSignin", data, headers
+    resp, data = http_post "https://apps.codeporting.com/csharp2java/v0/UserSignin", postdata, headers
 
 	doc = REXML::Document.new(data)
 	retValue = ""
@@ -54,11 +54,11 @@ class Service::CodePortingCSharp2Java < Service
   
   def process_on_codeporting
 	http.ssl[:verify] = false
-    data = "token=#{token}&ProjectName=#{project_name}&RepoKey=#{repo_key}&TarRepoKey=#{target_repo_key}&Username=#{username}&Password=#{password}&GithubUserId=#{userid}"
+    postdata = "token=#{token}&ProjectName=#{project_name}&RepoKey=#{repo_key}&TarRepoKey=#{target_repo_key}&Username=#{username}&Password=#{password}&GithubUserId=#{userid}"
 	headers = {
 		'Content-Type' => 'application/x-www-form-urlencoded'
 	}
-    resp, data = http_post "https://apps.codeporting.com/csharp2java/v0/githubpluginsupport", data, headers
+    resp, data = http_post "https://apps.codeporting.com/csharp2java/v0/githubpluginsupport", postdata, headers
 
 	doc = REXML::Document.new(data)
 	retValue = ""
