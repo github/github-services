@@ -11,29 +11,38 @@
 require "liquid"
 
 class Service::CommitMsgChecker < Service
+
   def receive_push
-    print "foo\n"
-    
     # TODO: check config params: message_format, template
     
     # remove commits with valid message
     fmt = data['message_format']
-    payload['commits'].delete_if { |c| c['message'] =~ /#{fmt}/
-    }
+    payload['commits'].delete_if { |c| c['message'] =~ /#{fmt}/ }
     
     # render email message with template
-    content = Liquid::Template.parse(data['template']).render 'event' => payload
+    repository = payload['repository']['url']
+    tpl = get_template(repository)
+    content = tpl.render 'event' => payload
     puts "-----"
     puts content
     puts "-----"
     
-    # TODO: send email
-    
-    # debugging, remove
-    print payload['commits'].length
-    payload['commits'].each { |c|
-      puts "key: ",c['message']
-    }
-    print "data: ",data['message_format'],"\n"
+    recipients = data['recipients']
+    # TODO: - get pusher email address (check event data format)
+
+    # TODO: - send email
   end
+  
+  def templates
+    @templates ||= Hash.new
+  end
+  
+  def get_template(repository)
+    # assume there can be only one template instance per repository
+    if !templates[repository]
+      templates[repository] = Liquid::Template.parse(data['template'])
+    end
+    templates[repository]
+  end
+  
 end

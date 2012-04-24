@@ -8,10 +8,13 @@ class CommitMsgCheckerTest < Service::TestCase
   def test_push
     svc = service(
       {'message_format' => '^add .*',
-      'template' => email_template},
+      'template' => email_template,
+      'recipients' => 'foo@bar.com,john@smith.org'
+      },
       push_payload)
 
     svc.receive_push
+
   end
   
   def service(*args)
