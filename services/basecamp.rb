@@ -1,143 +1,71 @@
 class Service::Basecamp < Service
-  string   :url, :project, :category, :username
-  password :password
-  boolean  :ssl
+  string          :project_url, :email_address
+  password        :password
+  white_list      :project_url, :email_address
+  default_events  :push, :pull_request, :issues
 
-  white_list :url, :project, :category, :username
+
+  def hook_name
+    'bcx'
+  end
 
   def receive_push
-    raise_config_error "Invalid basecamp domain" if basecamp_domain.nil?
+    commit = payload['commits'].last || {}
+    author = commit['author'] || commit['committer'] || payload['pusher']
 
-    repository      = payload['repository']['name']
-    name_with_owner = File.join(payload['repository']['owner']['name'], repository)
-    branch          = ref_name
+    message = summary_message.sub("[#{repo_name}] #{pusher_name} ", '')
+    create_event 'committed', message, summary_url, author['email']
+  end
 
-    commits = payload['commits'].reject { |commit| commit['message'].to_s.strip == '' }
-    return if commits.empty?
+  def receive_pull_request
+    base_ref = pull.base.label.split(':').last
+    head_ref = pull.head.label.split(':').last
+    head_ref = pull.head.label if head_ref == base_ref
 
-    ::Basecamp.establish_connection! basecamp_domain,
-      data['username'], data['password'], data['ssl'].to_i == 1
+    create_event "#{action} a pull request",
+      "#{pull.title} (#{base_ref}..#{head_ref})",
+      pull.html_url
+  end
 
-    commits.each do |commit|
-      gitsha        = commit['id']
-      short_git_sha = gitsha[0..5]
-      timestamp     = Date.parse(commit['timestamp'])
+  def receive_issues
+    create_event "#{action} an issue", issue.title, issue.html_url
+  end
 
-      added         = commit['added'].map    { |f| ['A', f] }
-      removed       = commit['removed'].map  { |f| ['R', f] }
-      modified      = commit['modified'].map { |f| ['M', f] }
-      changed_paths = (added + removed + modified).sort_by { |(char, file)| file }
-      changed_paths = changed_paths.collect { |entry| entry * ' ' }.join("\n  ")
 
-      # Shorten the elements of the subject
-      commit_title = commit['message'][/^([^\n]+)/, 1]
-      if commit_title.length > 50
-        commit_title = commit_title.slice(0,50) << '...'
-      end
+  private
 
-      title = "Commit on #{name_with_owner}: #{short_git_sha}: #{commit_title}"
+  def create_event(action, message, url, author_email = nil)
+    http_post_event :service => 'github',
+      :creator_email_address => author_email,
+      :description => action,
+      :title => message,
+      :url => url
+  end
 
-      body = <<-EOH
-*Author:* #{commit['author']['name']} <#{commit['author']['email']}>
-*Commit:* <a href="#{commit['url']}">#{gitsha}</a>
-*Date:*   #{timestamp} (#{timestamp.strftime('%a, %d %b %Y')})
-*Branch:* #{branch}
-*Home:*   #{payload['repository']['url']}
+  def http_post_event(params)
+    http.basic_auth data['email_address'], data['password']
+    http.headers['User-Agent']    = 'GitHub service hook'
+    http.headers['Content-Type']  = 'application/json'
+    http.headers['Accept']        = 'application/json'
 
-h2. Log Message
+    response = http_post(events_api_url, params.to_json)
 
-<pre>#{commit['message']}</pre>
-EOH
-
-      if changed_paths.size > 0
-        body << <<-EOH
-
-h2. Changed paths
-
-<pre>  #{changed_paths}</pre>
-EOH
-      end
-
-      post_message :title => title, :body => body
+    case response.status
+    when 401; raise_config_error "Invalid email + password: #{response.body.inspect}"
+    when 403; raise_config_error "No access to project: #{response.body.inspect}"
+    when 404; raise_config_error "No such project: #{response.body.inspect}"
+    when 422; raise_config_error "Validation error: #{response.body.inspect}"
     end
+  end
 
-  rescue SocketError => boom
-    if boom.to_s =~ /getaddrinfo: Name or service not known/
-      raise_config_error "Invalid basecamp domain name"
+  EVENTS_API_URL = 'https://basecamp.com:443/%d/api/v1/projects/%d/events.json'
+  def events_api_url
+    if data['project_url'] =~ %r{^https://basecamp\.com/(\d+)/projects/(\d+)}
+      EVENTS_API_URL % [$1, $2]
+    elsif data['project_url'] =~ /basecamphq\.com/
+      raise_config_error "That's a URL for a Basecamp Classic project, not the new Basecamp. Check out the Basecamp Classic service hook instead!"
     else
-      raise
-    end
-  rescue ActiveResource::UnauthorizedAccess => boom
-    raise_config_error "Unauthorized. Verify the project URL and credentials."
-  rescue ActiveResource::ForbiddenAccess => boom
-    raise_config_error boom.to_s
-  rescue ActiveResource::Redirection => boom
-    raise_config_error "Invalid project URL: #{boom}"
-  rescue RuntimeError => boom
-    if boom.to_s =~ /\((?:403|401|422)\)/
-      raise_config_error "Invalid credentials: #{boom}"
-    elsif boom.to_s =~ /\((?:404|301)\)/
-      raise_config_error "Invalid project URL: #{boom}"
-    elsif boom.to_s == 'Unprocessable Entity (422)'
-      # do nothing
-    else
-      raise
-    end
-  end
-
-  attr_writer :basecamp
-  attr_writer :project_id
-  attr_writer :category_id
-
-  def basecamp_domain
-    @basecamp_domain ||= Addressable::URI.parse(data['url'].to_s).host
-  rescue Addressable::URI::InvalidURIError
-  end
-
-  def build_message(options = {})
-    m = ::Basecamp::Message.new :project_id => project_id
-    m.category_id = category_id
-    options.each do |key, value|
-      m.send "#{key}=", value
-    end
-    m
-  end
-
-  def post_message(options = {})
-    build_message(options).save
-  end
-
-  def all_projects
-    Array(::Basecamp::Project.all)
-  end
-
-  def all_categories
-    Array(::Basecamp::Category.post_categories(project_id))
-  end
-
-  def project_id
-    @project_id ||= begin
-      name = data['project'].to_s
-      name.downcase!
-      projects = all_projects.select { |p| p.name.downcase == name }
-      case projects.size
-      when 1 then projects.first.id
-      when 0 then raise_config_error("Invalid Project: #{name.downcase}")
-      else raise_config_error("Multiple projects named: #{name.downcase}")
-      end
-    end
-  end
-
-  def category_id
-    @category_id ||= begin
-      name = data['category'].to_s
-      name.downcase!
-      categories = all_categories.select { |c| c.name.downcase == name }
-      case categories.size
-      when 1 then categories.first.id
-      when 0 then raise_config_error("Invalid Category: #{name.downcase}")
-      else raise_config_error("Multiple categories named: #{name.downcase}")
-      end
+      raise_config_error "That's not a URL to a Basecamp project! Navigate to the Basecamp project you'd like to post to and note the URL. It should look something like: https://basecamp.com/123456/projects/7890123 -- paste that URL here."
     end
   end
 end

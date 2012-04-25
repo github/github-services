@@ -4,24 +4,18 @@ Basecamp
 Install Notes
 -------------
 
-  1. url should be your Basecamp url
-  2. username should be the username or API token of the user that you want to use to post messages into your Basecamp - you can setup a user just for this purpose
-  3. password should be the password of the user that you want to use to post the messages.  If username is an API token, set password to 'x'.
-  4. project should be the name of the project that you want to post the message into (not the id)
-  5. category should be the name of the category that you want to post the message using (not the id)
-  6. ssl should be enabled for accounts that need SSL.
+  1. project_url is the URL of your Basecamp project: https://basecamp.com/1234/projects/5678
+  2. email_address is the email you sign in to Basecamp with. This person must have access to the project. To add events on behalf of other people, make the person an admin on the project.
+  3. password is the password you sign in to Basecamp with.
 
 
 Developer Notes
 ---------------
 
 data
-  - url
-  - username
+  - project_url
+  - email_address
   - password
-  - project
-  - category
-  - ssl
 
 payload
   - refer to docs/github_payload
