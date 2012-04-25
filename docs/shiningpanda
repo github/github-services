@@ -13,7 +13,8 @@ Install Notes
   1. Workspace - This your workspace key. For instance if your Jenkins URL is https://jenkins.shiningpanda.com/shiningpanda.org, then your workspace key is "shiningpanda.org".
   2. Job - This is the name of the job you want to trigger upon commit. For instance if the URL of your job in Jenkins is https://jenkins.shiningpanda.com/shiningpanda.org/job/selenose/, then your job name is selenose.
   3. Token - This is the value of the "Authentication Token" field of the "Trigger builds remotely (e.g., from scripts)" option in the "Build Triggers" section of your job configuration.
-  4. Parameters (optional) - If your job takes parameters, this is the query string built from the parameters and their value (for instance "arg1=foo&arg2=bar"). All parameters have to be properly URL-escaped.
+  4. Branches (optional) - This is a space-separated list of branches to listen for commits on. Commits to other branches will not trigger your job. If no branches are specified, jobs are triggered for all commits.
+  5. Parameters (optional) - If your job takes parameters, this is the query string built from the parameters and their value (for instance "arg1=foo&arg2=bar"). All parameters have to be properly URL-escaped.
 
 Developer Notes
 ---------------
@@ -22,6 +23,7 @@ data
   - workspace
   - job
   - token
+  - branches (optional)
   - parameters (optional)
 
 payload
