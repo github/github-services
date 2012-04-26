@@ -22,15 +22,30 @@ class Service::CommitMsgChecker < Service
     # render email message with template
     repository = payload['repository']['url']
     tpl = get_template(repository)
-    content = tpl.render 'event' => payload
-    puts "-----"
-    puts content
-    puts "-----"
-    
-    recipients = data['recipients']
-    # TODO: - get pusher email address (check event data format)
 
-    # TODO: - send email
+    commits = payload['commits']
+    committers = Set.new
+    commits.each { |c|
+      committers.add(c['committer']['email'])
+    }
+    committers.each { |committer|
+      ccommits = []
+      commits.each { |c|
+        if c['committer']['email'] == committer
+          ccommits.push(c)
+        end
+      }
+      payload['commits'] = ccommits
+      content = tpl.render 'event' => payload
+      puts "-----"
+      puts content
+      puts "-----"
+      
+      # TODO: send message content to committer + configured recipients
+      # can email.rb be used?
+      recipients = data['recipients']
+    }
+
   end
   
   def templates
