@@ -111,7 +111,6 @@ require 'right_http_connection'
 # vendor
 require 'basecamp'
 require 'rubyforge'
-require 'mqtt'
 
 require File.expand_path('../../lib/service', __FILE__)
 require File.expand_path('../../lib/app', __FILE__)
