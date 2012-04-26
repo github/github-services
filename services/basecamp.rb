@@ -35,7 +35,7 @@ class Service::Basecamp < Service
   private
 
   def create_event(action, message, url, author_email = nil)
-    http_post_event :service => 'github',
+    http_post_event :service => 'GitHub',
       :creator_email_address => author_email,
       :description => action,
       :title => message,
