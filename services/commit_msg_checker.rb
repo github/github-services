@@ -14,18 +14,25 @@ require "liquid"
 class Service::CommitMsgChecker < Service
 
   def receive_push
-    # TODO: check config params
     fmt = data['message_format']
+    repository = payload['repository']['url']
+
+    # validate configuration parameters
+    begin
+      re = /#{fmt}/
+      tpl = get_template(repository)
+    rescue RegexpError
+      raise_config_error "Invalid commit message format specification"
+    rescue Liquid::SyntaxError
+      raise_config_error "Invalid message template"
+    end
     cc = data['recipients'].split
     data['template']
     subject = data['subject']
+
     
     # remove commits with valid message
-    payload['commits'].delete_if { |c| c['message'] =~ /#{fmt}/ }
-    
-    # render email message with template
-    repository = payload['repository']['url']
-    tpl = get_template(repository)
+    payload['commits'].delete_if { |c| c['message'] =~ re }
 
     commits = payload['commits']
     committers = Set.new
@@ -42,6 +49,8 @@ class Service::CommitMsgChecker < Service
         end
       }
       payload['commits'] = ccommits
+
+      # render email message with template
       content = tpl.render 'event' => payload
       
       # send notification to committer + configured recipients
@@ -107,9 +116,18 @@ class Service::CommitMsgChecker < Service
   def get_template(repository)
     # assume there can be only one template instance per repository
     if !templates[repository]
-      templates[repository] = Liquid::Template.parse(data['template'])
+      tpl = data['template']
+      templates[repository] = Liquid::Template.parse(tpl)
     end
     templates[repository]
   end
-  
+
+  def default_email_template
+    tpl = <<HERE
+{% for c in event.commits %}
+  commit: {{ c.id }}
+{% endfor %}
+HERE
+  end
+
 end
