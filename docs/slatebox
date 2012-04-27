@@ -7,12 +7,8 @@ Use this service to create and manage new apps that live in the Slatebox environ
 Install Notes
 -------------
 
-  1.  Login to Slatebox and find your developer deployment key. This is listed alongside
-your api key and secret key. Paste this key into the above "authorization" textfield.
+  1.  Login to Slatebox and find your developer deployment key. This is listed in the developer dashboard along with your api and secret keys. Paste this key into the above "authorization" textfield.
 
-  2.  "App Id" is a list of unique application identifiers delimited by "," (i.e. "foo" 
-or "foo,bar") that pushes should trigger builds on. These are apps that you've previously
-created using your Slatebox developer dashboard.
+  2.  "App Id" is a list of unique application identifiers delimited by "," (i.e. "foo" or "foo,bar") that pushes should trigger builds on. These are apps that you've previously created using your Slatebox developer dashboard.
 
-  3.  If your GitHub repository is private you need to add the "slatebox" GitHub user as 
-a collaborator. This enables Slatebox to download the source code.
+  3.  If your GitHub repository is private you need to add the "slatebox" GitHub user as a collaborator. This enables Slatebox to download the source code.
