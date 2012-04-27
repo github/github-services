@@ -1,0 +1,27 @@
+Tropo
+======
+
+Sends SMS notifcation on github pushes, 
+Currently the SMS message is built to say:
+
+<commiter name> pushed <# commits> commit(s) to <repository name>
+
+Install Notes
+-------------
+
+1. [Signup for a Tropo account](https://www.tropo.com/account/register.jsp). Developer accounts are always 100% !!
+2. Create a scripting application and set the startURL to  [https://raw.github.com/tropo/tropo_github/master/tropo.rb](https://raw.github.com/tropo/tropo_github/master/tropo.rb)
+3. Add a SMS enabled number to your application (This is your '**from_number**').
+4. Copy token from the application manager (This is your '**token**'
+4. **to_number** - Message recipient, note this phone number must be properly [e.164 encoded](http://en.wikipedia.org/wiki/E.164). What this means in non-telephony speek is that you have to prepend the number with a plus '+', then the country code, and then number. eg: +14078675309."
+
+Developer Notes
+---------------
+
+###data
+ 	- token
+	- from_phone
+ 	- to_number
+
+###payload
+  	- refer to docs/github_payload
