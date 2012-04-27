@@ -1,77 +1,71 @@
 class Service::CodePortingCSharp2Java < Service
   string   :project_name, :repo_key, :target_repo_key, :username, :password
   boolean  :active
-  string   :userid
-  
+  string   :userid, :token
+
   self.title = 'CodePorting-C#2Java'
 
   def receive_push
-    response = ""
-	
-	return if Array(payload['commits']).size == 0
-	
+    return if Array(payload['commits']).empty?
     check_configuration_options(data)
-	
-	perform_login
-	
-	if (token == "")
-		response = "Unable to login on codeporting.com at the moment :( "
-		raise_config_error "#{response}"
-	else
-		response = process_on_codeporting
-		if (response == "True")
-			#process successful
-		else
-			raise_config_error 'Porting performed with errors, porting will be performed again on next commit.'
-		end
-	end
-	
-	response
+
+    response = nil
+    token = perform_login
+
+    if token.blank?
+      response = "Unable to login on codeporting.com at the moment :( "
+      raise_config_error "#{response}"
+    end
+
+    response = process_on_codeporting(token)
+    if response != "True"
+      raise_config_error 'Porting performed with errors, porting will be performed again on next commit.'
+    end
+
+    response
   end
-  
+
   def perform_login
-	http.ssl[:verify] = false
-    postdata = "LoginName=#{username}&Password=#{password}"
-	headers = {
-		'Content-Type' => 'application/x-www-form-urlencoded'
-	}
-    resp, data = http_post "https://apps.codeporting.com/csharp2java/v0/UserSignin", postdata, headers
+    http.ssl[:verify] = false
+    login_url = "https://apps.codeporting.com/csharp2java/v0/UserSignin"
+    resp = http.post login_url do |req|
+      req.body = {:LoginName => data['username'], :Password => data['password']}
+    end
 
-	doc = REXML::Document.new(data)
-	retValue = ""
-	doc.each_element('//return') { |item| 
-		retValue = item.attributes['success']
-	}
+    doc = REXML::Document.new(resp.body)
+    retValue = nil
+    doc.each_element('//return') do |item|
+      retValue = item.attributes['success']
+    end
 
-	if (retValue == "True")
-		doc.each_element('//Token') { |item| 
-			token = item.text
-		}
-	else
-		token = ""
-	end
+    if retValue == "True"
+      token = nil
+      doc.each_element('//Token') do |item|
+        token = item.text
+      end
+      token
+    end
   end
-  
-  def process_on_codeporting
-	http.ssl[:verify] = false
-    postdata = "token=#{token}&ProjectName=#{project_name}&RepoKey=#{repo_key}&TarRepoKey=#{target_repo_key}&Username=#{username}&Password=#{password}&GithubUserId=#{userid}"
-	headers = {
-		'Content-Type' => 'application/x-www-form-urlencoded'
-	}
-    resp, data = http_post "https://apps.codeporting.com/csharp2java/v0/githubpluginsupport", postdata, headers
 
-	doc = REXML::Document.new(data)
-	retValue = ""
-	doc.each_element('//return') { |item| 
-		retValue = item.attributes['success']
-	}
-	retValue
+  def process_on_codeporting(token)
+    process_url = "https://apps.codeporting.com/csharp2java/v0/githubpluginsupport"
+    resp = http.post process_url do |req|
+      req.body = {:token => token, :ProjectName => data['project_name'],
+        :RepoKey => data['repo_key'], :TarRepoKey => data['target_repo_key'],
+        :Username => data['username'], :Password => data['password'],
+        :GithubUserId => data['userid']}
+    end
+
+    doc = REXML::Document.new(resp.body)
+    retValue = nil
+    doc.each_element('//return') do |item|
+      retValue = item.attributes['success']
+    end
+    retValue
   end
-  
+
   private
 
-  string :token
-  
   def check_configuration_options(data)
     raise_config_error 'Project name must be set' if data['project_name'].blank?
     raise_config_error 'Repository is required' if data['repo_key'].blank?
@@ -79,6 +73,4 @@ class Service::CodePortingCSharp2Java < Service
     raise_config_error 'Codeporting username must be provided' if data['username'].blank?
     raise_config_error 'Codeporting password must be provided' if data['password'].blank?
   end
-
-
 end
