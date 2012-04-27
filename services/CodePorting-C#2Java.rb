@@ -1,6 +1,5 @@
 class Service::CodePortingCSharp2Java < Service
   string   :project_name, :repo_key, :target_repo_key, :username, :password
-  boolean  :active
   string   :userid, :token
 
   self.title = 'CodePorting-C#2Java'
