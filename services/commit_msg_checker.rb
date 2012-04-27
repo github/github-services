@@ -10,13 +10,17 @@
 
 require "liquid"
 
+
 class Service::CommitMsgChecker < Service
 
   def receive_push
-    # TODO: check config params: message_format, template
+    # TODO: check config params
+    fmt = data['message_format']
+    cc = data['recipients'].split
+    data['template']
+    subject = data['subject']
     
     # remove commits with valid message
-    fmt = data['message_format']
     payload['commits'].delete_if { |c| c['message'] =~ /#{fmt}/ }
     
     # render email message with template
@@ -28,6 +32,8 @@ class Service::CommitMsgChecker < Service
     commits.each { |c|
       committers.add(c['committer']['email'])
     }
+
+    
     committers.each { |committer|
       ccommits = []
       commits.each { |c|
@@ -37,15 +43,61 @@ class Service::CommitMsgChecker < Service
       }
       payload['commits'] = ccommits
       content = tpl.render 'event' => payload
-      puts "-----"
-      puts content
-      puts "-----"
       
-      # TODO: send message content to committer + configured recipients
-      # can email.rb be used?
-      recipients = data['recipients']
+      # send notification to committer + configured recipients
+      deliver_message([committer], cc, subject, content)
     }
 
+  end
+
+  def deliver_message(to, cc, subject, content)
+    configure_delivery unless mail_configured?
+    
+    mail_message(to, cc, subject, content).deliver
+  end
+
+  def configure_delivery(config)
+    configure_mail_defaults
+  end
+
+  def configure_mail_defaults
+    my = self
+
+    Mail.defaults do
+      delivery_method :smtp,
+        :address              => my.smtp_address,
+        :port                 => my.smtp_port,
+        :domain               => my.smtp_domain,
+        :user_name            => my.smtp_user_name,
+        :password             => my.smtp_password,
+        :authentication       => my.smtp_authentication,
+        :enable_starttls_auto => my.smtp_enable_starttls_auto?,
+        :openssl_verify_mode  => my.smtp_openssl_verify_mode
+    end
+
+    @@mail_configured = true
+  end
+
+  def mail_configured?
+    defined?(@@mail_configured) && @@mail_configured
+  end
+
+  def mail_message(to, cc, subject, body)
+    my = self
+    
+    Mail.new do
+      to       to
+      cc       cc
+      from     my.mail_from
+      reply_to my.mail_from
+      subject  subject
+      headers  my.secret_header
+
+      text_part do
+        content_type 'text/plain; charset=UTF-8'
+        body         body
+      end
+    end
   end
   
   def templates

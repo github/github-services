@@ -1,17 +1,34 @@
 require File.expand_path('../helper', __FILE__)
 
+class Service::CommitMsgChecker < Service
+  def configure_delivery(config)
+    Mail.defaults do
+      delivery_method :file
+    end
+    @@mail_configured = true
+  end
+
+  def mail_from
+    "john@smith.org"
+  end
+
+  def secret_header
+    {"myheader" => "abc"}
+  end
+  
+end
+
 class CommitMsgCheckerTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
 
   def test_push
-    svc = service(
-      {'message_format' => '^add .*',
-      'template' => email_template,
-      'recipients' => 'foo@bar.com,john@smith.org'
-      },
-      push_payload)
+    payload_file = File.new("github-event.js")
+    hash = eval(payload_file.read)
+
+    svc = service(hash['data'], hash['payload'])
+    svc.configure_delivery([])
 
     svc.receive_push
 
