@@ -22,7 +22,7 @@ class BasecampTest < Service::TestCase
       assert_equal 'application/json', env[:request_headers]['Accept']
 
       expected = {
-        'service' => 'github',
+        'service' => 'GitHub',
         'creator_email_address' => 'tom@mojombo.com',
         'description' => 'committed',
         'title' => 'pushed 3 new commits to master',
@@ -38,7 +38,7 @@ class BasecampTest < Service::TestCase
   def test_pull
     @stubs.post '/123/api/v1/projects/456/events.json' do |env|
       expected = {
-        'service' => 'github',
+        'service' => 'GitHub',
         'creator_email_address' => nil,
         'description' => 'opened a pull request',
         'title' => 'booya (master..feature)',
@@ -54,7 +54,7 @@ class BasecampTest < Service::TestCase
   def test_issues
     @stubs.post '/123/api/v1/projects/456/events.json' do |env|
       expected = {
-        'service' => 'github',
+        'service' => 'GitHub',
         'creator_email_address' => nil,
         'description' => 'opened an issue',
         'title' => 'booya',

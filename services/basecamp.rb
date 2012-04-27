@@ -31,7 +31,6 @@ class Service::Basecamp < Service
     create_event "#{action} an issue", issue.title, issue.html_url
   end
 
-
   private
 
   def create_event(action, message, url, author_email = nil)
