@@ -5,9 +5,7 @@ class Service::BasecampClassic < Service
   white_list  :url, :project, :category, :username
 
 
-  def hook_name
-    'basecamp'
-  end
+  self.hook_name = 'basecamp'
 
   def receive_push
     raise_config_error "Invalid basecamp domain" if basecamp_domain.nil?

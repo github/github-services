@@ -4,10 +4,7 @@ class Service::Basecamp < Service
   white_list      :project_url, :email_address
   default_events  :push, :pull_request, :issues
 
-
-  def hook_name
-    'bcx'
-  end
+  self.hook_name = 'bcx'
 
   def receive_push
     commit = payload['commits'].last || {}

@@ -265,6 +265,13 @@ class Service
       end
     end
 
+    # Sets the uniquely identifying name for this Service type.
+    #
+    # hook_name - The String name.
+    #
+    # Returns a String.
+    attr_writer :hook_name
+
     # Public: Gets the Hash of secret configuration options.  These are set on
     # the GitHub servers and never committed to git.
     #
