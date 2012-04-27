@@ -20,7 +20,7 @@ class Service::Rally < Service
     branch     = payload['ref'].split('/')[-1]  # most of the time it'll be refs/heads/master ==> master
     repo       = payload['repository']['name']
     repo_owner = payload['repository']['owner']['name']
-    chgset_uri = 'https://github.com/%s/%s' % [repo_owner, repo]
+    repo_uri   = 'https://github.com/%s/%s' % [repo_owner, repo]
 
     http.ssl[:verify] = false
     if server =~ /^https?:\/\//   # if they have http:// or https://, leave server value unchanged
@@ -41,11 +41,11 @@ class Service::Rally < Service
     @user_cache = {}
     payload['commits'].each do |commit|
       artifact_refs = snarfArtifacts(commit['message'])
-      addChangeset(commit, repo_ref, artifact_refs, chgset_uri, branch)
+      addChangeset(commit, repo_ref, artifact_refs, repo_uri, branch)
     end
   end
 
-  def addChangeset(commit, repo_ref, artifact_refs, chgset_uri, branch)
+  def addChangeset(commit, repo_ref, artifact_refs, repo_uri, branch)
       author = commit['author']['email']
       if !@user_cache.has_key?(author)
         user = rallyQuery('User', 'Name,UserName', 'UserName = "%s"' % [author])
@@ -60,7 +60,7 @@ class Service::Rally < Service
                     'CommitTimestamp' => Time.iso8601(commit['timestamp']).strftime("%FT%H:%M:%S.00Z"),
                     'Author'          => user_ref,
                     'Message'         => message,
-                    'Uri'             => chgset_uri,
+                    'Uri'             => '%s/commit/%s' % [repo_uri, commit['id']],
                     'Artifacts'       => artifact_refs # [{'_ref' => 'defect/1324.js'}, {}...]
                   }
       changeset.delete('Author') if user_ref == ""
@@ -81,7 +81,7 @@ class Service::Rally < Service
       commit['removed'].each  { |rem| changes << {'Action' => 'R', 'PathAndFilename' => rem } }
       changes.each do |change|
           change['Changeset'] = chgset_ref
-          change['Uri'] = '%s/blob/%s/%s' % [chgset_uri, branch, change['PathAndFilename']]
+          change['Uri'] = '%s/blob/%s/%s' % [repo_uri, branch, change['PathAndFilename']]
           chg_item = rallyCreate('Change', change)
       end
   end
