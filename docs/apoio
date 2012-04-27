@@ -1,0 +1,19 @@
+Apoio
+=====
+
+Install Notes
+-------------
+
+  1. Subdomain is your Apoio subdomain ('http://subdomain.apo.io')
+
+  2. Token is your Apoio Github token. You can get it from your profile.
+
+Developer Notes
+---------------
+
+data
+  - subdomain
+  - github_token
+
+payload
+  - refer to docs/github_payload
