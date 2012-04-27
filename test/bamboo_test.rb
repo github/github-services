@@ -13,17 +13,8 @@ class BambooTest < Service::TestCase
   end
 
   def test_triggers_build
-    @stubs.post "/api/rest/login.action" do |env|
-      assert_params env[:body], :username => 'admin', :password => 'pwd'
-      [200, {}, '<response><auth>TOKEN123</auth></response>']
-    end
-    @stubs.post "/api/rest/executeBuild.action" do |env|
-      assert_params env[:body], :auth => "TOKEN123", :buildKey => "ABC"
-      [200, {}, '<response></response>']
-    end
-    @stubs.post "/api/rest/logout.action" do |env|
-      assert_equal "auth=TOKEN123", env[:body]
-      [200, {}, '']
+    @stubs.post "/rest/api/latest/queue/ABC" do |env|
+      valid_response("ABC")
     end
 
     svc = service :push, data, payload
@@ -33,21 +24,10 @@ class BambooTest < Service::TestCase
   end
 
   def test_triggers_compound_build
-    @stubs.post "/api/rest/login.action" do |env|
-      assert_params env[:body], :username => 'admin', :password => 'pwd'
-      [200, {}, '<response><auth>TOKEN123</auth></response>']
-    end
-    @stubs.post "/api/rest/executeBuild.action" do |env|
-      assert_params env[:body], :auth => "TOKEN123", :buildKey => "ABC"
-      [200, {}, '<response></response>']
-    end
-    @stubs.post "/api/rest/executeBuild.action" do |env|
-      assert_params env[:body], :auth => "TOKEN123", :buildKey => "A"
-      [200, {}, '<response></response>']
-    end
-    @stubs.post "/api/rest/logout.action" do |env|
-      assert_equal "auth=TOKEN123", env[:body]
-      [200, {}, '']
+    ["ABC", "A"].each do |key|
+      @stubs.post "/rest/api/latest/queue/#{key}" do |env|
+        valid_response(key)
+      end
     end
 
     svc = service :push, compound_data1, payload
@@ -57,17 +37,8 @@ class BambooTest < Service::TestCase
   end
 
   def test_triggers_build_with_context_path
-    @stubs.post "/context/api/rest/login.action" do |env|
-      assert_params env[:body], :username => 'admin', :password => 'pwd'
-      [200, {}, '<response><auth>TOKEN123</auth></response>']
-    end
-    @stubs.post "/context/api/rest/executeBuild.action" do |env|
-      assert_params env[:body], :auth => "TOKEN123", :buildKey => "ABC"
-      [200, {}, '<response></response>']
-    end
-    @stubs.post "/context/api/rest/logout.action" do |env|
-      assert_equal "auth=TOKEN123", env[:body]
-      [200, {}, '']
+    @stubs.post "/context/rest/api/latest/queue/ABC" do |env|
+      valid_response("ABC")
     end
 
     data = self.data.update('base_url' => "https://secure.bamboo.com/context")
@@ -78,17 +49,8 @@ class BambooTest < Service::TestCase
   end
 
   def test_passes_build_error
-    @stubs.post "/api/rest/login.action" do |env|
-      assert_params env[:body], :username => 'admin', :password => 'pwd'
-      [200, {}, '<response><auth>TOKEN123</auth></response>']
-    end
-    @stubs.post "/api/rest/executeBuild.action" do |env|
-      assert_params env[:body], :auth => "TOKEN123", :buildKey => "ABC"
-      [200, {}, '<response><error>oh hai</error></response>']
-    end
-    @stubs.post "/api/rest/logout.action" do |env|
-      assert_equal "auth=TOKEN123", env[:body]
-      [200, {}, '']
+    @stubs.post "/rest/api/latest/queue/ABC" do |env|
+      error_response(404, "Plan ABC not found")
     end
 
     svc = service :push, data, payload
@@ -97,18 +59,6 @@ class BambooTest < Service::TestCase
     end
 
     @stubs.verify_stubbed_calls
-  end
-
-  def test_requires_valid_login
-    @stubs.post "/api/rest/login.action" do
-      [401, {}, '']
-    end
-
-    svc = service :push, data, payload
-
-    assert_raise Service::ConfigurationError do
-      svc.receive
-    end
   end
 
   def test_requires_base_url
@@ -159,7 +109,7 @@ class BambooTest < Service::TestCase
   end
 
   def test_invalid_bamboo_url
-    @stubs.post "/api/rest/login.action" do
+    @stubs.post "/rest/api/latest/queue/ABC" do
       [404, {}, '']
     end
 
@@ -207,6 +157,19 @@ class BambooTest < Service::TestCase
 
   def service(*args)
     super Service::Bamboo, *args
+  end
+
+  private 
+  def valid_response(key)
+    xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+    "<restQueuedBuild buildResultKey=\"#{key}-7\" buildNumber=\"7\" planKey=\"#{key}\">" +
+    "<triggerReason>Manual build</triggerReason><link rel=\"self\" href=\"http://bamboo.example.com/rest/api/latest/result/#{key}-7\"/>" +
+    "</restQueuedBuild>"
+    [200, {}, xml]
+  end
+  def error_response(status, msg)
+    xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><status><status-code>#{status}</status-code><message>#{msg}</message></status>"
+    [status, {}, xml]
   end
 end
 
