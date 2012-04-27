@@ -1,4 +1,7 @@
 class Service::Basecamp < Service
+  SERVICE_NAME = 'GitHub'
+  LOGO_URL     = 'https://assets.github.com/images/modules/about_page/octocat.png'
+
   string          :project_url, :email_address
   password        :password
   white_list      :project_url, :email_address
@@ -31,7 +34,8 @@ class Service::Basecamp < Service
   private
 
   def create_event(action, message, url, author_email = nil)
-    http_post_event :service => 'GitHub',
+    http_post_event :service => SERVICE_NAME,
+      :logo_url => LOGO_URL,
       :creator_email_address => author_email,
       :description => action,
       :title => message,
