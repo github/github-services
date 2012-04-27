@@ -1,10 +1,10 @@
 require 'uri'
 class Service::Apoio < Service
   default_events :issues
-  string   :subdomain, :github_token
+  string   :subdomain, :token
 
   def invalid_request?
-   data['github_token'].to_s.empty? or
+   data['token'].to_s.empty? or
    data['subdomain'].to_s.empty?
   end
 
@@ -25,7 +25,7 @@ class Service::Apoio < Service
 
     http.headers['Content-Type'] = 'application/json'
     http.headers['Accept'] = 'application/json'
-    http.headers['X-Github-Token'] = data['github_token']
+    http.headers['X-Api-Token'] = data['token']
 
     url = service_url(data['subdomain'])
     res = http_post(url, { :payload  => payload }.to_json)

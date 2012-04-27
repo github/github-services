@@ -8,12 +8,12 @@ class ApoioTest < Service::TestCase
   def test_push
     @stubs.post "/service/github" do |env|
       assert_equal 'test.apo.io', env[:url].host
-      assert_equal "my123token", env[:request_headers]["X-Github-Token"]
+      assert_equal "my123token", env[:request_headers]["X-Api-Token"]
       [200, {}, '']
     end
 
     svc = service(
-      {'subdomain' => 'test', 'github_token' => 'my123token' },
+      {'subdomain' => 'test', 'token' => 'my123token' },
       payload)
     svc.receive_issues
   end
