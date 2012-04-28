@@ -1,6 +1,30 @@
+require 'addressable/uri'
 require 'faraday'
 require 'ostruct'
 require File.expand_path("../service/structs", __FILE__)
+
+class Addressable::URI
+  attr_accessor :validation_deferred
+end
+
+module Faraday
+  def Connection.URI(url)
+    uri = if url.respond_to?(:host)
+      url
+    elsif url =~ /^https?\:\/\/?$/
+      ::Addressable::URI.new
+    elsif url.respond_to?(:to_str)
+      ::Addressable::URI.parse(url)
+    else
+      raise ArgumentError, "bad argument (expected URI object or URI string)"
+    end
+  ensure
+    if uri.respond_to?(:validation_deferred)
+      uri.validation_deferred = true
+      uri.port ||= uri.inferred_port
+    end
+  end
+end
 
 # Represents a single triggered Service call.  Each Service tracks the event
 # type, the configuration data, and the payload for the current call.
@@ -240,6 +264,13 @@ class Service
         hook
       end
     end
+
+    # Sets the uniquely identifying name for this Service type.
+    #
+    # hook_name - The String name.
+    #
+    # Returns a String.
+    attr_writer :hook_name
 
     # Public: Gets the Hash of secret configuration options.  These are set on
     # the GitHub servers and never committed to git.

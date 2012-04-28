@@ -85,6 +85,7 @@ require 'cgi'
 #~ require 'date' # This is needed by the CIA service in ruby 1.8.7 or later
 
 # bundled
+require 'addressable/uri'
 require 'mime/types'
 require 'xmlsimple'
 require 'active_resource'

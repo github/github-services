@@ -19,7 +19,7 @@ private
 
   def post_slatebox_message(slug, token)
     return unless commit = distinct_commits.last
-    create_build_url = "http://slatebox.com/application/build/#{slug}/#{token}"
+    create_build_url = "http://api.slatebox.com/application/build/#{slug}/#{token}"
 
     slatebox_message = {
       :branches => {
