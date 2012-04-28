@@ -16,31 +16,33 @@ class Service::CommitMsgChecker < Service
   def receive_push
     fmt = data['message_format']
     repository = payload['repository']['url']
+    subject = subject
 
-    # validate configuration parameters
+    # set and validate configuration parameters
     begin
-      re = /#{fmt}/
+      re = /#{fmt}/m
       tpl = get_template(repository)
     rescue RegexpError
       raise_config_error "Invalid commit message format specification"
     rescue Liquid::SyntaxError
       raise_config_error "Invalid message template"
     end
-    cc = data['recipients'].split
-    data['template']
-    subject = data['subject']
-
+    copies = data['recipients']
+    if copies && !copies.empty?
+      cc = copies.split(',')
+    end
     
-    # remove commits with valid message
+    # remove commits with a valid message
     payload['commits'].delete_if { |c| c['message'] =~ re }
 
+    # list all committers in push
     commits = payload['commits']
     committers = Set.new
     commits.each { |c|
       committers.add(c['committer']['email'])
     }
 
-    
+    # send a notification to each committer + configured recipients
     committers.each { |committer|
       ccommits = []
       commits.each { |c|
@@ -94,9 +96,8 @@ class Service::CommitMsgChecker < Service
   def mail_message(to, cc, subject, body)
     my = self
     
-    Mail.new do
+    m = Mail.new do
       to       to
-      cc       cc
       from     my.mail_from
       reply_to my.mail_from
       subject  subject
@@ -107,16 +108,31 @@ class Service::CommitMsgChecker < Service
         body         body
       end
     end
+    if cc && cc.length > 0
+      m.cc(cc)
+    end
+    return m
   end
   
   def templates
     @templates ||= Hash.new
   end
   
+  def subject
+    s = data['subject']
+    if !s || s.empty?
+      s = "Repository #{payload['repository']['name']} commit message format is invalid"
+    end
+    return s
+  end
+
   def get_template(repository)
     # assume there can be only one template instance per repository
     if !templates[repository]
       tpl = data['template']
+      if !tpl || tpl.empty?
+        tpl = default_email_template
+      end
       templates[repository] = Liquid::Template.parse(tpl)
     end
     templates[repository]

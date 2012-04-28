@@ -1,0 +1,46 @@
+Commit message checker
+======================
+
+Install Notes
+-------------
+
+1. Ruby regular expression that repository commit messages will be validated against e.g.
+   to require that commit messages are of the following form:
+
+"XYZW-99999: implement Hyper Text Coffee Pot Control Protocol
+   
+ Make Xyzw support HTCPCP v1.0 as described by RFC 2324.
+ ..."
+
+   use the following regular expression:
+   
+   ^XYZW-\d{1,5}: [\w ]{10,50}$(\n\n\w.*)?
+
+
+2. Email notification message template described using the Liquid markup language.
+   If missing, a default template will be used.  
+
+   For Liquid template documentation please see:
+   https://github.com/Shopify/liquid/wiki
+
+
+3. Email notification message subject field value.
+   If missing, a default subject will be used.
+
+4. Notification message recipients.
+   The notification message is always addressed directly to the committer.
+   Additional recipients may optionally be specified using this field.
+   The value must be a comma separated list of valid email addresses.
+
+
+Developer Notes
+---------------
+
+data
+  - message_format (mandatory)
+  - template (optional)
+  - subject (optional)
+  - recipients (optional)
+
+payload
+  - refer to docs/github_payload
