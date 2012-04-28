@@ -1,4 +1,5 @@
 class Service::Grove < Service
+  default_events :commit_comment, :gollum, :issues, :issue_comment, :pull_request, :push
   string :channel_token
 
   def receive_push
