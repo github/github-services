@@ -16,7 +16,7 @@ class Service::CommitMsgChecker < Service
   def receive_push
     fmt = data['message_format']
     repository = payload['repository']['url']
-    subject = subject
+    subj = subject
 
     # set and validate configuration parameters
     begin
@@ -56,13 +56,13 @@ class Service::CommitMsgChecker < Service
       content = tpl.render 'event' => payload
       
       # send notification to committer + configured recipients
-      deliver_message([committer], cc, subject, content)
+      deliver_message([committer], cc, subj, content)
     }
 
   end
 
   def deliver_message(to, cc, subject, content)
-    configure_delivery unless mail_configured?
+    configure_delivery(nil) unless mail_configured?
     
     mail_message(to, cc, subject, content).deliver
   end
@@ -113,7 +113,7 @@ class Service::CommitMsgChecker < Service
     end
     return m
   end
-  
+
   def templates
     @templates ||= Hash.new
   end
@@ -121,7 +121,7 @@ class Service::CommitMsgChecker < Service
   def subject
     s = data['subject']
     if !s || s.empty?
-      s = "Repository #{payload['repository']['name']} commit message format is invalid"
+      s = "[#{owner_name}/#{repo_name}] commit message format is invalid"
     end
     return s
   end
@@ -140,8 +140,25 @@ class Service::CommitMsgChecker < Service
 
   def default_email_template
     tpl = <<HERE
+Commits pushed to the repository contained invalid commit messages.
+
+Please see {{event.repository.url}} for commit message guidelines.
+
+Push event info
+***************
+repository: {{event.repository.url}}
+push date: {{event.head_commit.timestamp | date: ""%Y""}}
+pusher: {{event.pusher.name}}
+
+Commits
+*******
 {% for c in event.commits %}
-  commit: {{ c.id }}
+committed: {{c.committer.username}} / {{c.timestamp}}
+commit: {{ c.url }}
+message:
+{{c.message}}
+
+------
 {% endfor %}
 HERE
   end
