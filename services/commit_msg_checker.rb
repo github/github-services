@@ -20,7 +20,7 @@ class Service::CommitMsgChecker < Service
 
     # set and validate configuration parameters
     begin
-      re = /#{fmt}/m
+      re = %r{#{fmt}}m
       tpl = get_template(repository)
     rescue RegexpError
       raise_config_error "Invalid commit message format specification"
