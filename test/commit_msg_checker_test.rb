@@ -41,6 +41,7 @@ class CommitMsgCheckerTest < Service::TestCase
     assert_equal "[mojombo/grit] commit message format is invalid", m.subject
     assert_equal ["tom@mojombo.com"], m.to
     assert_equal ["a@b.fi", "c@d.fi"], m.cc
+    assert_equal 2, m.body.to_s.scan(%r{^commit: http://github.com/mojombo/grit/commit/\w+}).length
     assert_match "commit/5057e76a11abd02e83b7d3d3171c4b68d9c88480", m.body.to_s
     assert_match "commit/a47fd41f3aa4610ea527dcc1669dfdb9c15c5425", m.body.to_s
     assert_no_match %r{commit/06f63b43050935962f84fe54473a7c5de7977325}, m.body.to_s

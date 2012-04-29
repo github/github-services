@@ -33,7 +33,11 @@ class Service::CommitMsgChecker < Service
     end
     
     # remove commits with a valid message
-    payload['commits'].delete_if { |c| c['message'] =~ re }
+    payload['commits'].each_with_index { |c, i|
+      if c['message'] =~ re || is_auto_generated_commit(c)
+        payload['commits'].delete_at(i)
+      end
+    }
 
     # list all committers in push
     commits = payload['commits']
@@ -124,6 +128,14 @@ class Service::CommitMsgChecker < Service
       s = "[#{owner_name}/#{repo_name}] commit message format is invalid"
     end
     return s
+  end
+  
+  # skip automatically generated commit comments
+  def is_auto_generated_commit(commit)
+    if commit['message'] =~ /^Merge branch '\S+' of \S+$/
+      return true
+    end
+    return false
   end
 
   def get_template(repository)
