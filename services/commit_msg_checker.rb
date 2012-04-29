@@ -159,6 +159,7 @@ Please see {{event.repository.url}} for commit message guidelines.
 Push event info
 ***************
 repository: {{event.repository.url}}
+reference: {{event.ref}}
 push date: {{event.head_commit.timestamp | date: ""%Y""}}
 pusher: {{event.pusher.name}}
 
