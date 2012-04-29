@@ -1,5 +1,5 @@
-class Service::JenkinsNew < Service
-  self.title = 'Jenkins'
+class Service::JenkinsGit < Service
+  self.title = 'Jenkins (Git plugin)'
 
   NOTIFY_URL = '%s/git/notifyCommit'
 

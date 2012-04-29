@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class JenkinsNewTest < Service::TestCase
+class JenkinsGitTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
     @options = {'jenkins_url' => 'http://jenkins.example.com/jenkins/'}
@@ -33,6 +33,6 @@ class JenkinsNewTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::JenkinsNew, *args
+    super Service::JenkinsGit, *args
   end
 end

@@ -1,5 +1,6 @@
-class Service::Jenkins < Service
+class Service::JenkinsGitHub < Service
   self.title = 'Jenkins (GitHub plugin)'
+  self.hook_name = 'jenkins' # legacy hook name
 
   string :jenkins_hook_url
   white_list :jenkins_hook_url
