@@ -71,5 +71,6 @@ class Service::CodePortingCSharp2Java < Service
     raise_config_error 'Target repository is required' if data['target_repo_key'].blank?
     raise_config_error 'Codeporting username must be provided' if data['username'].blank?
     raise_config_error 'Codeporting password must be provided' if data['password'].blank?
+    raise_config_error 'GitHub User ID must be provided' if data['userid'].blank?
   end
 end
