@@ -25,3 +25,4 @@ gem "twilio-ruby",            "3.4.2"
 gem "rack-test", :require => false
 gem "right_aws",              "3.0.3"
 gem "right_http_connection",  "1.3.0"
+gem "mqtt", 			      "0.0.8"
