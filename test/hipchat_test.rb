@@ -15,7 +15,7 @@ class HipChatTest < Service::TestCase
 
     svc = service(
       {'auth_token' => 'a', 'room' => 'r'}, 'a' => 1)
-    svc.receive_event
+    svc.receive_push
   end
 
   def service(*args)

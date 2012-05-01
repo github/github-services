@@ -3,12 +3,13 @@ class Service::HipChat < Service
   boolean :notify
   white_list :room
 
-  default_events :commit_comment, :download, :fork, :fork_apply, :gollum,
-    :issues, :issue_comment, :member, :public, :pull_request, :push, :watch
+  default_events :push, :pull_request, :issues
 
-  def receive_event
-    # make sure we have what we need
+  def receive_push
+    # validate auth_token
     raise_config_error "Missing 'auth_token'" if data['auth_token'].to_s == ''
+
+    # validate room
     raise_config_error "Missing 'room'" if data['room'].to_s == ''
 
     http.headers['X-GitHub-Event'] = event.to_s
