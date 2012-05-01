@@ -1,6 +1,6 @@
 class Service::CodePortingCSharp2Java < Service
   string   :project_name, :repo_key, :target_repo_key, :username, :password
-  string   :userid, :token
+  string   :userid
 
   self.title = 'CodePorting-C#2Java'
 
@@ -26,7 +26,7 @@ class Service::CodePortingCSharp2Java < Service
 
   def perform_login
     http.ssl[:verify] = false
-    login_url = "https://apps.codeporting.com/csharp2java/v0/UserSignin"
+    login_url = "http://stage.codeporting.com/csharp2java/v0/UserSignin"
     resp = http.post login_url do |req|
       req.body = {:LoginName => data['username'], :Password => data['password']}
     end
@@ -47,7 +47,7 @@ class Service::CodePortingCSharp2Java < Service
   end
 
   def process_on_codeporting(token)
-    process_url = "https://apps.codeporting.com/csharp2java/v0/githubpluginsupport"
+    process_url = "http://stage.codeporting.com/csharp2java/v0/githubpluginsupport"
     resp = http.post process_url do |req|
       req.body = {:token => token, :ProjectName => data['project_name'],
         :RepoKey => data['repo_key'], :TarRepoKey => data['target_repo_key'],
@@ -71,5 +71,6 @@ class Service::CodePortingCSharp2Java < Service
     raise_config_error 'Target repository is required' if data['target_repo_key'].blank?
     raise_config_error 'Codeporting username must be provided' if data['username'].blank?
     raise_config_error 'Codeporting password must be provided' if data['password'].blank?
+    raise_config_error 'GitHub User ID must be provided' if data['userid'].blank?
   end
 end
