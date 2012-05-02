@@ -11,15 +11,15 @@ class IRCTest < Service::TestCase
       @writable_io ||= StringIO.new
     end
 
-    def puts(*args)
+    def irc_puts(*args)
       writable_io.puts *args
     end
 
-    def gets
+    def irc_gets
       readable_io.gets
     end
 
-    def eof?
+    def irc_eof?
       true
     end
 
@@ -44,10 +44,10 @@ class IRCTest < Service::TestCase
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
   end
-  
+
   def test_push_with_empty_branch_regex
     svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => ''}, payload)
-    
+
     svc.receive_push
     msgs = svc.writable_io.string.split("\n")
     assert_equal "NICK n", msgs.shift
@@ -61,7 +61,7 @@ class IRCTest < Service::TestCase
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
   end
-  
+
   def test_push_with_single_matching_branch_regex
     svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => 'mast*'}, payload)
 
@@ -78,7 +78,7 @@ class IRCTest < Service::TestCase
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
   end
-  
+
   def test_push_with_single_mismatching_branch_regex
     svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => '^ticket*'}, payload)
 
@@ -86,7 +86,7 @@ class IRCTest < Service::TestCase
     msgs = svc.writable_io.string.split("\n")
     assert_nil msgs.shift
   end
-  
+
   def test_push_with_multiple_branch_regexes_where_all_match
     svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => 'mast*,^ticket*'}, payload)
 

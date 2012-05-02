@@ -37,34 +37,35 @@ class Service::IRC < Service
     botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
     command = data['notice'].to_i == 1 ? 'NOTICE' : 'PRIVMSG'
 
-    self.puts "PASS #{data['password']}" if !data['password'].to_s.empty?
-    self.puts "NICK #{botname}"
-    self.puts "MSG NICKSERV IDENTIFY #{data['nickservidentify']}" if !data['nickservidentify'].to_s.empty?
-    self.puts "USER #{botname} 8 * :GitHub IRCBot"
+    irc_puts "PASS #{data['password']}" if !data['password'].to_s.empty?
+    irc_puts "NICK #{botname}"
+    irc_puts "MSG NICKSERV IDENTIFY #{data['nickservidentify']}" if !data['nickservidentify'].to_s.empty?
+    irc_puts "USER #{botname} 8 * :GitHub IRCBot"
 
     loop do
-      case self.gets
+      case irc_gets
       when / 00[1-4] #{Regexp.escape(botname)} /
         break
       when /^PING\s*:\s*(.*)$/
-        self.puts "PONG #{$1}"
+        irc_puts "PONG #{$1}"
       end
     end
 
     without_join = data['message_without_join'] == '1'
     rooms.each do |room|
       room, pass = room.split("::")
-      self.puts "JOIN #{room} #{pass}" unless without_join
+      irc_puts "JOIN #{room} #{pass}" unless without_join
 
       Array(messages).each do |message|
-        self.puts "#{command} #{room} :#{message}"
+        irc_puts "#{command} #{room} :#{message}"
       end
 
-      self.puts "PART #{room}" unless without_join
+      irc_puts "PART #{room}" unless without_join
     end
 
-    self.puts "QUIT"
-    self.gets until self.eof?
+    irc_puts "QUIT"
+    irc_response = []
+    irc_response << irc_gets unless irc_eof?
   rescue SocketError => boom
     if boom.to_s =~ /getaddrinfo: Name or service not known/
       raise_config_error 'Invalid host'
@@ -79,15 +80,15 @@ class Service::IRC < Service
     raise_config_error 'Host does not support SSL'
   end
 
-  def gets
+  def irc_gets
     irc.gets
   end
 
-  def eof?
+  def irc_eof?
     irc.eof?
   end
 
-  def puts(*args)
+  def irc_puts(*args)
     irc.puts *args
   end
 
@@ -125,7 +126,7 @@ class Service::IRC < Service
         "\002#{sha1[0..6]}\002 (#{files.size} files in #{dirs.size} dirs): #{short}"
     end
   end
-  
+
   def branch_name_matches?
     return true if data['branch_regexes'].nil?
     return true if data['branch_regexes'].strip == ""
