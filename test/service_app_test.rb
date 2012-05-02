@@ -12,6 +12,8 @@ class ServiceAppTest < Test::Unit::TestCase
     def receive_booya
       self.class.tested << self
     end
+
+    setup_for(Service::App)
   end
 
   def setup
@@ -55,6 +57,13 @@ class ServiceAppTest < Test::Unit::TestCase
   def test_nagios_check
     get '/'
     assert_equal 'ok', last_response.body
+  end
+
+  def test_service_hook_names
+    Service::TestCase::ALL_SERVICES.each do |svc|
+      get "/#{svc.hook_name}"
+      assert_equal svc.title, last_response.body
+    end
   end
 
   def app

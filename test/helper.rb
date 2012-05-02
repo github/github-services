@@ -2,6 +2,8 @@ require 'test/unit'
 require File.expand_path('../../config/load', __FILE__)
 
 class Service::TestCase < Test::Unit::TestCase
+  ALL_SERVICES = Service.services.dup
+
   def test_default
   end
 

@@ -344,8 +344,11 @@ class Service
     # Returns nothing.
     def inherited(svc)
       Service.services << svc
-      Service::App.service(svc)
       super
+    end
+
+    def setup_for(app)
+      app.service(self)
     end
   end
 

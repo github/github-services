@@ -1,3 +1,5 @@
+Dir["#{File.dirname(__FILE__)}/../../services/**/*.rb"].each { |service| load service }
+
 # The Sinatra App that handles incoming events.
 class Service::App < Sinatra::Base
   JSON_TYPE = "application/vnd.github-services+json"
@@ -10,6 +12,10 @@ class Service::App < Sinatra::Base
   #
   # Returns nothing.
   def self.service(svc_class)
+    get "/#{svc_class.hook_name}" do
+      svc_class.title
+    end
+
     post "/#{svc_class.hook_name}/:event" do
       boom = nil
       time = Time.now.to_f
@@ -50,6 +56,10 @@ class Service::App < Sinatra::Base
         end
       end
     end
+  end
+
+  Service.services.each do |svc|
+    svc.setup_for(self)
   end
 
   get "/" do
@@ -123,4 +133,3 @@ class Service::App < Sinatra::Base
   end
 end
 
-Dir["#{File.dirname(__FILE__)}/../../services/**/*.rb"].each { |service| load service }
