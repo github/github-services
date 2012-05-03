@@ -9,11 +9,11 @@ Install Notes
 
   1. 'broker' is the hostname of the MQTT broker.
   2. 'port' is the port to connect (default is 1883, MQTT standard).
-  3. 'topic' is the name of the topic to publish on (suggested example: 'github/<github_username>/<repo_name>').
+  3. 'topic' is the name of the topic to publish on (suggested example: 'github/&lt;github_username&gt;/&lt;repo_name&gt;').
   5. 'id' is the unique client ID which publishes the payload message (default is epoc time).
   4. The payload of the message is JSON received from Github (refer to docs/github_payload).
   5. ruby-mqtt does not support v3.1 of MQTT (username/password), and only supports QoS 0.
-  6. For testing, you can use mqtt.io as your web MQTT client: (broker: q.m2m.io, port: 1883, id: <github_username>.  You will "Subscribe to Topics": 'github/<github_username>/<repo_name>').
+  6. For testing, you can use mqtt.io as your web MQTT client: (broker: q.m2m.io, port: 1883, id: &lt;github_username&gt;.  You will "Subscribe to Topics": 'github/&lt;github_username&gt;/&lt;repo_name&gt;').
 
 Developer Notes
 ---------------
