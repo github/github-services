@@ -4,7 +4,9 @@ Jenkins (Git plugin)
 Install Notes
 -------------
 
-* Requires **[Git Plugin][wiki] v1.1.18**, released 2012-04-27.
+* Requires **[Git Plugin][wiki] v1.1.18**, released 2012-04-27, and "Poll SCM"
+  build trigger needs to be enabled. (Though you can have it poll very
+  infrequently, I recommend something like `0 */3 * * *`)
 * **Jenkins Url** is the base URL to your [Jenkins][] server, for example
   http://ci.jenkins-ci.org/. We will hit /git/notifyCommit under this URL (see
   [the Git plugin wiki page][wiki-push] for more details.)
