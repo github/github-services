@@ -67,25 +67,6 @@ class EmailTest < Service::TestCase
     assert_nil svc.messages.shift
   end
 
-  def test_show_diff
-    payload['commits'].each do |commit|
-      @stubs.get commit['url'].sub(/http:\/\/[^\/]+/, '')+".diff" do |env|
-        [200, {}, 'This is my diff']
-      end
-    end
-
-    svc = service(
-      {'address' => 'a', 'show_diff' => '1'},
-      payload)
-
-    svc.receive_push
-
-    msg, from, to = svc.messages.shift
-    assert_match 'This is my diff', msg
-
-    assert_nil svc.messages.shift
-  end
-
   def service(*args)
     svc = super Service::Email, *args
     def svc.messages
