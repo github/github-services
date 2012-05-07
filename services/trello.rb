@@ -21,6 +21,15 @@ class Service::Trello < Service
     true
   end
 
+  def assert_required_credentials
+    if consumer_token.empty?
+      raise_config_error "You need an authorization Token. See tips below."
+    end
+    if list_id.empty?
+      raise_config_error "You need to enter a list identifiter. See tips below."
+    end
+  end
+
   def create_cards
     http.url_prefix = "https://api.trello.com/1"
 
@@ -83,14 +92,5 @@ class Service::Trello < Service
 
   def message_max_length
     80
-  end
-
-  def assert_required_credentials
-    if consumer_token.empty?
-      raise_config_error "You need an authorization Token. See tips below."
-    end
-    if list_id.empty?
-      raise_config_error "You need to enter a list identifiter. See tips below."
-    end
   end
 end
