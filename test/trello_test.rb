@@ -1,11 +1,11 @@
 class TrelloTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
+    @data = {'list_id' => 'abc123', 'consumer_token' => 'blarg', 'master_only' => 1}
   end
 
   def test_push
-    svc = service :push,
-      {'list_id' => 'abc123', 'consumer_token' => 'blarg'}, payload
+    svc = service :push, @data
 
     def svc.message_max_length; 4 end
 
@@ -23,7 +23,41 @@ class TrelloTest < Service::TestCase
     svc.receive_push
   end
 
+  def test_master_only_no_master
+    svc = service :push,
+      @data.update("master_only" => 1),
+      payload.update("ref" => "refs/heads/non-master")
+
+    assert_no_cards_created svc
+  end
+
+  def test_master_only_master
+    svc = service :push, @data.update("master_only" => 1)
+    assert_cards_created svc
+  end
+
+  def test_ignore_regex
+    svc = service :push, @data.merge!("ignore_regex" => "Grit|throughout|heads")
+
+    assert_no_cards_created svc
+  end
+
   private
+
+  def assert_cards_created svc
+    @stubs.post "/1/cards" do |env|
+      assert_equal 'api.trello.com', env[:url].host
+      [200, {}, '']
+    end
+    svc.receive_push
+  end
+
+  def assert_no_cards_created svc
+    @stubs.post "/1/cards" do
+      raise "This should not be called"
+    end
+    svc.receive_push
+  end
 
   def correct_description
     'Author: Tom Preston-Werner

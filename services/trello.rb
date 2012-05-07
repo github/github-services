@@ -1,22 +1,32 @@
 class Service::Trello < Service
-  string :consumer_token, :list_id
+  string :list_id, :ignore_regex
+  boolean  :master_only
+  password :consumer_token
 
   def receive_push
-    return if payload['commits'].size == 0
+    return unless create_cards?
 
     # Confirm all required config is present
     assert_required_credentials
 
     # Create the card
-    create_card
+    create_cards
   end
 
   private
 
-  def create_card
+  def create_cards?
+    return false if payload['commits'].size == 0
+    return false if data['master_only'].to_i == 1 && branch_name != 'master'
+    true
+  end
+
+  def create_cards
     http.url_prefix = "https://api.trello.com/1"
 
     payload['commits'].each do |commit|
+      next if ignore_commit? commit
+
       http_post "cards",
         :name => name_for_commit(commit),
         :desc => desc_for_commit(commit),
@@ -24,6 +34,10 @@ class Service::Trello < Service
         :key => application_key,
         :token => consumer_token
     end
+  end
+
+  def ignore_commit? commit
+    ignore_regex && ignore_regex.match(commit['message'])
   end
 
   def name_for_commit commit
@@ -49,6 +63,14 @@ class Service::Trello < Service
 
   def list_id
     data['list_id'].to_s
+  end
+
+  def ignore_regex
+    @_memoized_ignore_regexp ||= if data['ignore_regex'].to_s.blank?
+      nil
+    else
+      Regexp.new(data['ignore_regex'].to_s)
+    end
   end
 
   def application_key
