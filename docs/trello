@@ -1,7 +1,7 @@
 Trello
 ======
 
-Adds a card to the supplied list for each commit when you push to GitHub. Optionally you can have this only happen to pushes to the master branch, and provide an exclusion regex.
+Adds a card to a Trello list for each commit when you push to GitHub. You can optionally limit this to the master branch, and provide an exclusion regex.
 
 Install Notes
 -------------
