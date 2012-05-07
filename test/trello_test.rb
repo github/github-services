@@ -38,8 +38,12 @@ class TrelloTest < Service::TestCase
 
   def test_ignore_regex
     svc = service :push, @data.merge!("ignore_regex" => "Grit|throughout|heads")
-
     assert_no_cards_created svc
+  end
+
+  def test_no_ignore_regex
+    svc = service :push, @data.merge!("ignore_regex" => "")
+    assert_cards_created svc
   end
 
   private
