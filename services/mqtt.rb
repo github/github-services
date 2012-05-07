@@ -6,7 +6,8 @@ class Service::MqttPub < Service
   def receive_push
  
     # Optional - use m2m.io public broker if not specified
-    if data['broker'].to_s == ''
+    broker = data['broker'].to_s
+    if broker == ''
       broker = 'q.m2m.io'
     end
     
@@ -51,7 +52,7 @@ class Service::MqttPub < Service
     begin
       # Connect to the broker, publish the payload!    
       MQTT::Client.connect(
-        :remote_host => data['broker'].to_s, 
+        :remote_host => broker, 
         :remote_port => port,
         :client_id => clientid,
         :username => user,
