@@ -57,7 +57,7 @@ class Service::Trello < Service
 
   def desc_for_commit commit
     author = commit['author'] || {}
-    
+
     "Author: %s\n\n%s\n\nRepo: %s\n\nCommit Message: %s" % [
       author['name'] || '[unknown]',
       commit['url'],
@@ -83,7 +83,7 @@ class Service::Trello < Service
   end
 
   def application_key
-    "74666606852cabea363165a7cd5b7dc9"
+    "db1e35883bfe8f8da1725a0d7d032a9c"
   end
 
   def repository
