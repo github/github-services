@@ -97,7 +97,7 @@ class Service::Rally < Service
   end
 
   def getOrCreateRepo(scm_repository, repo, repo_owner)
-      scm_repository = scm_repository == nil ? repo : scm_repository
+      scm_repository = repo if (scm_repository.nil? or scm_repository == "")
       repo_item = rallyQuery('SCMRepository', 'Name', 'Name = "%s"' % scm_repository)
       return itemRef(repo_item) unless repo_item.nil?
       repo_info = { 'Workspace' => @wksp_ref, 'Name' => scm_repository, 'SCMType' => 'GitHub',
