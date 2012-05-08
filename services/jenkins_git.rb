@@ -3,8 +3,8 @@ class Service::JenkinsGit < Service
 
   NOTIFY_URL = '%s/git/notifyCommit'
 
-  string :jenkins_url, :repo_base
-  white_list :jenkins_url, :repo_base
+  string :jenkins_url
+  white_list :jenkins_url
 
   def receive_push
     if !data['jenkins_url'].present?
