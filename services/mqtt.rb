@@ -1,5 +1,6 @@
 class Service::MqttPub < Service
-  string :broker, :port, :topic, :clientid, :user, :pass
+  string   :broker, :port, :topic, :clientid, :user
+  password :pass
   
   require 'mqtt'
 

@@ -10,8 +10,9 @@ class Net::SMTP
 end
 
 class Service::Email < Service
-  string :address, :secret
-  boolean :send_from_author
+  string     :address
+  password   :secret
+  boolean    :send_from_author
   white_list :address
 
   def receive_push
