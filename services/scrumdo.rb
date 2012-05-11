@@ -1,5 +1,6 @@
 class Service::ScrumDo < Service
-  string :username, :password, :project_slug
+  string     :username, :project_slug
+  password   :password
   white_list :project_slug, :username
 
   def receive_push
