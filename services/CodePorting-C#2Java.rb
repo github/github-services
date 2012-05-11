@@ -1,6 +1,12 @@
 class Service::CodePortingCSharp2Java < Service
+<<<<<<< HEAD
   string   :project_name, :repo_key, :target_repo_key, :codeporting_username, :codeporting_password
   string   :github_userid, :github_password
+=======
+  string   :project_name, :repo_key, :target_repo_key, :username
+  password :password
+  string   :userid
+>>>>>>> upstream/master
 
   self.title = 'CodePorting-C#2Java'
 

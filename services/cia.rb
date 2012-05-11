@@ -52,7 +52,7 @@ class Service::CIA < Service
   end
 
   def build_cia_commit(repository, branch, sha1, commit, size = 1)
-    log = commit['message'].lines.first
+    log = commit['message'].split("\n")[0]
     log << " (+#{size} more commits...)" if size > 1
 
     dt         = DateTime.parse(commit['timestamp']).new_offset
