@@ -26,7 +26,7 @@ class Service::CodePortingCSharp2Java < Service
 
   def perform_login
     http.ssl[:verify] = false
-	login_url = "http://stage.codeporting.com/csharp2java/v0/UserSignin"
+    login_url = "http://stage.codeporting.com/csharp2java/v0/UserSignin"
     resp = http.post login_url do |req|
       req.body = {:LoginName => data['codeporting_username'], :Password => data['codeporting_password']}
     end
