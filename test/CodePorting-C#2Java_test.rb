@@ -42,4 +42,3 @@ class CodePortingCSharp2JavaTest < Service::TestCase
     super Service::CodePortingCSharp2Java, *args
   end
 end
-
