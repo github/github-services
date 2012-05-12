@@ -72,6 +72,6 @@ class Service::CodePortingCSharp2Java < Service
     raise_config_error 'Codeporting username must be provided' if data['codeporting_username'].blank?
     raise_config_error 'Codeporting password must be provided' if data['codeporting_password'].blank?
     raise_config_error 'GitHub User ID must be provided for commiting changes back to GitHub' if data['github_userid'].blank?
-	raise_config_error 'GitHub Access Token must be provided for commiting changes back to GitHub' if data['github_access_token'].blank?
+    raise_config_error 'GitHub Access Token must be provided for commiting changes back to GitHub' if data['github_access_token'].blank?
   end
 end
