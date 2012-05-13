@@ -18,6 +18,8 @@ class Service::CIA < Service
         ref_name
       end
 
+    module_name = payload['repository']['name']
+
     commits = payload['commits']
 
     if commits.size > 5
@@ -72,6 +74,7 @@ class Service::CIA < Service
         <source>
           <project>#{repository}</project>
           <branch>#{branch}</branch>
+          <module>#{module_name}</module>
         </source>
         <timestamp>#{timestamp}</timestamp>
         <body>
