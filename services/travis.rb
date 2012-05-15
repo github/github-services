@@ -2,9 +2,10 @@ class Service::Travis < Service
   string :user, :token, :domain
   white_list :domain, :user
 
-  def receive_push
+  def receive_event
     http.ssl[:verify] = false
     http.basic_auth user, token
+    http.headers['X-GitHub-Event'] = event.to_s
     http_post travis_url, :payload => payload.to_json
   end
 
