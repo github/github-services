@@ -131,6 +131,19 @@ class Service
       end
     end
 
+    ALL_EVENTS = %w[
+      push issues issue_comment commit_comment
+      pull_request gollum watch download fork
+      fork_apply member public
+    ]
+
+    # Gets a list of events support by the service. Should be a superset of
+    # default_events.
+    def supported_events
+      return ALL_EVENTS.dup if method_defined? :receive_event
+      ALL_EVENTS.select { |event| method_defined? "receive_#{event}" }
+    end
+
     # Gets the current schema for the data attributes that this Service
     # expects.  This schema is used to generate the GitHub repository admin
     # interface.  The attribute types loosely to HTML input elements.

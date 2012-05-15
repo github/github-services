@@ -18,7 +18,7 @@ namespace :services do
     require File.expand_path("../config/load", __FILE__)
     services = []
     Service.services.each do |svc|
-      services << {:name => svc.hook_name, :events => svc.default_events,
+      services << {:name => svc.hook_name, :events => svc.default_events, :supported_events => svc.supported_events,
         :title => svc.title, :schema => svc.schema}
     end
     services.sort! { |x, y| x[:name] <=> y[:name] }
