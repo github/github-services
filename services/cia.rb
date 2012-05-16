@@ -23,12 +23,12 @@ class Service::CIA < Service
     commits = payload['commits']
 
     if commits.size > 5
-      message = build_cia_commit(repository, branch, payload['after'], commits.last, commits.size - 1)
+      message = build_cia_commit(repository, branch, payload['after'], commits.last, module_name, commits.size - 1)
       deliver(message)
     else
       commits.each do |commit|
         sha1 = commit['id']
-        message = build_cia_commit(repository, branch, sha1, commit)
+        message = build_cia_commit(repository, branch, sha1, commit, module_name)
         deliver(message)
       end
     end
@@ -42,7 +42,7 @@ class Service::CIA < Service
           address : 'http://cia.vc')
     end
   end
-  
+
   def deliver(message)
     xmlrpc_server.call("hub.deliver", message)
   rescue StandardError => err
@@ -53,7 +53,7 @@ class Service::CIA < Service
     end
   end
 
-  def build_cia_commit(repository, branch, sha1, commit, size = 1)
+  def build_cia_commit(repository, branch, sha1, commit, module_name, size = 1)
     log = commit['message'].split("\n")[0]
     log << " (+#{size} more commits...)" if size > 1
 
