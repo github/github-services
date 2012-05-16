@@ -1,7 +1,7 @@
 class Service::CIA < Service
-  string :address, :project, :branch
+  string :address, :project, :branch, :module
   boolean :long_url
-  white_list :address, :project, :branch
+  white_list :address, :project, :branch, :module
 
   def receive_push
     repository =
@@ -17,6 +17,8 @@ class Service::CIA < Service
       else
         ref_name
       end
+
+    module_name = data['module'].to_s
 
     commits = payload['commits']
 
@@ -72,6 +74,7 @@ class Service::CIA < Service
         <source>
           <project>#{repository}</project>
           <branch>#{branch}</branch>
+          <module>#{module_name}</module>
         </source>
         <timestamp>#{timestamp}</timestamp>
         <body>
