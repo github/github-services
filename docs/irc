@@ -4,23 +4,28 @@ IRC
 Install Notes
 -------------
 
-1.  `server` (ie. irc.freenode.net)
-2.  `port` is normally 6667 / 9999 for ssl
-3.  the `room` field can support multiple rooms (comma separated)
-4.  the `password` field is for the server password
-5.  room passwords can be specified for each room like this:
-        room_name::password
-6.  prefixing '#' to the room field is optional
-7.  `nick` is not required.  If provided, the IRCBot will use that
-    nick.
-8.  Enable `long_url` so that compare/commit url's are not passed
-    through bit.ly.
-9.  Enable `message_without_join' to keep the GitHub IRC bot from
-    joining and immediately leaving the channel for each push.
-10. Enable `no_colors` to disable colors in the messages sent by the
-    GitHub IRC bot.
-11. Enable Active and Notice checkboxes
-12. Configure your IRC channel to allow external messages (/mode #yourchannelname -n).
+1.  `server` - IRC server, IE. irc.freenode.net
+2.  `port` - Normally 6667 (No SSL) or 9999 (SSL)
+3.  `room` - Supports single or multiple rooms (comma separated).  Also supports room passwords (room_name::password).  Prefixing '#' to the room is optional.
+4.  `password` - Server password (optional)
+5.  `nick` - Nickame (optional)
+6.  `long_url` - If enabled, displays full compare/commit url's. If disabled uses bit.ly.
+7.  `message_without_join' - If enabled prevents joining and immediately leaving the channel.
+8. `no_colors` - Disables color support for messages
+9. `notice` - Enables notice support.  Make sure you configure channel to support notices ("/mode #yourchannelname -n" or "/msg chanserv set mlock -n")
+10. `active` - Enables the bot
+11. Configure your IRC channel to allow external messages (/mode #yourchannelname -n).
+
+For freenode, try the following:
+
+    # server: irc.freenode.net
+    # port: 6667
+    # room: #yourroom
+    # message_without_join: checked
+    # long_url: checked
+    # notice: checked
+    # active: checked
+    # NOTE: Ensure you enable notice support (see above)
 
 For troubleshooting, run the following curl command to get diagnostic information from GitHub. 
 
