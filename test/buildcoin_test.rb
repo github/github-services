@@ -29,7 +29,7 @@ class Buildcoin < Service::TestCase
   end
 
   def test_pull_request_review_comment
-    @stubs.post "/hooks/company_key/github/pullrequestcomment" do |env|
+    @stubs.post "/hooks/company_key/github/pullrequest/comment" do |env|
       [200, {}, '']
     end
 

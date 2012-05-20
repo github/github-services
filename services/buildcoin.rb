@@ -11,7 +11,7 @@ class Service::Buildcoin < Service
     elsif event.to_s.eql? 'pull_request'
       url = "https://buildcoin.com/hooks/#{data['company_key']}/github/pullrequest"
     elsif event.to_s.eql? 'pull_request_review_comment'
-      url = "https://buildcoin.com/hooks/#{data['company_key']}/github/pullrequestcomment"
+      url = "https://buildcoin.com/hooks/#{data['company_key']}/github/pullrequest/comment"
     end
 
     res = http_post url,
