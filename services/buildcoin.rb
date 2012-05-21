@@ -1,7 +1,7 @@
 class Service::Buildcoin < Service
   string :company_key
 
-  default_events :push, :pull_request, :pull_request_review_comment
+  default_events :push, :pull_request, :pull_request_review_comment, :issue_comment
 
   def receive_event
     raise_config_error "Missing Company API Key" if data['company_key'].to_s == ''
@@ -11,6 +11,8 @@ class Service::Buildcoin < Service
     elsif event.to_s.eql? 'pull_request'
       url = "https://buildcoin.com/hooks/#{data['company_key']}/github/pullrequest"
     elsif event.to_s.eql? 'pull_request_review_comment'
+      url = "https://buildcoin.com/hooks/#{data['company_key']}/github/pullrequest/comment"
+    elsif event.to_s.eql? 'issue_comment'
       url = "https://buildcoin.com/hooks/#{data['company_key']}/github/pullrequest/comment"
     end
 

@@ -38,6 +38,16 @@ class Buildcoin < Service::TestCase
     }, payload)
   end
 
+  def test_issue_comment
+    @stubs.post "/hooks/company_key/github/pullrequest/comment" do |env|
+      [200, {}, '']
+    end
+
+    svc = service(:issue_comment,{
+      'company_key' => 'company_key'
+    }, payload)
+  end
+
   def test_push_missing_company_key    
     svc = service({
     }, payload)
