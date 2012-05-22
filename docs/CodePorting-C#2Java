@@ -21,7 +21,6 @@ data
   - target_repo_key
   - codeporting_username
   - codeporting_password
-  - github_userid
   - github_access_token
   - active
 

@@ -20,7 +20,6 @@ class CodePortingCSharp2JavaTest < Service::TestCase
       assert_equal 'TestJava', form['TarRepoKey']
       assert_equal 'codeportingtest', form['Username']
       assert_equal 'testpassword', form['Password']
-      assert_equal 'CodePorting', form['GithubUserId']
       assert_equal '0314adcacbb895bd52f3bc6f2f361ebac3ffbfb6', form['GithubAccessToken']
       [200, {}, %(<xml><return success="True"></return></xml>)]
     end
@@ -31,7 +30,6 @@ class CodePortingCSharp2JavaTest < Service::TestCase
       'username' => 'codeportingtest',
       'password' => 'testpassword',
       'active' => '1',
-      'userid' => 'CodePorting',
       'GithubAccessToken' => '0314adcacbb895bd52f3bc6f2f361ebac3ffbfb6'}, payload)
 
     assert_equal 3, payload['commits'].size

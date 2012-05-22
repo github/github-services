@@ -53,7 +53,7 @@ class Service::CodePortingCSharp2Java < Service
       req.body = {:token => token, :ProjectName => data['project_name'],
         :RepoKey => data['repo_key'], :TarRepoKey => data['target_repo_key'],
         :Username => data['codeporting_username'], :Password => data['codeporting_password'],
-        :GithubUserId => data['github_userid'], :GithubAccessToken => data['github_access_token']}
+        :GithubAccessToken => data['github_access_token']}
     end
 
     doc = REXML::Document.new(resp.body)
@@ -72,7 +72,6 @@ class Service::CodePortingCSharp2Java < Service
     raise_config_error 'Target repository is required' if data['target_repo_key'].blank?
     raise_config_error 'Codeporting username must be provided' if data['codeporting_username'].blank?
     raise_config_error 'Codeporting password must be provided' if data['codeporting_password'].blank?
-    raise_config_error 'GitHub User ID must be provided for commiting changes back to GitHub' if data['github_userid'].blank?
     raise_config_error 'GitHub Access Token must be provided for commiting changes back to GitHub' if data['github_access_token'].blank?
   end
 end
