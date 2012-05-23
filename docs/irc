@@ -24,11 +24,15 @@ Install Notes
 
 For troubleshooting, run the following curl command to get diagnostic information from GitHub. 
 
-    # Replace 
-    # USERNAME:PASSWORD with your GitHub username and password. Username is your full username as used when signing in. 
-    # USERNAME/REPONAME with your repo name as it shows in github. 
+    # Replace:
+    # USERNAME:PASSWORD with your GitHub username & password. 
+    # Username is your full username as used when signing in. 
+    #
+    # USERNAME/REPONAME with your repo name as it shows in 
+    # github. 
     
-    $ curl -u "USERNAME:PASSWORD" -in https://api.github.com/repos/USERNAME/REPONAME/hooks
+    $ curl -u "USERNAME:PASSWORD" -in \ 
+      https://api.github.com/repos/USERNAME/REPONAME/hooks
 
 
 Developer Notes
