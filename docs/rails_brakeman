@@ -1,10 +1,5 @@
-RailsBrakeman
-=============
-
-RailsBrakeman - an online service to find security issues in your rails projectis.
-
-Install Notes
--------------
+RailsBrakeman is an online service to find security issues in your Rails
+projects.
 
 1. Create an account on rails-brakeman.com (just sign in with GitHub)
 2. Create a repository on rails-brakeman.com
@@ -15,12 +10,3 @@ Install Notes
 
 For more details about RailsBrakeman, go to https://rails-brakeman.com
 
-Developer Notes
----------------
-
-data
-  - rails_brakeman_url
-  - token
-
-payload
-  - refer to docs/github_payload

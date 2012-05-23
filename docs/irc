@@ -1,9 +1,3 @@
-IRC
-========
-
-Install Notes
--------------
-
 1.  `server` - IRC server, IE. irc.freenode.net
 2.  `port` - Normally 6667 (No SSL) or 9999 (SSL)
 3.  `room` - Supports single or multiple rooms (comma separated).  Also supports room passwords (room_name::password).  Prefixing '#' to the room is optional.
@@ -32,23 +26,5 @@ For troubleshooting, run the following curl command to get diagnostic informatio
     # Replace 
     # USERNAME:PASSWORD with your GitHub username and password. Username is your full username as used when signing in. 
     # USERNAME/REPONAME with your repo name as it shows in github. 
-    
+
     $ curl -u "USERNAME:PASSWORD" -in https://api.github.com/repos/USERNAME/REPONAME/hooks
-
-
-Developer Notes
----------------
-
-data
-  - server
-  - port
-  - room
-  - password
-  - ssl
-  - nick
-  - long_url
-  - message_without_join
-  - no_colors
-
-payload
-  - refer to docs/github_payload

@@ -1,21 +1,7 @@
-CIA.vc
-========
+1. Disable multiple messages if more than 5 commits are pushed.  Instead announce the last commit with "(+## more commits...)" appended to the note.
+2. `address` is the optional CIA address, defaults to http://cia.vc
+3. `project` is the optional project name, defaults to the Repository name.
+4. `branch` lets you specify the branch name, or a template with `%s` to fill the branch name in.
+5. `long_urls` enables full URLs instead of shortened URLs.
+6. `module` sets the module name in the project.
 
-Install Notes
--------------
-
-  1. Disable multiple messages if more than 5 commits are pushed.  Instead announce the last commit with "(+## more commits...)" appended to the note.
-
-
-Developer Notes
----------------
-
-data
-  - no_spam
-  - project - Optional project name, defaults to the Repository name.
-  - address - Optional CIA address, defaults to http://cia.vc
-  - branch - Optional branch template, use %s to include the real branch name
-  - module - Optional module name in the project.
-
-payload
-  - refer to docs/github_payload
