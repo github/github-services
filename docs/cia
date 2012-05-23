@@ -15,6 +15,7 @@ data
   - project - Optional project name, defaults to the Repository name.
   - address - Optional CIA address, defaults to http://cia.vc
   - branch - Optional branch template, use %s to include the real branch name
+  - module - Optional module name in the project.
 
 payload
   - refer to docs/github_payload
