@@ -8,6 +8,7 @@ Install Notes
 -------------
 
   1. Token - GitHub Service Hook Token for your Acunote organization. Get it from "Edit Organization" > "Repositories" page in Acunote.
+  2. Don't forget to check "Active"
 
 
 Developer Notes
