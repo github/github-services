@@ -57,15 +57,14 @@ class Service::Jabber < Service
 
   def deliver_muc(message, conferences)
     conferences.each do |conference|
-      muc = mucs[conference]
-      muc ||= mucs[conference] = ::Jabber::MUC::MUCClient.new(im.client)
-      muc.join(conference) unless muc.active?()
+      muc = ::Jabber::MUC::MUCClient.new(im.client)
+      muc.join(conference)
       im.deliver_deferred conference, message, :groupchat
     end
   end
 
   def mucs
-    @@mucs ||= {}
+    @mucs ||= {}
   end
 
   attr_writer :im
