@@ -18,7 +18,7 @@ class Service::JenkinsGit < Service
       :from => 'github'
     }
 
-    params[:branch] = branch_name unless tag?
+    params[:branches] = branch_name unless tag?
 
     http_get url, params
   end
