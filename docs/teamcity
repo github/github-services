@@ -18,9 +18,12 @@ Install Notes
   4.  "username" and "password" - username and password of a TeamCity user that can
       trigger a manual build of the TeamCity build configuration defined in "build_type_id"
 
-  5.  Since TeamCity uses BASIC authentication, it is highly recommended that the TeamCity server
-      use HTTPS/SSL to protect the password that is passed unencrypted over the internet.
+  5.  "branches" is an optional space-separated list of branches to watch commits for. 
+      Commits to other branches will be ignored. If no branches are specified, 
+      TeamCity will be notified of all commits.
 
+  6.  Since TeamCity uses BASIC authentication, it is highly recommended that the TeamCity server
+      use HTTPS/SSL to protect the password that is passed unencrypted over the internet.
 
 Developer Notes
 ---------------
@@ -30,6 +33,7 @@ data
   - build_type_id
   - username
   - password
-
+  - branches
+ 
 payload
   - unused by this service
