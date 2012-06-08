@@ -13,7 +13,7 @@ class JenkinsGitTest < Service::TestCase
       params = Rack::Utils.parse_nested_query(env[:url].query)
       expected_params = {
         'url' => 'http://github.com/mojombo/grit',
-        'branch' => 'master',
+        'branches' => 'master',
         'from' => 'github'
       }
       assert_equal(expected_params, params)
