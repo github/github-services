@@ -1,9 +1,13 @@
 class Service::TeamCity < Service
-  string   :base_url, :build_type_id, :username
+  string   :base_url, :build_type_id, :username, :branches
   password :password
-  white_list :base_url, :build_type_id, :username
+  white_list :base_url, :build_type_id, :username, :branches
 
   def receive_push
+    branches = data['branches'].to_s.split(/\s+/)
+    ref = payload["ref"].to_s
+    return unless branches.empty? || branches.include?(ref.split("/").last)
+
     # :(
     http.ssl[:verify] = false
 
