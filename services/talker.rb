@@ -1,3 +1,4 @@
+# coding: utf-8
 class Service::Talker < Service
   string  :url, :token
   boolean :digest
