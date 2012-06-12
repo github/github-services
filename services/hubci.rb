@@ -3,9 +3,7 @@ class Service::HubCI < Service
 
   def receive_push
     http.ssl[:verify] = false
-    payload['commits'].each do |commit|
-        http_post hubci_url, commit.to_json
-    end
+    http_post hubci_url, :commits=>payload['commits'].to_json
   end
 
   def hubci_url
