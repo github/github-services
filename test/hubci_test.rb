@@ -24,6 +24,15 @@ class HubCITest < Service::TestCase
     assert_equal '5373dd4a3648b88fa9acb8e46ebc188a', svc.token
   end
 
+  def test_pull_request_payload
+    @svc = service(data, payload)
+    @stubs.post '/repository/mojombo/grit/onCommit/5373dd4a3648b88fa9acb8e46ebc188a' do |env|
+      assert_equal 'application/json', env[:request_headers]['Content-Type']
+      assert_equal payload['commits'], JSON.parse(env[:body])['commits']
+    end
+    @svc.receive_push
+  end
+    
   def service(*args)
     super Service::HubCI, *args
   end
