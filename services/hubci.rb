@@ -4,11 +4,11 @@ class Service::HubCI < Service
   def receive_push
     http.ssl[:verify] = false
     http.headers['Content-Type'] = 'application/json'
-      http_post hubci_url, {:commits => payload['commits']}.to_json
+    http_post hubci_url, {:commits => payload['commits']}.to_json
   end
 
   def hubci_url
-      "http://hub.ci/repository/#{repoOwner}/#{repoName}/onCommit/#{token}"
+    "http://hub.ci/repository/#{repoOwner}/#{repoName}/onCommit/#{token}"
   end
 
   def repoName
