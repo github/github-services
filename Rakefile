@@ -22,8 +22,12 @@ namespace :services do
         :title => svc.title, :schema => svc.schema}
     end
     services.sort! { |x, y| x[:name] <=> y[:name] }
+    data = {
+      :metadata => { :generated_at => Time.now.utc },
+      :services => services
+    }
     File.open file, 'w' do |io|
-      io << Yajl.dump(services, :pretty => true)
+      io << Yajl.dump(data, :pretty => true)
     end
   end
 end
