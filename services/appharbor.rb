@@ -8,7 +8,7 @@ class Service::AppHarbor < Service
     raise_config_error 'Missing application slug' if slug.to_s.empty?
     raise_config_error 'Missing token' if token.to_s.empty?
 
-    create_build_url = "https://appharbor.com/application/#{slug}/build?authorization=#{token}"
+    create_build_url = "https://appharbor.com/applications/#{slug}/builds?authorization=#{token}"
 
     commit = distinct_commits.last
     appharbor_message = {
