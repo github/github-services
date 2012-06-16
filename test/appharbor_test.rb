@@ -9,9 +9,9 @@ class AppHarborTest < Service::TestCase
     application_slug = 'foo'
     token = 'bar'
 
-    @stubs.post "/application/#{application_slug}/build" do |env|
-      assert_equal token, env[:params]['authorization']
+    @stubs.post "/applications/#{application_slug}/builds" do |env|
       assert_equal 'application/json', env[:request_headers]['accept']
+      assert_equal "BEARER #{token}", env[:request_headers]['authorization']
 
       branches = JSON.parse(env[:body])['branches']
       assert_equal 1, branches.size
