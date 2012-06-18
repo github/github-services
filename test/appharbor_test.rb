@@ -21,7 +21,7 @@ private
 
   def test_push(application_slugs, token)
     application_slugs.split(",").each do |slug|
-      @stubs.post "/application/#{slug}/build" do |env|
+      @stubs.post "/applications/#{slug}/builds" do |env|
         verify_appharbor_payload(token, env)
       end
     end
@@ -33,7 +33,7 @@ private
   end
 
   def verify_appharbor_payload(token, env)
-    assert_equal token, env[:params]['authorization']
+    assert_equal "BEARER #{token}", env[:request_headers]['authorization']
     assert_equal 'application/json', env[:request_headers]['accept']
 
     branches = JSON.parse(env[:body])['branches']
