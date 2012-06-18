@@ -64,7 +64,7 @@ class Service::MqttPub < Service
           client.disconnect(false)
         end
     rescue SocketError => e
-      warn "SocketError occurred: " + e     
+      warn "SocketError occurred: " + e
     end
 
   end
