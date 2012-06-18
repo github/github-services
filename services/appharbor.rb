@@ -19,7 +19,7 @@ private
 
   def post_appharbor_message(slug, token)
     return unless commit = distinct_commits.last
-    create_build_url = "https://appharbor.com/application/#{slug}/build?authorization=#{token}"
+    create_build_url = "https://appharbor.com/applications/#{slug}/builds?authorization=#{token}"
 
     appharbor_message = {
       :branches => {
