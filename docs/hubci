@@ -1,19 +1,11 @@
-HUB.CI
-======
-
-HUB.CI is an SaaS continuous integration tool for Node.js
+HUB.CI is a SaaS continuous integration tool for Node.js
 
 Install Notes
 -------------
 
-    1.  Create an account at http://hub.ci (you can sign in with GitHub)
-    2.  Install your repository on HUB.CI
-    3.  You're done !
+1.  Create an account at http://hub.ci (you can sign in with GitHub)
+2.  Install your repository on HUB.CI
+3.  You're done!
 
 For more details about HUB.CI, go to http://docs.hub.ci
 
-Developer Notes
----------------
-
-data
-  - token (the authentication token for using the HUB.CI API)
