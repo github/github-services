@@ -1,6 +1,3 @@
-Prowl
-==========
-
 Prowl is an iPhone App+Web Service for arbitrary Push Notifications. After installing the app and registering the device, you receive an API key and can send notifications from your computer via Growl (with the Prowl GrowlStyle installed) or from any server with very little work (at least as far as the Push submission is concerned).
 
 To get started, create a user account for Prowl at https://www.prowlapp.com/.
@@ -8,13 +5,4 @@ To get started, create a user account for Prowl at https://www.prowlapp.com/.
 Install Notes
 -------------
 
-1. Create a new API key for GitHub at the Prowl website https://www.prowlapp.com/api_settings.php.
-
-Developer Notes
----------------
-
-apikey
-  - Your Prowl API key.
-
-payload
-  - refer to docs/github_payload
+1. Create a new API key for GitHub at the [Prowl website](https://www.prowlapp.com/api_settings.php).

@@ -9,12 +9,3 @@ Install Notes
 
   1. Token - GitHub Service Hook Token for your GroupTalent project. Get it from the project configuration page.
 
-
-Developer Notes
----------------
-
-data
-  - token
-
-payload
-  - refer to docs/github_payload

@@ -16,14 +16,3 @@ Install Notes
   3.  Check the "Active" checkbox and click "Update Settings".
   4.  Click on the "Nodejitsu" service name and then click the "Test Hook" link.
 
-For more details about Nodejitsu, go to http://nodejitsu.com. 
-If you want to know if your deploy was successful or why it failed please refer to out [API documentation of the Nodejitsu Web-hook API](http://webhooks.nodejitu.com)
-
-Developer Notes
----------------
-
-data
-  - password
-  - username
-  - domain
-  - branch

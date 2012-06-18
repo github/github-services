@@ -1,6 +1,3 @@
-ScrumDo
-=======
-
 ScrumDo is an agile/scrum project management site found at http://www.scrumdo.com
 Integrating GitHub with ScrumDo lets you see commits in your project newsfeed, and allows you to update stories via commit messages.
 
@@ -22,13 +19,3 @@ Install Notes
 
     Your project slug is `acme-project`
 
-Developer Notes
----------------
-
-data
-  - username
-  - password
-  - project_slug
-
-payload
-  - refer to docs/github_payload

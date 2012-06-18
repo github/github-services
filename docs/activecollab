@@ -1,0 +1,6 @@
+Install Notes
+-------------
+
+1. Currently, you must specify in the configuration milestone and or category if you want the commits to be associated with them.
+   In the future, I plan for this to have some form of configuration via tags / branches, or something like that.
+2. URL, Project ID, and Token are required the others not so much.

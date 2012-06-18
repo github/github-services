@@ -1,26 +1,8 @@
-Socialcast
-==========
+You should already have a Socialcast community. For the group_id you'll need to
+call the API to figure out the underlying integer group id for a group.
 
-Install Notes
--------------
+1. api_domain (e.g. foo-com.socialcast.com)
+2. username (user to post message on behalf of)
+3. password (password of user to post message on behalf of)
+4. group_id (OPTIONAL Id of a Socialcast group to post the message into)
 
-  You should already have a Socialcast community. For the group_id you'll need to call the 
-  API to figure out the underlying integer group id for a group.
-
-
-  1. api_domain (e.g. foo-com.socialcast.com)
-  2. username (user to post message on behalf of)
-  3. password (password of user to post message on behalf of)
-  4. group_id (OPTIONAL Id of a Socialcast group to post the message into)
-
-Developer Notes
----------------
-
-data
-  - api_domain
-  - username
-  - password
-  - group_id (optional)
-
-payload
-  - refer to docs/github_payload

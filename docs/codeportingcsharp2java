@@ -1,0 +1,11 @@
+CodePorting-C#2Java
+======
+
+Allows you to setup a GitHub repository to port C# code to Java on git commit.
+
+Install Notes
+-------------
+
+1. Signup for a CodePorting account at https://apps.codeporting.com/signup
+2. You can find your "User name" and "Password" on www.codeporting.com
+

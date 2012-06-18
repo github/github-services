@@ -1,18 +1,10 @@
 Grove.io
 =========
 
-Post deploy messages to Grove.io's IRC channels.
+This delivers updates to your GitHub repository to Grove.io's IRC channels.
+Events include Git pushes, issues, wiki changes, and comments.
 
 Install Notes
 -------------
 
-  1. `channel_token` - Channel's unique token which can be found from channel settings (available for organization owners)
-
-Developer Notes
----------------
-
-data
-  - channel_token
-
-payload
-  - refer to docs/github_payload
+  `channel_token` - Channel's unique token which can be found from channel settings (available for organization owners)

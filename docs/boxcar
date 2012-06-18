@@ -1,21 +1,10 @@
-Boxcar
-==========
-
-Send your commits to Boxcar, a messaging platform.  Get instant commit messages on your desktop and mobile devices.
-
 Install Notes
 -------------
 
-	1. Download and install Boxcar from http://boxcar.io
-	2. Type in the Boxcar e-mail addresses of the users wanting to be notified of commits to this repository.
-	3. If the user does not yet have Boxcar, we'll send them an e-mail to let them know where they can get it.
+Send your commits to Boxcar, a messaging platform.  Get instant commit messages on your desktop and mobile devices.
 
+1. Download and install Boxcar from <http://boxcar.io>
 
-Developer Notes
----------------
+2. Type in the Boxcar e-mail addresses of the users wanting to be notified of commits to this repository (comma separated).
 
-data
-  - subscribers (csv list of e-mail addresses)
-
-payload
-  - refer to docs/github_payload
+3. If the user does not yet have Boxcar, we'll send them an e-mail to let them know where they can get it.

@@ -1,15 +1,10 @@
-AppHarbor
-=======
-
 AppHarbor is a .NET Platform as a Service. Use this service to automatically trigger build, test run and deployment of your AppHarbor application when you push to GitHub.
 
 Install Notes
 -------------
 
-  1.  Go to your application's main page on AppHarbor and find the "Create build URL". Example: https://appharbor.com/application/{application_slug}/build?authorization={token}
+1.  Go to your application's main page on AppHarbor and find the "Create build URL". Example: https://appharbor.com/application/{application_slug}/build?authorization={token}
+2.  "token" is the value of the "authorization" parameter.
+3.  "application_slug" is a list of unique application identifiers delimited by "," (i.e. "foo" or "foo,bar") that pushes should trigger builds on.
+4.  If your GitHub repository is private you need to add the "apphb" GitHub user as a collaborator. This enables AppHarbor to download the source code.
 
-  2.  "Token" is the value of the "authorization" parameter.
-
-  3.  "Application Slugs" is a list of unique application identifiers delimited by "," (i.e. "foo" or "foo,bar") that pushes should trigger builds on.
-
-  4.  If your GitHub repository is private you need to add the "apphb" GitHub user as a collaborator. This enables AppHarbor to download the source code.

@@ -19,15 +19,4 @@ Install Notes
 2. **username**    - Username of one team member in the project (such as the ScrumMaster).
 3. **password**    - Password of one team member in the project.
 4. **base_url**    - Base_url is the url where your iceScrum is alive (http://www.example.com/icescrum). This is input is optional if not set "https://www.kagilum.com/a" for iceScrum Cloud customers.
-  
-Developer Notes
----------------
 
-data
-  - username
-  - password
-  - project_key
-  - base_url
-
-payload
-  - refer to docs/github_payload

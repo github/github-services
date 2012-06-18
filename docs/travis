@@ -1,30 +1,13 @@
-Travis
-======
-
-Travis – a distributed continuous integration service for the open source community
-
-
 Install Notes
 -------------
 
-  1.  Create an account at http://travis-ci.org (you can sign in with GitHub)
-  2.  Enter your credentials
-      - The token which you can find on the Travis profile page
-      - optional: Enter the username who the Travis token belongs to (defaults to the repository owner)
-      - optional: Enter the host of your Travis installation (defaults to http://notify.travis-ci.org), the protocol-prefix is optional and defaults to "http://".
-  3.  Make sure the "Active" checkbox is ticked, and click "Update Settings".
-  4.  Click on the "Travis" service name and then click the "Test Hook" link.
-  5.  You should receive an email from Travis once the build has completed
+1.  Create an account at http://travis-ci.org (you can sign in with GitHub)
+2.  Enter your credentials
+    - The token which you can find on the Travis profile page
+    - optional: Enter the username who the Travis token belongs to (defaults to the repository owner)
+    - optional: Enter the host of your Travis installation (defaults to http://notify.travis-ci.org), the protocol-prefix is optional and defaults to "http://".
+3.  Make sure the "Active" checkbox is ticked, and click "Update Settings".
+4.  Click on the "Travis" service name and then click the "Test Hook" link.
+5.  You should receive an email from Travis once the build has completed
 
 For more details about Travis, go to http://about.travis-ci.org/docs/
-
-
-Developer Notes
----------------
-
-data
-  - token
-  - user
-  - domain
-
-The token has to belong to the user, of course.

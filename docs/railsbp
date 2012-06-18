@@ -15,12 +15,3 @@ Install Notes
 
 For more details about Railsbp, go to https://railsbp.com
 
-Developer Notes
----------------
-
-data
-  - railsbp_url
-  - token
-
-payload
-  - refer to docs/github_payload

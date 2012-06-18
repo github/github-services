@@ -14,15 +14,3 @@ Install Notes
 
   3. Password is either the password of the user, or your Zendesk API token from "Settings / Channel / API". Remember to adjust the username if you use the API token.
 
-
-Developer Notes
----------------
-
-data
-  - subdomain
-  - username
-  - password
-
-payload
-  - refer to docs/github_payload
-

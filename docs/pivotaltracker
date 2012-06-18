@@ -1,0 +1,6 @@
+Install Notes
+-------------
+
+1. "token" is your Pivotal Tracker API Token. This is at the bottom of your 'My Profile' page.
+2. "branch" is the name of the branch you want to listen for commits on. If none is provided it will listen on all branches.
+3. "endpoint" is an optional endpoint for a custom Pivotal Tracker installation.  Leave this blank to use "https://www.pivotaltracker.com".

@@ -1,6 +1,3 @@
-Co-op
-========
-
 Install Notes
 -------------
 
@@ -9,14 +6,3 @@ Install Notes
   2. token is your API token. You can find this token in the group management panel as the group administrator, eg: "http://coopapp.com/groups/1066/edit"
 
 	3. Commit messages show up as being from Cobot, the Co-op message robot
-
-
-Developer Notes
----------------
-
-data
-  - group_id
-  - token
-
-payload
-  - refer to docs/github_payload

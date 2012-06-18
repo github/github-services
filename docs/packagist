@@ -3,7 +3,6 @@ Packagist
 
 Packagist – the main Composer repository
 
-
 Install Notes
 -------------
 
@@ -18,13 +17,3 @@ Install Notes
 
 For more details about Packagist, visit http://packagist.org/
 
-
-Developer Notes
----------------
-
-data
-  - token
-  - user
-  - domain
-
-The token has to belong to the user, of course.

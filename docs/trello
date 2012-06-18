@@ -15,16 +15,3 @@ Install Notes
 4. If you only want to create cards for commits on the master branch, tick 'Master Only'
 
 [create]: https://trello.com/1/authorize?key=db1e35883bfe8f8da1725a0d7d032a9c&name=Github+Services&expiration=never&response_type=token&scope=read,write
-
-Developer Notes
----------------
-
-data
-  - consumer_token
-  - list_id
-  - ignore_regex
-  - master_only
-
-payload
-  - refer to docs/github_payload
-

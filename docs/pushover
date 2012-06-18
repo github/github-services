@@ -1,5 +1,5 @@
 Pushover
-==========
+========
 
 Pushover is a cross-platform push notification service with a [simple API](https://pushover.net/api).
 
@@ -12,12 +12,3 @@ Install Notes
 
 3. Add your user key in the field above.  Optionally enter a device name to have notifications go to a single device, or leave blank to send to all active devices on your account.
 
-Developer Notes
----------------
-
-data
-  - user_key
-  - device_name
-
-payload
-  - refer to docs/github_payload

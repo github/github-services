@@ -1,0 +1,10 @@
+Basecamp
+========
+
+Install Notes
+-------------
+
+  1. project_url is the URL of your Basecamp project: https://basecamp.com/1234/projects/5678
+  2. email_address is the email you sign in to Basecamp with. This person must have access to the project. To add events on behalf of other people, make the person an admin on the project.
+  3. password is the password you sign in to Basecamp with.
+

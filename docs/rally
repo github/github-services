@@ -30,30 +30,20 @@ NB: Uri fields in Rally Changeset/Change records refer the to master branch.
 Install Notes
 -------------
 
-    You'll need a Rally account (see http://rally.rallydev.com).
+You'll need a Rally account (see http://rally.rallydev.com).
 
-    1. server - (REQUIRED) is the hostname of the Rally server.  
-       You do not have to provide the domain name portion of the server
-       if the name of the server is a Rally SaaS server, 
-         ie., rally1 or trial or demo.
-       If you are utilizing the Rally OnPrem product, you'll need 
-       to provide fully qualified hostname.
-    2. username - (REQUIRED) is the Rally UserName for the subscription.  
-       Make sure you specify the UserName (not the DisplayName or FirstName and LastName or Email).
-    3. password - (REQUIRED) is the password associated with the UserName for the Rally Subscription.
-    4. workspace - (REQUIRED) is the name of the Rally Workspace in which the target SCMRepository
-       resides.
-    5. repository - (OPTIONAL) is the name of the Rally SCMRepository.  By default, if not provided,
-       this integration will use the name of your GitHub repository as the SCMRepository name.
-       But, you have the ability to name the Rally SCMRepository to your choice of a name.
+1. server - (REQUIRED) is the hostname of the Rally server.  
+   You do not have to provide the domain name portion of the server
+   if the name of the server is a Rally SaaS server, 
+     ie., rally1 or trial or demo.
+   If you are utilizing the Rally OnPrem product, you'll need 
+   to provide fully qualified hostname.
+2. username - (REQUIRED) is the Rally UserName for the subscription.  
+   Make sure you specify the UserName (not the DisplayName or FirstName and LastName or Email).
+3. password - (REQUIRED) is the password associated with the UserName for the Rally Subscription.
+4. workspace - (REQUIRED) is the name of the Rally Workspace in which the target SCMRepository
+   resides.
+5. repository - (OPTIONAL) is the name of the Rally SCMRepository.  By default, if not provided,
+   this integration will use the name of your GitHub repository as the SCMRepository name.
+   But, you have the ability to name the Rally SCMRepository to your choice of a name.
 
-
-Developer Notes
-----------------
-
-data
-    - server     (Rally server name (domain info optional))
-    - username   (Rally subscription UserName)
-    - password   (Rally subscription Password )
-    - workspace  (name of Rally workspace holding target repository)
-    - repository (name of Rally SCMRepository (defaults to GitHub repository name))

@@ -1,38 +1,13 @@
-ZohoProjects
-============
+Project ID and Token is required for configuration which will be available under "Dashboard" --> "Project Settings" --> "Service Hooks".
 
-Install Notes
--------------
+This service hook allows you to associate changeset(s) with bug(s) in Zoho Projects.  To associate changeset(s) with bug(s) in ZohoProjects you will need to give the BUG ID in in your commit message.
 
-Project ID and Token is required for
-configuration which will be available
-under "Dashboard" --> "Project Settings"
---> "Service Hooks".
+Syntax: `OPEN SQUARE BRACKET #BUGID CLOSE SQUARE BRACKET` followed by commit message
 
-This service hook allows you to associate
-changeset(s) with bug(s) in Zoho Projects.
-To associate changeset(s) with bug(s) in
-ZohoProjects you will need to give the
-BUG ID in in your commit message.
+Ex: `[#SDP-23] fixed the memory leak issue.`
 
-Syntax : OPEN SQUARE BRACKET #BUGID CLOSE SQUARE BRACKET followed by commit message
+This will associate the changeset with bug with ID SDP-23.
 
-    Ex : [#SDP-23] fixed the memory leak issue.
+For more than one bugs, provide the BUG IDS separated by comma.
 
-	    This will associate the changeset with bug with ID SDP-23.
-
-		For more than one bugs, provide the BUG IDS separated by comma.
-
-	Ex : [#SDP-24,#SDP-25] UI alignment fix done.
-
-Developer Notes
----------------
-
-data
-	- project_id
-	- token
-
-payload
-	- refer to docs/github_payload
-
-
+Ex: `[#SDP-24,#SDP-25] UI alignment fix done.`

@@ -7,32 +7,21 @@ The github Bamboo service can be used to trigger builds after code has been push
 Install Notes
 -------------
 
-  1.  Your Bamboo server must be accessible from the internet.
+1.  Your Bamboo server must be accessible from the internet.
 
-  2.  "base_url" is the URL to your Bamboo server
-      Example: https://bamboo.example.com/ or http://bamboo.example.com/bamboo/
+2.  "base_url" is the URL to your Bamboo server
+    Example: https://bamboo.example.com/ or http://bamboo.example.com/bamboo/
 
-  3.  "build_key" is the identifier of the plan you want to trigger
-      Example: "BAM-TRUNK", where BAM = project key, TRUNK = plan key
-      
-      A compound build key value can be used to specify multiple builds or associate
-      specific branches with a build
-      Example: "master:BAM-TRUNK,3-2-patches:BAM-32PATCH,BAM-TESTS", where BAM-TRUNK 
-      will be triggered only by pushes to the master branch, BAM-32PATCH will only
-      be triggered by pushes to the 3-2-patches branch, and BAM-TESTS will be triggered
-      for any push.
+3.  "build_key" is the identifier of the plan you want to trigger
+    Example: "BAM-TRUNK", where BAM = project key, TRUNK = plan key
 
-  4.  "username" and "password" - username and password of a Bamboo user that can
-      trigger a manual build of the Bamboo plan defined in "build_key"
+    A compound build key value can be used to specify multiple builds or associate
+    specific branches with a build
+    Example: "master:BAM-TRUNK,3-2-patches:BAM-32PATCH,BAM-TESTS", where BAM-TRUNK 
+    will be triggered only by pushes to the master branch, BAM-32PATCH will only
+    be triggered by pushes to the 3-2-patches branch, and BAM-TESTS will be triggered
+    for any push.
 
-Developer Notes
----------------
+4.  "username" and "password" - username and password of a Bamboo user that can
+    trigger a manual build of the Bamboo plan defined in "build_key"
 
-data
-  - base_url
-  - build_key
-  - username
-  - password
-
-payload
-  - refer to docs/github_payload

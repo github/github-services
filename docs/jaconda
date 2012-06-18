@@ -1,25 +1,12 @@
-Jaconda
-========
-
 Install Notes
 -------------
+
+Pushes all Hooks for this Repository to Jaconda (Pushes, Issues, Pull Requests, etc).
 
 Using the following url as an example:
 https://bigbang.jaconda.im/rooms/galaxo
 
-  1. Subdomain is bigbang
-  2. Room ID is galaxo
-  3. Room token can be found on the Room Integration page
-  4. if Digest is checked, all commits will be compressed in one message
-
-Developer Notes
----------------
-
-data
-  - subdomain
-  - room_id
-  - room_token
-  - digest (boolean)
-
-payload
-  - refer to docs/github_payload
+1. Subdomain is bigbang
+2. Room ID is galaxo
+3. Room token can be found on the Room Integration page
+4. if Digest is checked, all commits will be compressed in one message
