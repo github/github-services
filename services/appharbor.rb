@@ -19,7 +19,7 @@ private
 
   def post_appharbor_message(slug, token)
     return unless commit = distinct_commits.last
-    create_build_url = "https://appharbor.com/applications/#{slug}/builds?authorization=#{token}"
+    create_build_url = "https://appharbor.com/applications/#{slug}/builds"
 
     appharbor_message = {
       :branches => {
@@ -31,6 +31,9 @@ private
       }
     }
 
-    http_post create_build_url, appharbor_message.to_json, 'Accept' => 'application/json'
+    http.headers['Accept'] = 'application/json'
+    http.headers['Authorization'] = "BEARER #{token}"
+
+    http_post create_build_url, appharbor_message.to_json
   end
 end
