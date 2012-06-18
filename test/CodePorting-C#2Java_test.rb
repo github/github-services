@@ -27,10 +27,10 @@ class CodePortingCSharp2JavaTest < Service::TestCase
     svc = service({'project_name' => 'Test_Project',
       'repo_key' => 'Test',
       'target_repo_key' => 'TestJava',
-      'username' => 'codeportingtest',
-      'password' => 'testpassword',
+      'codeporting_username' => 'codeportingtest',
+      'codeporting_password' => 'testpassword',
       'active' => '1',
-      'GithubAccessToken' => '0314adcacbb895bd52f3bc6f2f361ebac3ffbfb6'}, payload)
+      'github_access_token' => '0314adcacbb895bd52f3bc6f2f361ebac3ffbfb6'}, payload)
 
     assert_equal 3, payload['commits'].size
     assert_equal "True", svc.receive_push
