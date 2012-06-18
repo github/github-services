@@ -12,10 +12,15 @@ task :console do
 end
 
 namespace :services do
-  desc "Writes a JSON config to FILE || config/services.json"
-  task :config do
-    file = ENV["FILE"] || File.expand_path("../config/services.json", __FILE__)
+  task :load do
     require File.expand_path("../config/load", __FILE__)
+  end
+
+  task :build => [:config, :docs]
+
+  desc "Writes a JSON config to FILE || config/services.json"
+  task :config => :load do
+    file = ENV["FILE"] || File.expand_path("../config/services.json", __FILE__)
     services = []
     Service.services.each do |svc|
       services << {:name => svc.hook_name, :events => svc.default_events,
@@ -26,8 +31,22 @@ namespace :services do
       :metadata => { :generated_at => Time.now.utc },
       :services => services
     }
+    puts "Writing config to #{file}"
     File.open file, 'w' do |io|
       io << Yajl.dump(data, :pretty => true)
+    end
+  end
+
+  task :docs => :load do
+    return unless dir = ENV['DOCS']
+    docs = Dir[File.expand_path("../docs/*", __FILE__)]
+    docs.each do |path|
+      name = File.basename(path)
+      new_name = dir.include?('{name}') ? dir.sub('{name}', name) : File.join(dir, name)
+      new_dir = File.dirname(new_name)
+      FileUtils.mkdir_p(new_dir)
+      puts "COPY #{path} => #{new_name}"
+      FileUtils.cp(path, new_name)
     end
   end
 end
