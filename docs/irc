@@ -24,7 +24,10 @@ For freenode, try the following:
 For troubleshooting, run the following curl command to get diagnostic information from GitHub. 
 
     # Replace 
-    # USERNAME:PASSWORD with your GitHub username and password. Username is your full username as used when signing in. 
-    # USERNAME/REPONAME with your repo name as it shows in github. 
+    # USERNAME:PASSWORD with your GitHub username and password. Username is
+    # your full username as used when signing in.
+    #
+    # USERNAME/REPONAME with your repo name as it shows in GitHub.
 
-    $ curl -u "USERNAME:PASSWORD" -in https://api.github.com/repos/USERNAME/REPONAME/hooks
+    $ curl -u "USERNAME:PASSWORD" -in \
+      https://api.github.com/repos/USERNAME/REPONAME/hooks
