@@ -1,7 +1,6 @@
 class Service::IceScrum < Service
-  string   :username
+  string   :base_url, :project_key, :username
   password :password
-  string :base_url, :project_key
   def receive_push
 	raise_config_error "Invalid username" if data['username'].to_s.empty?
 	raise_config_error "Invalid password" if data['password'].to_s.empty?
