@@ -1,7 +1,7 @@
 class Service::IceScrum < Service
-  string   :base_url, :username, :project_key
+  string   :username
   password :password
-
+  string :base_url, :project_key
   def receive_push
 	raise_config_error "Invalid username" if data['username'].to_s.empty?
 	raise_config_error "Invalid password" if data['password'].to_s.empty?
@@ -12,9 +12,9 @@ class Service::IceScrum < Service
 	password = data['password'].to_s.gsub(/\s+/, "")
 
 	if data['base_url'].present?
-    	    url = "#{data['base_url']}/ws/p/#{project_key}/commit/save"
+    	    url = "#{data['base_url']}/ws/p/#{project_key}/commit"
        else
-	    url = "https://www.kagilum.com/a/ws/p/#{project_key}/commit/save"
+	    url = "https://www.kagilum.com/a/ws/p/#{project_key}/commit"
        end
 
   	http.ssl[:verify] = false
