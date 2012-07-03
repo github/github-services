@@ -1,9 +1,11 @@
 class Service::Yammer < Service
   string :group_id, :consumer_key, :consumer_secret,
     :access_token, :access_secret
-  boolean :digest
+  boolean :digest, :master_only
 
   def receive_push
+    return if data['master_only'].to_i == 1 && respond_to?(:branch_name) && branch_name != 'master'
+
     statuses   = [ ]
     repository = payload['repository']['name']
 
