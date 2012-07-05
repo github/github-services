@@ -42,6 +42,7 @@ namespace :services do
     docs = Dir[File.expand_path("../docs/*", __FILE__)]
     docs.each do |path|
       name = File.basename(path)
+      next if name == 'github_payload'
       new_name = dir.include?('{name}') ? dir.sub('{name}', name) : File.join(dir, name)
       new_dir = File.dirname(new_name)
       FileUtils.mkdir_p(new_dir)
