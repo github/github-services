@@ -6,7 +6,7 @@ class IceScrumTest < Service::TestCase
   end
 
   def test_push_valid
-    @stubs.post "/a/ws/p/TESTPROJ/commit/save" do |env|
+    @stubs.post "/a/ws/p/TESTPROJ/commit" do |env|
       assert_equal 'www.kagilum.com', env[:url].host
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
       body = Rack::Utils.parse_nested_query(env[:body])
@@ -14,7 +14,7 @@ class IceScrumTest < Service::TestCase
       assert_equal payload, recv
       [200, {}, '']
     end
-    
+
     svc = service({
       'username' => 'u',
       'password' => 'p',
@@ -26,7 +26,7 @@ class IceScrumTest < Service::TestCase
   end
 
   def test_push_valid_custom_url
-    @stubs.post "/icescrum/ws/p/TESTPROJ/commit/save" do |env|
+    @stubs.post "/icescrum/ws/p/TESTPROJ/commit" do |env|
       assert_equal 'www.example.com', env[:url].host
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
       body = Rack::Utils.parse_nested_query(env[:body])
@@ -34,7 +34,7 @@ class IceScrumTest < Service::TestCase
       assert_equal payload, recv      
       [200, {}, '']
     end
-    
+
     svc = service({
       'username'   => 'u',
       'password'   => 'p',
@@ -46,8 +46,8 @@ class IceScrumTest < Service::TestCase
     @stubs.verify_stubbed_calls
   end
 
-  def test_push_lowcase_project_key 
-    @stubs.post "/a/ws/p/TESTPROJ/commit/save" do |env|
+  def test_push_lowcase_project_key
+    @stubs.post "/a/ws/p/TESTPROJ/commit" do |env|
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
       body = Rack::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
@@ -60,17 +60,17 @@ class IceScrumTest < Service::TestCase
       'password' => 'p',
       'project_key' => 'testProj'
     }, payload)
-    
+
     svc.receive_push
     @stubs.verify_stubbed_calls
   end
 
-def test_push_whitespace_project_key 
-    @stubs.post "/a/ws/p/TESTPROJ/commit/save" do |env|
+def test_push_whitespace_project_key
+    @stubs.post "/a/ws/p/TESTPROJ/commit" do |env|
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
       body = Rack::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
-      assert_equal payload, recv      
+      assert_equal payload, recv
       [200, {}, '']
     end
 
@@ -79,29 +79,29 @@ def test_push_whitespace_project_key
       'password' => ' p ',
       'project_key' => ' TEST PROJ  '
     }, payload)
-    
+
     svc.receive_push
     @stubs.verify_stubbed_calls
   end
 
-  def test_push_missing_username    
+  def test_push_missing_username
     svc = service({
       'password' => 'p',
       'project_key' => 'TESTPROJ'
     }, payload)
-    
-    assert_raises Service::ConfigurationError do 
+
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
 
-  def test_push_missing_password    
+  def test_push_missing_password
     svc = service({
       'username' => 'u',
       'project_key' => 'TESTPROJ'
     }, payload)
-    
-    assert_raises Service::ConfigurationError do 
+
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
@@ -111,8 +111,8 @@ def test_push_whitespace_project_key
       'username' => 'u',
       'password' => 'p',
     }, payload)
-    
-    assert_raises Service::ConfigurationError do 
+
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
