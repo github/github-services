@@ -3,6 +3,8 @@ HeroHub
 
 HeroHub lets you build your GitHub commits on Heroku automatically.
 
+**Note**: Only public repositories are supported as of now.
+
 Notes
 -----
 
