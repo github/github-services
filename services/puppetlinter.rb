@@ -1,4 +1,4 @@
-class Service::Puppetlinter < Service
+class Service::PuppetLinter < Service
 
   def receive_push
     http_post \
