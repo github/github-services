@@ -1,7 +1,8 @@
-class Service::Puppetlinter < Service
+class Service::PuppetLinter < Service
 
   def receive_push
-    url = URI.parse('http://www.puppetlinter.com/api/v1/hook')
-    http_post url, payload.to_json, 'Content-Type' => 'application/json'
+    http_post \
+      "http://www.puppetlinter.com/api/v1/hook",
+      :payload => JSON.generate(payload)
   end
 end
