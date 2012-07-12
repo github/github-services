@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class PuppetlinterTest < Service::TestCase
+class PuppetLinterTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
@@ -9,7 +9,7 @@ class PuppetlinterTest < Service::TestCase
     url = '/api/v1/hook'
     @stubs.post url do |env|
       assert_equal 'www.puppetlinter.com', env[:url].host
-      assert_equal 'application/json', env[:request_headers]['Content-Type']
+      assert_equal 'application/x-www-form-urlencoded', env[:request_headers]['Content-Type']
       [200, {}, '']
     end
 
@@ -18,6 +18,6 @@ class PuppetlinterTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::Puppetlinter, *args
+    super Service::PuppetLinter, *args
   end
 end
