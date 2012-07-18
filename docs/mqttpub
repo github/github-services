@@ -12,7 +12,8 @@ Install Notes
 4. OPTIONAL. 'clientid' is the unique client ID which publishes the payload message (default is a prefixed epoc time long, e.g. "github_1336363787").
 5. OPTIONAL. 'user' is the v3.1 username (default is none).
 6. OPTIONAL. 'pass' is the v3.1 password (default is none).
-7. The payload of the message is JSON received from Github (refer to docs/github_payload).
-8. ruby-mqtt only supports QoS 0.
-9. For testing, you can use mqtt.io as your web MQTT client.  broker: q.m2m.io, port: 1883, clientid: {github_username}.  You will "Subscribe to Topics": 'github/{github_username}/{repo_name}'.  Unauthenticated username/password sets default to the public channel!
+7. OPTIONAL. 'retain' specifies whether or not the publication should be retained as the last/most recent message for new subscribers.
+8. The payload of the message is JSON received from Github (refer to docs/github_payload).
+9. ruby-mqtt only supports QoS 0.
+10. For testing, you can use mqtt.io as your web MQTT client.  broker: q.m2m.io, port: 1883, clientid: {github_username}.  You will "Subscribe to Topics": 'github/{github_username}/{repo_name}'.  Unauthenticated username/password sets default to the public channel!
 
