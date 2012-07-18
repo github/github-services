@@ -7,6 +7,14 @@ class Service::CodePortingCSharp2Java < Service
 
   def receive_push
     return if Array(payload['commits']).empty?
+
+    data['project_name'].strip!
+    data['repo_key'].strip!
+    data['target_repo_key'].strip!
+    data['codeporting_username'].strip!
+    data['codeporting_password'].strip!
+    data['github_access_token'].strip!
+
     check_configuration_options(data)
 
     response = nil
@@ -27,7 +35,7 @@ class Service::CodePortingCSharp2Java < Service
 
   def perform_login
     http.ssl[:verify] = false
-    login_url = "http://stage.codeporting.com/csharp2java/v0/UserSignin"
+    login_url = "https://apps.codeporting.com/csharp2java/v0/UserSignin"
     resp = http.post login_url do |req|
       req.body = {:LoginName => data['codeporting_username'], :Password => data['codeporting_password']}
     end
