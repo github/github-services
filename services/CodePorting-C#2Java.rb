@@ -56,7 +56,7 @@ class Service::CodePortingCSharp2Java < Service
   end
 
   def process_on_codeporting(token)
-    process_url = "http://stage.codeporting.com/csharp2java/v0/githubpluginsupport"
+    process_url = "http://apps.codeporting.com/csharp2java/v0/githubpluginsupport"
     resp = http.post process_url do |req|
       req.body = {:token => token, :ProjectName => data['project_name'],
         :RepoKey => data['repo_key'], :TarRepoKey => data['target_repo_key'],
