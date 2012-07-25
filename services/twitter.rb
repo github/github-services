@@ -32,8 +32,26 @@ class Service::Twitter < Service
     params = { 'status' => status, 'source' => 'github' }
 
     access_token = ::OAuth::AccessToken.new(consumer, data['token'], data['secret'])
-    consumer.request(:post, "/1/statuses/update.json",
-                     access_token, { :scheme => :query_string }, params)
+    res = consumer.request(:post, "/1/statuses/update.json",
+      access_token, { :scheme => :query_string }, params)
+    if res.code !~ /^2\d\d/
+      raise_response_error(res)
+    end
+  end
+
+  def raise_response_error(res)
+    error = "Received HTTP #{res.code}"
+    if msg = response_error_message(res)
+      error << ": "
+      error << msg
+    end
+
+    raise_config_error(error)
+  end
+
+  def response_error_message(res)
+    JSON.parse(res.body)
+  rescue
   end
 
   def consumer_key
