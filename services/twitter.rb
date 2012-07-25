@@ -50,7 +50,7 @@ class Service::Twitter < Service
   end
 
   def response_error_message(res)
-    JSON.parse(res.body)
+    JSON.parse(res.body)['error']
   rescue
   end
 
