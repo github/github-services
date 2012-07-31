@@ -8,13 +8,6 @@ class Service::CodePortingCSharp2Java < Service
   def receive_push
     return if Array(payload['commits']).empty?
 
-    data['project_name'].strip!
-    data['repo_key'].strip!
-    data['target_repo_key'].strip!
-    data['codeporting_username'].strip!
-    data['codeporting_password'].strip!
-    data['github_access_token'].strip!
-
     check_configuration_options(data)
 
     response = nil
