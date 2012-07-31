@@ -60,6 +60,6 @@ class Service::ShiningPanda < Service
   end
 
   def url
-    @url ||= "https://jenkins.shiningpanda.com/#{workspace}/job/#{job}/#{parameters.empty? ? 'build' : 'buildWithParameters'}"
+    @url ||= "https://jenkins.shiningpanda-ci.com/#{workspace}/job/#{job}/#{parameters.empty? ? 'build' : 'buildWithParameters'}"
   end
 end
