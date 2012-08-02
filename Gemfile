@@ -23,6 +23,8 @@ gem "SystemTimer", :platforms => :ruby_18
 gem "statsd-ruby",            "0.3.0.github.1"
 gem "twilio-ruby",            "3.4.2"
 gem "rack-test", :require => false
+gem "rest-client",            "~> 1.6.7"
 gem "right_aws",              "3.0.3"
 gem "right_http_connection",  "1.3.0"
 gem "mqtt", 			      "0.0.8"
+
