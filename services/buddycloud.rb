@@ -1,4 +1,3 @@
-require 'rest-client'
 require 'xmlsimple'
 require 'time'
 
