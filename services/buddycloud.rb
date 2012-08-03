@@ -7,8 +7,8 @@ class Service::Buddycloud < Service
   
   string      :buddycloud_base_api, :username, :password, :channel
   password    :password
-  boolean     :show_commits, :show_files
-  white_list  :buddycloud_base_api, :username, :channel, :show_commits, :show_files
+  boolean     :show_commit_summary, :show_commit_detail
+  white_list  :buddycloud_base_api, :username, :channel, :show_commit_summary, :show_commit_detail
   
 
   def receive_push
