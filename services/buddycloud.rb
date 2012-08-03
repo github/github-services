@@ -9,7 +9,8 @@ class Service::Buddycloud < Service
   string      :buddycloud_base_api, :username, :password, :channel
   password    :password
   boolean     :show_commits, :show_files
-  white_list  :buddycloud_base_api, :username, :password, :channel
+  white_list  :buddycloud_base_api, :username, :channel, :show_commits, :show_files
+  
 
   def receive_push
     check_config data
@@ -37,24 +38,18 @@ class Service::Buddycloud < Service
   end
   
   def make_request(entry, node)
-    headers = { :accept => 'application/xml+atom', :content_type => :xml }
-    headers['X-Session-Id'] = @session if defined? @session
-    
-    request = RestClient::Request.new(
-        :method   => :post,
-        :url      => @url + node,
-        :user     => @username,
-        :password => @password,
-        :headers  => headers,
-        :payload  => entry
-    )
-    begin
-      response = request.execute
-      @session = response.headers['X-Session-Id'] if defined? response.headers['X-Session-Id']
-      response.code
-    rescue 
-      raise "buddycloud channel not responding as expected, post not made"
-      return 500
+
+    http.basic_auth @username, @password
+    http.headers['Content-Type'] = 'application/xml'
+    http.headers['X-Session-Id'] = @session if defined? @session
+    http.ssl[:verify]            = false
+    response                     = http_post @url + node, entry
+
+    @session = response.headers['X-Session-Id'] if defined? response.headers['X-Session-Id']
+    case response.status
+      when 403, 401, 422 then raise_config_error("Permission denied")
+      when 404, 301 then raise_config_error("Invalid base url or channel name")
+      when 200, 201 then return response.status
     end
   end
   
@@ -73,9 +68,9 @@ class Service::Buddycloud < Service
     now     = Time.now
     message = <<-EOM
 A push has been made to repository "#{payload['repository']['name']}"
-    #{payload['repository']['url']}
+#{payload['repository']['url']}
       
-Changes: #{payload['compare']}
+Changes: #{shorten_url(payload['compare'])}
 Made by: #{payload['pusher']['name']} (https://github.com/#{payload['pusher']['name']})
 When:    #{now.strftime(@time_format)}
 
@@ -101,9 +96,11 @@ EOM
   end
   
   def commit_summary_message(c, i)
+    at          = Time.parse(c['timestamp'])
     description = c['message'][0 .. 60]
     commit_message = <<-EOC
 (#{i}) "#{description}"  - #{c['author']['name']}
+       #{shorten_url(c['url'])} - #{at.strftime(@time_format)} - #{at.strftime(@time_format)}
 EOC
   end
 
@@ -114,8 +111,7 @@ EOC
     modified       = c['modified'].join(' ')
     commit_message = <<-EOC
 (#{i}) #{c['author']['name']} <#{c['author']['email']}>
-#{at.strftime(@time_format)}    
-#{c['url']}
+#{shorten_url(c['url'])} - #{at.strftime(@time_format)}
 Files added: #{added}
 Files removed: #{removed}
 Files modified: #{modified}
@@ -125,4 +121,19 @@ Files modified: #{modified}
     
 EOC
   end
+ 
+  def shorten_url(url)
+    res = http_post "https://www.googleapis.com/urlshortener/v1/url" do |req|
+      req.headers['Content-Type'] = 'application/json'
+      req.body = {"longUrl"  => url}.to_json
+    end
+    if res.status != 200 && res.status != 201
+      url
+    else
+      url = JSON.parse(res.body)['id']
+    end
+    rescue TimeoutError
+      url
+  end
+  
 end

@@ -13,4 +13,4 @@ Install Notes
   2. Username -- username for the posting account
   3. Password -- password for the posting account
   4. Channel -- the channel to which to post
-  
+  5. Choose whether to show a summary of commit messages, detailed commit information, or both
