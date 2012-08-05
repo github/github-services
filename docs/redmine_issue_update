@@ -1,0 +1,47 @@
+Redmine Issue Update
+====================
+
+Updates an issue on Redmine, a project management tool, whenever a commit happened and is related to this issue
+Commits which are related to Redmine issues are detected by matching '#IssueNo' in the commit message
+
+Install Notes
+-------------
+1. Download and install Redmine from http://redmine.org
+2. Generate API key from Redmine from My account -> API access key (Right Side Section) -> Show
+3. Activate the service from Project Repo -> Admin -> Service Hooks -> Redmine Issue Update
+4. Set Redmine url and API access Key
+
+Note: Evey post update on the issues will be authored by the account given the API access key
+
+Example of the update issue post on Redmine (the output):
+
+    Commit: b44aa57a6c6c52cc20b9e396cfe3cf97bdfc2b33
+            https://github.com/modsaid/github-services/commit/b44aa57a6c6c52cc20b9e396cfe3cf97bdfc2b33
+    Author: modsaid <modsaid@example.com>
+    Date: 2007-10-10 (Sun, 02 Aug 2012)
+    Log Message:
+    -----------
+    Fix #{IssueNo}
+
+
+Developer Notes
+---------------
+
+data
+  - redmine_url (full URL of the redmine instance)
+  - api_key (the API key for using the webservice)
+
+payload
+  - refer to docs/github_payload (nothing is used by this script)
+
+Update an issue on Redmine with cURL
+  - curl -v -H "Content-Type: application/json" -X PUT --data "@388.json" -u login:password http://redmine/issues/388.json
+  - curl -v -H "Content-Type: application/json" -X PUT --data "@388.json" -H "X-Redmine-API-Key: xxxx" http://redmine/issues/388.json
+  - The file that contains the data sent to Redmine (388.json in the example above) would look like this:
+  {
+    "issue": {
+    "subject": "subject123",
+    "notes": "Changing the subject" 
+    }
+  }
+  Refer to http://www.redmine.org/projects/redmine/wiki/Rest_api_with_curl

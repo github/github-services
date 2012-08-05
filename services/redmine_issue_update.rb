@@ -51,6 +51,11 @@ class RedmineUpdater
       text
     end
 
+    def align(text, indent = '  ')
+      margin = text[/\A\s+/].size
+      text.gsub(/^\s{#{margin}}/, indent)
+    end
+
 end
 
 class Service::RedmineIssueUpdate < Service
