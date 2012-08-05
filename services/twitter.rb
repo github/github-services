@@ -1,6 +1,6 @@
 class Service::Twitter < Service
   string  :token, :secret
-  boolean :digest
+  boolean :digest, :short_format
 
   def receive_push
     return unless payload['commits']
@@ -12,13 +12,21 @@ class Service::Twitter < Service
       commit = payload['commits'][-1]
       author = commit['author'] || {}
       tiny_url = shorten_url("#{payload['repository']['url']}/commits/#{ref_name}")
-      status = "[#{repository}] #{tiny_url} #{author['name']} - #{payload['commits'].length} commits"
+      status = if data['short_format'] == '1'
+        "Git: #{tinyurl} - #{payload['commits'].length} commits"
+      else
+        "[#{repository}] #{tiny_url} #{author['name']} - #{payload['commits'].length} commits"
+      end
       status.length >= 140 ? statuses << status[0..136] + '...' : statuses << status
     else
       payload['commits'].each do |commit|
         author = commit['author'] || {}
         tiny_url = shorten_url(commit['url'])
-        status = "[#{repository}] #{tiny_url} #{author['name']} - #{commit['message']}"
+        status = if data['short_format'] == '1'
+          "Git: #{tiny_url} #{commit['message']}"
+        else
+          "[#{repository}] #{tiny_url} #{author['name']} - #{commit['message']}"
+        end
         status.length >= 140 ? statuses << status[0..136] + '...' : statuses << status
       end
     end
