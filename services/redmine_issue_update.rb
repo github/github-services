@@ -20,6 +20,9 @@ class RedmineUpdater
     request['X-Redmine-API-Key'] = @api_key
     request.set_form_data({"issue[notes]" => commit_text(commit)})
     res = @http.request(request)
+    if res.code.to_i == 404 #Issue No not found
+      raise Exception.new("Issue not found")
+    end
   end
 
   private
@@ -64,6 +67,9 @@ class Service::RedmineIssueUpdate < Service
 
   def receive_push
     begin
+      # check configurations first
+      check_configuration_options(data)
+
       redmine_updater = RedmineUpdater.new(data['redmine_url'], data['api_key'])
 
     	payload['commits'].each do |commit|
@@ -78,7 +84,15 @@ class Service::RedmineIssueUpdate < Service
       return true   
     rescue SocketError => se
       return false
+    rescue Exception => e
+      return false
     end
+  end
+
+  private
+  def check_configuration_options(data)
+    raise_config_error 'Redmine url must be set' if data['redmine_url'].blank?
+    raise_config_error 'API key is required' if data['api_key'].blank?   
   end
 end
 
