@@ -45,3 +45,10 @@ Update an issue on Redmine with cURL
     }
   }
   Refer to http://www.redmine.org/projects/redmine/wiki/Rest_api_with_curl
+
+  Credits
+  -------
+  * basayel
+  * modsaid
+  
+  http://www.espace.com.eg
