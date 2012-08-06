@@ -8,7 +8,7 @@ class RedmineUpdater
     @api_key     = api_key
     uri = URI.parse(@redmine_url)
     @http = Net::HTTP.new(uri.host, uri.port)
-    @http.use_ssl = true
+    @http.use_ssl = true if @redmine_url.match(/https/)
     @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
   end
 
@@ -16,10 +16,10 @@ class RedmineUpdater
   # send the commit notification to be added into redmine issue notes
   def notify_about_commit(issue_no, commit)
     request = Net::HTTP::Put.new("/issues/#{issue_no}.json")
-    request['Content-Type']='application/json'
-    request['X-Redmine-API-Key']=@api_key
+    request['Content-Type'] = 'application/json'
+    request['X-Redmine-API-Key'] = @api_key
     request.set_form_data({"issue[notes]" => commit_text(commit)})
-    res= @http.request(request)
+    res = @http.request(request)
   end
 
   private
@@ -63,18 +63,22 @@ class Service::RedmineIssueUpdate < Service
   white_list :redmine_url
 
   def receive_push
+    begin
+      redmine_updater = RedmineUpdater.new(data['redmine_url'], data['api_key'])
 
-    redmine_updater = RedmineUpdater.new(data['redmine_url'], data['api_key'])
+    	payload['commits'].each do |commit|
+        message = commit['message'].clone
 
-  	payload['commits'].each do |commit|
-      message = commit['message'].clone
-
-      #Extract issue IDs and send update to the related issues
-      while !(id= message[/#(\d)+/]).nil? do 
-        message.gsub!(id,'')
-        redmine_updater.notify_about_commit(id.gsub('#',''), commit)
+        #Extract issue IDs and send update to the related issues
+        while !(id= message[/#(\d)+/]).nil? do 
+          message.gsub!(id,'')
+          redmine_updater.notify_about_commit(id.gsub('#',''), commit)
+        end
       end
-    end   
+      return true   
+    rescue SocketError => se
+      return false
+    end
   end
 end
 
