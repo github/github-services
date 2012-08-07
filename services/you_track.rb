@@ -1,5 +1,5 @@
 class Service::YouTrack < Service
-  string   :base_url, :committers, :username
+  string :base_url, :committers, :username
   password :password
   white_list :base_url, :username, :committers
 
@@ -11,15 +11,20 @@ class Service::YouTrack < Service
 
   def login
     @logged_in ||= begin
-      res = http_post 'rest/user/login' do |req|
-        req.params.update \
+      api_key = data['api_key']
+      if api_key.nil?
+        res = http_post 'rest/user/login' do |req|
+          req.params.update \
           :login => data['username'],
           :password => data['password']
-        req.headers['Content-Length'] = '0'
-      end
-      verify_response(res)
+          req.headers['Content-Length'] = '0'
+        end
+        verify_response(res)
 
-      http.headers['Cookie'] = res.headers['set-cookie']
+        http.headers['Cookie'] = res.headers['set-cookie']
+      else
+        http.headers['X-YouTrack-ApiKey'] = api_key
+      end
       http.headers['Cache-Control'] = 'no-cache'
       true
     end
@@ -27,23 +32,23 @@ class Service::YouTrack < Service
 
   def process_commit(commit)
     author = nil
-    commit["message"].split("\n").each{ |commit_line|
+    commit["message"].split("\n").each { |commit_line|
       issue_id = commit_line[/( |^)#(\w+-\d+) /, 2]
       next if issue_id.nil?
 
+      login
       # lazily load author
       author ||= find_user_by_email(commit["author"]["email"])
       return if author.nil?
 
       command = commit_line[/( |^)#\w+-\d+ (.+)/, 2].strip
       command = "Fixed" if command.nil?
-      commentString = "Commit made by '''" + commit["author"]["name"] + "''' on ''" + commit["timestamp"] + "''\n" + commit["url"] + "\n\n{quote}" + commit["message"].to_s + "{quote}"  
-      execute_command(author, issue_id, command, commentString)
+      comment_string = "Commit made by '''" + commit["author"]["name"] + "''' on ''" + commit["timestamp"] + "''\n" + commit["url"] + "\n\n{quote}" + commit["message"].to_s + "{quote}"
+      execute_command(author, issue_id, command, comment_string)
     }
   end
 
   def find_user_by_email(email)
-    login
     counter = 0
     found_user = nil
     while true
@@ -64,11 +69,11 @@ class Service::YouTrack < Service
     end
   end
 
-  def execute_command(author, issue_id, command, commentString)
+  def execute_command(author, issue_id, command, comment_string)
     res = http_post "rest/issue/#{issue_id}/execute" do |req|
       req.params[:command] = command
-      req.params[:comment] = commentString
-      req.params[:runAs]   = author
+      req.params[:comment] = comment_string
+      req.params[:runAs] = author
     end
     verify_response(res)
   end
@@ -76,9 +81,12 @@ class Service::YouTrack < Service
   def verify_response(res)
     case res.status
       when 200..299
-      when 403, 401, 422 then raise_config_error("Invalid Credentials")
-      when 404, 301, 302 then raise_config_error("Invalid YouTrack URL")
-      else raise_config_error("HTTP: #{res.status}")
+      when 403, 401, 422 then
+        raise_config_error("Invalid Credentials")
+      when 404, 301, 302 then
+        raise_config_error("Invalid YouTrack URL")
+      else
+        raise_config_error("HTTP: #{res.status}")
     end
   end
 end
