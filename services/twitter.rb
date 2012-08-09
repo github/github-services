@@ -1,6 +1,6 @@
 class Service::Twitter < Service
   string  :token, :secret
-  boolean :digest
+  boolean :digest, :short_format
 
   def receive_push
     return unless payload['commits']
@@ -13,6 +13,11 @@ class Service::Twitter < Service
       author = commit['author'] || {}
       url = "#{payload['repository']['url']}/commits/#{ref_name}"
       status = "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
+      status = if data['short_format'] == '1'
+        "Git: #{url} - #{payload['commits'].length} commits"
+      else
+        "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
+      end
       length = status.length - url.length + 21 # The URL is going to be shortened by twitter. It's length will be at most 21 chars (HTTPS).
       # How many chars of the status can we actually use?
       # We can use 140 chars, have to reserve 3 chars for the railing dots (-3)
@@ -24,6 +29,11 @@ class Service::Twitter < Service
         author = commit['author'] || {}
         url = commit['url']
         status = "[#{repository}] #{url} #{author['name']} - #{commit['message']}"
+        status = if data['short_format'] == '1'
+          "Git: #{url} #{commit['message']}"
+        else
+          "[#{repository}] #{url} #{author['name']} - #{commit['message']}"
+        end
         length = status.length - url.length + 21 # The URL is going to be shortened by twitter. It's length will be at most 21 chars (HTTPS).
         # How many chars of the status can we actually use?
         # We can use 140 chars, have to reserve 3 chars for the railing dots (-3)
