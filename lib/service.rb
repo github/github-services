@@ -132,9 +132,9 @@ class Service
     end
 
     ALL_EVENTS = %w[
-      push issues issue_comment commit_comment
-      pull_request gollum watch download fork
-      fork_apply member public
+      commit_comment create delete download follow fork fork_apply gist gollum
+      issue_comment issues member public pull_request push team_add watch
+      pull_request_review_comment
     ]
 
     # Gets a list of events support by the service. Should be a superset of
