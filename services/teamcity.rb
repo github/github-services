@@ -6,7 +6,8 @@ class Service::TeamCity < Service
   def receive_push
     branches = data['branches'].to_s.split(/\s+/)
     ref = payload["ref"].to_s
-    return unless branches.empty? || branches.include?(ref.split("/").last)
+    branch = ref.split("/").last
+    return unless branches.empty? || branches.include?(branch)
 
     # :(
     http.ssl[:verify] = false
@@ -20,7 +21,7 @@ class Service::TeamCity < Service
     http.basic_auth data['username'].to_s, data['password'].to_s
     build_type_ids = data['build_type_id'].to_s
     build_type_ids.split(",").each do |build_type_id|
-      res = http_get "httpAuth/action.html", :add2Queue => build_type_id
+      res = http_get "httpAuth/action.html", :add2Queue => build_type_id, :branchName => branch
       case res.status
         when 200..299
         when 403, 401, 422 then raise_config_error("Invalid credentials")

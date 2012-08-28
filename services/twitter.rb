@@ -1,6 +1,6 @@
 class Service::Twitter < Service
   string  :token, :secret
-  boolean :digest
+  boolean :digest, :short_format
 
   def receive_push
     return unless payload['commits']
@@ -11,15 +11,35 @@ class Service::Twitter < Service
     if data['digest'] == '1'
       commit = payload['commits'][-1]
       author = commit['author'] || {}
-      tiny_url = shorten_url("#{payload['repository']['url']}/commits/#{ref_name}")
-      status = "[#{repository}] #{tiny_url} #{author['name']} - #{payload['commits'].length} commits"
-      status.length >= 140 ? statuses << status[0..136] + '...' : statuses << status
+      url = "#{payload['repository']['url']}/commits/#{ref_name}"
+      status = "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
+      status = if data['short_format'] == '1'
+        "Git: #{url} - #{payload['commits'].length} commits"
+      else
+        "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
+      end
+      length = status.length - url.length + 21 # The URL is going to be shortened by twitter. It's length will be at most 21 chars (HTTPS).
+      # How many chars of the status can we actually use?
+      # We can use 140 chars, have to reserve 3 chars for the railing dots (-3)
+      # also 21 chars for the t.co-URL (-21) but can fit the whole URL into the tweet (+url.length)
+      usable_chars = 140 - 3 - 21 + url.length
+      length >= 140 ? statuses << status[0..(usable_chars-1)] + '...' : statuses << status
     else
       payload['commits'].each do |commit|
         author = commit['author'] || {}
-        tiny_url = shorten_url(commit['url'])
-        status = "[#{repository}] #{tiny_url} #{author['name']} - #{commit['message']}"
-        status.length >= 140 ? statuses << status[0..136] + '...' : statuses << status
+        url = commit['url']
+        status = "[#{repository}] #{url} #{author['name']} - #{commit['message']}"
+        status = if data['short_format'] == '1'
+          "Git: #{url} #{commit['message']}"
+        else
+          "[#{repository}] #{url} #{author['name']} - #{commit['message']}"
+        end
+        length = status.length - url.length + 21 # The URL is going to be shortened by twitter. It's length will be at most 21 chars (HTTPS).
+        # How many chars of the status can we actually use?
+        # We can use 140 chars, have to reserve 3 chars for the railing dots (-3)
+        # also 21 chars for the t.co-URL (-21) but can fit the whole URL into the tweet (+url.length)
+        usable_chars = 140 - 3 - 21 + url.length
+        length >= 140 ? statuses << status[0..(usable_chars-1)] + '...' : statuses << status
       end
     end
 
