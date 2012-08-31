@@ -13,7 +13,7 @@ class Service::Sprintly < Service
 
     http.headers['Content-Type'] = 'application/json'
     http.basic_auth(data['email'], data['api_key'])
-    http.url_prefix = "https://sprint.ly/integration/github/#{product_id}/#{event}/"
+    http.url_prefix = "https://sprint.ly/integration/github/#{data['product_id']}/#{event}/"
     
     http_post data['api_key'], payload.to_json
   end
