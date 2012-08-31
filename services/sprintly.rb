@@ -10,12 +10,12 @@ class Service::Sprintly < Service
     raise_config_error "Must provide an api key" if data['api_key'].to_s.empty?
     raise_config_error "Must provide an email address." if data['email'].to_s.empty?
     raise_config_error "Must provide a product id." if data['product_id'].to_s.empty?
+    host_name = ENV['SPRINTLY_DEBUG_HOST'] || "https://sprint.ly"
 
     http.headers['Content-Type'] = 'application/json'
     http.basic_auth(data['email'], data['api_key'])
-    http.url_prefix = "https://sprint.ly/integration/github/#{data['product_id']}/#{event}/"
-    
-    http_post data['api_key'], payload.to_json
+
+    http_post "#{host_name}/integration/github/#{data['product_id']}/#{event}/", payload.to_json
   end
 end
 
