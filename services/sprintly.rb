@@ -1,23 +1,21 @@
 class Service::Sprintly < Service
-  def receive_push
-    if data['api_key'].to_s.empty?
-      raise_config_error "Must provide an api key"
-    end
+  default_events :commit_comment, :create, :delete, :download,
+      :follow, :fork, :fork_apply, :gist, :gollum, :issue_comment,
+      :issues, :member, :public, :pull_request, :push, :team_add,
+      :watch, :pull_request_review_comment, :status
+  string :email, :api_key, :product_id
+  white_list :email, :product_id
 
-    if data['username'].to_s.empty?
-      raise_config_error "Must provide a sprint.ly username"
-    end
-
-    # @@@ Auth? username + api_key?
-    http.basic_auth(data['username'], data['api_key'])
+  def receive_event
+    raise_config_error "Must provide an api key" if data['api_key'].to_s.empty?
+    raise_config_error "Must provide an email address." if data['email'].to_s.empty?
+    raise_config_error "Must provide a product id." if data['product_id'].to_s.empty?
 
     http.headers['Content-Type'] = 'application/json'
-    http.url_prefix = "https://sprint.ly/integration/github/" # @@@
+    http.basic_auth(data['email'], data['api_key'])
+    http.url_prefix = "https://sprint.ly/integration/github/#{product_id}/#{event}/"
     
-    payload['commits'].each do |commit|
-      # POST https://url_prefix/api_key?
-      http_post data['api_key'], commit.to_json
-    end
+    http_post data['api_key'], payload.to_json
   end
 end
 
