@@ -8,7 +8,7 @@ class Service::HubCI < Service
   end
 
   def hubci_url
-    "http://hub.ci/repository/#{repoOwner}/#{repoName}/onCommit/#{token}"
+    "https://hub.ci/repository/#{repoOwner}/#{repoName}/onCommit/#{token}"
   end
 
   def repoName
