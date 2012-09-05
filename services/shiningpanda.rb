@@ -3,6 +3,7 @@ class Service::ShiningPanda < Service
   white_list :workspace, :job, :branches, :parameters
 
   def receive_push
+    http.ssl[:verify] = false # :(
     if workspace.empty?
       raise_config_error 'Workspace not set'
     end
