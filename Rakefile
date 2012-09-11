@@ -21,7 +21,7 @@ namespace :services do
 
   desc "Writes a JSON config to FILE || config/services.json"
   task :config => :load do
-    file = ENV["FILE"] || File.expand_path("../config/services.json", __FILE__)
+    file = ENV["FILE"] || default_services_config
     services = []
     Service.services.each do |svc|
       services << {:name => svc.hook_name, :events => svc.default_events, :supported_events => svc.supported_events,
@@ -40,7 +40,7 @@ namespace :services do
 
   desc "Writes Docs to DOCS"
   task :docs => :load do
-    return unless dir = ENV['DOCS']
+    dir = ENV['DOCS'] || default_docs_dir
     docs = Dir[File.expand_path("../docs/*", __FILE__)]
     docs.each do |path|
       name = File.basename(path)
@@ -55,4 +55,12 @@ namespace :services do
 
   require 'set'
   GitHubDocs = Set.new(%w(github_payload payload_data))
+
+  def default_services_config
+    "#{ENV['GH_SRC_DIR']}/github/config/services.json"
+  end
+
+  def default_docs_dir
+    "#{ENV['GH_SRC_DIR']}/github/app/views/edit_repositories/hooks/_{name}.erb"
+  end
 end
