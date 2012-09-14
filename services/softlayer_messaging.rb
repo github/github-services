@@ -4,6 +4,8 @@ class Service::SoftLayer_Messaging < Service
   boolean :topic
   white_list :account, :user, :name
 
+  attr_writer :client
+
   # receive_push()
   def receive_push
     return unless data && payload
@@ -30,7 +32,6 @@ class Service::SoftLayer_Messaging < Service
 
   # publish_message()
   def publish_message(account, user, key, name, topic, payload)
-    client = SL::Messaging::Client.new(account)
     client.authenticate(user, key)
     # mungle
     options = {
@@ -50,20 +51,24 @@ class Service::SoftLayer_Messaging < Service
     payload_json_data = JSON.generate(payload)
 
     if topic
-        push_to_topic(client, name, payload_json_data, options)
+        push_to_topic(name, payload_json_data, options)
     else
-        push_to_queue(client, name, payload_json_data, options)
+        push_to_queue(name, payload_json_data, options)
     end
   end
 
-  def push_to_topic(client, name, payload, options={})
+  def push_to_topic(name, payload, options={})
     topic = client.topic(name)
     topic.publish(payload, options)
   end
 
-  def push_to_queue(client, name, payload, options={})
+  def push_to_queue(name, payload, options={})
     queue = client.queue(name)
     queue.push(payload, options)
+  end
+
+  def client
+    @client ||= SL::Messaging::Client.new(data['account'])
   end
 
   def account
