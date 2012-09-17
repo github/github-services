@@ -14,31 +14,35 @@ module Service::PullRequestHelpers
     base_ref = pull.base.label.split(':').last
     head_ref = pull.head.label.split(':').last
 
-    "[%s] %s %s pull request #%d: %s (%s...%s) %s" % [
+    "[%s] %s %s pull request #%d: %s (%s...%s)" % [
       repo.name,
-      sender.login,
+      pull.user.login,
       action,
       pull.number,
       pull.title,
       base_ref,
-      head_ref != base_ref ? head_ref : pull.head.label,
-      pull.html_url]
+      head_ref != base_ref ? head_ref : pull.head.label]
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
 
   def self.sample_payload
+    repo_owner = "mojombo"
+    repo_name = "magik"
+    pull_user = "foo"
+    pull_number = 5
     Service::HelpersWithMeta.sample_payload.merge(
       "action" => "opened",
       "pull_request" => {
-        "number" => 5,
+        "number" => pull_number,
         "commits" => 1,
         "state" => "open",
         "title" => "booya",
         "body"  => "boom town",
-        "user" => { "login" => "mojombo" },
-        "head" => {"label" => "foo:feature"},
-        "base" => {"label" => "mojombo:master"}
+        "user" => { "login" => "#{pull_user}" },
+        "head" => {"label" => "#{pull_user}:feature"},
+        "base" => {"label" => "#{repo_owner}:master"},
+        "html_url" => "https://github.com/#{repo_owner}/#{repo_name}/pulls/#{pull_number}"
       }
     )
   end
