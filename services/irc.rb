@@ -90,7 +90,7 @@ class Service::IRC < Service
 
   def irc
     @irc ||= begin
-      socket = TCPSocket.open(data['server'], data['port'])
+      socket = TCPSocket.open(data['server'], port)
 
       socket = new_ssl_wrapper(socket) if use_ssl?
 
@@ -109,6 +109,14 @@ class Service::IRC < Service
   
   def use_ssl?
     data['ssl'].to_i == 1
+  end
+  
+  def default_port
+    use_ssl? ? 9999 : 6667
+  end
+  
+  def port
+    data['port'] || default_port
   end
   
   def url
