@@ -96,7 +96,7 @@ class Service::IRC < Service
     @irc ||= begin
       socket = TCPSocket.open(data['server'], data['port'])
 
-      if data['ssl'].to_i == 1
+      if use_ssl?
         ssl_context = OpenSSL::SSL::SSLContext.new
         ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
         ssl_socket = OpenSSL::SSL::SSLSocket.new(socket, ssl_context)
@@ -107,6 +107,10 @@ class Service::IRC < Service
 
       socket
     end
+  end
+  
+  def use_ssl?
+    data['ssl'].to_i == 1
   end
 
   def format_commit_message(commit)
