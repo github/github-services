@@ -8,8 +8,6 @@ class Service::IRC < Service
     return if distinct_commits.empty?
     return unless branch_name_matches?
 
-    url  = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
-
     messages = []
     messages << "#{summary_message}: #{url}"
     messages += commit_messages.first(3)
@@ -18,8 +16,6 @@ class Service::IRC < Service
 
   def receive_pull_request
     return unless opened?
-
-    url  = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
 
     send_messages "#{summary_message}: #{url}"
   end
@@ -113,6 +109,10 @@ class Service::IRC < Service
   
   def use_ssl?
     data['ssl'].to_i == 1
+  end
+  
+  def url
+    data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
   end
 
   def format_commit_message(commit)
