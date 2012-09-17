@@ -96,17 +96,19 @@ class Service::IRC < Service
     @irc ||= begin
       socket = TCPSocket.open(data['server'], data['port'])
 
-      if use_ssl?
-        ssl_context = OpenSSL::SSL::SSLContext.new
-        ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        ssl_socket = OpenSSL::SSL::SSLSocket.new(socket, ssl_context)
-        ssl_socket.sync_close = true
-        ssl_socket.connect
-        socket = ssl_socket
-      end
+      socket = new_ssl_wrapper(socket) if use_ssl?
 
       socket
     end
+  end
+  
+  def new_ssl_wrapper(socket)
+    ssl_context = OpenSSL::SSL::SSLContext.new
+    ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    ssl_socket = OpenSSL::SSL::SSLSocket.new(socket, ssl_context)
+    ssl_socket.sync_close = true
+    ssl_socket.connect
+    ssl_socket
   end
   
   def use_ssl?
