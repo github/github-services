@@ -8,7 +8,8 @@ class AgileZenTest < Service::TestCase
   def test_unspecified_branch
     payload = {'answer' => 42, 'ref' => 'refs/heads/master'}
     @stubs.post '/api/v1/projects/123/changesets/github' do |env|
-      assert_equal payload.to_json,   env[:body]
+      body = JSON.parse(env[:body])
+      assert_equal payload, body
       assert_equal 'test_api_key',     env[:request_headers]['X-Zen-ApiKey']
       assert_equal 'application/json', env[:request_headers]['Content-Type']
       [200, {}, '']
