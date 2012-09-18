@@ -1,6 +1,3 @@
-require "net/https"
-require "uri"
-
 class Service::Redmine < Service
   string :address, :project, :api_key
   boolean :fetch_github_commits
@@ -23,21 +20,28 @@ class Service::Redmine < Service
         # check configurations first
         check_configuration_options(data)
 
-        redmine_updater = RedmineUpdater.new(data['address'], data['api_key'])
-
         payload['commits'].each do |commit|
           message = commit['message'].clone
 
           #Extract issue IDs and send update to the related issues
           while !(id= message[/#(\d)+/]).nil? do 
             message.gsub!(id,'')
-            redmine_updater.notify_about_commit(id.gsub('#',''), commit)
+            issue_no = id.gsub('#','')
+
+            # Send the commit information to the related issue on redmine
+            res = http_method :put, "#{data['address']}/issues/#{issue_no}.json" do |req|
+              req.headers['Content-Type'] = 'application/json'
+              req.headers['X-Redmine-API-Key'] = data['api_key']
+              req.params['issue[notes]'] = commit_text(commit)
+            end
           end
         end
         return true   
       rescue SocketError => se
+        puts "SocketError has occured: #{se.inspect}"
         return false
       rescue Exception => e
+        puts "Other Exception has occured: #{e.inspect}"
         return false
       end
     end
@@ -57,66 +61,37 @@ class Service::Redmine < Service
     data['update_redmine_issues_about_commits']
   end
 
-end
+  #Extract and buffer the needed commit information into one string
+  def commit_text(commit) 
+    gitsha   = commit['id']
+    added    = commit['added'].map    { |f| ['A', f] }
+    removed  = commit['removed'].map  { |f| ['R', f] }
+    modified = commit['modified'].map { |f| ['M', f] }
 
-# RedmineUpdater class that notifies the redmine related issue about the commit
-#===============================================================================
-class RedmineUpdater
+    timestamp = Date.parse(commit['timestamp'])
 
-  def initialize(redmine_url, api_key)
-    @redmine_url = redmine_url
-    @api_key     = api_key
-    uri = URI.parse(@redmine_url)
-    @http = Net::HTTP.new(uri.host, uri.port)
-    @http.use_ssl = true if @redmine_url.match(/https/)
-    @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    commit_author = "#{commit['author']['name']} <#{commit['author']['email']}>"
+
+    text = align(<<-EOH)
+      Commit: #{gitsha}
+          #{commit['url']}
+      Author: #{commit_author}
+      Date:   #{timestamp} (#{timestamp.strftime('%a, %d %b %Y')})
+
+    EOH
+
+    text << align(<<-EOH)
+      Log Message:
+      -----------
+      #{commit['message']}
+    EOH
+
+    text
   end
 
-
-  # send the commit notification to be added into redmine issue notes
-  def notify_about_commit(issue_no, commit)
-    request = Net::HTTP::Put.new("/issues/#{issue_no}.json")
-    request['Content-Type'] = 'application/json'
-    request['X-Redmine-API-Key'] = @api_key
-    request.set_form_data({"issue[notes]" => commit_text(commit)})
-    res = @http.request(request)
-    if res.code.to_i == 404 #Issue No not found
-      raise Exception.new("Issue not found")
-    end
+  def align(text, indent = '  ')
+    margin = text[/\A\s+/].size
+    text.gsub(/^\s{#{margin}}/, indent)
   end
-
-  private
-    #Extract and buffer the needed commit information into one string
-    def commit_text(commit) 
-      gitsha   = commit['id']
-      added    = commit['added'].map    { |f| ['A', f] }
-      removed  = commit['removed'].map  { |f| ['R', f] }
-      modified = commit['modified'].map { |f| ['M', f] }
-
-      timestamp = Date.parse(commit['timestamp'])
-
-      commit_author = "#{commit['author']['name']} <#{commit['author']['email']}>"
-
-      text = align(<<-EOH)
-        Commit: #{gitsha}
-            #{commit['url']}
-        Author: #{commit_author}
-        Date:   #{timestamp} (#{timestamp.strftime('%a, %d %b %Y')})
-
-      EOH
-
-      text << align(<<-EOH)
-        Log Message:
-        -----------
-        #{commit['message']}
-      EOH
-
-      text
-    end
-
-    def align(text, indent = '  ')
-      margin = text[/\A\s+/].size
-      text.gsub(/^\s{#{margin}}/, indent)
-    end
 
 end
