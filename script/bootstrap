@@ -47,6 +47,8 @@ rescue LoadError => boom
   exit 0
 end
 
+FileUtils.mkdir_p('.bundle')
+
 # record the Gemfile checksum so we can tell if the Gemfile has changed
 # since our loadpath was last generated. this is used in config/basic.rb
 # to verify the environment is bootstrapped and up-to-date.
@@ -59,7 +61,9 @@ if checksum == installed && system('bundle check 1>/dev/null 2>&1')
   puts "Gem environment up-to-date."
 else
   # run bundle-install to install any missing gems
-  argv = ['--no-color', 'install', '--path', 'vendor/gems'] + ARGV
+
+  argv  = ['install', '--no-color', '--path', File.join(root, 'vendor/gems')]
+  argv += ['--standalone', '--binstubs', 'bin', '--shebang'] + ARGV
   system("bundle", *argv) || begin
     warn "bundle executable not found.  Ensure bundler is installed (`gem " +
          "install bundler`) and that the gem bin path is in your PATH"
