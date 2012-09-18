@@ -31,8 +31,9 @@ Commit Message Syntax
 General comment format for adding comments and/or changing entity states:
 
 
-    #[Entity ID]:<new state>
+    (#|id:)[Entity ID]:<new state>
     Eg: Fixed out of memory exceptions #1221:Fixed
+        id:1221:Fixed Fixed out of memory exceptions
 
 
 The entire line will appear as a comment in your User Story, Bug, Feature, or Task; and the entity's
