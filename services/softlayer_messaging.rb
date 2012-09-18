@@ -50,24 +50,25 @@ class Service::SoftLayer_Messaging < Service
     # hopefully not bigger than 64K
     payload_json_data = JSON.generate(payload)
 
-    if topic
+  begin
+   if topic
         push_to_topic(name, payload_json_data, options)
     else
         push_to_queue(name, payload_json_data, options)
     end
 
-  rescue RestClient::RequestFailed => req
-    case req.http_code
-    when 404
-      raise_config_error 'Topic or Queue not created prior to publishing'
-    when 401
-      raise_config_error 'Bad SoftLayer messaging information'
-    else
-      raise_config_error "Unhandled SoftLayer #{req.http_code}"
+    rescue RestClient::ServerBrokeConnection => broken
+      raise_config_error "Disconnected #{broken.to_s}"
+    rescue RestClient::ExceptionWithResponse => req
+      case req.http_code
+      when 404
+        raise_config_error 'Topic or Queue not created prior to publishing'
+      when 401
+        raise_config_error 'Bad SoftLayer messaging authentication information'
+      else
+        raise_config_error "Unhandled SoftLayer response: #{req}"
+      end
     end
-
-  rescue RestClient::ServerBrokeConnection => broken
-    raise_config_error "Disconnected #{broken.to_s}"
   end
 
   def push_to_topic(name, payload, options={})
