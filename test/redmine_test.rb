@@ -24,9 +24,7 @@ class RedmineTest < Service::TestCase
       assert_equal 'redmine.org', env[:url].host
       assert_equal 'application/json', env[:request_headers]['Content-type']
       assert_equal 'API_KEY-654321', env[:request_headers]['X-Redmine-API-Key']
-      assert_equal '1234', env[:params]['id']
-      form = Rack::Utils.parse_query(env[:body])
-      assert_equal 'text', form['issue[notes]']
+      assert env[:params]['issue']['notes'].include?("Author: Mahmoud")
       [200, {}, '']
     end
     configurations = {
