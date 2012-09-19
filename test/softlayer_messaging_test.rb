@@ -61,7 +61,7 @@ class SoftLayerMessagingTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::SoftLayer_Messaging, *args
+    super Service::SoftLayerMessaging, *args
   end
 
   def fake_client
