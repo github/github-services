@@ -97,7 +97,7 @@ class Service::IRC < Service
       socket
     end
   end
-  
+
   def new_ssl_wrapper(socket)
     ssl_context = OpenSSL::SSL::SSLContext.new
     ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -106,19 +106,19 @@ class Service::IRC < Service
     ssl_socket.connect
     ssl_socket
   end
-  
+
   def use_ssl?
     data['ssl'].to_i == 1
   end
-  
+
   def default_port
     use_ssl? ? 9999 : 6667
   end
-  
+
   def port
     data['port'] || default_port
   end
-  
+
   def url
     data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
   end

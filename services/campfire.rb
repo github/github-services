@@ -12,7 +12,7 @@ class Service::Campfire < Service
   default_events :push, :pull_request, :issues
 
   def receive_push
-    url = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
+    url = configured_summary_url
     messages = []
     messages << "#{summary_message}: #{url}"
     messages += commit_messages.first(8)
@@ -26,7 +26,8 @@ class Service::Campfire < Service
   end
 
   def receive_pull_request
-    send_messages summary_message if action =~ /(open)|(close)/
+    message = "#{summary_message}: #{configured_summary_url}"
+    send_messages message if action =~ /(open)|(close)/
   end
 
   alias receive_issues receive_pull_request
@@ -60,6 +61,10 @@ class Service::Campfire < Service
 
   def campfire_domain
     data['subdomain'].to_s.sub /\.campfirenow\.com$/i, ''
+  end
+
+  def configured_summary_url
+    data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
   end
 
   def find_room
