@@ -14,14 +14,15 @@ module Service::PullRequestHelpers
     base_ref = pull.base.label.split(':').last
     head_ref = pull.head.label.split(':').last
 
-    "[%s] %s %s pull request #%d: %s (%s...%s)" % [
+    "[%s] %s %s pull request #%d: %s (%s...%s) %s" % [
       repo.name,
       pull.user.login,
       action,
       pull.number,
       pull.title,
       base_ref,
-      head_ref != base_ref ? head_ref : pull.head.label]
+      head_ref != base_ref ? head_ref : pull.head.label,
+      pull.html_url]
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
