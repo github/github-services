@@ -54,7 +54,7 @@ class Service::Redmine < Service
   end
 
   def fetch_github_commits_enabled?
-    data['fetch_commits'] || data['fetch_github_commits']
+    data['fetch_commits']
   end
 
   def update_issues_enabled?
