@@ -3,7 +3,7 @@ Redmine
 
 Redmine Service has the following modules:
 
-1. Fetch Github Commits
+1. Fetch GitHub Commits
 -----------------------
 
 Notifies an instance of Redmine, a project management tool, to fetch the new commits from GitHub.
@@ -15,7 +15,7 @@ Install Notes
 2. Activate "Enable WS for repository management" in the global settings. While there, generate an API key (if neccessary) and copy it.
 3. Set your github repository as git repository for a project.
 4. Enter the full URL to your Redmine instance as well as the project's identifier and the API key.
-5. Check the "Fetch Github Commits" option to enable the module.
+5. Check the "Fetch GitHub Commits" option to enable the module.
 6. We will then notify your Redmine whenever you do a "git push".
 
 Note: The GitHub servers need to have access to "sys/fetch_changesets". Some older tutorials have you add a rule to your server config to
@@ -51,30 +51,6 @@ Example of the update issue post on Redmine (the output):
   -------
   * modsaid
   * basayel
-  
+
   http://www.espace.com.eg
 
-
-
-Developer Notes
----------------
-
-data
-  - address (full URL of the redmine instance)
-  - api_key (the API key for using the webservice)
-  - project (identifier of the project belonging to this repository)
-
-payload
-  - refer to docs/github_payload (nothing is used by this script)
-
-Update an issue on Redmine with cURL
-  - curl -v -H "Content-Type: application/json" -X PUT --data "@388.json" -u login:password http://redmine/issues/388.json
-  - curl -v -H "Content-Type: application/json" -X PUT --data "@388.json" -H "X-Redmine-API-Key: xxxx" http://redmine/issues/388.json
-  - The file that contains the data sent to Redmine (388.json in the example above) would look like this:
-  {
-    "issue": {
-    "subject": "subject123",
-    "notes": "Changing the subject" 
-    }
-  }
-  Refer to http://www.redmine.org/projects/redmine/wiki/Rest_api_with_curl

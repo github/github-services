@@ -1,6 +1,6 @@
 class Service::Redmine < Service
   string :address, :project, :api_key
-  boolean :fetch_github_commits
+  boolean :fetch_commits
   boolean :update_redmine_issues_about_commits
   white_list :address, :project
 
@@ -54,7 +54,7 @@ class Service::Redmine < Service
   end
 
   def fetch_github_commits_enabled?
-    data['fetch_github_commits']
+    data['fetch_commits'] || data['fetch_github_commits']
   end
 
   def update_issues_enabled?
