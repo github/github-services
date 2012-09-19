@@ -8,8 +8,6 @@ class Service::IRC < Service
     return if distinct_commits.empty?
     return unless branch_name_matches?
 
-    url  = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
-
     messages = []
     messages << "#{summary_message}: #{url}"
     messages += commit_messages.first(3)
@@ -18,8 +16,6 @@ class Service::IRC < Service
 
   def receive_pull_request
     return unless opened?
-
-    url  = data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
 
     send_messages "#{summary_message}: #{url}"
   end
@@ -94,19 +90,37 @@ class Service::IRC < Service
 
   def irc
     @irc ||= begin
-      socket = TCPSocket.open(data['server'], data['port'])
+      socket = TCPSocket.open(data['server'], port)
 
-      if data['ssl'].to_i == 1
-        ssl_context = OpenSSL::SSL::SSLContext.new
-        ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        ssl_socket = OpenSSL::SSL::SSLSocket.new(socket, ssl_context)
-        ssl_socket.sync_close = true
-        ssl_socket.connect
-        socket = ssl_socket
-      end
+      socket = new_ssl_wrapper(socket) if use_ssl?
 
       socket
     end
+  end
+  
+  def new_ssl_wrapper(socket)
+    ssl_context = OpenSSL::SSL::SSLContext.new
+    ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    ssl_socket = OpenSSL::SSL::SSLSocket.new(socket, ssl_context)
+    ssl_socket.sync_close = true
+    ssl_socket.connect
+    ssl_socket
+  end
+  
+  def use_ssl?
+    data['ssl'].to_i == 1
+  end
+  
+  def default_port
+    use_ssl? ? 9999 : 6667
+  end
+  
+  def port
+    data['port'] || default_port
+  end
+  
+  def url
+    data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
   end
 
   def format_commit_message(commit)
