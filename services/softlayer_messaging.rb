@@ -1,4 +1,4 @@
-class Service::SoftLayer_Messaging < Service
+class Service::SoftLayerMessaging < Service
   string :account, :user, :name
   password :key
   boolean :topic
@@ -6,7 +6,7 @@ class Service::SoftLayer_Messaging < Service
 
   attr_writer :client
 
-  # receive_push()
+  # receive_push
   def receive_push
     return unless data && payload
 
@@ -26,11 +26,11 @@ class Service::SoftLayer_Messaging < Service
       raise_config_error "You must provide the api key."
     end
 
-    publish_message(account(), user(), apikey(), name(), data['topic'], payload)
+    publish_message(account, user, apikey, name, data['topic'], payload)
 
   end
 
-  # publish_message()
+  # publish_message
   def publish_message(account, user, key, name, topic, payload)
     client.authenticate(user, key)
     # mungle
