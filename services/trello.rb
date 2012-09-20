@@ -3,6 +3,20 @@ class Service::Trello < Service
   boolean  :master_only
   password :consumer_token
 
+  default_events :push, :pull_request
+
+  def receive_pull_request
+    return unless opened?
+    
+    http.url_prefix = "https://api.trello.com/1"
+    http_post "cards",
+      :name => truncate_message pull.title,
+      :desc => "%s : %s " % [pull.summary_message, pull.summary_url],
+      :idList => list_id,
+      :key => application_key,
+      :token => consumer_token
+  end
+
   def receive_push
     return unless create_cards?
 
@@ -49,10 +63,12 @@ class Service::Trello < Service
     ignore_regex && ignore_regex.match(commit['message'])
   end
 
+  def truncate_message(message)
+    message.length > message_max_length ? message[0..message_max_length] + "..." : message
+  end
+
   def name_for_commit commit
-    commit['message'].length > message_max_length ? \
-      commit['message'][0...message_max_length] + '...' : \
-      commit['message']
+    truncate_message commit['message']
   end
 
   def desc_for_commit commit
