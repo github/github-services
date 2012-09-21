@@ -22,9 +22,9 @@ class Service::Jira < Service
         key, value = entry.split(':')
 
         if key =~ /(?i)status|(?i)transition/
-          changeset.merge!(:transition => value.to_i)
+          changeset.merge!(:transition => value.to_s)
         elsif key =~ /(?i)resolution/
-          changeset.merge!(:fields => { :resolution => value.to_i })
+          changeset.merge!(:fields => { :resolution => value.to_s })
         else
           changeset.merge!(:fields => { key.to_sym => "Resolved" })
         end
