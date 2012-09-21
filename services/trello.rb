@@ -8,13 +8,8 @@ class Service::Trello < Service
   def receive_pull_request
     return unless opened?
     
-    http.url_prefix = "https://api.trello.com/1"
-    http_post "cards",
-      :name => truncate_message pull.title,
-      :desc => "%s : %s " % [pull.summary_message, pull.summary_url],
-      :idList => list_id,
-      :key => application_key,
-      :token => consumer_token
+    create_card truncate_message(pull.title), 
+                "%s : %s " % [pull.summary_message, pull.summary_url]
   end
 
   def receive_push
@@ -44,18 +39,21 @@ class Service::Trello < Service
     end
   end
 
-  def create_cards
+  def create_card(name, description)
     http.url_prefix = "https://api.trello.com/1"
+    http_post "cards",
+      :name => name,
+      :desc => description,
+      :idList => list_id,
+      :key => application_key,
+      :token => consumer_token
+  end
+    
 
+  def create_cards
     payload['commits'].each do |commit|
       next if ignore_commit? commit
-
-      http_post "cards",
-        :name => name_for_commit(commit),
-        :desc => desc_for_commit(commit),
-        :idList => list_id,
-        :key => application_key,
-        :token => consumer_token
+      create_card name_for_commit(commit), desc_for_commit(commit)
     end
   end
 
