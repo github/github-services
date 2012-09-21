@@ -75,7 +75,7 @@ class Service::Trello < Service
   end
 
   def truncate_message(message)
-    message.length > message_max_length ? message[0..message_max_length] + "..." : message
+    message.length > message_max_length ? message[0...message_max_length] + "..." : message
   end
 
   def name_for_commit commit
