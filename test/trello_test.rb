@@ -3,7 +3,7 @@ require File.expand_path('../helper', __FILE__)
 class TrelloTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
-    @data = {'list_id' => 'abc123', 'consumer_token' => 'blarg', 'master_only' => 1}
+    @data = {'push_list_id' => 'abc123', 'consumer_token' => 'blarg', 'master_only' => 1}
   end
 
   def test_push
@@ -23,6 +23,13 @@ class TrelloTest < Service::TestCase
     assert_equal correct_description, svc.send(:desc_for_commit, svc.payload['commits'].first)
 
     svc.receive_push
+  end
+
+  def test_backward_compatible_push_list_id
+    @data['list_id'] = @data['push_list_id']
+    @data.delete 'push_list_id'
+    svc = service :push, @data
+    assert_cards_created svc
   end
 
   def test_master_only_no_master
