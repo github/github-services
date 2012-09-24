@@ -118,7 +118,7 @@ class Service::IRC < Service
   end
 
   def port
-    data['port'] || default_port
+    data['port'] ? data['port'].to_i : default_port
   end
 
   def url
