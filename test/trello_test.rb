@@ -55,21 +55,42 @@ class TrelloTest < Service::TestCase
     assert_cards_created svc
   end
 
-  private
+  def test_pull_request
+    svc = service :pull_request, @data.merge!("pull_request_list_id" => 'zxy987')
+    assert_cards_created svc, :pull_request
+  end
+  
+  def test_closed_pull_request
+    svc = service :pull_request, 
+                  @data.merge!("pull_request_list_id" => 'zxy987'), 
+                  pull_payload.merge!("action" => "closed")
+    assert_no_cards_created svc, :pull_request
+  end
 
-  def assert_cards_created svc
+  private
+  
+  def call_hook_on_service svc, method
+    case method
+      when :push
+        svc.receive_push
+      when :pull_request
+        svc.receive_pull_request
+    end
+  end
+
+  def assert_cards_created(svc, method = :push)
     @stubs.post "/1/cards" do |env|
       assert_equal 'api.trello.com', env[:url].host
       [200, {}, '']
     end
-    svc.receive_push
+    call_hook_on_service svc, method
   end
 
-  def assert_no_cards_created svc
+  def assert_no_cards_created(svc, method = :push)
     @stubs.post "/1/cards" do
       raise "This should not be called"
     end
-    svc.receive_push
+    call_hook_on_service svc, method
   end
 
   def correct_description
