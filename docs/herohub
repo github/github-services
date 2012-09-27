@@ -1,0 +1,11 @@
+HeroHub
+=======
+
+HeroHub lets you build your GitHub commits on Heroku automatically.
+
+**Note**: Only public repositories are supported as of now.
+
+Notes
+-----
+
+Go to [GotemB/HeroHub](https://github.com/GotEmB/HeroHub) for instructions.
