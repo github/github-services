@@ -4,12 +4,11 @@ require 'time'
 class Service::Buddycloud < Service
   self.title     = 'buddycloud (GitHub plugin)'
   self.hook_name = 'buddycloud' # legacy hook name
-  
+
   string      :buddycloud_base_api, :username, :password, :channel
   password    :password
   boolean     :show_commit_summary, :show_commit_detail
   white_list  :buddycloud_base_api, :username, :channel, :show_commit_summary, :show_commit_detail
-  
 
   def receive_push
     check_config data
@@ -17,7 +16,7 @@ class Service::Buddycloud < Service
     entry         = create_entry payload
     make_request(entry, "posts")
   end
-  
+
   def check_config(data)
     raise_config_error "buddycloud API base URL not set" if !data['buddycloud_base_api'].present? || data['buddycloud_base_api'].empty?
     raise_config_error "buddycloud username not set" if !data['username'].present? || data['username'].empty?
@@ -35,7 +34,7 @@ class Service::Buddycloud < Service
       @show_commit_detail  = true 
     end
   end
-  
+
   def make_request(entry, node)
 
     http.basic_auth @username, @password
@@ -51,7 +50,7 @@ class Service::Buddycloud < Service
       when 200, 201 then return response.status
     end
   end
-  
+
   def create_entry(payload)
     message = generate_message(payload)
     XmlSimple.xml_out(
@@ -62,7 +61,7 @@ class Service::Buddycloud < Service
       {'RootName' => 'entry', 'NoIndent' => 1}
     )
   end
-  
+
   def generate_message(payload)
     now     = Time.now
     message = <<-EOM
@@ -93,7 +92,7 @@ EOM
     end
     message = message + "\n\n"
   end
-  
+
   def commit_summary_message(c, i)
     at          = Time.parse(c['timestamp'])
     description = c['message'][0 .. 60]
@@ -120,5 +119,5 @@ Files modified: #{modified}
     
 EOC
   end
- 
+
 end

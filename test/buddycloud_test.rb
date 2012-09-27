@@ -11,7 +11,7 @@ class BuddycloudTest < Service::TestCase
       service({}, payload).receive_push
     end
   end
-  
+
   def test_empty_api_url_provided
     assert_raises Service::ConfigurationError do
       service({'buddycloud_base_api' => ''}, payload).receive_push
@@ -23,13 +23,13 @@ class BuddycloudTest < Service::TestCase
       service({'buddycloud_base_api' => 'https://api.buddycloud.org'}, payload).receive_push
     end
   end
-  
+
   def test_empty_username_provided
     assert_raises Service::ConfigurationError do
       service({'buddycloud_base_api' => 'https://api.buddycloud.org', 'username' => ''}, payload).receive_push
     end
-  end  
-  
+  end
+
   def test_no_password_provided
     assert_raises Service::ConfigurationError do
       service({
@@ -38,7 +38,7 @@ class BuddycloudTest < Service::TestCase
       }, payload).receive_push
     end
   end
-     
+
   def test_empty_password_provided
     assert_raises Service::ConfigurationError do
       service({
@@ -47,8 +47,8 @@ class BuddycloudTest < Service::TestCase
           'password'          => ''
       }, payload).receive_push
     end
-  end 
-  
+  end
+
   def test_no_channel_provided
     assert_raises Service::ConfigurationError do
       service({
@@ -57,8 +57,8 @@ class BuddycloudTest < Service::TestCase
           'password'          => 'tellnoone',
       }, payload).receive_push
     end
-  end   
-  
+  end
+
   def test_empty_channel_provided
     assert_raises Service::ConfigurationError do
       service({
@@ -68,7 +68,7 @@ class BuddycloudTest < Service::TestCase
           'channel'           => ''
       }, payload).receive_push
     end
-  end  
+  end
 
   def service(*args)
     super Service::Buddycloud, *args
