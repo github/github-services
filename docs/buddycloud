@@ -1,0 +1,16 @@
+[buddycloud](http://buddycloud.org/) is group communication. Done Right.
+
+Great social features, realtime updates, archives and message revocation.
+
+Magically simple.
+
+Using the buddycloud plugin you can receive updates on a buddycloud instance about GitHub events.
+
+Install Notes
+-------------
+
+  1. buddycloud API base URL -- This is the base URL to the API for your buddycloud instance (no trailing slash)
+  2. Username -- username for the posting account
+  3. Password -- password for the posting account
+  4. Channel -- the channel to which to post
+  5. Choose whether to show a summary of commit messages, detailed commit information, or both
