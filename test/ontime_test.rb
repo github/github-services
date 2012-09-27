@@ -1,3 +1,4 @@
+require File.expand_path('../helper', __FILE__)
 require 'cgi'
 
 class OnTimeTest < Service::TestCase
