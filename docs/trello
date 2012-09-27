@@ -7,7 +7,7 @@ Install Notes
 -------------
 
 1. You will need to [create a consumer token][create] that authorises GitHub to write to the Trello api.
-2. Supply the list identifier for the list you want cards added to. You can get the lists for a board at this api url (NB: Swap TOKEN for the token from step 1, and BOARDID with the id of the board that the list is on - this is the last part of the Trello URL for the board):
+2. Supply the list identifier for the list you want cards added to. You may specify a different list for pull requests to be added to than commits. You can get the lists for a board at this api url (NB: Swap TOKEN for the token from step 1, and BOARDID with the id of the board that the list is on - this is the last part of the Trello URL for the board):
 
         https://api.trello.com/1/board/BOARDID?token=TOKEN&key=db1e35883bfe8f8da1725a0d7d032a9c&lists=all
 
