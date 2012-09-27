@@ -176,6 +176,21 @@ class IRCTest < Service::TestCase
     assert_nil msgs.shift
   end
 
+  def test_default_port_with_ssl
+    svc = service({'ssl' => '1'}, payload)
+    assert_equal 9999, svc.port
+  end
+
+  def test_default_port_no_ssl
+    svc = service({'ssl' => '0'}, payload)
+    assert_equal 6667, svc.port
+  end
+  
+  def test_overridden_port
+    svc = service({'port' => '1234'}, payload)
+    assert_equal 1234, svc.port
+  end
+
   def service(*args)
     super FakeIRC, *args
   end

@@ -4,6 +4,8 @@ class Service::IRC < Service
   boolean  :ssl, :message_without_join, :no_colors, :long_url, :notice
   white_list :server, :port, :room, :nick
 
+  default_events :push, :pull_request
+
   def receive_push
     return if distinct_commits.empty?
     return unless branch_name_matches?
@@ -116,7 +118,7 @@ class Service::IRC < Service
   end
 
   def port
-    data['port'] || default_port
+    data['port'] ? data['port'].to_i : default_port
   end
 
   def url
