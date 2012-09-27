@@ -1,0 +1,23 @@
+Work Market
+===========
+
+Use this service hook to add notes to Work Market assignments.
+
+Install Notes
+-------------
+
+**API token and secret** - One of your company's API tokens. See [Settings > API](http://www.workmarket.com/mmw/api)
+
+In order to update an assignment, you must include the Work Market assignment number in the commit message, e.g.:
+
+	Fixed a bug [#1234567890]
+
+Developer Notes
+---------------
+
+data
+  - token
+  - secret
+
+payload
+  - refer to docs/github_payload
