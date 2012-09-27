@@ -121,18 +121,4 @@ Files modified: #{modified}
 EOC
   end
  
-  def shorten_url(url)
-    res = http_post "https://www.googleapis.com/urlshortener/v1/url" do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.body = {"longUrl"  => url}.to_json
-    end
-    if res.status != 200 && res.status != 201
-      url
-    else
-      url = JSON.parse(res.body)['id']
-    end
-    rescue TimeoutError
-      url
-  end
-  
 end
