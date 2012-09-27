@@ -8,6 +8,31 @@ class YammerTest < Service::TestCase
   def test_push
     svc = service({'group_id' => 'g'}, payload)
 
+    svc.receive_push
+
+    assert_equal 3, svc.messages.size
+    assert_equal %w(g g g), svc.messages.map { |m| m['group_id'] }
+  end
+
+  def test_push_non_master_with_master_only
+    non_master_payload = payload
+    non_master_payload["ref"] = "refs/heads/non-master"
+    svc = service({'group_id' => 'g', 'master_only' => 1}, non_master_payload)
+    svc.receive_push
+    assert_equal 0, svc.messages.size
+  end
+
+  def test_push_non_master_without_master_only
+    non_master_payload = payload
+    non_master_payload["ref"] = "refs/heads/non-master"
+    svc = service({'group_id' => 'g', 'master_only' => 0}, non_master_payload)
+    svc.receive_push
+    assert_equal 3, svc.messages.size
+  end
+
+  def service(*args)
+    svc = super Service::Yammer, *args
+
     def svc.messages
       @messages ||= []
     end
@@ -20,14 +45,7 @@ class YammerTest < Service::TestCase
       'short'
     end
 
-    svc.receive_push
-
-    assert_equal 3, svc.messages.size
-    assert_equal %w(g g g), svc.messages.map { |m| m['group_id'] }
-  end
-
-  def service(*args)
-    super Service::Yammer, *args
+    svc
   end
 end
 
