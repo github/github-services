@@ -9,3 +9,6 @@ vendor/gems
 docs/payload_data
 .rvmrc
 .project
+.settings
+.buildpath
+
