@@ -16,7 +16,7 @@ module Service::PullRequestHelpers
 
     "[%s] %s %s pull request #%d: %s (%s...%s)" % [
       repo.name,
-      pull.user.login,
+      sender.login,
       action,
       pull.number,
       pull.title,
