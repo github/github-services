@@ -20,11 +20,11 @@ class OnTimeTest < Service::TestCase
     svc = service({'ontime_url' => 'http://www.example.com/', 'api_key' => 'test_api_key'}, payload)
     svc.receive_push
   end
-  
+
   # This tests the new api path for GitHub in OnTime Version 12.2 and later.
   def test_push_v1_api
     @stubs.get "/v122/api/version" do |env|
-      assert_equals 'www.example.com', env[:url].host
+      assert_equal 'www.example.com', env[:url].host
       [200, {}, '{"data":{"major":12,"minor":2,"build":0}}']
     end
 
