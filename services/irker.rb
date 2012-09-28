@@ -39,9 +39,9 @@ class Service::Irker < Service
       address = data['address'].to_s
       # In the future, we want github to run its own irker instance
       # we can then put localhost here
-      #if address.empty?
-      #  address = "master.atheme.org"
-      #end
+      if address.empty?
+        address = "master.atheme.org"
+      end
       TCPSocket.new address, 6659
     end
   end
