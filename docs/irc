@@ -3,7 +3,7 @@
 3.  `room` - Supports single or multiple rooms (comma separated).  Also supports room passwords (room_name::password).  Prefixing '#' to the room is optional.
 4.  `password` - Server password (optional)
 5.  `nick` - Nickame (optional)
-6.  `long_url` - If enabled, displays full compare/commit url's. If disabled uses bit.ly.
+6.  `long_url` - If enabled, displays full compare/commit url's. If disabled uses git.io.
 7.  `message_without_join` - If enabled prevents joining and immediately leaving the channel.
 8. `no_colors` - Disables color support for messages
 9. `notice` - Enables notice support.  Make sure you configure channel to support notices ("/mode #yourchannelname -n" or "/msg chanserv set mlock -n")
