@@ -428,11 +428,11 @@ class Service
     @http = @secrets = @email_config = nil
   end
 
-  # Public: Shortens the given URL with bit.ly.
+  # Public: Shortens the given URL with git.io.
   #
   # url - String URL to be shortened.
   #
-  # Returns the String URL response from bit.ly.
+  # Returns the String URL response from git.io.
   def shorten_url(url)
     res = http_post("http://git.io", :url => url)
     if res.status == 201
