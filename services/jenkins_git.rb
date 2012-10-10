@@ -21,6 +21,7 @@ class Service::JenkinsGit < Service
     params[:branches] = branch_name unless tag?
 
     http.ssl[:verify] = false
+    http.url_prefix = url
     http_get url, params
   end
 end
