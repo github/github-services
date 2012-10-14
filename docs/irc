@@ -2,7 +2,7 @@
 2.  `port` - Normally 6667 (No SSL) or 9999 (SSL) (optional). These are the defaults based on whether the value of `ssl` checkbox.
 3.  `room` - Supports single or multiple rooms (comma separated).  Also supports room passwords (room_name::password).  Prefixing '#' to the room is optional.
 4.  `password` - Server password (optional)
-5.  `nick` - Nickame (optional)
+5.  `nick` - Nickname (optional)
 6.  `long_url` - If enabled, displays full compare/commit url's. If disabled uses git.io.
 7.  `message_without_join` - If enabled prevents joining and immediately leaving the channel.
 8. `no_colors` - Disables color support for messages
