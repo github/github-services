@@ -12,7 +12,9 @@ class Service::IRC < Service
 
     messages = []
     messages << "#{summary_message}: #{url}"
-    messages += commit_messages.first(3)
+    messages += distinct_commits.first(3).map {
+        |commit| self.irc_format_commit_message(commit)
+    }
     send_messages messages
   end
 
@@ -125,7 +127,7 @@ class Service::IRC < Service
     data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
   end
 
-  def format_commit_message(commit)
+  def irc_format_commit_message(commit)
     short  = commit['message'].split("\n", 2).first.to_s
     short += '...' if short != commit['message']
 
