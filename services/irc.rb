@@ -27,6 +27,11 @@ class Service::IRC < Service
   alias receive_issues receive_pull_request
 
   def send_messages(messages)
+    if data['no_colors'].to_i == 1
+      messages.each{|message|
+        message.gsub!(/\002|\017|\026|\037|\003\d{,2}(?:,\d{,2})?/, '')}
+    end
+
     rooms = data['room'].to_s
     if rooms.empty?
       raise_config_error "No rooms: #{rooms.inspect}"
@@ -136,13 +141,8 @@ class Service::IRC < Service
     files  = Array(commit['modified'])
     dirs   = files.map { |file| File.dirname(file) }.uniq
 
-    if data['no_colors'].to_i == 1
-        "#{repo_name}: #{branch_name} #{author} * " +
-        "#{sha1[0..6]} (#{files.size} files in #{dirs.size} dirs): #{short}"
-    else
-        "\002#{repo_name}:\002 \00307#{branch_name}\003 \00303#{author}\003 * " +
-        "\002#{sha1[0..6]}\002 (#{files.size} files in #{dirs.size} dirs): #{short}"
-    end
+    "\002#{repo_name}:\002 \00307#{branch_name}\003 \00303#{author}\003 * " +
+    "\002#{sha1[0..6]}\002 (#{files.size} files in #{dirs.size} dirs): #{short}"
   end
 
   def branch_name_matches?
