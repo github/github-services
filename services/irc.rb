@@ -31,9 +31,11 @@ class Service::IRC < Service
   end
 
   def send_messages(messages)
+    messages = Array(messages)
+
     if data['no_colors'].to_i == 1
-      Array(messages).each{|message|
-        message.gsub!(/\002|\017|\026|\037|\003\d{,2}(?:,\d{,2})?/, '')}
+      messages.each{|message|
+        message.gsub!(/\002|\017|\026|\037|\003\d{0,2}(?:,\d{1,2})?/, '')}
     end
 
     rooms = data['room'].to_s
@@ -65,7 +67,7 @@ class Service::IRC < Service
       room, pass = room.split("::")
       irc_puts "JOIN #{room} #{pass}" unless without_join
 
-      Array(messages).each do |message|
+      messages.each do |message|
         irc_puts "#{command} #{room} :#{message}"
       end
 
