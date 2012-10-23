@@ -32,7 +32,7 @@ class Service::IRC < Service
 
   def send_messages(messages)
     if data['no_colors'].to_i == 1
-      messages.each{|message|
+      Array(messages).each{|message|
         message.gsub!(/\002|\017|\026|\037|\003\d{,2}(?:,\d{,2})?/, '')}
     end
 
