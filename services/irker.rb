@@ -37,10 +37,8 @@ class Service::Irker < Service
   def irker_con
     @irker_con ||= begin
       address = data['address'].to_s
-      # In the future, we want github to run its own irker instance
-      # we can then put localhost here
       if address.empty?
-        address = "master.atheme.org"
+        address = "localhost"
       end
       TCPSocket.new address, 6659
     end

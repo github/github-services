@@ -1,5 +1,5 @@
-1. `address` is the option irker service address, defaults to master.atheme.org.
-2. `channels` is the channel or list of channels the commit notification should be posted to. Format is irc://chat.freenode.net/#cia.
+1. `address` is the irker service address.
+2. `channels` is the channel or list of channels the commit notification should be posted to. Format is irc://chat.freenode.net/#commits.
 3. `project` is the optional project name, defaults to the Repository name.
 4. `branch` lets you specify the branch name, or a template with `%s` to fill the branch name in.
 5. `long_urls` enables full URLs instead of shortened URLs.
