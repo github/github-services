@@ -1,8 +1,12 @@
-[Jenkins](http://jenkins-ci.org/) is a very popular Continious Integration Server 
+[Jenkins](http://jenkins-ci.org/) is a popular continuous integration server.
 
-Using the Jenkins GitHub Plugin you can automatically trigger build jobs directly from GitHub commits.
+Using the Jenkins GitHub Plugin you can automatically trigger build jobs when
+pushes are made to GitHub.
 
 Install Notes
 -------------
 
-  1. github webhook url -- This this the url to your jenkins ci server for exmaple http://ci.jenkins-ci.org/github-webhook/. For more info, see https://wiki.jenkins-ci.org/display/JENKINS/Github+plugin.
+ 1. "Jenkins hook URL" is the URL of your Jenkins server's webhook endpoint. For
+ example: `http://ci.jenkins-ci.org/github-webhook/`.
+
+For more information see <https://wiki.jenkins-ci.org/display/JENKINS/Github+plugin>.
