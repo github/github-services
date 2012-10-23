@@ -12,13 +12,15 @@ class GeminiTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service(
-	{'server_url' => 'http://localhost/gemini','username' => 'user', 'api_key' => '43904539-01DD-48DF-98F3-C887DE833C3H'}, payload)
+    config = {'server_url' => 'http://localhost/gemini','username' => 'user',
+      'api_key' => '43904539-01DD-48DF-98F3-C887DE833C3H'}
+
+    svc = service(config, payload)
     svc.receive_push
   end
 
   def service(*args)
     super Service::Gemini, *args
   end
-    
 end
+
