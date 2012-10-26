@@ -3,8 +3,8 @@ class Service::SqsQueue < Service
   password :aws_secret_key
   white_list :aws_access_key, :sqs_queue_name
 
-  # receive_push()
-  def receive_push
+  # receive_event()
+  def receive_event
     return unless data && payload
 
     if data['aws_access_key'].to_s.empty?
