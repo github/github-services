@@ -1,7 +1,7 @@
 Amazon Simple Notification Service
 ==================================
 
-This service lets you publish push messages to Amazon's Simple Notification Service.  Optionally, you can set up an Amazon SQS subscriber if 'sqs_queue' is specified.
+This service lets you publish event messages to Amazon's Simple Notification Service.  Optionally, you can set up an Amazon SQS subscriber if 'sqs_queue' is specified.
 
 Install Notes
 -------------
