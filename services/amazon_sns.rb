@@ -5,7 +5,7 @@ class Service::AmazonSNS < Service
   white_list :aws_key, :sns_topic, :sqs_queue
   password :aws_secret
 
-  def receive_push
+  def receive_event
     raise_config_error "Missing 'aws_key'"    if data['aws_key'].to_s == ''
     raise_config_error "Missing 'aws_secret'" if data['aws_secret'].to_s == ''
     raise_config_error "Missing 'sns_topic'" if data['sns_topic'].to_s == ''

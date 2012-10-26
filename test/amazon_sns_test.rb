@@ -11,12 +11,12 @@ class AmazonSNSTest < Service::TestCase
   end
 
 
-  def test_push
+  def test_event
     svc = service :push, data, payload
     svc.aws_sdk_sns = aws_sns_stub
     svc.aws_sdk_sqs = aws_sqs_stub
 
-    svc.receive_push
+    svc.receive_event
 
     assert_equal 1, svc.aws_sdk_sns.topics.topic.messages.size
     assert_equal data['aws_key'], svc.data['aws_key']
@@ -25,7 +25,7 @@ class AmazonSNSTest < Service::TestCase
 
   end
 
-  def test_push_with_sqs_subscriber
+  def test_event_with_sqs_subscriber
 
     data_copy = data.clone
     data_copy['sqs_queue'] = 'q'
@@ -34,7 +34,7 @@ class AmazonSNSTest < Service::TestCase
     svc.aws_sdk_sns = aws_sns_stub
     svc.aws_sdk_sqs = aws_sqs_stub
 
-    svc.receive_push
+    svc.receive_event
 
     assert_equal 1, svc.aws_sdk_sns.topics.topic.messages.size
     assert_equal data_copy['sqs_queue'], svc.aws_sdk_sns.topics.topic.subscribers[0].name
@@ -53,7 +53,7 @@ class AmazonSNSTest < Service::TestCase
       svc = service :push, data, payload
 
       assert_raise Service::ConfigurationError do
-        svc.receive
+        svc.receive_event
       end
   end
 
@@ -65,7 +65,7 @@ class AmazonSNSTest < Service::TestCase
       svc = service :push, data, payload
 
       assert_raise Service::ConfigurationError do
-        svc.receive
+        svc.receive_event
       end
   end
 
@@ -77,7 +77,7 @@ class AmazonSNSTest < Service::TestCase
       svc = service :push, data, payload
 
       assert_raise Service::ConfigurationError do
-        svc.receive
+        svc.receive_event
       end
   end
 
