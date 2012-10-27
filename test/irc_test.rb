@@ -191,6 +191,26 @@ class IRCTest < Service::TestCase
     assert_equal 1234, svc.port
   end
 
+  def test_no_colors
+    # Default should include color
+    svc = service(:pull_request, {'room' => 'r', 'nick' => 'n'}, pull_payload)
+
+    svc.receive_pull_request
+    msgs = svc.writable_io.string.split("\n")
+    privmsg = msgs[3]  # skip NICK, USER, JOIN
+    assert_match /PRIVMSG #r.*grit/, privmsg
+    assert_match /\003/, privmsg
+
+    # no_colors should strip color
+    svc = service(:pull_request, {'room' => 'r', 'nick' => 'n', 'no_colors' => '1'}, pull_payload)
+
+    svc.receive_pull_request
+    msgs = svc.writable_io.string.split("\n")
+    privmsg = msgs[3]  # skip NICK, USER, JOIN
+    assert_match /PRIVMSG #r.*grit/, privmsg
+    assert_no_match /\003/, privmsg
+  end
+
   def service(*args)
     super FakeIRC, *args
   end
