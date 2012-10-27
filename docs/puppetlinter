@@ -12,5 +12,7 @@ The [public Web API](http://www.puppetlinter.com/api) can also be used to valida
 Install Notes
 -------------
 
-1. None but any members of your project wants to opt out of receiving lintign
+1. Any members of your project wants to opt out of receiving linting
 reports then they can do so [here](http://www.puppetlinter.com/optout).
+
+2. If you wish to lint a private repository you must authorize the linter via [this link](http://www.puppetlinter.com/auth/github).
