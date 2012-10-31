@@ -85,10 +85,11 @@ class Service::Trello < Service
   def desc_for_commit commit
     author = commit['author'] || {}
 
-    "Author: %s\n\n%s\n\nRepo: %s\n\nCommit Message: %s" % [
+    "Author: %s\n\n%s\n\nRepo: %s\n\nBranch: %s\n\nCommit Message: %s" % [
       author['name'] || '[unknown]',
       commit['url'],
       repository,
+      branch_name,
       commit['message'] || '[no description]'
     ]
   end
