@@ -250,7 +250,11 @@ class Service
     # user-facing documentation regarding the Service.
     #
     # Returns a String.
-    def title
+    def title(value = nil)
+      if value
+        return self.title = value
+      end
+
       @title ||= begin
         hook = name.dup
         hook.sub! /.*:/, ''
@@ -269,7 +273,11 @@ class Service
     # short string that is used to uniquely identify the service internally.
     #
     # Returns a String.
-    def hook_name
+    def hook_name(value = nil)
+      if value
+        return self.hook_name = value
+      end
+
       @hook_name ||= begin
         hook = name.dup
         hook.downcase!

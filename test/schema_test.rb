@@ -74,8 +74,8 @@ end
 
 class CustomSchemaTest < DefaultSchemaTest
   class SchemaService < Service
-    self.title = "Custom!"
-    self.hook_name = "custom"
+    title "Custom!"
+    hook_name "custom"
 
     string :abc
     password :def
