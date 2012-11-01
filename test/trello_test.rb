@@ -100,6 +100,8 @@ http://github.com/mojombo/grit/commit/06f63b43050935962f84fe54473a7c5de7977325
 
 Repo: grit
 
+Branch: master
+
 Commit Message: stub git call for Grit#heads test f:15 Case#1'
   end
 
