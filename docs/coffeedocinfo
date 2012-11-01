@@ -1,0 +1,2 @@
+This service allows you to auto-publish documentation for your CoffeeScript library.
+The resulting documentation will be hosted for you at http://coffeedoc.info/github/your-name/your-project
