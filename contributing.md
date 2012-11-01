@@ -23,3 +23,34 @@ Repository.
 * A support contact for our users that have problems.  This can be a GitHub user,
 an email address, or link to a contact form.
 
+If we need support from any hooks without this data, we will look for the most
+active contributor to the hook file itself.
+
+You can annotate this directly in the hook like so:
+
+```ruby
+class Service::MyService < Service
+  string :project, :api_token
+
+  # only include 'project' in the debug logs, skip the api token.
+  white_list :project
+
+  default_events :push, :issues, :pull_request
+
+  # Technoweenie on GitHub is pinged for any bugs with the Hook code.
+  maintained_by :github => 'technoweenie'
+
+  # Support channels for user-level Hook problems (service failure,
+  # misconfigured
+  supported_by :web => 'http://my-service.com/support',
+    :email => 'support@my-service.com'
+end
+```
+
+You can annotate Supportors and Maintainers by the following methods:
+
+* `:github` - a GitHub login.
+* `:web` - A URL to a contact form.
+* `:email` - An email address.
+* `:twitter` - A Twitter handle.
+
