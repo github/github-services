@@ -4,21 +4,21 @@ Jenkins (Git plugin)
 Install Notes
 -------------
 
-* Requires **[Git Plugin][wiki] v1.1.18**, released 2012-04-27, and "Poll SCM"
+* Requires **[Git Plugin][wiki] v1.1.18**, released 2012-04-27, and the "Poll SCM"
   build trigger needs to be enabled. (Though you can have it poll very
   infrequently, I recommend something like `0 */3 * * *`)
-* **Jenkins Url** is the base URL to your [Jenkins][] server, for example
-  http://ci.jenkins-ci.org/. We will hit /git/notifyCommit under this URL (see
+* "Jenkins Url" is the base URL of your [Jenkins][] server. For example:
+  `http://ci.jenkins-ci.org/`. We will hit `/git/notifyCommit` under this URL. (See
   [the Git plugin wiki page][wiki-push] for more details.)
 
 Details
 -------
 
-[Jenkins][] is a very popular Continuous Integration Server.
+[Jenkins][] is a popular continuous integration server.
 
-If you're using the standard [Jenkins Git plugin][wiki] to poll & check out your
-repository, you can easily and quickly switch to a pushing model using this
-service. 
+If you're using the standard [Jenkins Git plugin][wiki] to poll & check out
+your repository, you can quickly and easily switch to a push model using this
+service.
 
 It will send a request to your Jenkins instance telling it about the
 repositories and branches that changed. Jenkins will then poll the repository

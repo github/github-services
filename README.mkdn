@@ -18,6 +18,8 @@ How the services work
 Steps to contributing
 ---------------------
 
+Start by reading the [Contributing Guidelines](https://github.com/github/github-services/blob/master/CONTRIBUTING.md).
+
 1. Fork the project
 2. Create a new file in /services/ called `service_name.rb`, using the [following
    template](https://github.com/github/github-services/tree/master/services#readme):
@@ -36,7 +38,7 @@ Steps to contributing
 6. Once it's accepted we'll add any new necessary data fields to the GitHub
    front-end so people can start using your addition.
 
-*Patches including tests are encouraged*
+*Patches including tests are required*
 
 A huge thanks goes out to [our many contributors](https://github.com/github/github-services/contributors)!
 

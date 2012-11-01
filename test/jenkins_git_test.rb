@@ -3,12 +3,14 @@ require File.expand_path('../helper', __FILE__)
 class JenkinsGitTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
-    @options = {'jenkins_url' => 'http://jenkins.example.com/jenkins/'}
+    @options = {'jenkins_url' => 'http://monkey:secret@jenkins.example.com/jenkins/'}
   end
 
   def test_push
     @stubs.get "/jenkins/git/notifyCommit" do |env|
       assert_equal 'jenkins.example.com', env[:url].host
+
+      assert_equal 'Basic bW9ua2V5OnNlY3JldA==', env[:request_headers]['authorization']
 
       params = Rack::Utils.parse_nested_query(env[:url].query)
       expected_params = {

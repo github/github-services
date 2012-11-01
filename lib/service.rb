@@ -29,6 +29,72 @@ end
 # Represents a single triggered Service call.  Each Service tracks the event
 # type, the configuration data, and the payload for the current call.
 class Service
+  class Contributor < Struct.new(:value)
+    def self.contributor_types
+      @contributor_types ||= []
+    end
+
+    def self.inherited(contributor_type)
+      contributor_types << contributor_type
+      super
+    end
+
+    def self.create(type, keys)
+      klass = contributor_types.detect { |struct| struct.contributor_type == type }
+      if klass
+        Array(keys).map do |key|
+          klass.new(key)
+        end
+      else
+        raise ArgumentError, "Invalid Contributor type #{type.inspect}"
+      end
+    end
+
+    def to_contributor_hash(key)
+      {:type => self.class.contributor_type, key => value}
+    end
+  end
+
+  class EmailContributor < Contributor
+    def self.contributor_type
+      :email
+    end
+
+    def to_hash
+      to_contributor_hash(:address)
+    end
+  end
+
+  class GitHubContributor < Contributor
+    def self.contributor_type
+      :github
+    end
+
+    def to_hash
+      to_contributor_hash(:login)
+    end
+  end
+
+  class TwitterContributor < Contributor
+    def self.contributor_type
+      :twitter
+    end
+
+    def to_hash
+      to_contributor_hash(:login)
+    end
+  end
+
+  class WebContributor < Contributor
+    def self.contributor_type
+      :web
+    end
+
+    def to_hash
+      to_contributor_hash(:url)
+    end
+  end
+
   dir = File.expand_path '../service', __FILE__
   Dir["#{dir}/events/helpers/*.rb"].each do |helper|
     require helper
@@ -36,6 +102,12 @@ class Service
   Dir["#{dir}/events/*.rb"].each do |helper|
     require helper
   end
+
+  ALL_EVENTS = %w[
+    commit_comment create delete download follow fork fork_apply gist gollum
+    issue_comment issues member public pull_request push team_add watch
+    pull_request_review_comment status
+  ].sort
 
   class << self
     attr_accessor :root, :env, :host
@@ -130,12 +202,6 @@ class Service
         @default_events = events
       end
     end
-
-    ALL_EVENTS = %w[
-      commit_comment create delete download follow fork fork_apply gist gollum
-      issue_comment issues member public pull_request push team_add watch
-      pull_request_review_comment status
-    ].sort
 
     # Gets a list of events support by the service. Should be a superset of
     # default_events.
@@ -250,11 +316,15 @@ class Service
     # user-facing documentation regarding the Service.
     #
     # Returns a String.
-    def title
-      @title ||= begin
-        hook = name.dup
-        hook.sub! /.*:/, ''
-        hook
+    def title(value = nil)
+      if value
+        @title = value
+      else
+        @title ||= begin
+          hook = name.dup
+          hook.sub! /.*:/, ''
+          hook
+        end
       end
     end
 
@@ -269,12 +339,16 @@ class Service
     # short string that is used to uniquely identify the service internally.
     #
     # Returns a String.
-    def hook_name
-      @hook_name ||= begin
-        hook = name.dup
-        hook.downcase!
-        hook.sub! /.*:/, ''
-        hook
+    def hook_name(value = nil)
+      if value
+        @hook_name = value
+      else
+        @hook_name ||= begin
+          hook = name.dup
+          hook.downcase!
+          hook.sub! /.*:/, ''
+          hook
+        end
       end
     end
 
@@ -284,6 +358,44 @@ class Service
     #
     # Returns a String.
     attr_writer :hook_name
+
+    attr_reader :url, :logo_url
+
+    def url(value = nil)
+      if value
+        @url = value
+      else
+        @url
+      end
+    end
+
+    def logo_url(value = nil)
+      if value
+        @logo_url = value
+      else
+        @logo_url
+      end
+    end
+
+    def supporters
+      @supporters ||= []
+    end
+
+    def maintainers
+      @maintainers ||= []
+    end
+
+    def supported_by(values)
+      values.each do |contributor_type, value|
+        supporters.push(*Contributor.create(contributor_type, value))
+      end
+    end
+
+    def maintained_by(values)
+      values.each do |contributor_type, value|
+        maintainers.push(*Contributor.create(contributor_type, value))
+      end
+    end
 
     # Public: Gets the Hash of secret configuration options.  These are set on
     # the GitHub servers and never committed to git.
@@ -428,11 +540,11 @@ class Service
     @http = @secrets = @email_config = nil
   end
 
-  # Public: Shortens the given URL with bit.ly.
+  # Public: Shortens the given URL with git.io.
   #
   # url - String URL to be shortened.
   #
-  # Returns the String URL response from bit.ly.
+  # Returns the String URL response from git.io.
   def shorten_url(url)
     res = http_post("http://git.io", :url => url)
     if res.status == 201
