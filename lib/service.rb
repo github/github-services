@@ -318,13 +318,13 @@ class Service
     # Returns a String.
     def title(value = nil)
       if value
-        return self.title = value
-      end
-
-      @title ||= begin
-        hook = name.dup
-        hook.sub! /.*:/, ''
-        hook
+        @title = value
+      else
+        @title ||= begin
+          hook = name.dup
+          hook.sub! /.*:/, ''
+          hook
+        end
       end
     end
 
@@ -341,14 +341,14 @@ class Service
     # Returns a String.
     def hook_name(value = nil)
       if value
-        return self.hook_name = value
-      end
-
-      @hook_name ||= begin
-        hook = name.dup
-        hook.downcase!
-        hook.sub! /.*:/, ''
-        hook
+        @hook_name = value
+      else
+        @hook_name ||= begin
+          hook = name.dup
+          hook.downcase!
+          hook.sub! /.*:/, ''
+          hook
+        end
       end
     end
 
@@ -359,7 +359,23 @@ class Service
     # Returns a String.
     attr_writer :hook_name
 
-    attr_accessor :url, :logo_url
+    attr_reader :url, :logo_url
+
+    def url(value = nil)
+      if value
+        @url = value
+      else
+        @url
+      end
+    end
+
+    def logo_url(value = nil)
+      if value
+        @logo_url = value
+      else
+        @logo_url
+      end
+    end
 
     def supporters
       @supporters ||= []

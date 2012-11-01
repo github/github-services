@@ -37,6 +37,9 @@ class Service::MyService < Service
 
   default_events :push, :issues, :pull_request
 
+  url "http://myservice.com"
+  logo_url "http://myservice.com/logo.png"
+
   # Technoweenie on GitHub is pinged for any bugs with the Hook code.
   maintained_by :github => 'technoweenie'
 

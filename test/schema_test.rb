@@ -99,6 +99,9 @@ class CustomSchemaTest < DefaultSchemaTest
 
     white_list :abc, :ghi
 
+    url 'url'
+    logo_url 'logo'
+
     maintained_by :email => 'abc@def.com',
       :web => 'http://def.com/support',
       :github => 'abc',
@@ -150,6 +153,14 @@ class CustomSchemaTest < DefaultSchemaTest
     assert_contributor :github, 'def', supporters
     assert_contributor :twitter, 'def', supporters
     assert_equal 5, supporters.size
+  end
+
+  def test_url
+    assert_equal 'url', @svc.url
+  end
+
+  def test_logo_url
+    assert_equal 'logo', @svc.logo_url
   end
 
   def assert_contributor(contributor_type, value, contributors)
