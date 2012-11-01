@@ -29,6 +29,72 @@ end
 # Represents a single triggered Service call.  Each Service tracks the event
 # type, the configuration data, and the payload for the current call.
 class Service
+  class Contributor < Struct.new(:value)
+    def self.contributor_types
+      @contributor_types ||= []
+    end
+
+    def self.inherited(contributor_type)
+      contributor_types << contributor_type
+      super
+    end
+
+    def self.create(type, keys)
+      klass = contributor_types.detect { |struct| struct.contributor_type == type }
+      if klass
+        Array(keys).map do |key|
+          klass.new(key)
+        end
+      else
+        raise ArgumentError, "Invalid Contributor type #{type.inspect}"
+      end
+    end
+
+    def to_contributor_hash(key)
+      {:type => self.class.contributor_type, key => value}
+    end
+  end
+
+  class EmailContributor < Contributor
+    def self.contributor_type
+      :email
+    end
+
+    def to_hash
+      to_contributor_hash(:address)
+    end
+  end
+
+  class GitHubContributor < Contributor
+    def self.contributor_type
+      :github
+    end
+
+    def to_hash
+      to_contributor_hash(:login)
+    end
+  end
+
+  class TwitterContributor < Contributor
+    def self.contributor_type
+      :twitter
+    end
+
+    def to_hash
+      to_contributor_hash(:login)
+    end
+  end
+
+  class WebContributor < Contributor
+    def self.contributor_type
+      :web
+    end
+
+    def to_hash
+      to_contributor_hash(:url)
+    end
+  end
+
   dir = File.expand_path '../service', __FILE__
   Dir["#{dir}/events/helpers/*.rb"].each do |helper|
     require helper
@@ -292,6 +358,28 @@ class Service
     #
     # Returns a String.
     attr_writer :hook_name
+
+    attr_accessor :url, :logo_url
+
+    def supporters
+      @supporters ||= []
+    end
+
+    def maintainers
+      @maintainers ||= []
+    end
+
+    def supported_by(values)
+      values.each do |contributor_type, value|
+        supporters.push(*Contributor.create(contributor_type, value))
+      end
+    end
+
+    def maintained_by(values)
+      values.each do |contributor_type, value|
+        maintainers.push(*Contributor.create(contributor_type, value))
+      end
+    end
 
     # Public: Gets the Hash of secret configuration options.  These are set on
     # the GitHub servers and never committed to git.

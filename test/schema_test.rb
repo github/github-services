@@ -31,6 +31,22 @@ class DefaultSchemaTest < Service::TestCase
   def test_white_listed_attributes
     assert_equal [], @svc.white_listed
   end
+
+  def test_url
+    assert_nil @svc.url
+  end
+
+  def test_logo_url
+    assert_nil @svc.logo_url
+  end
+
+  def test_maintainers
+    assert_equal [], @svc.maintainers
+  end
+
+  def test_supporters
+    assert_equal [], @svc.supporters
+  end
 end
 
 class DefaultSchemaWithEventsTest < DefaultSchemaTest
@@ -82,6 +98,16 @@ class CustomSchemaTest < DefaultSchemaTest
     boolean :ghi
 
     white_list :abc, :ghi
+
+    maintained_by :email => 'abc@def.com',
+      :web => 'http://def.com/support',
+      :github => 'abc',
+      :twitter => 'def'
+
+    supported_by :email => 'abc@def.com',
+      :web => 'http://def.com/support',
+      :github => %w(abc def),
+      :twitter => 'def'
   end
 
   def setup
@@ -105,6 +131,30 @@ class CustomSchemaTest < DefaultSchemaTest
 
   def test_white_listed_attributes
     assert_equal %w(abc ghi), @svc.white_listed
+  end
+
+  def test_maintainers
+    maintainers = @svc.maintainers
+    assert_contributor :email, 'abc@def.com', maintainers
+    assert_contributor :web, 'http://def.com/support', maintainers
+    assert_contributor :github, 'abc', maintainers
+    assert_contributor :twitter, 'def', maintainers
+    assert_equal 4, maintainers.size
+  end
+
+  def test_supporters
+    supporters = @svc.supporters
+    assert_contributor :email, 'abc@def.com', supporters
+    assert_contributor :web, 'http://def.com/support', supporters
+    assert_contributor :github, 'abc', supporters
+    assert_contributor :github, 'def', supporters
+    assert_contributor :twitter, 'def', supporters
+    assert_equal 5, supporters.size
+  end
+
+  def assert_contributor(contributor_type, value, contributors)
+    assert contributors.detect { |c| c.class.contributor_type == contributor_type &&
+                                     c.value == value }
   end
 end
 
