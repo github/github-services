@@ -8,7 +8,9 @@ class HostedGraphiteTest < Service::TestCase
   def test_push
     url = "/integrations/github/"
     @stubs.post url do |env|
-      assert_equal "payload=%22payload%22&api_key=test", env[:body]
+      params = Rack::Utils.parse_query env[:body]
+      assert_equal 'payload', JSON.parse(params['payload'])
+      assert_equal 'test', params['api_key']
       [200, {}, '']
     end
 
