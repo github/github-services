@@ -3,6 +3,11 @@ class Service::Irker < Service
   boolean :long_url
   white_list :address, :project, :branch, :module, :channels
 
+  url 'http://www.catb.org/~esr/irker/'
+  logo_url 'http://www.catb.org/~esr/irker/irker-logo.png'
+  maintained_by :github => 'AI0867'
+  supported_by :web => 'irc://chat.freenode.net/#irker'
+
   require 'json'
 
   def receive_push
