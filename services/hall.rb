@@ -3,7 +3,9 @@ class Service::Hall < Service
   default_events :commit_comment, :gollum, :issues, :issue_comment, :pull_request, :push
   string :room_token
 
-  # Supportors and Maintainers
+  # Contributing Assets
+  url "https://hall.com"
+  logo_url "https://hall.com/images/media_kit/hall_logo.jpg"
   maintained_by :github => 'bhellman1'
   supported_by :web => 'https://hallcom.uservoice.com/', :email => 'contact@hall-inc.com', :twitter => 'hall'
 
