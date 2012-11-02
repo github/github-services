@@ -2,10 +2,6 @@ class Service::Gemini < Service
   string :server_url, :api_key
 
   def receive_push
-    if data['username'].to_s.empty?
-      raise_config_error "Username is missing"
-    end
-
     if data['server_url'].to_s.empty?
       raise_config_error "Server URL is missing"
     end
@@ -15,7 +11,7 @@ class Service::Gemini < Service
     end
 
     # Sets this basic auth info for every request. GitHub user and Gemini API Key.
-    http.basic_auth(data['username'], data['api_key'])
+    http.basic_auth(data['api_key'], data['api_key'])
 
     # Every request sends JSON.
     http.headers['Content-Type'] = 'application/json'
@@ -27,4 +23,3 @@ class Service::Gemini < Service
     http_post "commit", commits.to_json
   end
 end
-

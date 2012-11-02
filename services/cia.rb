@@ -39,7 +39,7 @@ class Service::CIA < Service
     @xmlrpc_server ||= begin
       XMLRPC::Client.new2(
         (address = data['address'].to_s).present? ?
-          address : 'http://cia.vc')
+          address : 'http://cia.vc/xmlrpc.php')
     end
   end
 
