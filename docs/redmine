@@ -1,6 +1,11 @@
 Redmine
 ==========
 
+Redmine Service has the following modules:
+
+1. Fetch GitHub Commits
+-----------------------
+
 Notifies an instance of Redmine, a project management tool, to fetch the new commits from GitHub.
 
 Install Notes
@@ -10,20 +15,42 @@ Install Notes
 2. Activate "Enable WS for repository management" in the global settings. While there, generate an API key (if neccessary) and copy it.
 3. Set your github repository as git repository for a project.
 4. Enter the full URL to your Redmine instance as well as the project's identifier and the API key.
-5. We will then notify your Redmine whenever you do a "git push".
+5. Check the "Fetch GitHub Commits" option to enable the module.
+6. We will then notify your Redmine whenever you do a "git push".
 
 Note: The GitHub servers need to have access to "sys/fetch_changesets". Some older tutorials have you add a rule to your server config to
 allow access to sys/ only from localhost. Since it is now possible to use an API key, this is no longer necessary.
 
 Notifies an instance of Redmine, a project management tool, to fetch the new commits from GitHub.
 
-Developer Notes
----------------
+2. Update Redmine Issues about related commits
+----------------------------------------------
 
-data
-  - address (full URL of the redmine instance)
-  - api_key (the API key for using the webservice)
-  - project (identifier of the project belonging to this repository)
+Updates an issue on Redmine, a project management tool, whenever a commit happened and is related to this issue
+Commits which are related to Redmine issues are detected by matching '#IssueNo' in the commit message (i.e "fixing bug #234" is related to issue #234)
 
-payload
-  - refer to docs/github_payload (nothing is used by this script)
+Install Notes
+-------------
+1. Generate API key from Redmine from My account -> API access key (Right Side Section) -> Show
+3. This module requires setting Redmine url and API access Key.
+4. Check the "Update Redmine Issues About Commits" option to enable the module.
+
+Note: Evey post update on the issues will be authored by the account given the API access key
+
+Example of the update issue post on Redmine (the output):
+
+    Commit: b44aa57a6c6c52cc20b9e396cfe3cf97bdfc2b33
+            https://github.com/modsaid/github-services/commit/b44aa57a6c6c52cc20b9e396cfe3cf97bdfc2b33
+    Author: modsaid <modsaid@example.com>
+    Date: 2007-10-10 (Sun, 02 Aug 2012)
+    Log Message:
+    -----------
+    Fix #{IssueNo}
+
+  Credits
+  -------
+  * modsaid
+  * basayel
+
+  http://www.espace.com.eg
+

@@ -3,7 +3,7 @@ require File.expand_path('../helper', __FILE__)
 class TrelloTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
-    @data = {'list_id' => 'abc123', 'consumer_token' => 'blarg', 'master_only' => 1}
+    @data = {'push_list_id' => 'abc123', 'consumer_token' => 'blarg', 'master_only' => 1}
   end
 
   def test_push
@@ -23,6 +23,13 @@ class TrelloTest < Service::TestCase
     assert_equal correct_description, svc.send(:desc_for_commit, svc.payload['commits'].first)
 
     svc.receive_push
+  end
+
+  def test_backward_compatible_push_list_id
+    @data['list_id'] = @data['push_list_id']
+    @data.delete 'push_list_id'
+    svc = service :push, @data
+    assert_cards_created svc
   end
 
   def test_master_only_no_master
@@ -48,21 +55,42 @@ class TrelloTest < Service::TestCase
     assert_cards_created svc
   end
 
-  private
+  def test_pull_request
+    svc = service :pull_request, @data.merge!("pull_request_list_id" => 'zxy987')
+    assert_cards_created svc, :pull_request
+  end
+  
+  def test_closed_pull_request
+    svc = service :pull_request, 
+                  @data.merge!("pull_request_list_id" => 'zxy987'), 
+                  pull_payload.merge!("action" => "closed")
+    assert_no_cards_created svc, :pull_request
+  end
 
-  def assert_cards_created svc
+  private
+  
+  def call_hook_on_service svc, method
+    case method
+      when :push
+        svc.receive_push
+      when :pull_request
+        svc.receive_pull_request
+    end
+  end
+
+  def assert_cards_created(svc, method = :push)
     @stubs.post "/1/cards" do |env|
       assert_equal 'api.trello.com', env[:url].host
       [200, {}, '']
     end
-    svc.receive_push
+    call_hook_on_service svc, method
   end
 
-  def assert_no_cards_created svc
+  def assert_no_cards_created(svc, method = :push)
     @stubs.post "/1/cards" do
       raise "This should not be called"
     end
-    svc.receive_push
+    call_hook_on_service svc, method
   end
 
   def correct_description
@@ -71,6 +99,8 @@ class TrelloTest < Service::TestCase
 http://github.com/mojombo/grit/commit/06f63b43050935962f84fe54473a7c5de7977325
 
 Repo: grit
+
+Branch: master
 
 Commit Message: stub git call for Grit#heads test f:15 Case#1'
   end

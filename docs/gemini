@@ -1,0 +1,14 @@
+Gemini
+-------------
+
+IT'S ABOUT TRACKING
+Gemini is the all-in-one Tracker that works beautifully for any kind of project, team or process.
+Every task, initiative, bug, issue, enquiry, change request and ticket in one place.
+
+This GitHub integration works with Gemini v5.1.2+.
+
+Install Notes
+-------------
+
+* Create an API Key(GUID) in your Web.config file for the key "gemini.apikey".
+* "gemini_url" is YOUR Gemini instance i.e "http://gemini.countersoft.com".

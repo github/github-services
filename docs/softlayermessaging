@@ -1,0 +1,15 @@
+SoftLayer Messaging
+========
+
+Install Notes
+-------------
+
+
+  "SoftLayer Message Queue" getting started guide:
+    http://sldn.softlayer.com/article/Message-Queue-Getting-Started
+
+  1. account is the publishing account, typically 5 characters and not the username
+  2. user is the authenticating portal user
+  3. key is the messaging API key (not SoftLayer API key).
+  4. name is the queue or topic name.  This will need to be created before hand.
+  5. topic designates whether the name provided is either a topic or a queue name.

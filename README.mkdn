@@ -18,6 +18,8 @@ How the services work
 Steps to contributing
 ---------------------
 
+Start by reading the [Contributing Guidelines](https://github.com/github/github-services/blob/master/CONTRIBUTING.md).
+
 1. Fork the project
 2. Create a new file in /services/ called `service_name.rb`, using the [following
    template](https://github.com/github/github-services/tree/master/services#readme):
@@ -36,7 +38,7 @@ Steps to contributing
 6. Once it's accepted we'll add any new necessary data fields to the GitHub
    front-end so people can start using your addition.
 
-*Patches including tests are encouraged*
+*Patches including tests are required*
 
 A huge thanks goes out to [our many contributors](https://github.com/github/github-services/contributors)!
 
@@ -95,3 +97,19 @@ You can also test your hook with the Sinatra web service:
    just editing the "data" values but leaving the "payload" alone.)
 3. Send the docs/github_payload file to your service by calling:
    `./script/deliver_payload [service-name]`
+
+Other hook types
+----------------
+
+The default hook for a service is `push`. You may wish to have services respond
+to other event types, like `pull_request` or `issues`. The full list may be 
+found in [service.rb](../blob/master/lib/service.rb#L134).
+Unless your service specifies `default_events <list_of_types>`, only the `push` 
+hook will be called, see 
+[service.rb#default_events](../blob/master/lib/service.rb#L126).
+
+To make use of these additional types, your service will either need to define 
+`receive_<type>` (like `receive_pull_request_review_comment`) or a generic 
+`receive_event`.
+
+You can read more about the Hooks in the [API Documentation](http://developer.github.com/v3/repos/hooks/).

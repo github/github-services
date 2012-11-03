@@ -1,5 +1,5 @@
 class Service::Travis < Service
-  default_events :push
+  default_events :push, :pull_request, :issue_comment, :public, :member
   string :user, :token, :domain
   white_list :domain, :user
 

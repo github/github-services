@@ -135,32 +135,32 @@ class ShiningPandaTest < Service::TestCase
 
   def test_url_without_parameters
     svc = service(data, payload)
-    assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/build", svc.url
+    assert_equal "https://jenkins.shiningpanda-ci.com/shiningpanda.org/job/pygments/build", svc.url
   end
 
   def test_url_nil_parameters
     svc = service(data.merge({'parameters' => nil}), payload)
-    assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/build", svc.url
+    assert_equal "https://jenkins.shiningpanda-ci.com/shiningpanda.org/job/pygments/build", svc.url
   end
 
   def test_url_blank_parameters
     svc = service(data.merge({'parameters' => ''}), payload)
-    assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/build", svc.url
+    assert_equal "https://jenkins.shiningpanda-ci.com/shiningpanda.org/job/pygments/build", svc.url
   end
 
   def test_url_with_parameters
     svc = service(data.merge({'parameters' => 'foo=bar'}), payload)
-    assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/buildWithParameters", svc.url
+    assert_equal "https://jenkins.shiningpanda-ci.com/shiningpanda.org/job/pygments/buildWithParameters", svc.url
   end
 
   def test_url_strip_workspace
     svc = service(data.merge({'workspace' => ' shiningpanda.org '}), payload)
-    assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/build", svc.url
+    assert_equal "https://jenkins.shiningpanda-ci.com/shiningpanda.org/job/pygments/build", svc.url
   end
 
   def test_url_strip_job
     svc = service(data.merge({'job' => ' pygments '}), payload)
-    assert_equal "https://jenkins.shiningpanda.com/shiningpanda.org/job/pygments/build", svc.url
+    assert_equal "https://jenkins.shiningpanda-ci.com/shiningpanda.org/job/pygments/build", svc.url
   end
 
   def test_strip_token

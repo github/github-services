@@ -1,16 +1,38 @@
 class Service::Trello < Service
-  string :list_id, :ignore_regex
+  string :push_list_id, :pull_request_list_id, :ignore_regex
   boolean  :master_only
   password :consumer_token
+
+  default_events :push, :pull_request
+
+  def receive_pull_request
+    return unless opened?
+
+    assert_required_credentials :pull_request
+    
+    create_card :pull_request, name_for_pull(pull), desc_for_pull(pull)
+  end
+
+  def name_for_pull(pull)
+    pull.title
+  end
+
+  def desc_for_pull(pull)
+    "Author: %s\n\n%s\n\nDescription: %s" % [
+      pull.user.login,
+      pull.html_url,
+      pull.body || '[no description]'
+    ]
+  end
 
   def receive_push
     return unless create_cards?
 
     # Confirm all required config is present
-    assert_required_credentials
+    assert_required_credentials :push
 
     # Create the card
-    create_cards
+    create_cards :push
   end
 
   private
@@ -21,27 +43,30 @@ class Service::Trello < Service
     true
   end
 
-  def assert_required_credentials
+  def assert_required_credentials(event)
     if consumer_token.empty?
       raise_config_error "You need an authorization Token. See tips below."
     end
-    if list_id.empty?
+    if list_id(event).empty?
       raise_config_error "You need to enter a list identifiter. See tips below."
     end
   end
 
-  def create_cards
+  def create_card(event, name, description)
     http.url_prefix = "https://api.trello.com/1"
+    http_post "cards",
+      :name => name,
+      :desc => description,
+      :idList => list_id(event),
+      :key => application_key,
+      :token => consumer_token
+  end
+    
 
+  def create_cards(event)
     payload['commits'].each do |commit|
       next if ignore_commit? commit
-
-      http_post "cards",
-        :name => name_for_commit(commit),
-        :desc => desc_for_commit(commit),
-        :idList => list_id,
-        :key => application_key,
-        :token => consumer_token
+      create_card event, name_for_commit(commit), desc_for_commit(commit)
     end
   end
 
@@ -49,19 +74,22 @@ class Service::Trello < Service
     ignore_regex && ignore_regex.match(commit['message'])
   end
 
+  def truncate_message(message)
+    message.length > message_max_length ? message[0...message_max_length] + "..." : message
+  end
+
   def name_for_commit commit
-    commit['message'].length > message_max_length ? \
-      commit['message'][0...message_max_length] + '...' : \
-      commit['message']
+    truncate_message commit['message']
   end
 
   def desc_for_commit commit
     author = commit['author'] || {}
 
-    "Author: %s\n\n%s\n\nRepo: %s\n\nCommit Message: %s" % [
+    "Author: %s\n\n%s\n\nRepo: %s\n\nBranch: %s\n\nCommit Message: %s" % [
       author['name'] || '[unknown]',
       commit['url'],
       repository,
+      branch_name,
       commit['message'] || '[no description]'
     ]
   end
@@ -70,8 +98,14 @@ class Service::Trello < Service
     data['consumer_token'].to_s
   end
 
-  def list_id
-    data['list_id'].to_s
+  def list_id(event)
+    list = data["#{event}_list_id"]
+    
+    # this should make the old `list_id`, which was implicitly for push,
+    # backwards-compatible
+    list ||= data["list_id"] if event == :push
+    
+    list.to_s
   end
 
   def ignore_regex

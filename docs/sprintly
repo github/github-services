@@ -1,0 +1,14 @@
+Sprintly
+========
+
+Sprint.ly is a project management aide which is lightweight for developers and provides visibility for external stakeholders.
+
+Integration with sprint.ly powers closing tickets through commit messages, updating ticket status via pull request and much more.
+
+Install Notes
+-------------
+
+1. Sign up at https://sprint.ly/
+2. On your profile page ( https://sprint.ly/account/profile/ ), get your API key.
+3. On your product's page, get the product number. The id is in the URL like: https://sprint.ly/product/3722/ -- 3722 would be your product id.
+4. Enjoy!

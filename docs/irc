@@ -1,14 +1,16 @@
 1.  `server` - IRC server, IE. irc.freenode.net
-2.  `port` - Normally 6667 (No SSL) or 9999 (SSL)
+2.  `port` - Normally 6667 (No SSL) or 9999 (SSL) (optional). These are the defaults based on whether the value of `ssl` checkbox.
 3.  `room` - Supports single or multiple rooms (comma separated).  Also supports room passwords (room_name::password).  Prefixing '#' to the room is optional.
 4.  `password` - Server password (optional)
-5.  `nick` - Nickame (optional)
-6.  `long_url` - If enabled, displays full compare/commit url's. If disabled uses bit.ly.
-7.  `message_without_join' - If enabled prevents joining and immediately leaving the channel.
+5.  `nick` - Nickname (optional)
+6.  `long_url` - If enabled, displays full compare/commit url's. If disabled uses git.io.
+7.  `message_without_join` - If enabled prevents joining and immediately leaving the channel.
 8. `no_colors` - Disables color support for messages
 9. `notice` - Enables notice support.  Make sure you configure channel to support notices ("/mode #yourchannelname -n" or "/msg chanserv set mlock -n")
-10. `active` - Enables the bot
-11. Configure your IRC channel to allow external messages (/mode #yourchannelname -n).
+10. `branch_regexes` - Regular expressions for branch name matching (optional, comma separated). For example, only master => `^master$`, master & starts with bug => `master,^bug`.
+11. `no_pull_requests` - Turns off notifications of opened pull requests.
+12. `active` - Enables the bot
+13. Configure your IRC channel to allow external messages (/mode #yourchannelname -n).
 
 For freenode, try the following:
 

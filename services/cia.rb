@@ -1,6 +1,6 @@
 class Service::CIA < Service
   string :address, :project, :branch, :module
-  boolean :long_url
+  boolean :long_url, :full_commits
   white_list :address, :project, :branch, :module
 
   def receive_push
@@ -39,7 +39,7 @@ class Service::CIA < Service
     @xmlrpc_server ||= begin
       XMLRPC::Client.new2(
         (address = data['address'].to_s).present? ?
-          address : 'http://cia.vc')
+          address : 'http://cia.vc/xmlrpc.php')
     end
   end
 
@@ -54,7 +54,8 @@ class Service::CIA < Service
   end
 
   def build_cia_commit(repository, branch, sha1, commit, module_name, size = 1)
-    log = commit['message'].split("\n")[0]
+    log_lines = commit['message'].split("\n")
+    log = log_lines.shift
     log << " (+#{size} more commits...)" if size > 1
 
     dt         = DateTime.parse(commit['timestamp']).new_offset
@@ -63,6 +64,12 @@ class Service::CIA < Service
     tiny_url   = data['long_url'].to_i == 1 ? commit['url'] : shorten_url(commit['url'])
 
     log << " - #{tiny_url}"
+
+    if data['full_commits'].to_i == 1
+      log_lines.each do |log_line|
+        log << "\n" << log_line
+      end
+    end
 
     <<-MSG
       <message>

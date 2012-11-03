@@ -112,6 +112,7 @@ require 'right_http_connection'
 # vendor
 require 'basecamp'
 require 'rubyforge'
+require 'softlayer/messaging'
 
 require File.expand_path('../../lib/service', __FILE__)
 require File.expand_path('../../lib/service/app', __FILE__)

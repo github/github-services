@@ -3,6 +3,7 @@ class Service::ShiningPanda < Service
   white_list :workspace, :job, :branches, :parameters
 
   def receive_push
+    http.ssl[:verify] = false # :(
     if workspace.empty?
       raise_config_error 'Workspace not set'
     end
@@ -60,6 +61,6 @@ class Service::ShiningPanda < Service
   end
 
   def url
-    @url ||= "https://jenkins.shiningpanda.com/#{workspace}/job/#{job}/#{parameters.empty? ? 'build' : 'buildWithParameters'}"
+    @url ||= "https://jenkins.shiningpanda-ci.com/#{workspace}/job/#{job}/#{parameters.empty? ? 'build' : 'buildWithParameters'}"
   end
 end

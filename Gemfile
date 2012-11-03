@@ -26,3 +26,5 @@ gem "rack-test", :require => false
 gem "right_aws",              "3.0.3"
 gem "right_http_connection",  "1.3.0"
 gem "mqtt", 			      "0.0.8"
+gem "softlayer_messaging", "~> 1.0.2"
+gem "aws-sdk", "1.6.8"

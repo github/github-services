@@ -1,4 +1,5 @@
 .DS_Store
+.idea
 deploy.rb
 *~
 config/secrets.yml
@@ -9,3 +10,6 @@ vendor/gems
 docs/payload_data
 .rvmrc
 .project
+.settings
+.buildpath
+

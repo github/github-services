@@ -9,7 +9,7 @@ class Service::JenkinsGitHub < Service
     if data['jenkins_hook_url'].present?
       url = data['jenkins_hook_url']
     else
-      raise_config_error "Jenkins Github Webhook URL not set"
+      raise_config_error "Jenkins Hook Url not set"
     end
     http_post url,
       :payload => JSON.generate(payload)
