@@ -14,7 +14,7 @@ class Service::Twitter < Service
       url = "#{payload['repository']['url']}/commits/#{ref_name}"
       status = "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
       status = if data['short_format'] == '1'
-        "Git: #{url} - #{payload['commits'].length} commits"
+        "#{url} - #{payload['commits'].length} commits"
       else
         "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
       end
@@ -30,7 +30,7 @@ class Service::Twitter < Service
         url = commit['url']
         status = "[#{repository}] #{url} #{author['name']} - #{commit['message']}"
         status = if data['short_format'] == '1'
-          "Git: #{url} #{commit['message']}"
+          "#{url} #{commit['message']}"
         else
           "[#{repository}] #{url} #{author['name']} - #{commit['message']}"
         end
