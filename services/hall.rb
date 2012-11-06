@@ -9,7 +9,7 @@ class Service::Hall < Service
   maintained_by :github => 'bhellman1'
   supported_by :web => 'https://hallcom.uservoice.com/', :email => 'contact@hall-inc.com', :twitter => 'hall'
 
-  def receive_push
+  def receive_event
     raise_config_error "Missing room token" if data['room_token'].to_s.empty?
     room_token = data['room_token'].to_s
 
