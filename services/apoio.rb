@@ -16,7 +16,7 @@ class Service::Apoio < Service
     http.headers['X-Subdomain'] = data['subdomain']
     http.headers['X-Api-Token'] = data['token']
 
-    url = service_url("https://api.apo.io/service/github")
+    url = "https://api.apo.io/service/github"
     res = http_post(url, { :payload  => payload }.to_json)
 
     if res.status != 200
