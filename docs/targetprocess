@@ -21,9 +21,6 @@ Install Notes
 
   - A project admin's account credentials to access your TargetProcess server.
 
-  - The project id from your TargetProcess project that the GitHub repository
-    should map to (this can be found on the "Projects" list within TargetProcess)
-
 ---------------------
 Commit Message Syntax
 ---------------------

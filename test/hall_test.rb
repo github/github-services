@@ -14,7 +14,7 @@ class HallTest < Service::TestCase
 
     svc = service(
       {'room_token' => 'test_token'}, payload)
-    svc.receive_push
+    svc.receive_event
   end
 
   def service(*args)
