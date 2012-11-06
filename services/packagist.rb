@@ -1,5 +1,5 @@
 class Service::Packagist < Service
-  string :domain, :user, :token
+  string :user, :token, :domain
   white_list :domain, :user
 
   def receive_push
@@ -38,7 +38,7 @@ class Service::Packagist < Service
       'http://packagist.org'
     else
       data['domain']
-    end.strip
+    end.lstrip.sub(/[\/\s]+$/,'')
   end
 
   def domain_parts
