@@ -7,7 +7,8 @@ class ApoioTest < Service::TestCase
 
   def test_push
     @stubs.post "/service/github" do |env|
-      assert_equal 'test.apo.io', env[:url].host
+      assert_equal 'api.apo.io', env[:url].host
+      assert_equal "test", env[:request_headers]["X-Subdomain"]
       assert_equal "my123token", env[:request_headers]["X-Api-Token"]
       [200, {}, '']
     end
@@ -22,4 +23,3 @@ class ApoioTest < Service::TestCase
     super Service::Apoio, *args
   end
 end
-
