@@ -65,6 +65,44 @@ class PackagistTest < Service::TestCase
     assert_equal 'http', svc.scheme
   end
 
+  def test_detects_http_url
+    data = {
+      'domain' => 'http://packagist.example.com/'
+    }
+
+    svc = service(data, payload)
+    assert_equal 'packagist.example.com', svc.domain
+    assert_equal 'http', svc.scheme
+  end
+
+  def test_detects_https_url
+    data = {
+      'domain' => 'https://packagist.example.com/'
+    }
+
+    svc = service(data, payload)
+    assert_equal 'packagist.example.com', svc.domain
+    assert_equal 'https', svc.scheme
+  end
+
+  def test_strips_trailing_slash
+    data = {
+      'domain' => 'packagist.example.com/   '
+    }
+
+    svc = service(data, payload)
+    assert_equal 'packagist.example.com', svc.domain
+  end
+
+  def test_strips_trailing_slash_deep_path
+    data = {
+      'domain' => 'packagist.example.com/path/to/subdirectory/  '
+    }
+
+    svc = service(data, payload)
+    assert_equal 'packagist.example.com/path/to/subdirectory', svc.domain
+  end
+
   def test_infers_user_from_repo_data
     svc = service(data.reject{|key,v| key == 'user'}, payload)
     assert_equal "mojombo", svc.user
