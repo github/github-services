@@ -3,7 +3,7 @@ class Service::Toggl < Service
   white_list :project
 
   def receive_push
-    http.url_prefix = "https://www.toggl.com/api/v5"
+    http.url_prefix = "https://www.toggl.com/api/v6"
     http.basic_auth data['api_token'], 'api_token'
     http.headers['Content-Type'] = 'application/json'
 
@@ -18,7 +18,9 @@ class Service::Toggl < Service
         :task => {
           :duration => duration.to_i,
           :description => commit["message"].strip,
-          :project => data["project"],
+          :project => {
+            :id => data["project"]
+          },
           :start => (Time.now - duration.to_i).iso8601,
           :billable => true,
           :created_with => "github",
