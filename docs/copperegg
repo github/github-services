@@ -1,7 +1,9 @@
 Allows you to setup a GitHub repository to create Annotations on git pushes.
 Annotations are created like so:
 
-    "GitHub: #{payload['pusher']['name']} has pushed #{payload['commits'].size} commit(s) to #{payload['repository']['name']}"
+    "GitHub: #{payload['pusher']['name']} has pushed
+    #{payload['commits'].size} commit(s) to
+    #{payload['repository']['name']}"
 
 Install Notes
 -------------
