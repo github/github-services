@@ -1,8 +1,9 @@
 # based on the travis.rb service
 class Service::Nodejitsu < Service
-  string :subdomain, :username, :branch
+  string :username
   password :password
-  white_list :subdomain, :username, :branch
+  string :branch, :endpoint
+  white_list :endpoint, :username, :branch
 
   def receive_push
     return if branch.to_s != '' && branch != branch_name
@@ -25,17 +26,17 @@ class Service::Nodejitsu < Service
 
   def branch
     if data['branch'].to_s == ''
-      data['branch']
+      'master'
     else
-       'master'
+       data['branch']
     end.strip
   end
 
   def password
     if data['password'].to_s == ''
-      data['password']
+      ''
     else
-       ''
+       data['password']
     end.strip
   end
 
@@ -50,10 +51,10 @@ class Service::Nodejitsu < Service
   protected
 
   def full_domain
-    if data['domain'].to_s == ''
+    if data['endpoint'].to_s == ''
       'https://webhooks.nodejitsu.com'
     else
-      data['domain']
+      data['endpoint']
     end.strip
   end
 
