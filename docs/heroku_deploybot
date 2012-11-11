@@ -1,0 +1,33 @@
+Heroku - DeployBot
+==================
+
+Deploys heroku apps from a git repo emails the result to collaborators based on config vars.
+Check [deploybot](https://github.com/abhishekmunie/deploybot) repo for details.
+The hook posts a request at `https://deploybot.heroku.com/:your-heroku-app` to initiate deploy.
+
+Install Notes
+-------------
+
+    **heroku app** should be the heroku app on which to initiate deployment.
+
+To allow Deploy Bot to access your heroku app add `bot@abhishekmunie.com`
+as a collaborator at https://dashboard.heroku.com/apps/:your-heroku-app/collaborators
+
+For use with private GitHub repo add botx(bot@abhishekmunie.com) to collaborators.
+
+Add the following [config-vars](https://devcenter.heroku.com/articles/config-vars) to your app:
+
+    SOURCE_REPO   : URL of git repo to deploy
+    SOURCE_BRANCH : Branch to deploy (default: master)
+
+Additional configs:
+
+    SEND_DEPLOY_SUCCESS       : set false if you dont want e-mail for successful deployments.
+                                If you want reports to be sent to only some collaborators
+                                set an array of their e-mail id. (default: true)
+    SEND_DEPLOY_ERROR         : set false if you dont want e-mail for deployment errors.
+                                If you want reports to be sent to only some collaborators
+                                set an array of their e-mail id. (default: true)
+    SEND_DEPLOY_ALREADYUPDATE : set true if you want e-mail when repository was already up-to-date.
+                                If you want reports to be sent to only some collaborators
+                                set an array of their e-mail id. (default: false)
