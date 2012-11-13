@@ -6,7 +6,7 @@ class WeblateTest < Service::TestCase
   def test_push
     @stubs.post "/hooks/github/" do |env|
       assert_equal 'weblate.example.org', env[:url].host
-      assert_equal 'application/json',
+      assert_equal 'application/x-www-form-urlencoded',
         env[:request_headers]['content-type']
       [200, {}, '']
     end
