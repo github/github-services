@@ -2,6 +2,10 @@ class Service::Weblate < Service
   string :url
   white_list :url
 
+  url "http://weblate.org/"
+  logo_url "http://weblate.org/graphics/weblate-32.png"
+  maintained_by :github => 'nijel'
+
   def receive_push
     url = data['url']
     url.gsub! /\s/, ''
