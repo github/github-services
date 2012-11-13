@@ -22,7 +22,7 @@ class Service::Weblate < Service
       :payload => payload.to_json
 
     if res.status < 200 || res.status > 299
-      raise_config_error
+      raise_config_error "Failed with #{res.status}"
     end
   rescue URI::InvalidURIError
     raise_config_error "Invalid URL: #{data['url']}"
