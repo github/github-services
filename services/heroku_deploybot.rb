@@ -4,7 +4,7 @@ class Service::Heroku_DeployBot < Service
 
   white_list :heroku_apps
 
-  default_events :push, :pull_request
+  default_events :push
 
   url "http://deploybot.abhishekmunie.com"
   maintained_by :github => 'abhishekmunie'
@@ -19,7 +19,7 @@ class Service::Heroku_DeployBot < Service
     http.headers['Content-Type'] = 'application/json'
 
     # Uses this URL as a prefix for every request.
-    http.url_prefix = "https://deploybot.heroku.com"
+    http.url_prefix = "https://deploybot.herokuapp.com"
 
     if data['heroku_apps'].respond_to?("each")
       heroku_apps.each do |heroku_app|
