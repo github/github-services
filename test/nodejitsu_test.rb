@@ -23,8 +23,13 @@ class NodejitsuTest < Service::TestCase
   end
 
   def test_keeps_http_scheme
-    svc = service(data.merge({'domain' => 'http://example.com'}), payload)
+    svc = service(data.merge({'endpoint' => 'http://example.com'}), payload)
     assert_equal 'http', svc.scheme
+  end
+
+  def test_keeps_domain
+    svc = service(data.merge({'endpoint' => 'http://example.com'}), payload)
+    assert_equal 'example.com', svc.domain
   end
 
   def test_constructs_post_receive_url
@@ -45,14 +50,15 @@ class NodejitsuTest < Service::TestCase
     data = {
       'username' => 'kronn  ',
       'password' => '5373dd4a3648b88fa9acb8e46ebc188a  ',
-      'domain' => 'webhooks.nodejitsu.com   ',
+      'endpoint' => 'hooks.nodejitsu.com   ',
       'branch' => 'integration  '
     }
 
     svc = service(data, payload)
     assert_equal 'kronn', svc.username
     assert_equal '5373dd4a3648b88fa9acb8e46ebc188a', svc.password
-    assert_equal 'webhooks.nodejitsu.com', svc.domain
+    assert_equal 'hooks.nodejitsu.com', svc.domain
+    assert_equal 'https', svc.scheme
     assert_equal 'integration', svc.branch
   end
 
@@ -69,7 +75,7 @@ class NodejitsuTest < Service::TestCase
     assert_equal '5373dd4a3648b88fa9acb8e46ebc188a', svc.password
     assert_equal 'webhooks.nodejitsu.com', svc.domain
     assert_equal 'https', svc.scheme
-    assert_equal '', svc.branch
+    assert_equal 'master', svc.branch
   end
 
   def test_infers_user_from_repo_data
