@@ -1,4 +1,5 @@
-class Service::Bugherd < Service
+class Service::BugHerd < Service
+  default_events :issues, :issue_comment, :push
   string :project_key
   white_list :project_key
 
@@ -11,4 +12,8 @@ class Service::Bugherd < Service
     http_post url,
       :payload => JSON.generate(payload)
   end
+
+  alias receive_issues receive_push
+  alias receive_issue_comment receive_push
+
 end

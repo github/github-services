@@ -1,4 +1,4 @@
-class BugherdTest < Service::TestCase
+class BugHerdTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
@@ -25,9 +25,11 @@ class BugherdTest < Service::TestCase
     svc = service :push,
       {'url' => '', 'project_key' => 'KEY'}, payload
     svc.receive_push
+    svc.receive_issues
+    svc.receive_issue_comment
   end
 
   def service(*args)
-    super Service::Bugherd, *args
+    super Service::BugHerd, *args
   end
 end
