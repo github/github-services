@@ -1,12 +1,21 @@
 class Service::YouTrack < Service
-  string :base_url, :committers, :username
+  string :base_url, :committers, :username, :branch
   password :password
-  white_list :base_url, :username, :committers
+  white_list :base_url, :username, :committers, :branch
 
   def receive_push
+    # If branch is defined by user setting, process commands only if commits 
+    # are on that branch. If branch is not defined, process regardless of branch.
+    return unless active_branch?
+
     http.ssl[:verify] = false
     http.url_prefix = data['base_url']
     payload['commits'].each { |c| process_commit(c) }
+  end
+
+  def active_branch?
+    ref = payload['ref'].to_s
+    data['branch'].to_s.empty? or data['branch'].to_s == ref.split('/').last
   end
 
   def login

@@ -21,3 +21,6 @@
   - Administrator's account (e.g. 'root' user) credentials to access your YouTrack server.
 
   - Name of a user group in YouTrack, in which YouTrack will search for committer's account.
+
+  - Branch name to track. If a branch is provided, only commits to that branch will trigger
+    YouTrack commands and commits to others will be ignored. If the branch is left empty, commits on any branch will trigger commands.
