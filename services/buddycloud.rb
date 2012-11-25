@@ -27,10 +27,10 @@ class Service::Buddycloud < Service
     @password            = data['password']
     @show_commit_summary = false
     @show_commit_detail  = false
-    if data.has_key?('show_commit_summary') && data['show_commit_summary'] == true
+    if data.has_key?('show_commit_summary') && data['show_commit_summary'].to_i == 1
       @show_commit_summary = true
     end
-    if data.has_key?('show_commit_detail') && data['show_commit_detail'] == true
+    if data.has_key?('show_commit_detail') && data['show_commit_detail'].to_i == 1
       @show_commit_detail  = true 
     end
   end
