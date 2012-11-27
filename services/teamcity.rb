@@ -4,6 +4,8 @@ class Service::TeamCity < Service
   white_list :base_url, :build_type_id, :username, :branches
 
   def receive_push
+    return if payload['deleted']
+
     branches = data['branches'].to_s.split(/\s+/)
     ref = payload["ref"].to_s
     branch = ref.split("/").last
