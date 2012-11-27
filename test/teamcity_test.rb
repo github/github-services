@@ -23,6 +23,38 @@ class TeamCityTest < Service::TestCase
     svc.receive_push
   end
 
+  def test_push_with_branch_name
+    url = "/abc/httpAuth/action.html"
+    @stubs.get url do |env|
+      assert_equal 'branch-name', env[:params]['branchName']
+      [200, {}, '']
+    end
+
+    svc = service({
+      'base_url' => 'http://teamcity.com/abc',
+      'build_type_id' => 'btid'
+    }, {
+      'ref' => 'refs/heads/branch-name'
+    })
+    svc.receive_push
+  end
+
+  def test_push_with_branch_name_incl_slashes
+    url = "/abc/httpAuth/action.html"
+    @stubs.get url do |env|
+      assert_equal 'branch/name', env[:params]['branchName']
+      [200, {}, '']
+    end
+
+    svc = service({
+      'base_url' => 'http://teamcity.com/abc',
+      'build_type_id' => 'btid'
+    }, {
+      'ref' => 'refs/heads/branch/name'
+    })
+    svc.receive_push
+  end
+
   def service(*args)
     super Service::TeamCity, *args
   end
