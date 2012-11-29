@@ -11,7 +11,7 @@ class Service::Asana < Service
     branch = payload['ref'].split('/').last
 
     branch_restriction = data['restrict_to_branch'].to_s
-    commit_restriction = data['restrict_to_last_comment'] == 1
+    commit_restriction = data['restrict_to_last_comment'] == "1"
 
     # check the branch restriction is poplulated and branch is not included
     if branch_restriction.length > 0 && branch_restriction.index(branch) == nil
