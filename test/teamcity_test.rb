@@ -23,6 +23,21 @@ class TeamCityTest < Service::TestCase
     svc.receive_push
   end
 
+  def test_push_deleted_branch
+    url = "/abc/httpAuth/action.html"
+    @stubs.get url do |env|
+      assert false, "service should not be called for deleted branches"
+    end
+
+    svc = service({
+      'base_url' => 'http://teamcity.com/abc',
+      'build_type_id' => 'btid'
+    }, {
+      'deleted' => true
+    })
+    svc.receive_push
+  end
+
   def service(*args)
     super Service::TeamCity, *args
   end
