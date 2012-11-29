@@ -58,6 +58,7 @@ class Service::Irker < Service
 
     files      = commit['modified'] + commit['added'] + commit['removed']
     tiny_url   = data['long_url'].to_i == 1 ? commit['url'] : shorten_url(commit['url'])
+    channels   = data['channels'].split(";")
 
     file_string = files.join(" ")
     if file_string.size > 80 and files.size > 1
@@ -75,18 +76,18 @@ class Service::Irker < Service
       privmsg = <<-PRIVMSG
         #{repository}: #{commit['author']['name']} #{module_name}:#{branch} * #{sha1[0..6]} / #{files.join(",")}: #{tiny_url}
       PRIVMSG
-      messages.push JSON.generate({'to' => data['channels'], 'privmsg' => privmsg.strip})
+      messages.push JSON.generate({'to' => channels, 'privmsg' => privmsg.strip})
       log_lines[0..4].each do |log_line|
         privmsg = <<-PRIVMSG
           #{repository}: #{log_line[0..400]}
         PRIVMSG
-        messages.push JSON.generate({'to' => data['channels'], 'privmsg' => privmsg.strip})
+        messages.push JSON.generate({'to' => channels, 'privmsg' => privmsg.strip})
       end
     else
       privmsg = <<-PRIVMSG
         #{repository}: #{commit['author']['name']} #{module_name}:#{branch} * #{sha1[0..6]} / #{files.join(",")}: #{log_lines[0][0..300]} #{tiny_url}
       PRIVMSG
-      messages.push JSON.generate({'to' => data['channels'], 'privmsg' => privmsg.strip})
+      messages.push JSON.generate({'to' => channels, 'privmsg' => privmsg.strip})
     end
     return messages
   end
