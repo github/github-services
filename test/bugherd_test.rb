@@ -1,3 +1,5 @@
+require File.expand_path('../helper', __FILE__)
+
 class BugHerdTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
