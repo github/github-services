@@ -8,7 +8,7 @@ class Service::TeamCity < Service
 
     branches = data['branches'].to_s.split(/\s+/)
     ref = payload["ref"].to_s
-    branch = ref.split("/").last
+    branch = ref.split("/", 3).last
     return unless branches.empty? || branches.include?(branch)
 
     # :(
