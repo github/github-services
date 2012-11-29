@@ -4,3 +4,4 @@
 4. `branch` lets you specify the branch name, or a template with `%s` to fill the branch name in.
 5. `long_urls` enables full URLs instead of shortened URLs.
 6. `module` sets the module name in the project.
+7. `color` adds ANSI color codes to the message.

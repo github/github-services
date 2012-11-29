@@ -1,7 +1,7 @@
 class Service::Irker < Service
   string :address, :project, :branch, :module, :channels
-  boolean :long_url
-  white_list :address, :project, :branch, :module, :channels
+  boolean :long_url, :color
+  white_list :address, :project, :branch, :module, :channels, :long_url, :color
 
   url 'http://www.catb.org/~esr/irker/'
   logo_url 'http://www.catb.org/~esr/irker/irker-logo.png'
@@ -59,6 +59,16 @@ class Service::Irker < Service
     files      = commit['modified'] + commit['added'] + commit['removed']
     tiny_url   = data['long_url'].to_i == 1 ? commit['url'] : shorten_url(commit['url'])
 
+    if data['color'].to_i == 1 then
+      bold = "\x1b[1m"
+      green = "\x1b[1;32m"
+      yellow = "\x1b[1;33m"
+      brown = "\x1b[33m"
+      reset = "\x1b[0m"
+    else
+      bold = green = yellow = brown = reset = ''
+    end
+
     file_string = files.join(" ")
     if file_string.size > 80 and files.size > 1
       prefix = files[0]
@@ -73,7 +83,7 @@ class Service::Irker < Service
     messages = []
     if data['full_commits'].to_i == 1
       privmsg = <<-PRIVMSG
-        #{repository}: #{commit['author']['name']} #{module_name}:#{branch} * #{sha1[0..6]} / #{files.join(",")}: #{tiny_url}
+        #{bold}#{repository}:#{reset} #{green}#{commit['author']['name']}#{reset} #{module_name}:#{yellow}#{branch}#{reset} * #{bold}#{sha1[0..6]}#{reset} / #{bold}#{files.join(",")}#{reset}: #{brown}#{tiny_url}#{reset}
       PRIVMSG
       messages.push JSON.generate({'to' => data['channels'], 'privmsg' => privmsg.strip})
       log_lines[0..4].each do |log_line|
@@ -84,7 +94,7 @@ class Service::Irker < Service
       end
     else
       privmsg = <<-PRIVMSG
-        #{repository}: #{commit['author']['name']} #{module_name}:#{branch} * #{sha1[0..6]} / #{files.join(",")}: #{log_lines[0][0..300]} #{tiny_url}
+        #{bold}#{repository}:#{reset} #{green}#{commit['author']['name']}#{reset} #{module_name}:#{yellow}#{branch}#{reset} * #{bold}#{sha1[0..6]}#{reset} / #{bold}#{files.join(",")}#{reset}: #{log_lines[0][0..300]} #{brown}#{tiny_url}#{reset}
       PRIVMSG
       messages.push JSON.generate({'to' => data['channels'], 'privmsg' => privmsg.strip})
     end
