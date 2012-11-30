@@ -5,3 +5,5 @@
 5. `long_urls` enables full URLs instead of shortened URLs.
 6. `module` sets the module name in the project.
 7. `color` adds ANSI color codes to the message.
+8. `full_commits` sends multiple messages to show up to 5 lines of the commit message.
+

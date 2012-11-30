@@ -1,7 +1,8 @@
 class Service::Irker < Service
   string :address, :project, :branch, :module, :channels
-  boolean :long_url, :color
-  white_list :address, :project, :branch, :module, :channels, :long_url, :color
+  boolean :long_url, :color, :full_commits
+  white_list :address, :project, :branch, :module, :channels, :long_url, :color,
+    :full_commits
 
   url 'http://www.catb.org/~esr/irker/'
   logo_url 'http://www.catb.org/~esr/irker/irker-logo.png'
