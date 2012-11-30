@@ -62,11 +62,11 @@ class Service::Irker < Service
     channels   = data['channels'].split(";")
 
     if data['color'].to_i == 1 then
-      bold = "\x1b[1m"
-      green = "\x1b[1;32m"
-      yellow = "\x1b[1;33m"
-      brown = "\x1b[33m"
-      reset = "\x1b[0m"
+      bold = "\x02"
+      green = "\x0303"
+      yellow = "\x0307"
+      brown = "\x0305"
+      reset = "\x0F"
     else
       bold = green = yellow = brown = reset = ''
     end
@@ -90,7 +90,7 @@ class Service::Irker < Service
       messages.push JSON.generate({'to' => channels, 'privmsg' => privmsg.strip})
       log_lines[0..4].each do |log_line|
         privmsg = <<-PRIVMSG
-          #{repository}: #{log_line[0..400]}
+          #{bold}#{repository}:#{reset} #{log_line[0..400]}
         PRIVMSG
         messages.push JSON.generate({'to' => channels, 'privmsg' => privmsg.strip})
       end
