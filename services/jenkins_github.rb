@@ -11,6 +11,7 @@ class Service::JenkinsGitHub < Service
     else
       raise_config_error "Jenkins Hook Url not set"
     end
+    http.ssl[:verify] = false # :(
     http_post url,
       :payload => JSON.generate(payload)
   end
