@@ -1,0 +1,11 @@
+lingohub
+========
+
+Start localizing your software to increase market share and improve customer satisfaction.
+Localization is simple with lingohub. Be Global, Go Local!
+
+Install Notes
+-------------
+
+1. Please enter your Project Token found in your project settings page.
+2. Now edit your 'Watch Patterns on the 'Imports/Edit your repository settings' page. Only files that contain translations for your master locale should be included in the given regular expression.
