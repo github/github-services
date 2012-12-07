@@ -1,6 +1,7 @@
 class Service::Fisheye < Service
 
   string  :url_base, :token, :repository_name
+  white_list :url_base, :repository_name
 
   def receive_push
 
