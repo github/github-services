@@ -4,6 +4,8 @@ Fisheye
 FishEye is a revision-control browser and search engine.
 The github Fisheye service can be used to trigger repository scan after code has been pushed to your git repository.
 
+Requires Fisheye 2.10 or later.
+
 Install Notes
 -------------
 
