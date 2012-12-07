@@ -1,14 +1,10 @@
 class Service::Fisheye < Service
+
+  string  :url_base, :token, :repository_name
+
   def receive_push
 
-    repository_name = payload['repository']['name']
-    url_base = data['url_base']
-    token = data['token']
-    custom_repository_name = data['custom_repository_name']
-
-    if custom_repository_name.to_s.strip.length != 0
-      repository_name = custom_repository_name
-    end
+    verify_config
 
     http.headers['X-Api-Key'] = token
 
@@ -29,8 +25,28 @@ class Service::Fisheye < Service
       when 404
         raise_config_error("Invalid repository name")
       else
-        raise_config_error("Unknown error")
+        msg = "#{url_base}, repository: #{repository_name} with token: #{token.to_s.strip.length != 0}"
+        raise_config_error("Error occurred: #{response.status} when connecting to: #{msg}")
     end
   end
+
+  def verify_config
+    %w(url_base token repository_name).each do |var|
+      raise_config_error "Missing configuration: #{var}" if send(var).to_s.empty?
+    end
+  end
+
+  def repository_name
+    @repository_name ||= (data['custom_repository_name'].to_s.strip.length != 0) ? data['custom_repository_name'] : payload['repository']['name']
+  end
+
+  def url_base
+    @url_base ||= data['url_base']
+  end
+
+  def token
+    @token ||= data['token']
+  end
+
 end
 
