@@ -12,7 +12,7 @@ Install Notes
 1.  Your Fisheye server must be accessible from the internet.
 
 2.  "base_url" is the URL to your Fisheye server
-    Example: https://fisheye.example.com/ or http://fisheye.example.com/fisheye/
+    Example: http://fisheye.example.com/ or http://fisheye.example.com/fisheye/
 
 3.  "token" is the REST API Fisheye token 
     It is defined in Fisheye Administration > Security Settings > Authentication > REST API Token
