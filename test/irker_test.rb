@@ -64,6 +64,15 @@ class IrkerTest < Service::TestCase
     @server.messages.shift 4
   end
 
+  def test_file_consolidation
+    payload = { "repository" => "repository", "commits" => [{ "message" => "commitmsg", "author" => {"name" => "authorname"}, "id" => "8349815fed9", "modified" => ["foo/a/bar/baz/andsomemore/filenumberone.hpp", "foo/a/bar/baz/andsomemore/filenumbertwo.hpp", "foo/b/quuuuuuuuuuuux/filenumberthree.cpp", "foo/b/quuuuuuuuuuuux/filenumberfour.cpp", "foo/b/bar/baz/andsomemore/filenumberfive.cpp", "foo/b/bar/baz/andsomemore/filenumbersix.cpp", "foo/b/filenumberseven.cpp"], "added" => [], "removed" => [] }] }
+    svc = service({'address' => "localhost", "channels" => "irc://chat.freenode.net/#commits;irc://chat.freenode.net/#irker;irc://chat.freenode.net/testuser,isnick", 'project' => 'abc', 'long_url' => 1}, payload)
+    svc.irker_con = @server
+    svc.receive_push
+
+    assert msg = @server.messages.shift
+  end
+
   def service(*args)
     super Service::Irker, *args
   end
