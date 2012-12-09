@@ -64,6 +64,18 @@ class IrkerTest < Service::TestCase
     @server.messages.shift 4
   end
 
+  def test_duplicates
+    payload = { "repository" => "repository", "commits" => [{ "message" => "msg", "author" => {"name" => "authorname"}, "id" => "3ef829ad", "modified" => ["foo", "bar"], "added" => ["foo"], "removed" => ["bar"] }] }
+    svc = service({'address' => "localhost", "channels" => "irc://chat.freenode.net/#commits", 'project' => 'abc', 'long_url' => 1}, payload)
+    svc.irker_con = @server
+    svc.receive_push
+
+    assert msg = @server.messages.shift
+    to_irker = JSON.parse(msg)
+    assert_equal to_irker["privmsg"].scan("foo").size, 1
+    assert_equal to_irker["privmsg"].scan("bar").size, 1
+  end
+
   def service(*args)
     super Service::Irker, *args
   end

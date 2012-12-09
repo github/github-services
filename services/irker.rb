@@ -71,6 +71,7 @@ class Service::Irker < Service
       bold = green = yellow = brown = reset = ''
     end
 
+    files.uniq!
     file_string = files.join(" ")
     if file_string.size > 80 and files.size > 1
       prefix = files[0]
