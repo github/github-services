@@ -8,13 +8,15 @@ class JenkinsGitHubTest < Service::TestCase
   def test_push
     @stubs.post "/github-webhook/" do |env|
       assert_equal 'jenkins.example.com', env[:url].host
+      assert_equal 'Basic bW9ua2V5OnNlY3JldA==',
+        env[:request_headers]['authorization']
       assert_equal 'application/x-www-form-urlencoded',
         env[:request_headers]['content-type']
       [200, {}, '']
     end
 
     svc = service :push,
-      {'jenkins_hook_url' => 'http://jenkins.example.com/github-webhook/'}, payload
+      {'jenkins_hook_url' => 'http://monkey:secret@jenkins.example.com/github-webhook/'}, payload
     svc.receive_push
   end
 
