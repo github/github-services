@@ -71,7 +71,8 @@ class Service::Irker < Service
       bold = green = yellow = brown = reset = ''
     end
 
-    file_string = files.join(" ")
+    files.uniq!
+    file_string = files.join(",")
     if file_string.size > 80 and files.size > 1
       prefix = files[0]
       files.each do |file|
@@ -79,13 +80,13 @@ class Service::Irker < Service
           prefix = prefix.rpartition("/")[0]
         end
       end
-      files = "#{prefix}/ (#{files.size} files)"
+      file_string = "#{prefix}/ (#{files.size} files)"
     end
 
     messages = []
     if data['full_commits'].to_i == 1
       privmsg = <<-PRIVMSG
-        #{bold}#{repository}:#{reset} #{green}#{commit['author']['name']}#{reset} #{module_name}:#{yellow}#{branch}#{reset} * #{bold}#{sha1[0..6]}#{reset} / #{bold}#{files.join(",")}#{reset}: #{brown}#{tiny_url}#{reset}
+        #{bold}#{repository}:#{reset} #{green}#{commit['author']['name']}#{reset} #{module_name}:#{yellow}#{branch}#{reset} * #{bold}#{sha1[0..6]}#{reset} / #{bold}#{file_string}#{reset}: #{brown}#{tiny_url}#{reset}
       PRIVMSG
       messages.push JSON.generate({'to' => channels, 'privmsg' => privmsg.strip})
       log_lines[0..4].each do |log_line|
@@ -96,7 +97,7 @@ class Service::Irker < Service
       end
     else
       privmsg = <<-PRIVMSG
-        #{bold}#{repository}:#{reset} #{green}#{commit['author']['name']}#{reset} #{module_name}:#{yellow}#{branch}#{reset} * #{bold}#{sha1[0..6]}#{reset} / #{bold}#{files.join(",")}#{reset}: #{log_lines[0][0..300]} #{brown}#{tiny_url}#{reset}
+        #{bold}#{repository}:#{reset} #{green}#{commit['author']['name']}#{reset} #{module_name}:#{yellow}#{branch}#{reset} * #{bold}#{sha1[0..6]}#{reset} / #{bold}#{file_string}#{reset}: #{log_lines[0][0..300]} #{brown}#{tiny_url}#{reset}
       PRIVMSG
       messages.push JSON.generate({'to' => channels, 'privmsg' => privmsg.strip})
     end
