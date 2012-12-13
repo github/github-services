@@ -9,4 +9,4 @@ Install Notes
  1. "Jenkins Hook Url" is the URL of your Jenkins server's webhook endpoint. For
  example: `http://ci.jenkins-ci.org/github-webhook/`.
 
-For more information see <https://wiki.jenkins-ci.org/display/JENKINS/Github+plugin>.
+For more information see <https://wiki.jenkins-ci.org/display/JENKINS/GitHub+plugin>.

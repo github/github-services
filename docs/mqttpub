@@ -13,7 +13,7 @@ Install Notes
 5. OPTIONAL. 'user' is the v3.1 username (default is none).
 6. OPTIONAL. 'pass' is the v3.1 password (default is none).
 7. OPTIONAL. 'retain' specifies whether or not the publication should be retained as the last/most recent message for new subscribers.
-8. The payload of the message is JSON received from Github (refer to docs/github_payload).
+8. The payload of the message is JSON received from GitHub (refer to docs/github_payload).
 9. ruby-mqtt only supports QoS 0.
 10. For testing, you can use mqtt.io as your web MQTT client.  broker: q.m2m.io, port: 1883, clientid: {github_username}.  You will "Subscribe to Topics": 'github/{github_username}/{repo_name}'.  Unauthenticated username/password sets default to the public channel!
 
