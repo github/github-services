@@ -42,7 +42,20 @@ class Service::FishEye < Service
   end
 
   def url_base
-    @FishEye_Base_URL ||= data['FishEye_Base_URL']
+    @FishEye_Base_URL ||= begin
+        url_base = data['FishEye_Base_URL']
+
+        if (!(url_base.nil? || url_base.empty?))
+            if url_base !~ /^https?\:\/\//
+                url_base = "http://#{url_base}"
+            end
+
+            url_base = url_base.gsub(/\/+$/, '')
+        end
+
+        url_base
+    end
+
   end
 
   def token
