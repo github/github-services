@@ -1,7 +1,7 @@
-class Service::Fisheye < Service
+class Service::FishEye < Service
 
-  string  :url_base, :token, :repository_name
-  white_list :url_base, :repository_name
+  string  :FishEye_Base_URL, :REST_API_Token, :FishEye_Repository_Name
+  white_list :FishEye_Base_URL, :FishEye_Repository_Name
 
   def receive_push
 
@@ -22,7 +22,7 @@ class Service::Fisheye < Service
       when 200
         "Ok"
       when 401
-        raise_config_error("Invalid token")
+        raise_config_error("Invalid REST API Token")
       when 404
         raise_config_error("Invalid repository name")
       else
@@ -38,15 +38,15 @@ class Service::Fisheye < Service
   end
 
   def repository_name
-    @repository_name ||= (data['custom_repository_name'].to_s.strip.length != 0) ? data['custom_repository_name'] : payload['repository']['name']
+    @FishEye_Repository_Name ||= (data['FishEye_Repository_Name'].to_s.strip.length != 0) ? data['FishEye_Repository_Name'] : payload['repository']['name']
   end
 
   def url_base
-    @url_base ||= data['url_base']
+    @FishEye_Base_URL ||= data['FishEye_Base_URL']
   end
 
   def token
-    @token ||= data['token']
+    @REST_API_Token ||= data['REST_API_Token']
   end
 
 end
