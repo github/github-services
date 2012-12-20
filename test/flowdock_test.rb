@@ -17,7 +17,7 @@ class FlowdockTest < Service::TestCase
 
     svc = service(
       {'token' => @tokens}, push_payload)
-      svc.receive_event
+    svc.receive_event
   end
 
   def test_token_sanitization
@@ -30,7 +30,7 @@ class FlowdockTest < Service::TestCase
 
     svc = service(
       {'token' => " " + @tokens + " "}, payload)
-      svc.receive_event
+    svc.receive_event
   end
 
   def service(*args)
