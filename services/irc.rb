@@ -7,7 +7,6 @@ class Service::IRC < Service
   default_events :push, :pull_request
 
   def receive_push
-    return if distinct_commits.empty?
     return unless branch_name_matches?
 
     messages = []
@@ -186,10 +185,8 @@ class Service::IRC < Service
           message << "at #{fmt_hash after_sha}"
         end
 
-        if distinct_commits.any?
-          num = distinct_commits.size
-          message << "(+\002#{num}\017 new commit#{num > 1 ? 's' : ''})"
-        end
+        num = distinct_commits.size
+        message << "(+\002#{num}\017 new commit#{num != 1 ? 's' : ''})"
       end
 
     elsif deleted?
@@ -205,12 +202,9 @@ class Service::IRC < Service
         message << "fast-forwarded #{fmt_branch branch_name} from #{fmt_hash before_sha} to #{fmt_hash after_sha}"
       end
 
-    elsif distinct_commits.any?
-      num = distinct_commits.size
-      message << "pushed \002#{num}\017 new commit#{num > 1 ? 's' : ''} to #{fmt_branch branch_name}"
-
     else
-      message << "pushed nothing"
+      num = distinct_commits.size
+      message << "pushed \002#{num}\017 new commit#{num != 1 ? 's' : ''} to #{fmt_branch branch_name}"
     end
 
     message.join(' ')
