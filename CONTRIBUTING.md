@@ -50,7 +50,7 @@ class Service::MyService < Service
 end
 ```
 
-You can annotate Supportors and Maintainers by the following methods:
+You can annotate Supporters and Maintainers by the following methods:
 
 * `:github` - a GitHub login.
 * `:web` - A URL to a contact form.
