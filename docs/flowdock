@@ -6,3 +6,5 @@ Install Notes
 -------------
 
   API Token is a flow-specific token. You can find it either in the flow, or in Flowdock's Integrations help page at https://www.flowdock.com/help/integrations.
+
+  Multiple flows may be specified with multiple comma-separated tokens.
