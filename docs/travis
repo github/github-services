@@ -1,8 +1,6 @@
 Travis CI is a distributed build platform for the open source community.
 
-By enabling this hook, Travis CI will listen to push and pull request events to trigger new builds,
-member and public events to keep track of repository visibility and issue comment events to
-allow users to talk to [@travisbot](https://github.com/travisbot).
+By enabling this hook, Travis CI will listen to push and pull request events to trigger new builds, member and public events to keep track of repository visibility and issue comment events to allow users to talk to [@travisbot](https://github.com/travisbot).
 
 Install Notes
 -------------
