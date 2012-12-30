@@ -6,15 +6,17 @@ class HipChatTest < Service::TestCase
   end
 
   def test_push
+    payload = {'a' => 1, 'ref' => 'refs/heads/master'}
     @stubs.post "/v1/webhooks/github" do |env|
-      assert_match /(^|\&)payload=%7B%22a%22%3A1%7D($|\&)/, env[:body]
-      assert_match "auth_token=a", env[:body]
-      assert_match "room_id=r", env[:body]
+      form = Rack::Utils.parse_query(env[:body])
+      assert_equal payload, JSON.parse(form['payload'])
+      assert_equal 'a', form['auth_token']
+      assert_equal 'r', form['room_id']
       [200, {}, '']
     end
 
     svc = service(
-      {'auth_token' => 'a', 'room' => 'r'}, 'a' => 1)
+      {'auth_token' => 'a', 'room' => 'r'}, payload)
     svc.receive_event
   end
 
