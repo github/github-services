@@ -1,6 +1,8 @@
 class Service::Travis < Service
   default_events :push, :pull_request, :issue_comment, :public, :member
-  string :user, :token, :domain
+  string :user
+  password :token
+  string :domain
   white_list :domain, :user
 
   def receive_event
