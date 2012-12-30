@@ -7,5 +7,6 @@ Install Notes
 -------------
 
 1. **Auth Token** - One of your group's API tokens. See: http://www.hipchat.com/docs/api/auth
-2. **Room** - The full name of the room to send the message to. The room's room_id will also work.
-3. **Notify** - Whether or not to notify room members.
+2. **Restrict to Branch** - List of branches to which will be inspected
+3. **Room** - The full name of the room to send the message to. The room's room_id will also work.
+4. **Notify** - Whether or not to notify room members.
