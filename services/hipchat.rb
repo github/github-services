@@ -11,12 +11,15 @@ class Service::HipChat < Service
     raise_config_error "Missing 'auth_token'" if data['auth_token'].to_s == ''
     raise_config_error "Missing 'room'" if data['room'].to_s == ''
 
-    branch = payload['ref'].split('/').last
-    branch_restriction = data['restrict_to_branch'].to_s
+    # push events can be restricted to certain branches
+    if event.to_s == "push"
+      branch = payload['ref'].split('/').last
+      branch_restriction = data['restrict_to_branch'].to_s
 
-    # check the branch restriction is poplulated and branch is not included
-    if branch_restriction.length > 0 && branch_restriction.index(branch) == nil
-      return
+      # check the branch restriction is poplulated and branch is not included
+      if branch_restriction.length > 0 && branch_restriction.index(branch) == nil
+        return
+      end
     end
 
     http.headers['X-GitHub-Event'] = event.to_s
