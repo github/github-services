@@ -1,6 +1,6 @@
 base = "#{File.dirname(__FILE__)}/../"
 worker_processes ENV['UNICORN_WORKERS'] ? ENV['UNICORN_WORKERS'].to_i : 1
-timeout ENV['UNICORN_TIMEOUT'] ? ENV['UNICORN_TIMEOUT'].to_i : 600
+timeout ENV['UNICORN_TIMEOUT'] ? ENV['UNICORN_TIMEOUT'].to_i : 60
 
 if ENV['GH_APP']
   preload_app true
