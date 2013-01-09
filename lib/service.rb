@@ -55,7 +55,7 @@ class Service
     end
   end
 
-  class EmailContributor < Contributo
+  class EmailContributor < Contributor
     def self.contributor_type
       :email
     end
