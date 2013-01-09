@@ -1,16 +1,18 @@
 base = "#{File.dirname(__FILE__)}/../"
+preload_app true
+
 worker_processes ENV['UNICORN_WORKERS'] ? ENV['UNICORN_WORKERS'].to_i : 1
 timeout ENV['UNICORN_TIMEOUT'] ? ENV['UNICORN_TIMEOUT'].to_i : 15
+listen ENV['UNICORN_LISTEN'] ? ENV['UNICORN_LISTEN'] : '0.0.0.0:4000'
 
-# if ENV['GH_APP']
-  preload_app true
-  # listen "#{base}/tmp/sockets/unicorn.sock"
-  listen '0.0.0.0:4000'
-  stderr_path "#{base}/log/unicorn.stderr.log"
-  stderr_path "#{base}/log/unicorn.stderr.log"
-  pid "#{base}/tmp/pids/unicorn.pid"
-# end
+stderr_path "#{base}/log/unicorn.stderr.log"
+stderr_path "#{base}/log/unicorn.stderr.log"
+pid "#{base}/tmp/pids/unicorn.pid"
 
+##
+# Signal handling
+
+# Called in the master before forking each worker process.
 before_fork do |server, worker|
   ##
   # When sent a USR2, Unicorn will suffix its pidfile with .oldbin and
@@ -23,14 +25,14 @@ before_fork do |server, worker|
   #
   # Using this method we get 0 downtime deploys.
 
-  if ENV['GH_APP']
-    old_pid = "#{base}/tmp/pids/unicorn.pid.oldbin"
-    if File.exists?(old_pid) && server.pid != old_pid
-      begin
-        Process.kill("QUIT", File.read(old_pid).to_i)
-      rescue Errno::ENOENT, Errno::ESRCH
-        # someone else did our job for us
-      end
+  # wait until last worker boots to send QUIT signal
+  next if worker.nr != (server.worker_processes - 1)
+
+  if File.exists?("#{pidfile}.oldbin") && server.pid != "#{pidfile}.oldbin"
+    begin
+      Process.kill("QUIT", File.read("#{pidfile}.oldbin").to_i)
+    rescue Errno::ENOENT, Errno::ESRCH
+      # someone else did our job for us
     end
   end
 end
