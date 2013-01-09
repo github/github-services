@@ -12,4 +12,4 @@ docs/payload_data
 .project
 .settings
 .buildpath
-
+log/*.log
