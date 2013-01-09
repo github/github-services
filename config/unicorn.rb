@@ -1,14 +1,20 @@
 base = "#{File.dirname(__FILE__)}/../"
 worker_processes ENV['UNICORN_WORKERS'] ? ENV['UNICORN_WORKERS'].to_i : 1
-timeout ENV['UNICORN_TIMEOUT'] ? ENV['UNICORN_TIMEOUT'].to_i : 60
+timeout ENV['UNICORN_TIMEOUT'] ? ENV['UNICORN_TIMEOUT'].to_i : 15
 
-if ENV['GH_APP']
+# create log and tmp directories
+%w[tmp tmp/sockets tmp/pids log].each do |dir|
+  Dir.mkdir "#{base}/#{dir}" unless File.directory?("#{base}/#{dir}")
+end
+
+# if ENV['GH_APP']
   preload_app true
-  listen "#{base}/tmp/sockets/unicorn.sock"
+  # listen "#{base}/tmp/sockets/unicorn.sock"
+  listen '0.0.0.0:4001'
   stderr_path "#{base}/log/unicorn.stderr.log"
   stderr_path "#{base}/log/unicorn.stderr.log"
   pid "#{base}/tmp/pids/unicorn.pid"
-end
+# end
 
 before_fork do |server, worker|
   ##
