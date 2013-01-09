@@ -7,7 +7,8 @@ listen ENV['UNICORN_LISTEN'] ? ENV['UNICORN_LISTEN'] : '0.0.0.0:4000'
 
 stderr_path "#{base}/log/unicorn.stderr.log"
 stderr_path "#{base}/log/unicorn.stderr.log"
-pid "#{base}/tmp/pids/unicorn.pid"
+pidfile = "#{base}/tmp/pids/unicorn.pid"
+pid pidfile
 
 ##
 # Signal handling
