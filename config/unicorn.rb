@@ -10,7 +10,7 @@ end
 # if ENV['GH_APP']
   preload_app true
   # listen "#{base}/tmp/sockets/unicorn.sock"
-  listen '0.0.0.0:4001'
+  listen '0.0.0.0:4000'
   stderr_path "#{base}/log/unicorn.stderr.log"
   stderr_path "#{base}/log/unicorn.stderr.log"
   pid "#{base}/tmp/pids/unicorn.pid"
