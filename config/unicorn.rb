@@ -2,11 +2,6 @@ base = "#{File.dirname(__FILE__)}/../"
 worker_processes ENV['UNICORN_WORKERS'] ? ENV['UNICORN_WORKERS'].to_i : 1
 timeout ENV['UNICORN_TIMEOUT'] ? ENV['UNICORN_TIMEOUT'].to_i : 15
 
-# create log and tmp directories
-%w[tmp tmp/sockets tmp/pids log].each do |dir|
-  Dir.mkdir "#{base}/#{dir}" unless File.directory?("#{base}/#{dir}")
-end
-
 # if ENV['GH_APP']
   preload_app true
   # listen "#{base}/tmp/sockets/unicorn.sock"
