@@ -55,7 +55,7 @@ class Service
     end
   end
 
-  class EmailContributor < Contributor
+  class EmailContributor < Contributo
     def self.contributor_type
       :email
     end
@@ -802,11 +802,11 @@ class Service
   end
 end
 
+require 'timeout'
 begin
   require 'system_timer'
   Service::Timeout = SystemTimer
 rescue LoadError
-  require 'timeout'
   Service::Timeout = Timeout
 end
 
