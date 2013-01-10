@@ -5,6 +5,7 @@ class Service::App < Sinatra::Base
   JSON_TYPE = "application/vnd.github-services+json"
 
   set :hostname, lambda { %x{hostname} }
+  set :runner, Service::Runner.new
 
   # Hooks the given Service to a Sinatra route.
   #
@@ -12,6 +13,8 @@ class Service::App < Sinatra::Base
   #
   # Returns nothing.
   def self.service(svc_class)
+    runner = self.runner
+
     get "/#{svc_class.hook_name}" do
       svc_class.title
     end
@@ -22,44 +25,31 @@ class Service::App < Sinatra::Base
       data = nil
       begin
         event, data, payload = parse_request
-        if svc = svc_class.receive(event, data, payload)
-          log_service_request svc, 200
-          "OK"
-        else
-          log_service_request svc, 200
-          "#{svc_class.hook_name} Service does not respond to 'push' events"
+        resp = runner.call(svc_class, event, data, payload)
+
+        log_service_request(resp.service, resp.status)
+
+        if resp.exception?
+          report_exception(svc_class, data, resp.exception,
+            :event => event, :payload => payload.inspect)
         end
-      rescue Faraday::Error::ConnectionFailed => boom
-        log_service_request svc, 503
-        boom.message
-      rescue Service::ConfigurationError => boom
-        log_service_request svc, 400
-        boom.message
-      rescue Timeout::Error, Service::TimeoutError => boom
-        log_service_request svc, 504
-        "Service Timeout"
-      rescue Service::MissingError => boom
-        log_service_request svc, 404
-        boom.message
-      rescue Object => boom
-        report_exception svc_class, data, boom,
-          :event => event, :payload => payload.inspect
-        log_service_request svc, 500
-        "ERROR"
+
+        resp.message
       ensure
-        duration = Time.now.to_f - time
-        if svc_class != Service::Web && duration > 9
-          boom ||= Service::TimeoutError.new("Long Service Hook")
+        if svc_class != Service::Web && resp.duration > 9
+          boom = resp.exception ||
+            Service::TimeoutError.new("Long Service Hook")
+
           report_exception svc_class, data, boom,
             :event => event, :payload => payload.inspect,
-            :duration => "#{duration}s"
+            :duration => "#{resp.duration}s"
         end
       end
     end
   end
 
   Service.services.each do |svc|
-    svc.setup_for(self)
+    service(svc)
   end
 
   get "/" do

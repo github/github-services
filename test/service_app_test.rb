@@ -13,7 +13,7 @@ class ServiceAppTest < Test::Unit::TestCase
       self.class.tested << self
     end
 
-    setup_for(Service::App)
+    Service::App.service(self)
   end
 
   def setup

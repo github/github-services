@@ -1,7 +1,9 @@
 require 'addressable/uri'
 require 'faraday'
 require 'ostruct'
-require File.expand_path("../service/structs", __FILE__)
+%w(structs runner).each do |lib|
+  require File.expand_path("../service/#{lib}", __FILE__)
+end
 
 class Addressable::URI
   attr_accessor :validation_deferred
@@ -470,10 +472,6 @@ class Service
     def inherited(svc)
       Service.services << svc
       super
-    end
-
-    def setup_for(app)
-      app.service(self)
     end
   end
 
