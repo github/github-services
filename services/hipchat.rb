@@ -3,8 +3,8 @@ class Service::HipChat < Service
   boolean :notify
   white_list :room, :restrict_to_branch
 
-  default_events :commit_comment, :download, :fork, :fork_apply, :gollum,
-    :issues, :issue_comment, :member, :public, :pull_request, :push, :watch
+  default_events :commit_comment, :download, :fork_apply, :gollum,
+    :issues, :issue_comment, :member, :public, :pull_request, :push
 
   def receive_event
     # make sure we have what we need
