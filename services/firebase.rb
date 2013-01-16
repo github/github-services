@@ -25,7 +25,7 @@ class Service::Firebase < Service
 
     secret = data['secret'].to_s
     if secret.length > 0
-      url = url + '?key=' + secret
+      url = url + '?auth=' + secret
     end
 
     payload['commits'].each do |commit|
