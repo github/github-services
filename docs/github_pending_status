@@ -1,0 +1,10 @@
+The GitHub pending status service provides all new commits with a
+default status of pending.
+
+Install Notes
+-------------
+
+1. "username" and "password" - username and password of a GitHub user that
+   can create statuses for the repo.
+
+2. POST is made to gihub api over HTTPS using BASIC authentication.
