@@ -1,5 +1,8 @@
 class Service::GithubPendingStatus < Service
-  string :username, :password
+  string :username
+  password :password
+  
+  white_list :username
   
   maintained_by :github => "jtrinklein"
   
