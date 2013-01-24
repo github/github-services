@@ -37,3 +37,10 @@ before_fork do |server, worker|
     end
   end
 end
+
+# Called by the worker after forking.
+after_fork do |server, worker|
+  # Write out a pid file for each of our workers.
+  child_pid = server.config[:pid].sub('.pid', ".#{worker.nr}.pid")
+  system("echo #{Process.pid} > #{child_pid}")
+end
