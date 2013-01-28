@@ -1,6 +1,6 @@
 class Service::HipChat < Service
   string :auth_token, :room, :restrict_to_branch
-  boolean :notify
+  boolean :notify, :quiet_fork, :quiet_watch
   white_list :room, :restrict_to_branch
 
   default_events :commit_comment, :download, :fork, :fork_apply, :gollum,
@@ -21,6 +21,10 @@ class Service::HipChat < Service
         return
       end
     end
+    
+    # ignore forks and watches if boolean is set
+    return if event.to_s =~ /fork/ && data['quiet_fork']
+    return if event.to_s =~ /watch/ && data['quiet_watch']
 
     http.headers['X-GitHub-Event'] = event.to_s
 
