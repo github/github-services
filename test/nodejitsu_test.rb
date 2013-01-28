@@ -22,6 +22,14 @@ class NodejitsuTest < Service::TestCase
     assert_equal "master", @svc.branch
   end
 
+  def test_reads_email_errors_from_data
+    assert_equal false, @svc.email_errors
+  end
+
+  def test_reads_email_success_deploys_from_data
+    assert_equal false, @svc.email_success_deploys
+  end
+
   def test_keeps_http_scheme
     svc = service(data.merge({'endpoint' => 'http://example.com'}), payload)
     assert_equal 'http', svc.scheme
@@ -98,12 +106,15 @@ class NodejitsuTest < Service::TestCase
 
   def data
     {
-      'username' => 'kronn',
-      'password' => '5373dd4a3648b88fa9acb8e46ebc188a',
-      'domain'   => 'webhooks.nodejitsu.com',
-      'branch'   => 'master'
+      'username'              => 'kronn',
+      'password'              => '5373dd4a3648b88fa9acb8e46ebc188a',
+      'domain'                => 'webhooks.nodejitsu.com',
+      'branch'                => 'master',
+      'email_success_deploys' => false,
+      'email_errors'          => false
     }
   end
+
   def payload
     {
       "after"   => "a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",

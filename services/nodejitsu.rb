@@ -3,13 +3,15 @@ class Service::Nodejitsu < Service
   string :username
   password :password
   string :branch, :endpoint
-  white_list :endpoint, :username, :branch
+  boolean :email_success_deploys, :email_errors
+  white_list :endpoint, :username, :branch, :email_success_deploys, :email_errors
 
   def receive_push
     return if branch.to_s != '' && branch != branch_name
     http.ssl[:verify] = false
     http.basic_auth username, password
-    http_post nodejitsu_url, :payload => payload.to_json
+    http_post nodejitsu_url, :payload => payload.to_json,
+      :email_success => email_success_deploys, :email_errors => email_errors
   end
 
   def nodejitsu_url
@@ -38,6 +40,22 @@ class Service::Nodejitsu < Service
     else
        data['password']
     end.strip
+  end
+
+  def email_success_deploys
+    if data['email_success_deploys'].to_s == ''
+      true
+    else
+      data['email_success_deploys']
+    end
+  end
+
+  def email_errors
+    if data['email_errors'].to_s == ''
+      true
+    else
+      data['email_errors']
+    end
   end
 
   def scheme
