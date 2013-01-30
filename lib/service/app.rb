@@ -1,7 +1,6 @@
-Dir["#{File.dirname(__FILE__)}/../../services/**/*.rb"].each { |service| load service }
-
 # The Sinatra App that handles incoming events.
 class Service::App < Sinatra::Base
+  Service.load_services
   JSON_TYPE = "application/vnd.github-services+json"
 
   set :hostname, lambda { %x{hostname} }

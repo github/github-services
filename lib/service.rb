@@ -155,6 +155,11 @@ class Service
       raise err
     end
 
+    def load_services
+      path = File.expand_path("../../services/**/*.rb", __FILE__)
+      Dir[path].each { |lib| require(lib) }
+    end
+
     # Tracks the defined services.
     #
     # Returns an Array of Service Classes.
