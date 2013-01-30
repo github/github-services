@@ -14,7 +14,6 @@ require 'mime/types'
 require 'xmlsimple'
 require 'active_resource'
 require 'rack'
-require 'sinatra/base'
 require 'tinder'
 require 'yajl/json_gem'
 require 'basecamp'
@@ -62,6 +61,20 @@ module Faraday
       uri.validation_deferred = true
       uri.port ||= uri.inferred_port
     end
+  end
+end
+
+module GitHubServices
+  VERSION = '1.0.0'
+
+  # The SHA1 of the commit that was HEAD when the process started. This is
+  # used in production to determine which version of the app is deployed.
+  #
+  # Returns the 40 char commit SHA1 string.
+  def self.current_sha
+    @current_sha ||=
+      `cd #{root}; git rev-parse HEAD 2>/dev/null || echo unknown`.
+      chomp.freeze
   end
 end
 
