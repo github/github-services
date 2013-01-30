@@ -1,5 +1,4 @@
 require File.expand_path('../helper', __FILE__)
-Service::App.set :environment, :test
 
 class FisheyeTest < Service::TestCase
 
@@ -25,7 +24,7 @@ class FisheyeTest < Service::TestCase
     end
 
     svc = service :push, data_my_repo, payload
-    assert_equal("Ok", svc.receive)
+    assert_equal("Ok", svc.receive_push)
 
     @stubs.verify_stubbed_calls
   end
@@ -41,7 +40,7 @@ class FisheyeTest < Service::TestCase
     }
 
     svc = service :push, data, payload
-    assert_equal("Ok", svc.receive)
+    assert_equal("Ok", svc.receive_push)
 
     @stubs.verify_stubbed_calls
   end
@@ -58,7 +57,7 @@ class FisheyeTest < Service::TestCase
     }
 
     svc = service :push, data, payload
-    assert_equal("Ok", svc.receive)
+    assert_equal("Ok", svc.receive_push)
 
     @stubs.verify_stubbed_calls
   end
@@ -71,7 +70,7 @@ class FisheyeTest < Service::TestCase
     svc = service :push, data, payload
 
     assert_raise Service::ConfigurationError do
-      svc.receive
+      svc.receive_push
     end
 
     @stubs.verify_stubbed_calls
@@ -85,7 +84,7 @@ class FisheyeTest < Service::TestCase
     svc = service :push, data, payload
 
     assert_raise Service::ConfigurationError do
-      svc.receive
+      svc.receive_push
     end
 
     @stubs.verify_stubbed_calls
@@ -95,7 +94,7 @@ class FisheyeTest < Service::TestCase
     svc = service :push, {}, payload
 
     assert_raise Service::ConfigurationError do
-      svc.receive
+      svc.receive_push
     end
 
     @stubs.verify_stubbed_calls
@@ -105,7 +104,7 @@ class FisheyeTest < Service::TestCase
     svc = service :push, {}, {}
 
     assert_raise Service::ConfigurationError do
-      svc.receive
+      svc.receive_push
     end
 
     @stubs.verify_stubbed_calls
@@ -117,7 +116,7 @@ class FisheyeTest < Service::TestCase
     end
 
     svc = service :push, data_my_repo, {}
-    assert_equal("Ok", svc.receive)
+    assert_equal("Ok", svc.receive_push)
 
     @stubs.verify_stubbed_calls
   end
@@ -130,7 +129,7 @@ class FisheyeTest < Service::TestCase
     svc = service :push, data_my_repo, payload
 
     assert_raise Service::ConfigurationError do
-      svc.receive
+      svc.receive_push
     end
 
     @stubs.verify_stubbed_calls
@@ -144,7 +143,7 @@ class FisheyeTest < Service::TestCase
     svc = service :push, data_my_repo, payload
 
     assert_raise Service::ConfigurationError do
-      svc.receive
+      svc.receive_push
     end
 
     @stubs.verify_stubbed_calls
@@ -158,7 +157,7 @@ class FisheyeTest < Service::TestCase
     svc = service :push, data_my_repo, payload
 
     assert_raise Service::ConfigurationError do
-      svc.receive
+      svc.receive_push
     end
 
     @stubs.verify_stubbed_calls

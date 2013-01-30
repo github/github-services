@@ -168,10 +168,6 @@ module Service::PushHelpers
     end)
   end
 
-  def receive
-    receive_push
-  end
-
   def self.sample_payload
     {
       "after"  => "a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",

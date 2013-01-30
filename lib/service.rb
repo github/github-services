@@ -130,29 +130,9 @@ class Service
 
     attr_writer :current_sha
 
-    # Public: Processes an incoming Service event.
-    #
-    # event   - A symbol identifying the event type.  Example: :push
-    # data    - A Hash with the configuration data for the Service.
-    # payload - A Hash with the unique payload data for this Service instance.
-    #
     # Returns the Service instance if it responds to this event, or nil.
     def receive(event, data, payload = nil)
-      svc = new(event, data, payload)
-
-      methods = ["receive_#{event}", "receive_event"]
-      if event_method = methods.detect { |m| svc.respond_to?(m) }
-        Service::Timeout.timeout(20, TimeoutError) do
-          svc.send(event_method)
-        end
-
-        svc
-      end
-    rescue Service::ConfigurationError, Errno::EHOSTUNREACH, Errno::ECONNRESET, SocketError, Net::ProtocolError => err
-      if !err.is_a?(Service::Error)
-        err = ConfigurationError.new(err)
-      end
-      raise err
+      new(event, data, payload).receive
     end
 
     def load_services
@@ -379,8 +359,16 @@ class Service
     #
     # Returns a Hash.
     def secrets
-      @secrets ||=
-        (File.exist?(secret_file) && YAML.load_file(secret_file)) || {}
+      @secrets ||= begin
+        jabber = ENV['SERVICES_JABBER'].to_s.split("::")
+        twitter = ENV['SERVICES_TWITTER'].to_s.split("::")
+
+        { 'jabber' => {'user' => jabber[0], 'password' => jabber[1] },
+          'boxcar' => {'apikey' => ENV['SERVICES_BOXCAR'].to_s},
+          'twitter' => {'key' => twitter[0], 'secret' => twitter[1]},
+          'bitly' => {'key' => ENV['SERVICES_BITLY'].to_s}
+        }
+      end
     end
 
     # Public: Gets the Hash of email configuration options.  These are set on
@@ -449,10 +437,6 @@ class Service
       Service.services << svc
       super
     end
-
-    def setup_for(app)
-      app.service(self)
-    end
   end
 
   # Determine #root from this file's location
@@ -505,6 +489,8 @@ class Service
   # Returns nothing.
   attr_writer :ca_file
 
+  attr_reader :event_method
+
   def initialize(event = :push, data = {}, payload = nil)
     helper_name = "#{event.to_s.classify}Helpers"
     if Service.const_defined?(helper_name)
@@ -515,7 +501,15 @@ class Service
     @event = event.to_sym
     @data = data || {}
     @payload = payload || sample_payload
+    @event_method = ["receive_#{event}", "receive_event"].detect do |method|
+      respond_to?(method)
+    end
     @http = @secrets = @email_config = nil
+    @callbacks = []
+  end
+
+  def respond_to_event?
+    !@event_method.nil?
   end
 
   # Public: Shortens the given URL with git.io.
@@ -651,18 +645,51 @@ class Service
   # Returns a Faraday::Connection instance.
   def http(options = {})
     @http ||= begin
-      req = options[:request] ||= {}
-      req[:open_timeout] ||= 3
-      req[:timeout] ||= 10
-      ssl = options[:ssl] ||= {}
-      ssl[:ca_file] ||= ca_file
-      ssl[:verify_depth] ||= 5
+      self.class.default_http_options.each do |key, sub_options|
+        sub_hash = options[key] ||= {}
+        sub_options.each do |sub_key, sub_value|
+          sub_hash[sub_key] ||= sub_value
+        end
+      end
+      options[:ssl][:ca_file] ||= ca_file
 
       Faraday.new(options) do |b|
         b.request :url_encoded
-        b.adapter :net_http
+        b.adapter *(options[:adapter] || :net_http)
+        b.use HttpReporter, self
       end
     end
+  end
+
+  def self.default_http_options
+    @@default_http_options ||= {
+      :request => {:timeout => 10, :open_timeout => 5},
+      :ssl => {:verify_depth => 5},
+      :headers => {}
+    }
+  end
+
+  # Adds an HTTP callback
+  def on_http(&block)
+    @callbacks << block
+  end
+
+  def receive_http(env)
+    @callbacks.each { |cb| cb.call env }
+  end
+
+  def receive
+    return unless respond_to_event?
+    Service::Timeout.timeout(20, TimeoutError) do
+      send(event_method)
+    end
+
+    self
+  rescue Service::ConfigurationError, Errno::EHOSTUNREACH, Errno::ECONNRESET, SocketError, Net::ProtocolError => err
+    if !err.is_a?(Service::Error)
+      err = ConfigurationError.new(err)
+    end
+    raise err
   end
 
   # Public: Checks for an SSL error, and re-raises a Services configuration error.
@@ -777,6 +804,26 @@ class Service
   end
 
   class MissingError < Error
+  end
+
+  class HttpReporter < Faraday::Response::Middleware
+    def initialize(app, service = nil)
+      super(app)
+      @service = service
+    end
+
+    def on_complete(env)
+      @service.receive_http(
+        :request => {
+          :url => env[:url].to_s,
+          :headers => env[:request_headers]
+        }, :response => {
+          :status => env[:status],
+          :headers => env[:response_headers],
+          :body => env[:body].to_s
+        }
+      )
+    end
   end
 end
 
