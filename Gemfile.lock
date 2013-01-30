@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    github-services (1.0.0.44adcbe)
+    github-services (1.0.0.45281be)
       SystemTimer
       activeresource (~> 3.0.0)
       addressable (~> 2.2.7)

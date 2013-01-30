@@ -20,28 +20,51 @@ Gem::Specification.new do |spec|
   spec.homepage = 'https://github.com/github/github-services'
   spec.licenses = ['MIT']
 
-  spec.add_dependency "activeresource",         "~> 3.0.0"
   spec.add_dependency "addressable",            "~> 2.2.7"
-  spec.add_dependency "amqp",                   "0.6.7"
-  spec.add_dependency "httparty",               "0.7.4"
   spec.add_dependency 'yajl-ruby',              '1.1.0'
   spec.add_dependency "mash",                   "~> 0.1.1"
   spec.add_dependency "mime-types",             "~> 1.15"
-  spec.add_dependency "oauth",                  "0.4.4"
-  spec.add_dependency "tinder",                 "1.8.0.github"
-  spec.add_dependency "mail",                   "~>2.3"
-  spec.add_dependency "xml-simple",             "1.0.11"
-  spec.add_dependency "xmpp4r-simple",          "0.8.8"
-  #gem "yammer4r",              "0.1.5"
   spec.add_dependency "ruby-hmac",              "0.4.0"
   spec.add_dependency "faraday",                "0.7.6"
   spec.add_dependency "SystemTimer"
+
+  # Basecamp Classic
+  spec.add_dependency "activeresource",         "~> 3.0.0"
+
+  # AMQP
+  spec.add_dependency "amqp",                   "0.6.7"
+
+  # Twitter
+  spec.add_dependency "oauth",                  "0.4.4"
+
+  # Campfire
+  spec.add_dependency "tinder",                 "1.8.0.github"
+
+  # Bamboo, Buddycloud
+  spec.add_dependency "xml-simple",             "1.0.11"
+
+  # Email
+  spec.add_dependency "mail",                   "~>2.3"
+
+  # Jabber
+  spec.add_dependency "xmpp4r-simple",          "0.8.8"
+
+  # Twilio
   spec.add_dependency "twilio-ruby",            "3.4.2"
+
+  # Amazon SQS
   spec.add_dependency "right_aws",              "3.0.3"
   spec.add_dependency "right_http_connection",  "1.3.0"
+
+  # MQTT
   spec.add_dependency "mqtt", "0.0.8"
+
+  # Softlayer Messaging
   spec.add_dependency "softlayer_messaging", "~> 1.0.2"
+
+  # Amazon SNS
   spec.add_dependency "aws-sdk", "~> 1.8.0"
+  spec.add_dependency "httparty", "0.7.4"
 
   spec.files = %w(Gemfile LICENSE README.mkdn CONTRIBUTING.md Rakefile)
   spec.files << "#{lib}.gemspec"
