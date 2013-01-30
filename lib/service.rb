@@ -407,10 +407,11 @@ class Service
     end
 
     def objectify(hash)
+      struct = OpenStruct.new
       hash.each do |key, value|
-        hash[key] = objectify(value) if value.is_a?(Hash)
+        struct.send("#{key}=", value.is_a?(Hash) ? objectify(value) : value)
       end
-      OpenStruct.new hash
+      struct
     end
 
     # Sets the path to the secrets configuration file.
