@@ -43,19 +43,11 @@ class Service::Nodejitsu < Service
   end
 
   def email_success_deploys
-    if data['email_success_deploys'].to_s == ''
-      true
-    else
-      data['email_success_deploys']
-    end
+    data['email_success_deploys']
   end
 
   def email_errors
-    if data['email_errors'].to_s == ''
-      true
-    else
-      data['email_errors']
-    end
+    data['email_errors']
   end
 
   def scheme

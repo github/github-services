@@ -23,7 +23,7 @@ class NodejitsuTest < Service::TestCase
   end
 
   def test_reads_email_errors_from_data
-    assert_equal false, @svc.email_errors
+    assert_equal true, @svc.email_errors
   end
 
   def test_reads_email_success_deploys_from_data
@@ -111,7 +111,7 @@ class NodejitsuTest < Service::TestCase
       'domain'                => 'webhooks.nodejitsu.com',
       'branch'                => 'master',
       'email_success_deploys' => false,
-      'email_errors'          => false
+      'email_errors'          => true
     }
   end
 
