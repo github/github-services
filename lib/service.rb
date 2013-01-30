@@ -118,24 +118,6 @@ class Service
       end
     end
 
-    # Gets a StatsD client.
-    def stats
-      @stats ||= begin
-        if (hash = secrets['statsd']) && url = hash[env]
-          uri   = Addressable::URI.parse(url)
-          stats = Statsd.new uri.host, uri.port 
-          stats.namespace = 'services'
-          stats
-        else
-          stats = Statsd.new '127.0.0.1', 8127
-          stats.namespace = 'services'
-          stats
-        end
-      end
-    end
-
-    attr_writer :stats
-
     # The SHA1 of the commit that was HEAD when the process started. This is
     # used in production to determine which version of the app is deployed.
     #
@@ -161,26 +143,16 @@ class Service
       methods = ["receive_#{event}", "receive_event"]
       if event_method = methods.detect { |m| svc.respond_to?(m) }
         Service::Timeout.timeout(20, TimeoutError) do
-          Service.stats.time "hook.time.#{hook_name}" do
-            svc.send(event_method)
-            Service.stats.increment "event.count.#{event}"
-          end
+          svc.send(event_method)
         end
 
         svc
       end
     rescue Service::ConfigurationError, Errno::EHOSTUNREACH, Errno::ECONNRESET, SocketError, Net::ProtocolError => err
-      Service.stats.increment "hook.fail.config.#{hook_name}"
       if !err.is_a?(Service::Error)
         err = ConfigurationError.new(err)
       end
       raise err
-    rescue Service::TimeoutError
-      Service.stats.increment "hook.fail.timeout.#{hook_name}"
-      raise
-    rescue
-      Service.stats.increment "hook.fail.exception.#{hook_name}"
-      raise
     end
 
     # Tracks the defined services.
