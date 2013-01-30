@@ -1,7 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
 class FisheyeTest < Service::TestCase
-
   def app
     Service::App
   end
