@@ -1,0 +1,15 @@
+This service hook adds an object to a given Firebase for every commit.
+
+The commit will be appended, in-order, to the URL provided in the 'firebase'
+configuration option. This is the equivalent of calling:
+
+    new Firebase(firebase).push(commit);
+
+from the JS library.
+
+The provided URL must point to a valid Firebase reference, and must be prefixed
+with https://
+
+If you have secured your Firebase with security rules that prevent anonymous
+writes, you may provide the secret to your firebase in the configuration
+options.
