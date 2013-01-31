@@ -4,7 +4,8 @@ require 'stringio'
 class IRCTest < Service::TestCase
   class FakeIRC < Service::IRC
     def readable_io
-      @readable_io ||= StringIO.new(" 004 n ")
+      nick = data['nick']
+      @readable_io ||= StringIO.new(" 004 #{nick} \r\n:NickServ!nickserv@network.net PRIVMSG #{nick} :Successfully authenticated as #{nick}.\r\n")
     end
 
     def writable_io
@@ -35,6 +36,24 @@ class IRCTest < Service::TestCase
     msgs = svc.writable_io.string.split("\n")
     assert_equal "NICK n", msgs.shift
     assert_match "USER n", msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+
+  def test_push_with_nickserv
+    svc = service({'room' => 'r', 'nick' => 'n', 'nickserv_password' => 'pass'}, payload)
+
+    svc.receive_push
+    msgs = svc.writable_io.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match "USER n", msgs.shift
+    assert_equal "PRIVMSG NICKSERV :IDENTIFY pass", msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
@@ -126,25 +145,6 @@ class IRCTest < Service::TestCase
 
     svc.receive_push
     msgs = svc.writable_io.string.split("\n")
-    assert_nil msgs.shift
-  end
-
-  def test_push_with_nickserv
-    svc = service({'room' => 'r', 'nick' => 'n', 'nickservidentify' => 'booya'},
-      payload)
-
-    svc.receive_push
-    msgs = svc.writable_io.string.split("\n")
-    assert_equal "NICK n", msgs.shift
-    assert_equal "MSG NICKSERV IDENTIFY booya", msgs.shift
-    assert_match "USER n", msgs.shift
-    assert_equal "JOIN #r", msgs.shift.strip
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_equal "PART #r", msgs.shift.strip
-    assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
   end
 
