@@ -62,7 +62,7 @@ class Service::IRC < Service
 
     nickserv_password = data['nickserv_password']
     if !nickserv_password.empty?
-      irc_puts "PRIVMSG NICKSERV :IDENTIFY #{nickserv_password}" if !nickserv_password.empty?
+      irc_puts "PRIVMSG NICKSERV :IDENTIFY #{nickserv_password}"
       loop do
         case irc_gets
         when /^:NickServ/i
