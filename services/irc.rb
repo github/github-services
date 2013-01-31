@@ -60,7 +60,7 @@ class Service::IRC < Service
       end
     end
 
-    nickserv_password = data['nickserv_password']
+    nickserv_password = data['nickserv_password'].to_s
     if !nickserv_password.empty?
       irc_puts "PRIVMSG NICKSERV :IDENTIFY #{nickserv_password}"
       loop do
