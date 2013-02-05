@@ -3,6 +3,7 @@
 3.  `room` - Supports single or multiple rooms (comma separated).  Also supports room passwords (room_name::password).  Prefixing '#' to the room is optional.
 4.  `password` - Server password (optional)
 5.  `nick` - Nickname (optional)
+7.  `nickserv_password` - Password for the server's [NickServ](http://en.wikipedia.org/wiki/Internet_Relay_Chat_services) (optional)
 6.  `long_url` - If enabled, displays full compare/commit url's. If disabled uses git.io.
 7.  `message_without_join` - If enabled prevents joining and immediately leaving the channel.
 8. `no_colors` - Disables color support for messages
