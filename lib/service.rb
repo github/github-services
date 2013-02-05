@@ -488,7 +488,8 @@ class Service
       respond_to?(method)
     end
     @http = @secrets = @email_config = nil
-    @callbacks = []
+    @http_callbacks = []
+    @remote_callbacks = []
   end
 
   def respond_to_event?
@@ -654,11 +655,22 @@ class Service
 
   # Adds an HTTP callback
   def on_http(&block)
-    @callbacks << block
+    @http_callbacks << block
   end
 
+  # Passes HTTP response debug data to the HTTP callbacks.
   def receive_http(env)
-    @callbacks.each { |cb| cb.call env }
+    @http_callbacks.each { |cb| cb.call(env) }
+  end
+
+  # Add remote call callbacks.
+  def on_remote_call(&block)
+    @remote_callbacks << block
+  end
+
+  # Passes raw debug data to remote call callbacks.
+  def receive_remote_call(text)
+    @remote_callbacks.each { |cb| cb.call(text) }
   end
 
   def receive
