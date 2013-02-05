@@ -1,11 +1,10 @@
 PATH
   remote: .
   specs:
-    github-services (1.0.0.adc12ae)
+    github-services (1.0.0.1a2f667)
       SystemTimer
       activeresource (~> 3.0.0)
       addressable (~> 2.2.7)
-      amqp (= 0.6.7)
       aws-sdk (~> 1.8.0)
       faraday (= 0.7.6)
       httparty (= 0.7.4)
@@ -37,8 +36,6 @@ GEM
       activesupport (= 3.0.10)
     activesupport (3.0.10)
     addressable (2.2.8)
-    amqp (0.6.7)
-      eventmachine (>= 0.12.4)
     aws-sdk (1.8.1.1)
       json (~> 1.4)
       nokogiri (>= 1.4.4)

@@ -31,9 +31,6 @@ Gem::Specification.new do |spec|
   # Basecamp Classic
   spec.add_dependency "activeresource",         "~> 3.0.0"
 
-  # AMQP
-  spec.add_dependency "amqp",                   "0.6.7"
-
   # Twitter
   spec.add_dependency "oauth",                  "0.4.4"
 
