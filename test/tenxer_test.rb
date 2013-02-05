@@ -16,7 +16,7 @@ class TenxerTest < Service::TestCase
 
   def test_push
     checker = post_checker "push"
-    @stubs.post "/updater/githubpubsubhubbub", &checker
+    @stubs.post "/updater/githubpubsubhubbub/", &checker
 
     svc = service(:push, {}, {'test' => 'payload'})
     svc.receive_event
@@ -24,21 +24,21 @@ class TenxerTest < Service::TestCase
 
   def test_pull_request
     checker = post_checker "pull_request"
-    @stubs.post "/updater/githubpubsubhubbub", &checker
+    @stubs.post "/updater/githubpubsubhubbub/", &checker
 
     svc = service(:pull_request, {}, {'test' => 'payload'})
     svc.receive_event
   end
 
-  
+
   def test_issues
     checker = post_checker "issues"
-    @stubs.post "/updater/githubpubsubhubbub", &checker
-  
+    @stubs.post "/updater/githubpubsubhubbub/", &checker
+
     svc = service(:issues, {}, {'test' => 'payload'})
     svc.receive_event
   end
-   
+
   def service(*args)
     super Service::Tenxer, *args
   end

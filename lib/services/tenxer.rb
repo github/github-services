@@ -6,7 +6,7 @@ class Service::Tenxer < Service
   maintained_by :github => 'tenxer'
   supported_by :web => 'http://www.tenxer.com/faq',
     :email => 'support@tenxer.com'
-    
+
   def receive_event
     url = "https://www.tenxer.com/updater/githubpubsubhubbub/"
     res = http_post url, {'payload' => JSON.generate(payload)},
@@ -14,6 +14,6 @@ class Service::Tenxer < Service
     if res.status != 200
       raise Error, "Error sending event to tenXer. Status: " +
         res.status.to_s + ": " + res.body
-    end    
+    end
   end
 end
