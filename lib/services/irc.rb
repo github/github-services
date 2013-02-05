@@ -87,7 +87,6 @@ class Service::IRC < Service
     end
 
     irc_puts "QUIT"
-    emit_debug_log
     irc_gets unless irc_eof?
   rescue SocketError => boom
     if boom.to_s =~ /getaddrinfo: Name or service not known/
@@ -101,6 +100,8 @@ class Service::IRC < Service
     raise_config_error 'Invalid host'
   rescue OpenSSL::SSL::SSLError
     raise_config_error 'Host does not support SSL'
+  ensure
+    emit_debug_log
   end
 
   def irc_gets
