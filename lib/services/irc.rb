@@ -138,7 +138,7 @@ class Service::IRC < Service
 
   def emit_debug_log
     return unless irc_debug_log.any?
-    receive_remote_call(irc_debug_log.join("\n"))
+    receive_remote_call("IRC Log:\n#{irc_debug_log.join("\n")}")
   end
 
   def irc
