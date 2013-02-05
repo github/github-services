@@ -6,12 +6,12 @@ How the services work
 
 1. A post-receive background job is submitted when someone pushes their
    commits to GitHub
-2. If the repository the commits belong to has any "Service Hooks" setup, the
+2. If the repository the commits belong to has any "Service Hooks" set up, the
    job makes a request to `http://services-server/service_name/push` with the
    following data:
     - `params[:payload]` containing all of the commit data (the same data you get using the API)
     - `params[:data]` containing the service data (username, password, room, etc)
-3. Sinatra (github-services.rb) processes the request (twitters your data, says
+3. Sinatra (github-services.rb) processes the request (tweets your data, says
    something in campfire, posts it to lighthouse, etc)
 4. Rinse and repeat
 
