@@ -21,7 +21,7 @@ class Service::HipChat < Service
         return
       end
     end
-    
+
     # ignore forks and watches if boolean is set
     return if event.to_s =~ /fork/ && data['quiet_fork']
     return if event.to_s =~ /watch/ && data['quiet_watch']
