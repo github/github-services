@@ -47,7 +47,7 @@ class Service::IRC < Service
     botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
     command = data['notice'].to_i == 1 ? 'NOTICE' : 'PRIVMSG'
 
-    irc_puts "PASS #{data['password']}" if !data['password'].to_s.empty?
+    irc_password(:PASS, data['password']) if !data['password'].to_s.empty?
     irc_puts "NICK #{botname}"
     irc_puts "USER #{botname} 8 * :GitHub IRCBot"
 
@@ -62,7 +62,7 @@ class Service::IRC < Service
 
     nickserv_password = data['nickserv_password'].to_s
     if !nickserv_password.empty?
-      irc_puts "PRIVMSG NICKSERV :IDENTIFY #{nickserv_password}"
+      irc_password("PRIVMSG NICKSERV :IDENTIFY", nickserv_password)
       loop do
         case irc_gets
         when /^:NickServ/i
@@ -87,6 +87,7 @@ class Service::IRC < Service
     end
 
     irc_puts "QUIT"
+    emit_debug_log
     irc_response = []
     irc_response << irc_gets unless irc_eof?
   rescue SocketError => boom
@@ -111,8 +112,24 @@ class Service::IRC < Service
     irc.eof?
   end
 
-  def irc_puts(*args)
-    irc.puts *args
+  def irc_password(command, password)
+    real_command = "#{command} #{password}"
+    debug_command = "#{command} #{'*' * password.size}"
+    irc_puts(real_command, debug_command)
+  end
+
+  def irc_puts(command, debug_command=command)
+    irc_debug_log << debug_command
+    irc.puts command
+  end
+
+  def irc_debug_log
+    @irc_debug_log ||= []
+  end
+
+  def emit_debug_log
+    return unless irc_debug_log.any?
+    receive_remote_call(irc_debug_log.join("\n"))
   end
 
   def irc

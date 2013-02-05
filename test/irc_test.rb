@@ -12,8 +12,9 @@ class IRCTest < Service::TestCase
       @writable_io ||= StringIO.new
     end
 
-    def irc_puts(*args)
-      writable_io.puts *args
+    def irc_puts(command, debug_command = command)
+      irc_debug_log << debug_command
+      writable_io.puts command
     end
 
     def irc_gets
@@ -30,38 +31,86 @@ class IRCTest < Service::TestCase
   end
 
   def test_push
+    expected = [
+      "NICK n",
+      "USER n",
+      "JOIN #r",
+      /PRIVMSG #r.*grit/,
+      /PRIVMSG #r.*grit/,
+      /PRIVMSG #r.*grit/,
+      /PRIVMSG #r.*grit/,
+      "PART #r",
+      "QUIT"
+    ]
+
+    remote_call_emitted = false
     svc = service({'room' => 'r', 'nick' => 'n'}, payload)
+    svc.on_remote_call do |text|
+      assert_irc_commands expected, text
+      remote_call_emitted = true
+    end
 
     svc.receive_push
-    msgs = svc.writable_io.string.split("\n")
-    assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
-    assert_equal "JOIN #r", msgs.shift.strip
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_equal "PART #r", msgs.shift.strip
-    assert_equal "QUIT", msgs.shift.strip
-    assert_nil msgs.shift
+    assert remote_call_emitted
+    assert_irc_commands expected, svc.writable_io.string
+  end
+
+  def test_push_with_password
+    expected = [
+      "PASS pass",
+      "NICK n",
+      "USER n",
+      "JOIN #r",
+      /PRIVMSG #r.*grit/,
+      /PRIVMSG #r.*grit/,
+      /PRIVMSG #r.*grit/,
+      /PRIVMSG #r.*grit/,
+      "PART #r",
+      "QUIT"
+    ]
+
+    remote_call_emitted = false
+    svc = service({'room' => 'r', 'nick' => 'n', 'password' => 'pass'}, payload)
+    svc.on_remote_call do |text|
+      censored = expected.dup
+      censored[0] = 'PASS ****'
+
+      assert_irc_commands censored, text
+      remote_call_emitted = true
+    end
+
+    svc.receive_push
+    assert remote_call_emitted
+    assert_irc_commands expected, svc.writable_io.string
   end
 
   def test_push_with_nickserv
+    expected = [
+      "NICK n",
+      "USER n",
+      "PRIVMSG NICKSERV :IDENTIFY pass",
+      "JOIN #r",
+      /PRIVMSG #r.*grit/,
+      /PRIVMSG #r.*grit/,
+      /PRIVMSG #r.*grit/,
+      /PRIVMSG #r.*grit/,
+      "PART #r",
+      "QUIT"
+    ]
+
+    remote_call_emitted = false
     svc = service({'room' => 'r', 'nick' => 'n', 'nickserv_password' => 'pass'}, payload)
+    svc.on_remote_call do |text|
+      censored = expected.dup
+      censored[2] = "PRIVMSG NICKSERV :IDENTIFY ****"
+
+      assert_irc_commands censored, text
+      remote_call_emitted = true
+    end
 
     svc.receive_push
-    msgs = svc.writable_io.string.split("\n")
-    assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
-    assert_equal "PRIVMSG NICKSERV :IDENTIFY pass", msgs.shift
-    assert_equal "JOIN #r", msgs.shift.strip
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_equal "PART #r", msgs.shift.strip
-    assert_equal "QUIT", msgs.shift.strip
-    assert_nil msgs.shift
+    assert remote_call_emitted
+    assert_irc_commands expected, svc.writable_io.string
   end
 
   def test_push_with_empty_branch_regex
@@ -213,6 +262,14 @@ class IRCTest < Service::TestCase
 
   def service(*args)
     super FakeIRC, *args
+  end
+
+  def assert_irc_commands(expected, text)
+    lines = text.split("\n")
+    expected.each do |line|
+      assert_match line, lines.shift
+    end
+    assert_nil lines.shift
   end
 end
 
