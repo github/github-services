@@ -1,4 +1,4 @@
-class Service::HubCI < Service
+class Service::NodeCI < Service
   string :token
 
   def receive_push
