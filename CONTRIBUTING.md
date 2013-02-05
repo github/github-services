@@ -8,6 +8,9 @@ GitHub will accept service hooks for the following types of services:
 In order to provide quality service and support for our users, we require the
 following:
 
+* Implement endpoints that take the full, untouched payload.
+Good example: [CodeClimate](https://github.com/github/github-services/blob/master/services/codeclimate.rb).
+Bad Example: [Campfire](https://github.com/github/github-services/blob/master/services/campfire.rb).
 * Thorough documentation about what the hook does, and what the options do.
 * Tested code that works.  If we have to make changes to the Services infrastructure,
 it helps a lot to have passing tests so we know we're not breaking things.

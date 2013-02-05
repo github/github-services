@@ -1,6 +1,7 @@
 require 'test/unit'
 require 'pp'
 require File.expand_path('../../config/load', __FILE__)
+Service.load_services
 
 class Service::TestCase < Test::Unit::TestCase
   ALL_SERVICES = Service.services.dup
@@ -19,10 +20,7 @@ class Service::TestCase < Test::Unit::TestCase
     end
 
     service = klass.new(event, data, payload)
-    service.http = Faraday.new do |b|
-      b.request :url_encoded
-      b.adapter :test, @stubs
-    end
+    service.http :adapter => [:test, @stubs]
     service
   end
 

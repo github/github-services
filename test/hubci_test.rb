@@ -11,7 +11,7 @@ class HubCITest < Service::TestCase
   end
 
   def test_constructs_post_receive_url
-    assert_equal 'https://hub.ci/repository/mojombo/grit/onCommit/5373dd4a3648b88fa9acb8e46ebc188a',
+    assert_equal 'https://node.ci/repository/mojombo/grit/onCommit/5373dd4a3648b88fa9acb8e46ebc188a',
       @svc.hubci_url
   end
 

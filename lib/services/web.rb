@@ -30,7 +30,6 @@ class Service::Web < Service
     # and GET params are added to the POST body
     http.url_prefix = url
     http.headers['X-GitHub-Event'] = event.to_s
-    http.headers['User-Agent'] = 'GitHub Services Web Hook'
 
     if data['insecure_ssl'].to_i == 1
       http.ssl[:verify] = false

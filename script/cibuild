@@ -1,0 +1,6 @@
+#!/bin/sh
+# Usage: script/test
+# Runs the library's CI suite.
+
+script/bootstrap
+bundle exec rake test
