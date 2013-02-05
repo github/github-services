@@ -637,9 +637,9 @@ class Service
       options[:ssl][:ca_file] ||= ca_file
 
       Faraday.new(options) do |b|
+        b.use HttpReporter, self
         b.request :url_encoded
         b.adapter *(options[:adapter] || :net_http)
-        b.use HttpReporter, self
       end
     end
   end
@@ -793,9 +793,11 @@ class Service
     def initialize(app, service = nil)
       super(app)
       @service = service
+      @time = Time.now
     end
 
     def on_complete(env)
+      ms = ((Time.now - @time) * 1000).round
       @service.receive_http(
         :request => {
           :url => env[:url].to_s,
@@ -803,7 +805,8 @@ class Service
         }, :response => {
           :status => env[:status],
           :headers => env[:response_headers],
-          :body => env[:body].to_s
+          :body => env[:body].to_s,
+          :duration => "%.02fs" % [Time.now - @time]
         }
       )
     end
