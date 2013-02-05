@@ -88,8 +88,7 @@ class Service::IRC < Service
 
     irc_puts "QUIT"
     emit_debug_log
-    irc_response = []
-    irc_response << irc_gets unless irc_eof?
+    irc_gets unless irc_eof?
   rescue SocketError => boom
     if boom.to_s =~ /getaddrinfo: Name or service not known/
       raise_config_error 'Invalid host'
@@ -105,11 +104,13 @@ class Service::IRC < Service
   end
 
   def irc_gets
-    irc.gets
+    response = readable_irc.gets
+    debug_incoming(response) unless !response || response.empty?
+    response
   end
 
   def irc_eof?
-    irc.eof?
+    readable_irc.eof?
   end
 
   def irc_password(command, password)
@@ -119,8 +120,16 @@ class Service::IRC < Service
   end
 
   def irc_puts(command, debug_command=command)
-    irc_debug_log << debug_command
-    irc.puts command
+    debug_outgoing(debug_command)
+    writable_irc.puts command
+  end
+
+  def debug_outgoing(command)
+    irc_debug_log << ">> #{command.strip}"
+  end
+
+  def debug_incoming(command)
+    irc_debug_log << "=> #{command.strip}"
   end
 
   def irc_debug_log
@@ -135,12 +144,13 @@ class Service::IRC < Service
   def irc
     @irc ||= begin
       socket = TCPSocket.open(data['server'], port)
-
       socket = new_ssl_wrapper(socket) if use_ssl?
-
       socket
     end
   end
+
+  alias readable_irc irc
+  alias writable_irc irc
 
   def new_ssl_wrapper(socket)
     ssl_context = OpenSSL::SSL::SSLContext.new
