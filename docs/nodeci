@@ -1,0 +1,11 @@
+NODE.CI is a SaaS continuous integration tool for Node.js
+
+Install Notes
+-------------
+
+1.  Create an account at http://node.ci (you can sign in with GitHub)
+2.  Install your repository on NODE.CI
+3.  You're done!
+
+For more details about NODE.CI, go to http://docs.node.ci
+
