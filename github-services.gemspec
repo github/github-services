@@ -69,7 +69,6 @@ Gem::Specification.new do |spec|
   spec.files = %w(Gemfile LICENSE README.mkdn CONTRIBUTING.md Rakefile)
   spec.files << "#{lib}.gemspec"
   spec.files += Dir.glob("lib/**/*.rb")
-  spec.files += Dir.glob("services/**/*.rb")
   spec.files += Dir.glob("test/**/*.rb")
   spec.files += Dir.glob("script/*")
 
