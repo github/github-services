@@ -32,9 +32,9 @@ class HubCITest < Service::TestCase
     end
     @svc.receive_push
   end
-    
+
   def service(*args)
-    super Service::HubCI, *args
+    super Service::NodeCI, *args
   end
 
   def data
@@ -42,7 +42,7 @@ class HubCITest < Service::TestCase
       'token' => '5373dd4a3648b88fa9acb8e46ebc188a'
     }
   end
-    
+
   def payload
 
     {
