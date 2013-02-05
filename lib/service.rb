@@ -348,9 +348,20 @@ class Service
     #
     # Returns a Hash.
     def email_config
-      @email_config ||=
-        (File.exist?(email_config_file) && YAML.load_file(email_config_file)) || {}
+      @email_config ||= begin
+        hash = (File.exist?(email_config_file) && YAML.load_file(email_config_file)) || {}
+        EMAIL_KEYS.each do |key|
+          env_key = "EMAIL_SMTP_#{key.upcase}"
+          if value = ENV[env_key]
+            hash[key] = value
+          end
+        end
+        hash
+      end
     end
+    EMAIL_KEYS = %w(address port domain authentication user_name password
+                    enable_starttls_auto openssl_verify_mode enable_logging
+                    noreply_address)
 
     # Gets the path to the secret configuration file.
     #
