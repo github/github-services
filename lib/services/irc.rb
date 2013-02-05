@@ -1,5 +1,5 @@
 class Service::IRC < Service
-  string   :server, :port, :room, :nick, :branch_regexes
+  string   :server, :port, :room, :nick, :branch_regexes, :nickserv_password
   password :password
   boolean  :ssl, :message_without_join, :no_colors, :long_url, :notice
   white_list :server, :port, :room, :nick
@@ -49,7 +49,6 @@ class Service::IRC < Service
 
     irc_puts "PASS #{data['password']}" if !data['password'].to_s.empty?
     irc_puts "NICK #{botname}"
-    irc_puts "MSG NICKSERV IDENTIFY #{data['nickservidentify']}" if !data['nickservidentify'].to_s.empty?
     irc_puts "USER #{botname} 8 * :GitHub IRCBot"
 
     loop do
@@ -58,6 +57,20 @@ class Service::IRC < Service
         break
       when /^PING\s*:\s*(.*)$/
         irc_puts "PONG #{$1}"
+      end
+    end
+
+    nickserv_password = data['nickserv_password'].to_s
+    if !nickserv_password.empty?
+      irc_puts "PRIVMSG NICKSERV :IDENTIFY #{nickserv_password}"
+      loop do
+        case irc_gets
+        when /^:NickServ/i
+          # NickServ responded somehow.
+          break
+        when /^PING\s*:\s*(.*)$/
+          irc_puts "PONG #{$1}"
+        end
       end
     end
 
