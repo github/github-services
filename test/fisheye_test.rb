@@ -1,7 +1,7 @@
 require File.expand_path('../helper', __FILE__)
 Service::App.set :environment, :test
 
-class FisheyeTest < Service::TestCase
+class FishEyeTest < Service::TestCase
 
   def app
     Service::App
@@ -13,9 +13,9 @@ class FisheyeTest < Service::TestCase
 
   def data_my_repo
     {
-        "url_base" => "http://localhost:6060/foo",
-        "token" => "515848d216e3baa46e10d92f21f890f67fea1d12",
-        "custom_repository_name" => "myRepo"
+        "FishEye_Base_URL" => "http://localhost:6060/foo",
+        "REST_API_Token" => "515848d216e3baa46e10d92f21f890f67fea1d12",
+        "FishEye_Repository_Name" => "myRepo"
     }
   end
 
@@ -30,14 +30,42 @@ class FisheyeTest < Service::TestCase
     @stubs.verify_stubbed_calls
   end
 
+  def test_triggers_scanning_url_with_slash
+    @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/myRepo/scan" do |env|
+      [200, {}]
+    end
+
+    data = data_my_repo
+    data['FishEye_Base_URL'] = "http://localhost:6060/foo/"
+
+    svc = service :push, data, payload
+    assert_equal("Ok", svc.receive)
+
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_triggers_scanning_url_without_http
+    @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/myRepo/scan" do |env|
+      [200, {}]
+    end
+
+    data = data_my_repo
+    data['FishEye_Base_URL'] = "localhost:6060/foo"
+
+    svc = service :push, data, payload
+    assert_equal("Ok", svc.receive)
+
+    @stubs.verify_stubbed_calls
+  end
+
   def test_triggers_scanning_github_repository
     @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/grit/scan" do |env|
       [200, {}]
     end
 
     data = {
-      "url_base" => "http://localhost:6060/foo",
-      "token" => "515848d216e3baa46e10d92f21f890f67fea1d12",
+      "FishEye_Base_URL" => "http://localhost:6060/foo",
+      "REST_API_Token" => "515848d216e3baa46e10d92f21f890f67fea1d12",
     }
 
     svc = service :push, data, payload
@@ -52,9 +80,9 @@ class FisheyeTest < Service::TestCase
     end
 
     data = {
-      "url_base" => "http://localhost:6060/foo",
-      "token" => "515848d216e3baa46e10d92f21f890f67fea1d12",
-      "custom_repository_name" => "   "
+      "FishEye_Base_URL" => "http://localhost:6060/foo",
+      "REST_API_Token" => "515848d216e3baa46e10d92f21f890f67fea1d12",
+      "FishEye_Repository_Name" => "   "
     }
 
     svc = service :push, data, payload
@@ -63,9 +91,9 @@ class FisheyeTest < Service::TestCase
     @stubs.verify_stubbed_calls
   end
 
-  def test_triggers_scanning_missing_url_base
+  def test_triggers_scanning_missing_FishEye_Base_URL
     data = {
-      "token" => "515848d216e3baa46e10d92f21f890f67fea1d12"
+      "REST_API_Token" => "515848d216e3baa46e10d92f21f890f67fea1d12"
     }
 
     svc = service :push, data, payload
@@ -79,7 +107,7 @@ class FisheyeTest < Service::TestCase
 
   def test_triggers_scanning_missing_token
     data = {
-      "url_base" => "http://localhost:6060/foo"
+      "FishEye_Base_URL" => "http://localhost:6060/foo"
     }
 
     svc = service :push, data, payload
@@ -165,7 +193,7 @@ class FisheyeTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::Fisheye, *args
+    super Service::FishEye, *args
   end
 
 end
