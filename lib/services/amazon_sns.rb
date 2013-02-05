@@ -1,4 +1,5 @@
-require 'aws-sdk'
+require 'aws/sns'
+require 'aws/sqs'
 
 class Service::AmazonSNS < Service
   string :aws_key, :aws_secret, :sns_topic, :sqs_queue
@@ -22,16 +23,16 @@ class Service::AmazonSNS < Service
 
   attr_writer :aws_sdk_sqs
   def aws_sdk_sqs
-    @aws_sdk_sqs ||= AWS::SQS.new(*aws_config)
+    @aws_sdk_sqs ||= AWS::SQS.new(aws_config)
   end
 
   attr_writer :aws_sdk_sns
   def aws_sdk_sns
-    @aws_sdk_sns ||= AWS::SNS.new(*aws_config)
+    @aws_sdk_sns ||= AWS::SNS.new(aws_config)
   end
 
   def aws_config
-    [:access_key_id=>data['aws_key'], :secret_access_key=>data['aws_secret']]
+    {:access_key_id=>data['aws_key'], :secret_access_key=>data['aws_secret']}
   end
 
 end

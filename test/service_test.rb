@@ -6,6 +6,11 @@ class ServiceTest < Service::TestCase
     end
   end
 
+  class TestCatchAllService < Service
+    def receive_event
+    end
+  end
+
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
     @service = service(:push, 'data', 'payload')
@@ -13,6 +18,38 @@ class ServiceTest < Service::TestCase
 
   def test_receive_valid_event
     assert TestService.receive :push, {}, {}
+  end
+
+  def test_specific_event_method
+    assert_equal 'receive_push', TestService.new(:push, {}, {}).event_method
+  end
+
+  def test_catch_all_event_method
+    assert_equal 'receive_event', TestCatchAllService.new(:push, {}, {}).event_method
+  end
+
+  def test_missing_method
+    assert_equal nil, TestService.new(:issues, {}, {}).event_method
+  end
+
+  def test_http_callback
+    calls = 0
+    @service.on_http do |env|
+      assert_equal '/', env[:request][:url]
+      assert_equal '0', env[:request][:headers]['Content-Length']
+      assert_equal 200, env[:response][:status]
+      assert_equal 'booya', env[:response][:headers]['x-test']
+      assert_equal 'ok', env[:response][:body]
+      calls += 1
+    end
+
+    @stubs.post '/' do |env|
+      [200, {'x-test' => 'booya'}, 'ok']
+    end
+
+    @service.http.post '/'
+
+    assert_equal 1, calls
   end
 
   def test_url_shorten
