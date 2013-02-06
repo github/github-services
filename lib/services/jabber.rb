@@ -37,35 +37,18 @@ class Service::Jabber < Service
 
     #Split multiple addresses into array, removing duplicates
     recipients  = data.has_key?('user') ? data['user'].split(',').each(&:strip!).uniq : []
-    conferences = data.has_key?('muc') ? data['muc'].split(',').each(&:strip!).uniq : []
     messages = []
     messages << "#{summary_message}: #{summary_url}"
     messages += commit_messages
     message = messages.join("\n")
 
     deliver_messages(message, recipients)
-
-    # temporarily disabled
-    #deliver_muc(message, conferences) if !conferences.empty?
   end
 
   def deliver_messages(message, recipients)
     recipients.each do |recipient|
       im.deliver_deferred recipient, message, :chat
     end
-  end
-
-  def deliver_muc(message, conferences)
-    conferences.each do |conference|
-      muc = mucs[conference]
-      muc ||= mucs[conference] = ::Jabber::MUC::MUCClient.new(im.client)
-      muc.join(conference) unless muc.active?()
-      im.deliver_deferred conference, message, :groupchat
-    end
-  end
-
-  def mucs
-    @@mucs ||= {}
   end
 
   attr_writer :im

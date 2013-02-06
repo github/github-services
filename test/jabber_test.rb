@@ -45,18 +45,6 @@ class JabberTest < Service::TestCase
     assert_equal 'c', msg[0]
     assert_equal :chat, msg[2]
 
-    #assert msg = svc.im.delivered.shift
-    #assert_equal 'e', msg[0]
-    #assert_equal :groupchat, msg[2]
-
-    #assert msg = svc.im.delivered.shift
-    #assert_equal 'f', msg[0]
-    #assert_equal :groupchat, msg[2]
-
-    #assert msg = svc.im.delivered.shift
-    #assert_equal 'g', msg[0]
-    #assert_equal :groupchat, msg[2]
-
     assert_nil svc.im.delivered.shift
   end
 
