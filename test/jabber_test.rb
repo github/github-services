@@ -26,9 +26,6 @@ class JabberTest < Service::TestCase
   def test_push
     svc = service({'user' => 'a,b , c , b', 'muc' => 'e,f , g, f'}, payload)
     svc.im = FakeJabber.new
-    svc.mucs['e'] = FakeJabber::Client.new('e')
-    svc.mucs['f'] = FakeJabber::Client.new('f')
-    svc.mucs['g'] = FakeJabber::Client.new('g')
     svc.receive_push
 
     assert svc.im.accept_subscriptions
