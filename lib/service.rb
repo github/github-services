@@ -667,9 +667,10 @@ class Service
     @remote_calls << text
   end
 
-  def receive
+  def receive(timeout = nil)
     return unless respond_to_event?
-    Service::Timeout.timeout(20, TimeoutError) do
+    timeout_sec = (timeout || 20).to_i
+    Service::Timeout.timeout(timeout_sec, TimeoutError) do
       send(event_method)
     end
 
