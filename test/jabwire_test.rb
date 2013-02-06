@@ -21,10 +21,11 @@ class JabwireTest < Service::TestCase
   end
 
   def test_posts_payload
-    @stubs.post '/projects/1000/webhook?apikey=5373dd4a3648b88fa9acb8e46ebc188a' do |env|
+    @stubs.post '/projects/1000/webhook.json?apikey=5373dd4a3648b88fa9acb8e46ebc188a' do |env|
       assert_equal 'https', env[:url].scheme
       assert_equal 'www.jabwire.com', env[:url].host
-      assert_equal payload, JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
+      assert_equal 'application/json', env[:request_headers]['Content-type']
+      assert_equal payload, JSON.parse(env[:body])["payload"]
     end
 
     @svc.receive_push

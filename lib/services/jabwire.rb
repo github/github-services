@@ -10,7 +10,11 @@ class Service::Jabwire < Service
 
   def receive_push
     http.ssl[:verify] = false
-    http_post "https://www.jabwire.com/projects/#{project_id}/webhook?apikey=#{apikey}", :payload => payload.to_json
+    http_post "https://www.jabwire.com/projects/#{project_id}/webhook.json" do |req|
+      req.params[:apikey] = apikey
+      req.headers['Content-Type'] = 'application/json'
+      req.body = JSON.generate({:payload => payload})
+    end
   end
 
   def project_id
