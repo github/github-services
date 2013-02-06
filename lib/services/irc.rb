@@ -87,7 +87,7 @@ class Service::IRC < Service
     end
 
     irc_puts "QUIT"
-    irc_gets unless irc_eof?
+    irc_gets until irc_eof?
   rescue SocketError => boom
     if boom.to_s =~ /getaddrinfo: Name or service not known/
       raise_config_error 'Invalid host'
