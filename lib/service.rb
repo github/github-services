@@ -474,6 +474,10 @@ class Service
 
   attr_reader :event_method
 
+  attr_reader :http_calls
+
+  attr_reader :remote_calls
+
   def initialize(event = :push, data = {}, payload = nil)
     helper_name = "#{event.to_s.classify}Helpers"
     if Service.const_defined?(helper_name)
@@ -488,8 +492,8 @@ class Service
       respond_to?(method)
     end
     @http = @secrets = @email_config = nil
-    @http_callbacks = []
-    @remote_callbacks = []
+    @http_calls = []
+    @remote_calls = []
   end
 
   def respond_to_event?
@@ -653,24 +657,14 @@ class Service
     }
   end
 
-  # Adds an HTTP callback
-  def on_http(&block)
-    @http_callbacks << block
-  end
-
   # Passes HTTP response debug data to the HTTP callbacks.
   def receive_http(env)
-    @http_callbacks.each { |cb| cb.call(env) }
-  end
-
-  # Add remote call callbacks.
-  def on_remote_call(&block)
-    @remote_callbacks << block
+    @http_calls << env
   end
 
   # Passes raw debug data to remote call callbacks.
   def receive_remote_call(text)
-    @remote_callbacks.each { |cb| cb.call(text) }
+    @remote_calls << text
   end
 
   def receive

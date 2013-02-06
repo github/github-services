@@ -33,23 +33,21 @@ class ServiceTest < Service::TestCase
   end
 
   def test_http_callback
-    calls = 0
-    @service.on_http do |env|
-      assert_equal '/', env[:request][:url]
-      assert_equal '0', env[:request][:headers]['Content-Length']
-      assert_equal 200, env[:response][:status]
-      assert_equal 'booya', env[:response][:headers]['x-test']
-      assert_equal 'ok', env[:response][:body]
-      calls += 1
-    end
-
     @stubs.post '/' do |env|
       [200, {'x-test' => 'booya'}, 'ok']
     end
 
     @service.http.post '/'
 
-    assert_equal 1, calls
+    @service.http_calls.each do |env|
+      assert_equal '/', env[:request][:url]
+      assert_equal '0', env[:request][:headers]['Content-Length']
+      assert_equal 200, env[:response][:status]
+      assert_equal 'booya', env[:response][:headers]['x-test']
+      assert_equal 'ok', env[:response][:body]
+    end
+
+    assert_equal 1, @service.http_calls.size
   end
 
   def test_url_shorten

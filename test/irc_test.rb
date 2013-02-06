@@ -34,21 +34,20 @@ class IRCTest < Service::TestCase
       "QUIT"
     ]
 
-    remote_call_emitted = false
     svc = service({'room' => 'r', 'nick' => 'n'}, payload)
-    svc.on_remote_call do |text|
+
+    svc.receive_push
+    assert_irc_commands expected, svc.writable_irc.string
+    assert_equal 1, svc.remote_calls.size
+
+    svc.remote_calls.each do |text|
       incoming, outgoing = split_irc_debug(text)
       modified = expected.dup
       modified.unshift 'IRC Log:'
 
       assert_irc_commands ['004 n'], incoming
       assert_irc_commands modified, outgoing
-      remote_call_emitted = true
     end
-
-    svc.receive_push
-    assert remote_call_emitted
-    assert_irc_commands expected, svc.writable_irc.string
   end
 
   def test_push_with_password
@@ -65,9 +64,13 @@ class IRCTest < Service::TestCase
       "QUIT"
     ]
 
-    remote_call_emitted = false
     svc = service({'room' => 'r', 'nick' => 'n', 'password' => 'pass'}, payload)
-    svc.on_remote_call do |text|
+
+    svc.receive_push
+    assert_irc_commands expected, svc.writable_irc.string
+    assert_equal 1, svc.remote_calls.size
+
+    svc.remote_calls.each do |text|
       incoming, outgoing = split_irc_debug(text)
       censored = expected.dup
       censored[0] = 'PASS ****'
@@ -75,12 +78,7 @@ class IRCTest < Service::TestCase
 
       assert_irc_commands ['004 n'], incoming
       assert_irc_commands censored, outgoing
-      remote_call_emitted = true
     end
-
-    svc.receive_push
-    assert remote_call_emitted
-    assert_irc_commands expected, svc.writable_irc.string
   end
 
   def test_push_with_nickserv
@@ -101,9 +99,13 @@ class IRCTest < Service::TestCase
       ':NickServ!nickserv@network.net PRIVMSG n :Successfully authenticated as n.'
     ]
 
-    remote_call_emitted = false
     svc = service({'room' => 'r', 'nick' => 'n', 'nickserv_password' => 'pass'}, payload)
-    svc.on_remote_call do |text|
+
+    svc.receive_push
+    assert_irc_commands expected, svc.writable_irc.string
+    assert_equal 1, svc.remote_calls.size
+
+    svc.remote_calls.each do |text|
       incoming, outgoing = split_irc_debug(text)
       censored = expected.dup
       censored[2] = "PRIVMSG NICKSERV :IDENTIFY ****"
@@ -111,12 +113,7 @@ class IRCTest < Service::TestCase
 
       assert_irc_commands expected_incoming, incoming
       assert_irc_commands censored, outgoing
-      remote_call_emitted = true
     end
-
-    svc.receive_push
-    assert remote_call_emitted
-    assert_irc_commands expected, svc.writable_irc.string
   end
 
   def test_push_with_empty_branch_regex
