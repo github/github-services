@@ -32,8 +32,19 @@ class Service::Jabber < Service
 
   attr_writer :im
   def im
-    @im || @@im ||= begin
-      ::Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
+    @im || @@im ||= build_jabber_connection
+  end
+
+  def build_jabber_connection
+    user = secrets['jabber']['user'].to_s
+    pass = secrets['jabber']['password'].to_s
+
+    if user.empty? || pass.empty?
+      raise_config_error("Missing Jabber user/pass: #{user.inspect}")
     end
+
+    ::Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
+  rescue
+    raise_config_error("Troubles connecting to Jabber: #{user.inspect}")
   end
 end
