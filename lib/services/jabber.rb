@@ -6,27 +6,6 @@ class ::Jabber::Simple
   def subscribed_to?(x); true; end
 end
 
-# Default implementation of MUCClient uses blocked connection
-class ::Jabber::MUC::MUCClient
-  def join(jid, password=nil)
-    raise "MUCClient already active" if active?
-
-    @jid = (jid.kind_of?(::Jabber::JID) ? jid : ::Jabber::JID.new(jid))
-    activate
-
-    pres = ::Jabber::Presence.new
-    pres.to = @jid
-    pres.from = @my_jid
-    xmuc = ::Jabber::MUC::XMUC.new
-    xmuc.password = password
-    pres.add xmuc
-
-    @stream.send pres
-
-    self
-  end
-end
-
 class Service::Jabber < Service
   string :user
   white_list :user
