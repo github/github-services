@@ -7,13 +7,10 @@ class GenericNotifierTest < Service::TestCase
   end
 
   def test_posts_payload
-    expected = payload
-    expected['event'] = 'push'
-
     @stubs.post '/github_notification' do |env|
       assert_equal 'http', env[:url].scheme
       assert_equal 'example.com', env[:url].host
-      assert_equal expected, JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
+      assert_equal payload, JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
     end
 
     svc = service(
@@ -35,9 +32,9 @@ class GenericNotifierTest < Service::TestCase
 
   def test_event_added_to_payload
     @stubs.post '/github_notification' do |env|
-      payload = JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
+      event = Rack::Utils.parse_query(env[:body])['event']
 
-      assert_equal 'pull_request', payload['event']
+      assert_equal 'pull_request', event
     end
 
     svc = service(
@@ -47,9 +44,12 @@ class GenericNotifierTest < Service::TestCase
 
   def test_pull_request_post
     @stubs.post '/github_notification' do |env|
-      payload = JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
+      parsed = Rack::Utils.parse_query(env[:body])
 
-      assert_equal 'pull_request', payload['event']
+      event = parsed['event']
+      payload = JSON.parse(parsed['payload'])
+
+      assert_equal 'pull_request', event
       assert payload['pull_request']
     end
 

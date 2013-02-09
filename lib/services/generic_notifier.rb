@@ -16,9 +16,7 @@ class Service::GenericNotifier < Service
 
     raise_config_error "Missing URL" if data['url'].to_s.empty?
 
-    payload['event'] = @event
-    
     http.ssl[:verify] = false
-    http_post data["url"], :payload => payload.to_json
+    http_post data["url"], :event => @event, :payload => payload.to_json
   end
 end
