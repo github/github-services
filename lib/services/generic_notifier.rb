@@ -5,6 +5,7 @@ class Service::GenericNotifier < Service
   supported_by :email => 'roberto@baremetal.io'
 
   string :url
+  boolean :verify_ssl
 
   # add a boolean for all the supported events
   Service::ALL_EVENTS.each do |event|
@@ -16,7 +17,10 @@ class Service::GenericNotifier < Service
 
     raise_config_error "Missing URL" if data['url'].to_s.empty?
 
-    http.ssl[:verify] = false
+    if !data["verify_ssl"]
+      http.ssl[:verify] = false
+    end
+
     http_post data["url"], :event => @event, :payload => payload.to_json
   end
 end
