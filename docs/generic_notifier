@@ -1,0 +1,23 @@
+The Generic Notifier allows you to send any GitHub event to a third party webservice over HTTP[S].  In order to support HTTPS with private CA certificates, the verify ssl checkbox can be left unchecked.
+
+Install Notes
+-------------
+
+Enter the URL that event requests should be sent to.  The URL can be secured in one of two ways:
+
+ * Add HTTP basic auth credentials to the url, e.g. http://user:pass@example.com/github_notification
+ * Add an auth token to the url, e.g. http://example.com/github_notification/fab1edb10b5
+
+Select the events you are interested in by checking the box next to each.
+
+The Request Body
+----------------
+
+The request is made with two parameters:
+
+ * event - the GitHub event that triggered the request.
+ * payload - the GitHub-generated data for the event.
+
+Check out the GitHub help article below to see this hook in action:
+
+https://help.github.com/articles/testing-webhooks
