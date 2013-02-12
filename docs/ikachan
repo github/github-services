@@ -1,0 +1,13 @@
+Ikachan (HTTP-to-IRC Gateway)
+=============================
+
+Ikachan is an httpd to deliver messages to IRC.
+http://search.cpan.org/~yappo/App-Ikachan/bin/ikachan
+
+This service lets you publish event messages to IRC through Ikachan httpd.
+
+Install Notes
+-------------
+
+1. *url*(REQUIRED) - Ikachan server base url, ex. http://example.jp:4979/
+2. *room*(REQUIRED) - Supports single or multiple rooms (comma separated).
