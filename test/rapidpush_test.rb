@@ -6,10 +6,10 @@ class RapidPushTest < Service::TestCase
   end
 
   def test_push
-    @stubs.post "/api" do |env|
+    @stubs.post "/api/github/a" do |env|
       assert_equal 'rapidpush.net', env[:url].host
       data = Rack::Utils.parse_query(env[:body])
-      assert_equal 'a', data['apikey']
+      assert_equal payload.to_json, data['payload']
       [200, {}, '']
     end
 
