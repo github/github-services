@@ -1,0 +1,9 @@
+RapidPush is an easy-to-use push notification service.
+You can receive notifications from third-party applications like nagios, github or flexget directly to your smartphone.
+
+Install Notes
+-------------
+1. Get an account at https://rapidpush.net/signup
+2. Install the RapidPush Android App through the Google Play Store and login to your created account
+3. Generate an API-Key within the user interface under the API-Key tab and provide this key to the GitHub RapidPush service hook
+4. Finished, you can now receive the notifications
