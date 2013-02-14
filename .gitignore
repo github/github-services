@@ -16,3 +16,4 @@ log
 tmp
 pkg
 Gemfile.lock
+.ruby-version
