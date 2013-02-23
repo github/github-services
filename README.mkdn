@@ -22,7 +22,7 @@ Start by reading the [Contributing Guidelines](https://github.com/github/github-
 
 1. Fork the project
 2. Create a new file in /services/ called `service_name.rb`, using the [following
-   template](https://github.com/github/github-services/tree/master/services#readme):
+   template](https://github.com/github/github-services/tree/master/lib/services#readme):
 
     ```ruby
     class Service::ServiceName < Service
