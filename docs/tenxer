@@ -3,4 +3,12 @@ tenXer
 
 tenXer makes it easy to track personal and team metrics from all your cloud services, set goals to improve your stats, and see how you compare.
 
-Sign up at https://www.tenxer.com
+Install Notes
+-------------
+
+**API Key** - The API keys for tenXer users of this repo.
+
+1. Create an account at https://www.tenxer.com
+2. For normal GitHub users, connect to GitHub and we will automatically configure this service.
+3. For **GitHub Enterprise** you must manually add your API Key to the list above.
+
