@@ -1,6 +1,10 @@
 class Service::Depending < Service
   string :token
 
+  url "http://depending.in/"
+
+  maintained_by :github => 'toopay'
+
   def receive_push
     http.ssl[:verify] = false
     http.basic_auth "github", token
