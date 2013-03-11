@@ -49,10 +49,10 @@ class Service::Twitter < Service
   end
 
   def post(status)
-    params = { 'status' => status, 'source' => 'github' }
+    params = { 'status' => status }
 
     access_token = ::OAuth::AccessToken.new(consumer, data['token'], data['secret'])
-    res = consumer.request(:post, "/1/statuses/update.json",
+    res = consumer.request(:post, "/1.1/statuses/update.json",
       access_token, { :scheme => :query_string }, params)
     if res.code !~ /^2\d\d/
       raise_response_error(res)
@@ -70,7 +70,7 @@ class Service::Twitter < Service
   end
 
   def response_error_message(res)
-    JSON.parse(res.body)['error']
+    JSON.parse(res.body)['errors'].map { |error| error['message'] }.join('; ')
   rescue
   end
 
