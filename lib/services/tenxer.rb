@@ -8,8 +8,8 @@ class Service::Tenxer < Service
   string :api_key
 
   def receive_event
-    # make sure we have what we need
-    raise_config_error "Missing 'api_key'" if data['api_key'].to_s == ''
+    # TODO: Once we migrate to new service, make sure we have what we need
+    # raise_config_error "Missing 'api_key'" if data['api_key'].to_s == ''
 
     url = "https://www.tenxer.com/updater/githubpubsubhubbub/"
     res = http_post url, 
