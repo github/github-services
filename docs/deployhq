@@ -1,0 +1,17 @@
+DeployHQ
+--------
+
+DeployHQ is a service which lets you deploy directly
+from your GitHub repository to your server via FTP or
+SSH/SFTP.
+
+Install Notes
+-------------
+
+1. **Deploy Hook URL** Should be the automatic deployment URL of the 
+server you wish to deploy to. You can find this on the
+Edit Server or Edit Server Group page in DeployHQ.
+
+1. **Email Pusher** Specifies whether the person who pushed
+the commits should receive an email once a deployment
+is completed.
