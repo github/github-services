@@ -11,8 +11,9 @@ class Service::Conductor < Service
   supported_by :email => 'support@conductor-app.com'
 
   def receive_push
+    api_key = data['api_key']
     http.headers['X-GitHub-Event'] = event.to_s
-    http_post "#{url}/github/commit/#{api_key}", {:payload => payload.to_json}
+    http_post "#{self.class.url}/github/commit/#{api_key}", {:payload => payload.to_json}
   end
 
 end
