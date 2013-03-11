@@ -19,6 +19,7 @@ namespace :services do
   task :config => :load do
     file = ENV["FILE"] || default_services_config
     services = []
+    Service.load_services
     Service.services.each do |svc|
       services << {:name => svc.hook_name, :events => svc.default_events, :supported_events => svc.supported_events,
         :title => svc.title, :schema => svc.schema}
@@ -52,11 +53,15 @@ namespace :services do
   require 'set'
   GitHubDocs = Set.new(%w(github_payload payload_data))
 
+  def base_github_path
+    ENV['GH_PATH'] || "#{ENV['HOME']}/github/github"
+  end
+
   def default_services_config
-    "#{ENV['GH_SRC_DIR']}/github/config/services.json"
+    "#{base_github_path}/config/services.json"
   end
 
   def default_docs_dir
-    "#{ENV['GH_SRC_DIR']}/github/app/views/edit_repositories/hooks/_{name}.erb"
+    "#{base_github_path}/app/views/edit_repositories/hooks/_{name}.erb"
   end
 end
