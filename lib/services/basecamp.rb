@@ -1,6 +1,6 @@
 class Service::Basecamp < Service
   SERVICE_NAME = 'GitHub'
-  LOGO_URL     = 'https://assets.github.com/images/modules/about_page/octocat.png'
+  LOGO_URL     = 'https://asset1.37img.com/global/github/original.png'
 
   string          :project_url, :email_address
   password        :password
