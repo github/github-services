@@ -6,11 +6,14 @@ class TenxerTest < Service::TestCase
   end
 
   def post_checker(event)
+    payload = {'test' => 'payload'}
     return lambda { |env|
       assert_equal "https", env[:url].scheme
       assert_equal "www.tenxer.com", env[:url].host
-      assert_match "payload=%7B%22test%22%3A%22payload%22%7D", env[:body]
       assert_equal event, env[:request_headers]["X_GITHUB_EVENT"]
+      form = Rack::Utils.parse_query(env[:body])
+      assert_equal payload, JSON.parse(form['payload'])
+      assert_equal 'API KEY', form['api_key']
       return [200, {}, ''] }
   end
 
@@ -18,7 +21,7 @@ class TenxerTest < Service::TestCase
     checker = post_checker "push"
     @stubs.post "/updater/githubpubsubhubbub/", &checker
 
-    svc = service(:push, {}, {'test' => 'payload'})
+    svc = service(:push, {'api_key' => 'API KEY'}, {'test' => 'payload'})
     svc.receive_event
   end
 
@@ -26,7 +29,8 @@ class TenxerTest < Service::TestCase
     checker = post_checker "pull_request"
     @stubs.post "/updater/githubpubsubhubbub/", &checker
 
-    svc = service(:pull_request, {}, {'test' => 'payload'})
+    svc = service(:pull_request, {'api_key' => 'API KEY'},
+      {'test' => 'payload'})
     svc.receive_event
   end
 
@@ -35,7 +39,7 @@ class TenxerTest < Service::TestCase
     checker = post_checker "issues"
     @stubs.post "/updater/githubpubsubhubbub/", &checker
 
-    svc = service(:issues, {}, {'test' => 'payload'})
+    svc = service(:issues, {'api_key' => 'API KEY'}, {'test' => 'payload'})
     svc.receive_event
   end
 
