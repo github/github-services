@@ -11,7 +11,7 @@ class Service::AmazonSNS < Service
     raise_config_error "Missing 'aws_secret'" if data['aws_secret'].to_s == ''
     raise_config_error "Missing 'sns_topic'" if data['sns_topic'].to_s == ''
 
-    t = aws_sdk_sns.topics.create(data['sns_topic'])
+    t = get_topic(data['sns_topic'])
 
     if(data['sqs_queue'].to_s != '')
       q = aws_sdk_sqs.queues.create(data['sqs_queue'])
@@ -35,4 +35,11 @@ class Service::AmazonSNS < Service
     {:access_key_id=>data['aws_key'], :secret_access_key=>data['aws_secret']}
   end
 
+  def get_topic(name_or_arn)
+    if name_or_arn =~ /^arn:aws:sns:/
+      aws_sdk_sns.topics[name_or_arn]
+    else
+      aws_sdk_sns.topics.create(name_or_arn)
+    end
+  end
 end
