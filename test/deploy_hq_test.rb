@@ -10,7 +10,7 @@ class DeployHqTest < Service::TestCase
     @stubs.post '/deploy/projectname/to/servername/serverkey' do |env|
       assert_equal 'test.deployhq.com', env[:url].host
       assert_equal 'https', env[:url].scheme
-      post_payload = JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
+      post_payload = JSON.parse(Faraday::Utils.parse_query(env[:body])['payload'])
 
       assert_not_nil payload['after']
       assert_equal post_payload['after'], post_payload['after']

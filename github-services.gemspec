@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mash",                   "~> 0.1.1"
   spec.add_dependency "mime-types",             "~> 1.15"
   spec.add_dependency "ruby-hmac",              "0.4.0"
-  spec.add_dependency "faraday",                "0.7.6"
+  spec.add_dependency "faraday",                "~> 0.8.6"
   spec.add_dependency "SystemTimer"
 
   # Basecamp Classic

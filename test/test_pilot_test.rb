@@ -28,7 +28,7 @@ class TestPilotTest < Service::TestCase
   def test_posts_payload
     @stubs.post '/callbacks/github' do |env|
       assert_equal env[:params]['token'], @svc.token
-      assert_equal payload, JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
+      assert_equal payload, JSON.parse(Faraday::Utils.parse_query(env[:body])['payload'])
     end
     @svc.receive_push
   end

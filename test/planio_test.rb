@@ -8,7 +8,7 @@ class PlanioTest < Service::TestCase
   def test_push
     @stubs.get "/a/sys/fetch_changesets" do |env|
       assert_equal 'r.com', env[:url].host
-      data = Rack::Utils.parse_nested_query(env[:body])
+      data = Faraday::Utils.parse_nested_query(env[:body])
       assert_equal 'a', env[:params]['key']
       assert_equal 'p', env[:params]['id']
       [200, {}, '']

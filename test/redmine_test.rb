@@ -8,7 +8,7 @@ class RedmineTest < Service::TestCase
   def test_push
     @stubs.get "/a/sys/fetch_changesets" do |env|
       assert_equal 'r.com', env[:url].host
-      data = Rack::Utils.parse_nested_query(env[:body])
+      data = Faraday::Utils.parse_nested_query(env[:body])
       assert_equal 'a', env[:params]['key']
       assert_equal 'p', env[:params]['id']
       [200, {}, '']
@@ -28,17 +28,17 @@ class RedmineTest < Service::TestCase
       [200, {}, '']
     end
     configurations = {
-      'address' => "http://redmine.org", 
+      'address' => "http://redmine.org",
       'api_key' => "API_KEY-654321",
       'update_redmine_issues_about_commits' => true
     }
     payloads = {
-      'commits' => [ 
-                    { 'message' => "FIX Issue #1234", 
-                       'timestamp' => "2007-10-10T00:11:02-07:00", 
-                       'id' => "b44aa57a6c6c52cc20b9e396cfe3cf97bdfc2b33", 
-                       'url' => "https://github.com/modsaid/github-services/commit/b44aa57a6c6c52cc20b9e396cfe3cf97bdfc2b33", 
-                       'author' => {'name' => "Mahmoud", 'email' => "modsaid@example.com"}, 
+      'commits' => [
+                    { 'message' => "FIX Issue #1234",
+                       'timestamp' => "2007-10-10T00:11:02-07:00",
+                       'id' => "b44aa57a6c6c52cc20b9e396cfe3cf97bdfc2b33",
+                       'url' => "https://github.com/modsaid/github-services/commit/b44aa57a6c6c52cc20b9e396cfe3cf97bdfc2b33",
+                       'author' => {'name' => "Mahmoud", 'email' => "modsaid@example.com"},
                        'added' => [], 'removed' => [], 'modified' => []
                     }
                   ]

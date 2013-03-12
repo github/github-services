@@ -54,7 +54,7 @@ class ServiceTest < Service::TestCase
     url = "http://github.com"
     @stubs.post "/" do |env|
       assert_equal 'git.io', env[:url].host
-      data = Rack::Utils.parse_query(env[:body])
+      data = Faraday::Utils.parse_query(env[:body])
       assert_equal url, data['url']
       [201, {'Location' => 'short'}, '']
     end

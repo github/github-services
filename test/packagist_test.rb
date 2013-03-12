@@ -31,9 +31,9 @@ class PackagistTest < Service::TestCase
   def test_posts_payload
     @stubs.post '/api/github' do |env|
       assert_equal 'packagist.example.com', env[:url].host
-      assert_equal 'simensen', Rack::Utils.parse_query(env[:body])['username']
-      assert_equal '5gieo7lwcd8gww800scs', Rack::Utils.parse_query(env[:body])['apiToken']
-      assert_equal payload, JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
+      assert_equal 'simensen', Faraday::Utils.parse_query(env[:body])['username']
+      assert_equal '5gieo7lwcd8gww800scs', Faraday::Utils.parse_query(env[:body])['apiToken']
+      assert_equal payload, JSON.parse(Faraday::Utils.parse_query(env[:body])['payload'])
     end
     @svc.receive_push
   end

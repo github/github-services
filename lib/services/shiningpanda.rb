@@ -21,7 +21,7 @@ class Service::ShiningPanda < Service
     end
     branch = payload['ref'].to_s.split('/').last
     if branches.empty? || branches.include?(branch)
-      Rack::Utils.parse_query(data['parameters']).each do |key, values|
+      Faraday::Utils.parse_query(data['parameters']).each do |key, values|
         if !values.is_a?(String) and values.length > 1
           raise_config_error "Only one parameter value allowed for " + key
         end
@@ -53,7 +53,7 @@ class Service::ShiningPanda < Service
   end
 
   def parameters
-    @parameters ||= Rack::Utils.parse_nested_query(cleanup('parameters'))
+    @parameters ||= Faraday::Utils.parse_nested_query(cleanup('parameters'))
   end
 
   def query
