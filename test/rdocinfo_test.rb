@@ -8,7 +8,7 @@ class RDocInfoTest < Service::TestCase
   def test_push
     @stubs.post "/checkout" do |env|
       assert_equal 'rubydoc.info', env[:url].host
-      data = Rack::Utils.parse_query(env[:body])
+      data = Faraday::Utils.parse_query(env[:body])
       assert_equal 1, JSON.parse(data['payload'])['a']
       [200, {}, '']
     end

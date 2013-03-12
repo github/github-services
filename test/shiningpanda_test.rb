@@ -7,7 +7,7 @@ class ShiningPandaTest < Service::TestCase
 
   def test_receive_push_without_parameters
     @stubs.post '/shiningpanda.org/job/pygments/build' do |env|
-      form = Rack::Utils.parse_query(env[:body])
+      form = Faraday::Utils.parse_query(env[:body])
       assert_equal 'PWFm8c2T', form['token']
       assert_equal 'Triggered by a push of omansion to master (commit: 83d9205e73c25092ce7cb7ce530d2414e6d068cb)', form['cause']
     end
@@ -17,7 +17,7 @@ class ShiningPandaTest < Service::TestCase
 
   def test_receive_push_with_parameters
     @stubs.post '/shiningpanda.org/job/pygments/buildWithParameters' do |env|
-      form = Rack::Utils.parse_query(env[:body])
+      form = Faraday::Utils.parse_query(env[:body])
       assert_equal 'PWFm8c2T', form['token']
       assert_equal 'Triggered by a push of omansion to master (commit: 83d9205e73c25092ce7cb7ce530d2414e6d068cb)', form['cause']
       assert_equal 'bar', form['foo']
@@ -28,7 +28,7 @@ class ShiningPandaTest < Service::TestCase
 
   def test_receive_push_branch_match
     @stubs.post '/shiningpanda.org/job/pygments/build' do |env|
-      form = Rack::Utils.parse_query(env[:body])
+      form = Faraday::Utils.parse_query(env[:body])
       assert_equal 'PWFm8c2T', form['token']
       assert_equal 'Triggered by a push of omansion to dev (commit: 83d9205e73c25092ce7cb7ce530d2414e6d068cb)', form['cause']
     end
@@ -38,7 +38,7 @@ class ShiningPandaTest < Service::TestCase
 
   def test_receive_push_branches_match
     @stubs.post '/shiningpanda.org/job/pygments/build' do |env|
-      form = Rack::Utils.parse_query(env[:body])
+      form = Faraday::Utils.parse_query(env[:body])
       assert_equal 'PWFm8c2T', form['token']
       assert_equal 'Triggered by a push of omansion to master (commit: 83d9205e73c25092ce7cb7ce530d2414e6d068cb)', form['cause']
     end
@@ -165,7 +165,7 @@ class ShiningPandaTest < Service::TestCase
 
   def test_strip_token
     @stubs.post '/shiningpanda.org/job/pygments/build' do |env|
-      assert_equal 'PWFm8c2T', Rack::Utils.parse_query(env[:body])['token']
+      assert_equal 'PWFm8c2T', Faraday::Utils.parse_query(env[:body])['token']
     end
     svc = service(data.merge({'token' => ' PWFm8c2T '}), payload)
     svc.receive_push

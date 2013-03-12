@@ -16,9 +16,9 @@ class WebTest < Service::TestCase
       assert_equal 'Basic bW9ua2V5OnNlY3JldA==', env[:request_headers]['authorization']
       assert_match /form/, env[:request_headers]['content-type']
       assert_equal 'abc.com', env[:url].host
-      params = Rack::Utils.parse_nested_query(env[:url].query)
+      params = Faraday::Utils.parse_nested_query(env[:url].query)
       assert_equal({'a' => '1'}, params)
-      body = Rack::Utils.parse_nested_query(env[:body])
+      body = Faraday::Utils.parse_nested_query(env[:body])
       assert_equal '1', body['a']
       recv = JSON.parse(body['payload'])
       assert_equal payload, recv
@@ -57,7 +57,7 @@ class WebTest < Service::TestCase
       assert_equal 'sha1='+OpenSSL::HMAC.hexdigest(Service::Web::HMAC_DIGEST,
                                         'monkey', env[:body]),
         env[:request_headers]['X-Hub-Signature']
-      body = Rack::Utils.parse_nested_query(env[:body])
+      body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
       assert_equal payload, recv
       [200, {}, '']
@@ -74,7 +74,7 @@ class WebTest < Service::TestCase
 
     @stubs.post "/foo" do |env|
       assert_equal 'Basic bW9ua2V5OnNlY3JldA==', env[:request_headers]['authorization']
-      params = Rack::Utils.parse_nested_query(env[:url].query)
+      params = Faraday::Utils.parse_nested_query(env[:url].query)
       assert_equal({'a' => '1'}, params)
       assert_match /json/, env[:request_headers]['content-type']
       assert_equal 'abc.com', env[:url].host

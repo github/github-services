@@ -8,7 +8,7 @@ class HostedGraphiteTest < Service::TestCase
   def test_push
     url = "/integrations/github/"
     @stubs.post url do |env|
-      params = Rack::Utils.parse_query env[:body]
+      params = Faraday::Utils.parse_query env[:body]
       assert_equal 'payload', JSON.parse(params['payload'])
       assert_equal 'test', params['api_key']
       [200, {}, '']

@@ -4,7 +4,7 @@ class CodePortingCSharp2JavaTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
     @stubs.post '/csharp2java/v0/UserSignin' do |env|
-      form = Rack::Utils.parse_query(env[:body])
+      form = Faraday::Utils.parse_query(env[:body])
       assert_equal 'codeportingtest', form['LoginName']
       assert_equal 'testpassword', form['Password']
       [200, {}, %(<xml><Token>MONKEY</Token><return success="True"></return></xml>)]
@@ -13,7 +13,7 @@ class CodePortingCSharp2JavaTest < Service::TestCase
 
   def test_push
     @stubs.post '/csharp2java/v0/githubpluginsupport' do |env|
-      form = Rack::Utils.parse_query(env[:body])
+      form = Faraday::Utils.parse_query(env[:body])
       assert_equal 'MONKEY', form['token']
       assert_equal 'Test_Project', form['ProjectName']
       assert_equal 'Test', form['RepoKey']

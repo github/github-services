@@ -20,7 +20,7 @@ class LingohubTest < Service::TestCase
   def test_payload
     @stubs.post "/github_callback" do |env|
 
-      body = Rack::Utils.parse_nested_query(env[:body])
+      body = Faraday::Utils.parse_nested_query(env[:body])
       received_payload =  JSON.parse(body['payload'])
 
       assert_equal payload['after'], received_payload['after']
