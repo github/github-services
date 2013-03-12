@@ -1,5 +1,7 @@
 class Service::JqueryPlugins < Service
 
+  self.title = 'jQuery Plugins'
+
   url "http://plugins.jquery.com/"
 
   logo_url "http://plugins.jquery.com/jquery-wp-content/themes/jquery/images/logo-jquery.png"
