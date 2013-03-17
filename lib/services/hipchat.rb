@@ -28,13 +28,22 @@ class Service::HipChat < Service
 
     http.headers['X-GitHub-Event'] = event.to_s
 
-    res = http_post "https://api.hipchat.com/v1/webhooks/github",
-      :auth_token => data['auth_token'],
-      :room_id => data['room'],
-      :payload => JSON.generate(payload),
-      :notify => data['notify'] ? 1 : 0
-    if res.status < 200 || res.status > 299
-      raise_config_error
+    rooms = data['room'].to_s.split(",")
+    room_ids = if rooms.all? { |room_id| Integer(room_id) rescue false }
+      rooms
+    else
+      [data['room'].to_s]
+    end
+    
+    room_ids.each do |room_id|
+      res = http_post "https://api.hipchat.com/v1/webhooks/github",
+        :auth_token => data['auth_token'],
+        :room_id => room_id,
+        :payload => JSON.generate(payload),
+        :notify => data['notify'] ? 1 : 0
+      if res.status < 200 || res.status > 299
+        raise_config_error
+      end
     end
   end
 end
