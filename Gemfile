@@ -9,7 +9,7 @@ gem "faraday",                "0.7.6"
 gem "SystemTimer"
 
   # Basecamp Classic
-gem "activeresource",         "~> 3.0.0"
+gem "activeresource",         "~> 3.2.0"
 
   # Twitter
 gem "oauth",                  "0.4.4"
