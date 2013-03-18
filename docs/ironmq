@@ -1,0 +1,14 @@
+IronMQ
+======
+
+Posts all of your GitHub events to IronMQ so you can process the events asynchronously. This can also be used as a safe
+buffer between GitHub and your application so you never miss a GitHub event.
+
+For more information about IronMQ, see [www.iron.io](http://www.iron.io).
+
+Install Notes
+-------------
+
+1. **token** - Your Iron.io OAuth token. Get yours at: http://hud.iron.io/tokens
+2. **project_id** - The Iron.io project ID you you'd like to use.
+3. **queue_name** - The name of the queue to post to.
