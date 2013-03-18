@@ -30,11 +30,7 @@ class Service::IronMQ < Service
     queue_name = data['queue_name'].to_s.strip
     raise_config_error "Missing 'token'" if token == ''
     raise_config_error "Missing 'project_id'" if project_id == ''
-    queue_name = queue_name != '' ?  queue_name || "github_service_hooks"
-
-    if event.to_s == "push"
-      # can pick out certain event types if it makes sense
-    end
+    queue_name = queue_name != '' ? queue_name : "github_service_hooks"
 
     #http.ssl[:verify] = false
     body = {
