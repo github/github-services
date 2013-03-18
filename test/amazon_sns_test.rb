@@ -10,7 +10,6 @@ class AmazonSNSTest < Service::TestCase
      }
   end
 
-
   def test_event
     svc = service :push, data, payload
     svc.aws_sdk_sns = aws_sns_stub
@@ -18,10 +17,29 @@ class AmazonSNSTest < Service::TestCase
 
     svc.receive_event
 
+    assert_nil svc.aws_sdk_sns.topics.topic_by_arn
     assert_equal 1, svc.aws_sdk_sns.topics.topic.messages.size
+    assert_equal 'fakearn:t', svc.aws_sdk_sns.topics.topic.arn
     assert_equal data['aws_key'], svc.data['aws_key']
     assert_equal data['aws_secret'], svc.data['aws_secret']
     assert_equal data['sns_topic'], svc.data['sns_topic']
+
+  end
+
+  def test_event_with_topic_arn
+    data_copy = data.merge('sns_topic' => 'arn:aws:sns:us-east-1:111222333444:t')
+    svc = service :push, data_copy, payload
+    svc.aws_sdk_sns = aws_sns_stub
+    svc.aws_sdk_sqs = aws_sqs_stub
+
+    svc.receive_event
+
+    assert_nil svc.aws_sdk_sns.topics.topic
+    assert_equal 1, svc.aws_sdk_sns.topics.topic_by_arn.messages.size
+    assert_equal 'arn:aws:sns:us-east-1:111222333444:t', svc.aws_sdk_sns.topics.topic_by_arn.arn
+    assert_equal data_copy['aws_key'], svc.data['aws_key']
+    assert_equal data_copy['aws_secret'], svc.data['aws_secret']
+    assert_equal data_copy['sns_topic'], svc.data['sns_topic']
 
   end
 
@@ -130,17 +148,23 @@ class AmazonSNSTest < Service::TestCase
   end
 
   class FakeTopicCollection
-    attr_reader :topic
+    attr_reader :topic, :topic_by_arn
     def create(name)
       @topic ||= FakeTopic.new("fakearn:" + name)
+    end
+    # Refer by topic ARN (see AWS::SNS::TopicCollection):
+    def [](topic_arn)
+      @topic_by_arn ||= FakeTopic.new(topic_arn)
     end
   end
 
   class FakeTopic
+    attr_reader :arn
     attr_reader :messages
     attr_reader :subscribers
 
     def initialize arn
+      @arn = arn
       @messages = []
       @subscribers = []
     end
