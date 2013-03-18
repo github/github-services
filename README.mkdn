@@ -59,7 +59,9 @@ How to test your service
 
 You can test your service in a ruby irb console:
 
-1. Run `rake console` to start irb.
+0. Cache gems and install them to `vendor/gems` by doing:
+   `script/bootstrap`
+1. Start irb: `bundle exec irb -r config/load.rb -r lib/services/myservice.rb`
 2. Instantiate your Service:
 
     ```ruby
@@ -86,7 +88,7 @@ You can test your service in a ruby irb console:
 You can also use this one-liner in the shell instead:
 
   ```bash
-  bundle exec ruby -r config/load.rb -r services/myservice.rb -e \
+  bundle exec ruby -r config/load.rb -r lib/services/myservice.rb -e \
     "Service::MyService.new(:push, {'foo' => 'bar'}).receive_push"
   ```
 You can also test your hook with the Sinatra web service:
