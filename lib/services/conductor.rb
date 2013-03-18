@@ -12,6 +12,8 @@ class Service::Conductor < Service
 
   def receive_push
     api_key = data['api_key']
+
+    http.ssl[:verify] = false
     http.headers['X-GitHub-Event'] = event.to_s
     http_post "#{self.class.url}/github/commit/#{api_key}", {:payload => payload.to_json}
   end
