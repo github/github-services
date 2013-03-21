@@ -47,7 +47,7 @@ class Service::IRC < Service
     botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
     command = data['notice'].to_i == 1 ? 'NOTICE' : 'PRIVMSG'
 
-    irc_password(:PASS, data['password']) if !data['password'].to_s.empty?
+    irc_password("PASS", data['password']) if !data['password'].to_s.empty?
     irc_puts "NICK #{botname}"
     irc_puts "USER #{botname} 8 * :GitHub IRCBot"
 
