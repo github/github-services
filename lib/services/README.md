@@ -13,8 +13,7 @@ end
 Inside the method, you can access the configuration data in a hash named
 `data`, and the payload data in a Hash named `payload`.
 
-Note: A service can respond to more than one event.  Currently, only `push`
-is supported.
+Note: A service can respond to more than one event.
 
 ## Tip: Check configuration data early.
 
