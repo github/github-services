@@ -15,7 +15,7 @@ class FishEyeTest < Service::TestCase
     {
         "url_base" => "http://localhost:6060/foo",
         "token" => "515848d216e3baa46e10d92f21f890f67fea1d12",
-        "custom_repository_name" => "myRepo"
+        "repository_name" => "myRepo"
     }
   end
 
@@ -82,7 +82,7 @@ class FishEyeTest < Service::TestCase
     data = {
       "url_base" => "http://localhost:6060/foo",
       "token" => "515848d216e3baa46e10d92f21f890f67fea1d12",
-      "custom_repository_name" => "   "
+      "repository_name" => "   "
     }
 
     svc = service :push, data, payload

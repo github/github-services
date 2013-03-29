@@ -38,7 +38,7 @@ class Service::FishEye < Service
   end
 
   def repository_name
-    @repository_name ||= (data['custom_repository_name'].to_s.strip.length != 0) ? data['custom_repository_name'] : payload['repository']['name']
+    @repository_name ||= (data['repository_name'].to_s.strip.length != 0) ? data['repository_name'] : payload['repository']['name']
   end
 
   def url_base
