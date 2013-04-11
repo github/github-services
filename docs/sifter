@@ -1,0 +1,10 @@
+Setting up GitHub/Sifter integration
+------------------------------------
+
+0. Sign up for Sifter and create a new project
+1. Go to your Sifter project
+1. Go to the project settings page
+1. Click the "GitHub integration" link
+1. Copy the token on the page
+1. Enter that token here
+
