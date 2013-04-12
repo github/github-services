@@ -1,8 +1,9 @@
 class Service::Yammer < Service
+  default_events :push, :commit_comment, :pull_request, :pull_request_review_comment, :public
   string :token
 
-  def receive_push
-    http_post "https://yammer-github.herokuapp.com/#{token}/notify/push", :payload => payload.to_json
+  def receive_event
+    http_post "https://yammer-github.herokuapp.com/#{token}/notify/#{event}", :payload => payload.to_json
   end
 
   def token
