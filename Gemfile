@@ -6,7 +6,6 @@ gem "mash",                   "~> 0.1.1"
 gem "mime-types",             "~> 1.15"
 gem "ruby-hmac",              "0.4.0"
 gem "faraday",                "0.7.6"
-gem "SystemTimer"
 
   # Basecamp Classic
 gem "activeresource",         "~> 3.0.0"
@@ -24,7 +23,7 @@ gem "xml-simple",             "1.0.11"
 gem "mail",                   "~>2.3"
 
   # Jabber
-gem "xmpp4r-simple",          "0.8.8"
+gem "xmpp4r-simple-19",       "~> 1.0.0"
 
   # Twilio
 gem "twilio-ruby",            "3.4.2"
