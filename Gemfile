@@ -41,4 +41,4 @@ gem "softlayer_messaging", "~> 1.0.2"
   # Amazon SNS
 gem "aws-sdk", "~> 1.8.0"
 gem "httparty", "0.7.4"
-gem "rake",                   "0.8.7"
+gem "rake",                   "10.0.3"
