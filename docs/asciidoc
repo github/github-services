@@ -1,0 +1,14 @@
+Asciidoc
+=========
+
+With this service you can generate your pdf/html/docbook from your asciidoc files.
+
+
+
+Install Notes
+-------------
+
+  1. Install a asciidoc-server (https://github.com/edusantana/asciidoc-server)
+  2. Configure it
+  3. Share the server generation settings to users
+	4. Tell users your server url to configure at service settings.
