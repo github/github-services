@@ -17,6 +17,15 @@ class CodeshipTest < Service::TestCase
     end
     svc.receive_push
   end
+  
+  def test_json_encoding
+    payload = {'unicodez' => "rtiaü\n\n€ý5:q"}
+    svc = service({'project_uuid' => 'abc'}, payload)
+    @stubs.post "/hook/abc" do |env|
+      assert_equal payload, JSON.parse(env[:body])
+    end
+    svc.receive_push
+  end
 
 private
 
