@@ -6,6 +6,7 @@ gem "mash",                   "~> 0.1.1"
 gem "mime-types",             "~> 1.15"
 gem "ruby-hmac",              "0.4.0"
 gem "faraday",                "0.7.6"
+gem "excon",                  "~> 0.20.1"
 
   # Basecamp Classic
 gem "activeresource",         "~> 3.0.0"

@@ -644,7 +644,7 @@ class Service
       Faraday.new(options) do |b|
         b.use HttpReporter, self
         b.request :url_encoded
-        b.adapter *(options[:adapter] || :net_http)
+        b.adapter *(options[:adapter] || :excon)
       end
     end
   end
