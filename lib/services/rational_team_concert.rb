@@ -5,33 +5,6 @@ class Service::RationalTeamConcert < Service
 	white_list :server_url, :username, :basic_authentication
 	attr_accessor :cookies
 
-  # Public: Lazily loads the Faraday::Connection for the current Service
-  # instance.
-  #
-  # @override for debugging purposes, insert a Logger
-  #
-  # options - Optional Hash of Faraday::Connection options.
-  #
-  # Returns a Faraday::Connection instance.
-  def http(options = {})
-    @http ||= begin
-      self.class.default_http_options.each do |key, sub_options|
-        sub_hash = options[key] ||= {}
-        sub_options.each do |sub_key, sub_value|
-          sub_hash[sub_key] ||= sub_value
-        end
-      end
-      options[:ssl][:ca_file] ||= ca_file
-
-      Faraday.new(options) do |b|
-        b.use Faraday::Response::Logger
-        b.use HttpReporter, self
-        b.request :url_encoded
-        b.adapter *(options[:adapter] || :net_http)
-      end
-    end
-  end
-
 	def receive_push
 		checkSettings
 		prepare
