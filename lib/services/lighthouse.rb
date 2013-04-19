@@ -32,7 +32,7 @@ class Service::Lighthouse < Service
         </changeset>
       XML
 
-      @ligthouse_body = changeset_xml
+      @lighthouse_body = changeset_xml
 
       account = "http://#{data['subdomain']}.lighthouseapp.com"
 
@@ -50,8 +50,8 @@ class Service::Lighthouse < Service
 
   def reportable_http_env(env, time)
     hash = super(env, time)
-    hash[:request][:body] = @ligthouse_body
-    @ligthouse_body = nil
+    hash[:request][:body] = @lighthouse_body
+    @lighthouse_body = nil
     hash
   end
 end
