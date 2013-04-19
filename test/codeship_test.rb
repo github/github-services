@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require File.expand_path('../helper', __FILE__)
 
 class CodeshipTest < Service::TestCase
@@ -17,7 +19,7 @@ class CodeshipTest < Service::TestCase
     end
     svc.receive_push
   end
-  
+
   def test_json_encoding
     payload = {'unicodez' => "rtiaü\n\n€ý5:q"}
     svc = service({'project_uuid' => 'abc'}, payload)
