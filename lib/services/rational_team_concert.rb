@@ -79,9 +79,11 @@ class Service::RationalTeamConcert < Service
 	
 	def cookieString
 		result = ''
-		cookies.each { |key, value| 
-			result += key + '=' + value + ";"
-		}
+		if cookies 
+			cookies.each { |key, value| 
+				result += key + '=' + value + (cookies.size > 1 ? ";" : "")
+			}
+		end
 		return result
 	end
 	
