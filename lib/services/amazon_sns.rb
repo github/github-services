@@ -18,7 +18,7 @@ class Service::AmazonSNS < Service
       t.subscribe(q)
     end
 
-    t.publish(JSON.generate(payload))
+    t.publish(generate_json(payload))
   end
 
   attr_writer :aws_sdk_sqs

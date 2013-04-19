@@ -86,7 +86,7 @@ class Service::RationalTeamConcert < Service
 	def new_work_item (commit, work_item_type)
 		url= "%s/oslc/contexts/%s/workitems/%s" % [data['server_url'], data['project_area_uuid'], work_item_type]
 		work_item= { 'dcterms:title' => commit['message']}
-		res= http_post url, work_item.to_json
+		res= http_post url, generate_json(work_item)
 		raise_config_error "Work item was not created. Make sure that its possible to create work items with no additional required fields" unless res.status == 201
 		return res.body
 	end
@@ -94,7 +94,7 @@ class Service::RationalTeamConcert < Service
 	def post_comment(work_item, comment_body)
 		comment_url= get_comment_url work_item
 		comment= { 'dcterms:description' => comment_body }
-		res= http_post comment_url, comment.to_json
+		res= http_post comment_url, generate_json(comment)
 		raise_config_error "Not possible to add comments with the current setup" unless res.status == 201
 	end
 

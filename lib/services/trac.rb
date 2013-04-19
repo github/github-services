@@ -5,7 +5,7 @@ class Service::Trac < Service
   def receive_push
     http.ssl[:verify] = false
     http.url_prefix = data['url']
-    http_post "github/#{data['token']}", :payload => payload.to_json
+    http_post "github/#{data['token']}", :payload => generate_json(payload)
   rescue Faraday::Error::ConnectionFailed
     raise_config_error "Connection refused. Invalid server URL."
   end

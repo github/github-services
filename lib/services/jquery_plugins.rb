@@ -11,7 +11,7 @@ class Service::JqueryPlugins < Service
   supported_by :email => 'plugins@jquery.com'
 
   def receive_push
-    http_post "http://plugins.jquery.com/postreceive-hook", :payload => payload.to_json
+    http_post "http://plugins.jquery.com/postreceive-hook", :payload => generate_json(payload)
   end
 
 end

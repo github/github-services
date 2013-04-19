@@ -4,7 +4,7 @@ class Service::SnowyEvening < Service
   def receive_push
     http.ssl[:verify] = false
     res = http_post "https://snowy-evening.com/api/integration/github_commit/"+data['api_key']+"/"+data['project'],
-      :payload => JSON.generate(payload)
+      :payload => generate_json(payload)
     return
   end
 end

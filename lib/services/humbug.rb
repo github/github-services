@@ -17,7 +17,7 @@ class Service::Humbug < Service
       :email => data['email'],
       'api-key' => data['api_key'],
       :event => event,
-      :payload => JSON.generate(payload)
+      :payload => generate_json(payload)
     if not res.success?
       raise_config_error ("Server returned status " + res.status.to_s +
                           ": " + res.body)

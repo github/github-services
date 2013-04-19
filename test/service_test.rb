@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require File.expand_path('../helper', __FILE__)
 
 class ServiceTest < Service::TestCase
@@ -75,6 +77,12 @@ class ServiceTest < Service::TestCase
     assert_raises Service::ConfigurationError do
       @service.http_post 'http://abc'
     end
+  end
+
+  def test_json_encoding
+    payload = {'unicodez' => "rtiaü\n\n€ý5:q"}
+    json = @service.generate_json(payload)
+    assert_equal payload, JSON.parse(json)
   end
 
   def service(*args)

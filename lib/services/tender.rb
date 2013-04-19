@@ -9,7 +9,7 @@ class Service::Tender < Service
     begin
       # Nothing to see here really, just reposting the payload as-is
       http.headers['content-type'] = 'application/json'
-      body = JSON.generate(payload)
+      body = generate_json(payload)
       url = "https://#{data['domain']}/tickets/github/#{data['token']}"
       http_post url, body
 

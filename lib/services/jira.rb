@@ -40,7 +40,7 @@ class Service::Jira < Service
         http.basic_auth data['username'], data['password']
         http.headers['Content-Type'] = 'application/json'
         res = http_post '%s/rest/api/%s/issue/%s/transitions' % [data['server_url'], data['api_version'], issue_id],
-          changeset.to_json
+          generate_json(changeset)
       rescue URI::InvalidURIError
         raise_config_error "Invalid server_hostname: #{data['server_url']}"
       end

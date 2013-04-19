@@ -10,7 +10,7 @@ class Service::Codeship < Service
 
   def receive_push
     http.headers['content-type'] = 'application/json'
-    http_post codeship_url, payload.to_json
+    http_post codeship_url, generate_json(payload)
   end
 
   private

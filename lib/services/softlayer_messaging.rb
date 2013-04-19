@@ -48,7 +48,7 @@ class Service::SoftLayerMessaging < Service
 
     # Encode payload to JSON
     # hopefully not bigger than 64K
-    payload_json_data = JSON.generate(payload)
+    payload_json_data = generate_json(payload)
 
   begin
    if topic

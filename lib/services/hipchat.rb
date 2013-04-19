@@ -39,7 +39,7 @@ class Service::HipChat < Service
       res = http_post "https://api.hipchat.com/v1/webhooks/github",
         :auth_token => data['auth_token'],
         :room_id => room_id,
-        :payload => JSON.generate(payload),
+        :payload => generate_json(payload),
         :notify => data['notify'] ? 1 : 0
       if res.status < 200 || res.status > 299
         raise_config_error

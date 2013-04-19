@@ -14,7 +14,7 @@ class Service::AgileZen < Service
     http.headers['Content-Type'] = 'application/json'
 
     res = http_post "https://agilezen.com/api/v1/projects/#{data['project_id']}/changesets/github",
-      JSON.generate(payload)
+      generate_json(payload)
 
     if res.status < 200 || res.status > 299
       raise_config_error

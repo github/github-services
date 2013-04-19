@@ -574,7 +574,7 @@ class Service
   #     req.basic_auth("username", "password")
   #     req.params[:page] = 1 # http://github.com/create?page=1
   #     req.headers['Content-Type'] = 'application/json'
-  #     req.body = {:foo => :bar}.to_json
+  #     req.body = generate_json(:foo => :bar)
   #   end
   #   # => <Faraday::Response>
   #
@@ -606,7 +606,7 @@ class Service
   #     req.basic_auth("username", "password")
   #     req.params[:page] = 1 # http://github.com/create?page=1
   #     req.headers['Content-Type'] = 'application/json'
-  #     req.body = {:foo => :bar}.to_json
+  #     req.body = generate_json(:foo => :bar)
   #   end
   #   # => <Faraday::Response>
   #
@@ -644,7 +644,7 @@ class Service
       Faraday.new(options) do |b|
         b.use HttpReporter, self
         b.request :url_encoded
-        b.adapter *(options[:adapter] || :net_http)
+        b.adapter *(options[:adapter] || :excon)
       end
     end
   end
@@ -682,6 +682,10 @@ class Service
     raise err
   end
 
+  def generate_json(body)
+    JSON.generate(body)
+  end
+
   # Public: Checks for an SSL error, and re-raises a Services configuration error.
   #
   # Returns nothing.
@@ -697,7 +701,7 @@ class Service
   # Returns a String.
   def log_message(status = 0)
     "[%s] %03d %s/%s %s" % [Time.now.utc.to_s(:db), status,
-      self.class.hook_name, @event, JSON.generate(log_data)]
+      self.class.hook_name, @event, generate_json(log_data)]
   end
 
   # Public: Builds a sanitized Hash of the Data hash without passwords.

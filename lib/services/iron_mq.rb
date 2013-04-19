@@ -35,7 +35,7 @@ class Service::IronMQ < Service
     #http.ssl[:verify] = false
     body = {
         "messages" => [
-            "body" => payload.to_json
+            "body" => generate_json(payload)
         ]
     }
 
@@ -43,7 +43,7 @@ class Service::IronMQ < Service
       # test
       resp = DumbResponse.new
     else
-      http_post " https://mq-aws-us-east-1.iron.io/1/projects/#{project_id}/queues/#{queue_name}/messages", body.to_json, {"Authorization" => "OAuth #{token}"}
+      http_post " https://mq-aws-us-east-1.iron.io/1/projects/#{project_id}/queues/#{queue_name}/messages", generate_json(body), {"Authorization" => "OAuth #{token}"}
     end
 
     return data, payload, resp

@@ -10,7 +10,7 @@ class Service::Nodejitsu < Service
     return if branch.to_s != '' && branch != branch_name
     http.ssl[:verify] = false
     http.basic_auth username, password
-    http_post nodejitsu_url, :payload => payload.to_json,
+    http_post nodejitsu_url, :payload => generate_json(payload),
       :email_success => email_success_deploys, :email_errors => email_errors
   end
 
