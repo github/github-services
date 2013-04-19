@@ -779,6 +779,20 @@ class Service
     @helper ? @helper.sample_payload : {}
   end
 
+  def reportable_http_env(env, time)
+    {
+      :request => {
+        :url => env[:url].to_s,
+        :headers => env[:request_headers]
+      }, :response => {
+        :status => env[:status],
+        :headers => env[:response_headers],
+        :body => env[:body].to_s,
+        :duration => "%.02fs" % [Time.now - time]
+      }
+    }
+  end
+
   # Raised when an unexpected error occurs during service hook execution.
   class Error < StandardError
     attr_reader :original_exception
@@ -808,18 +822,7 @@ class Service
     end
 
     def on_complete(env)
-      ms = ((Time.now - @time) * 1000).round
-      @service.receive_http(
-        :request => {
-          :url => env[:url].to_s,
-          :headers => env[:request_headers]
-        }, :response => {
-          :status => env[:status],
-          :headers => env[:response_headers],
-          :body => env[:body].to_s,
-          :duration => "%.02fs" % [Time.now - @time]
-        }
-      )
+      @service.receive_http(@service.reportable_http_env(env, @time))
     end
   end
 end
