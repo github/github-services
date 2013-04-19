@@ -34,6 +34,6 @@ private
     http.headers['Accept'] = 'application/json'
     http.headers['Authorization'] = "BEARER #{token}"
 
-    http_post create_build_url, appharbor_message.to_json
+    http_post create_build_url, generate_json(appharbor_message)
   end
 end

@@ -11,6 +11,6 @@ class Service::CoffeeDocInfo < Service
                :twitter => 'netzpirat', :github => 'netzpirat'
 
   def receive_push
-    http_post 'http://coffeedoc.info/checkout', :payload => payload.to_json
+    http_post 'http://coffeedoc.info/checkout', :payload => generate_json(payload)
   end
 end

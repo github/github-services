@@ -3,7 +3,7 @@ class Service::Yammer < Service
   string :token
 
   def receive_event
-    http_post "https://yammer-github.herokuapp.com/#{token}/notify/#{event}", :payload => payload.to_json
+    http_post "https://yammer-github.herokuapp.com/#{token}/notify/#{event}", :payload => generate_json(payload)
   end
 
   def token

@@ -12,7 +12,7 @@ class Service::Pachube < Service
     if payload['ref'] == "refs/heads/#{data['track_branch']}" then
       http_method :put, "#{feed_url}.json" do |req|
         req.headers['X-PachubeApiKey'] = data['api_key']
-        req.body = {
+        req.body = generate_json(
           :version => '1.0.0',
           :datastreams => [
             {
@@ -28,20 +28,20 @@ class Service::Pachube < Service
             {
               :id => "#{repo_name}-files_added"
             }
-          ]}.to_json
+          ])
       end
       distinct_commits.each do |commit|
         [ 'modified', 'removed', 'added' ].each do |ds|
           http_method :post, "#{feed_url}/datastreams/#{repo_name}-files_#{ds}/datapoints" do |req|
             req.headers['X-PachubeApiKey'] = data['api_key']
-            req.body = {
+            req.body = generate_json(
               :version => '1.0.0',
               :datapoints => [
                 {
                   :at => commit['timestamp'],
                   :value => commit[ds].size
                 }
-              ]}.to_json
+              ])
           end
         end
       end

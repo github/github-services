@@ -13,7 +13,7 @@ class Service::Hall < Service
     raise_config_error "Missing room token" if data['room_token'].to_s.empty?
     room_token = data['room_token'].to_s
 
-    res = http_post "https://hall.com/api/1/services/github/#{room_token}", :payload => JSON.generate(payload)
+    res = http_post "https://hall.com/api/1/services/github/#{room_token}", :payload => generate_json(payload)
   end
 
 end

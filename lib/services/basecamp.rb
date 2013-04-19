@@ -48,7 +48,7 @@ class Service::Basecamp < Service
     http.headers['Content-Type']  = 'application/json'
     http.headers['Accept']        = 'application/json'
 
-    response = http_post(events_api_url, params.to_json)
+    response = http_post(events_api_url, generate_json(params))
 
     case response.status
     when 401; raise_config_error "Invalid email + password: #{response.body.inspect}"

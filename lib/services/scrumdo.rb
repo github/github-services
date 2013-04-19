@@ -9,7 +9,7 @@ class Service::ScrumDo < Service
 
     url = "http://www.scrumdo.com/hooks/github/#{data["project_slug"]}"
     res = http_post url do |req|
-       req.body = {:payload => payload.to_json, :username=>username, :password=>password}
+       req.body = {:payload => generate_json(payload), :username=>username, :password=>password}
     end
 
     if res.status < 200 || res.status > 299

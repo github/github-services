@@ -21,6 +21,6 @@ class Service::Freckle < Service
 
     http.headers['Content-Type'] = 'application/json'
     http_post "http://#{data['subdomain']}.letsfreckle.com/api/entries/import",
-      {:entries => entries, :token => data['token']}.to_json
+      generate_json(:entries => entries, :token => data['token'])
   end
 end

@@ -37,11 +37,11 @@ class Service::Web < Service
 
     body = if data['content_type'] == 'json'
       http.headers['content-type'] = 'application/json'
-      JSON.generate(payload)
+      generate_json(payload)
     else
       http.headers['content-type'] = 'application/x-www-form-urlencoded'
       Faraday::Utils.build_nested_query(
-        http.params.merge(:payload => JSON.generate(payload)))
+        http.params.merge(:payload => generate_json(payload)))
     end
 
     if !(secret = data['secret'].to_s).empty?

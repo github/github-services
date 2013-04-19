@@ -28,7 +28,7 @@ class Service::Gemnasium < Service
   end
 
   def body
-    payload.to_json
+    generate_json(payload)
   end
 
   def url

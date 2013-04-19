@@ -7,6 +7,6 @@ class Service::Boxcar < Service
       "http://providers.boxcar.io/github/%s" %
         [secrets['boxcar']['apikey']],
       :emails => data['subscribers'],
-      :payload => JSON.generate(payload)
+      :payload => generate_json(payload)
   end
 end

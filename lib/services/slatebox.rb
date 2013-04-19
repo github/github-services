@@ -31,6 +31,6 @@ private
       }
     }
 
-    http_post create_build_url, slatebox_message.to_json, 'Accept' => 'application/json'
+    http_post create_build_url, generate_json(slatebox_message), 'Accept' => 'application/json'
   end
 end

@@ -20,6 +20,6 @@ class Service::Gemini < Service
     http.url_prefix = '%s/api/github' % [data['server_url']]
 
     # POST http://localhost/gemini/api/github/commit
-    http_post "commit", payload.to_json
+    http_post "commit", generate_json(payload)
   end
 end

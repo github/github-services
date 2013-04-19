@@ -5,7 +5,7 @@ class Service::Planbox < Service
     token = data['token']
     res = http_post 'https://www.planbox.com/api/github_commits' do |req|
       req.params[:token] = data['token']
-      req.body = {:payload => payload.to_json}
+      req.body = {:payload => generate_json(payload)}
     end
 
     if res.status < 200 || res.status > 299
