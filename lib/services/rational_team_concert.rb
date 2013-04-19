@@ -53,7 +53,7 @@ class Service::RationalTeamConcert < Service
 					   Faraday::Utils.build_nested_query(http.params.merge(:j_username => data['username'], :j_password => data['password'])) 
 
 		if 'authrequired'.eql? res.headers['X-com-ibm-team-repository-web-auth-msg']
-			raise_config_error 'Invalid Username or Password %s' % res.env[:url]
+			raise_config_error 'Invalid Username or Password'
 		end
 	
 		http.headers['Cookie']= captureCookies res
@@ -144,9 +144,9 @@ class Service::RationalTeamConcert < Service
 
 	def get_comment_url (work_item) 
 		answer= JSON.parse(work_item)
-		raise_config_error "Invalid OSLC response. Unable to parse the work item: %s" % work_item unless answer
+		raise_config_error "Invalid OSLC response. Unable to parse the work item" unless answer
 		discussedBy= answer['oslc:discussedBy']
-		raise_config_error "Invalid OSLC response. Expected to receive oslc:discussedBy in the response %s" % work_item unless discussedBy
+		raise_config_error "Invalid OSLC response. Expected to receive oslc:discussedBy in the response" unless discussedBy
 		return "#{discussedBy['rdf:resource']}/oslc:comment"
 	end
 end
