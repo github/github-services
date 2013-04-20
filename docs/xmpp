@@ -1,0 +1,6 @@
+Install Notes
+-------------
+
+  1. **JID** is the Jabber ID where the service hook will connect to send the payload.
+  2. **Password** is the password for the JID.
+  3. **Recipient** is a comma seperated list of JIDs to deliver the payload.  Currently, there is a maximum of 25 users.
