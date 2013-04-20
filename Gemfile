@@ -13,7 +13,7 @@ gem "tilt",                   "~> 1.2.1"
 gem "tinder",                 "1.8.0.github"
 gem "mail",                   "~>2.3"
 gem "xml-simple",             "1.0.11", :require => 'xmlsimple'
-gem "xmpp4r-simple",          "0.8.8"
+gem "xmpp4r-simple-19",       "~> 1.0.0"
 #gem "yammer4r",              "0.1.5"
 gem "ruby-hmac",              "0.4.0"
 gem "thin",                   "1.2.2"
