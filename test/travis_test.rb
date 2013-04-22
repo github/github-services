@@ -38,7 +38,7 @@ class TravisTest < Service::TestCase
       assert_equal basic_auth('kronn', '5373dd4a3648b88fa9acb8e46ebc188a'),
         env[:request_headers]['authorization']
       assert_equal 'push', env[:request_headers]['x-github-event']
-      assert_equal payload, JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
+      assert_equal payload, JSON.parse(Faraday::Utils.parse_query(env[:body])['payload'])
     end
     @svc.receive_event
   end
@@ -50,7 +50,7 @@ class TravisTest < Service::TestCase
       assert_equal basic_auth('kronn', '5373dd4a3648b88fa9acb8e46ebc188a'),
         env[:request_headers]['authorization']
       assert_equal 'pull_request', env[:request_headers]['x-github-event']
-      assert_equal pull_payload, JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
+      assert_equal pull_payload, JSON.parse(Faraday::Utils.parse_query(env[:body])['payload'])
     end
     @svc.receive_event
   end

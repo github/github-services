@@ -8,7 +8,7 @@ class ScrumDoTest < Service::TestCase
   def test_push
     @stubs.post "/hooks/github/slug" do |env|
       assert_equal 'www.scrumdo.com', env[:url].host
-      data = Rack::Utils.parse_query(env[:body])
+      data = Faraday::Utils.parse_query(env[:body])
       assert_equal 'rick',   data['username']
       assert_equal 'monkey', data['password']
       assert data['payload']

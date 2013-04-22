@@ -8,7 +8,7 @@ class SplendidBaconTest < Service::TestCase
   def test_push
     @stubs.post "/api/v1/projects/p/github" do |env|
       assert_equal 'splendidbacon.com', env[:url].host
-      data = Rack::Utils.parse_nested_query(env[:body])
+      data = Faraday::Utils.parse_nested_query(env[:body])
       assert_equal 1, JSON.parse(data['payload'])['a']
       [200, {}, '']
     end

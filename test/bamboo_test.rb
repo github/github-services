@@ -141,7 +141,7 @@ class BambooTest < Service::TestCase
   # Raises Test::Unit::AssertionFailedError if the assertion doesn't match.
   # Returns nothing.
   def assert_params(body, expected)
-    params = Rack::Utils.parse_query(body)
+    params = Faraday::Utils.parse_query(body)
     expected.each do |key, expected_value|
       assert value = params.delete(key.to_s), "#{key} not in #{params.inspect}"
       assert_equal expected_value, value, "#{key} = #{value.inspect}, not #{expected_value.inspect}"

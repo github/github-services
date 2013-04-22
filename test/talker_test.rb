@@ -54,7 +54,7 @@ class TalkerTest < Service::TestCase
       @stubs.post "/room/1/messages.json" do |env|
         assert_equal 's.talkerapp.com', env[:url].host
         assert_equal 't', env[:request_headers]['x-talker-token']
-        data = Rack::Utils.parse_nested_query(env[:body])
+        data = Faraday::Utils.parse_nested_query(env[:body])
         assert data.key?('message')
         [200, {}, '']
       end
