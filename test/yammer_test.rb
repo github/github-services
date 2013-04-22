@@ -22,7 +22,7 @@ class YammerTest < Service::TestCase
         assert_equal 'https', env[:url].scheme
         assert_equal 'yammer-github.herokuapp.com', env[:url].host
         assert_equal "/a4f1200fc99331027ab1239%3D%3D/notify/#{event}", env[:url].path
-        assert_equal payload, JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
+        assert_equal payload, JSON.parse(Faraday::Utils.parse_query(env[:body])['payload'])
       end
 
       svc.receive_event
