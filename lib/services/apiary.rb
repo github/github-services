@@ -12,8 +12,10 @@ class Service::Apiary < Service
   
   def make_apiary_call
     return true if not domain
-    http.url_prefix = apiary_address
-    http_post domain.to_s + '/' + branch.to_s, :payload => JSON.generate(payload)
+    http_post apiary_address,
+      :payload => JSON.generate(payload),
+      :branch => branch,
+      :vanity => domain
   end
 
   def branch
