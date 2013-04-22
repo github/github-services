@@ -16,7 +16,7 @@ class Service::Grmble < Service
                   'type' => 'message',
                 }
 
-      http_post 'msg', :message => JSON.generate(message)
+      http_post 'msg', :message => generate_json(message)
     end
   end
 end

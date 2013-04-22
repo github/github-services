@@ -14,7 +14,7 @@ class Service::Toggl < Service
       # Toggl wants it in seconds.  Commits should be in seconds
       duration = duration.to_i * 60
 
-      http_post "tasks.json", {
+      http_post "tasks.json", generate_json(
         :task => {
           :duration => duration.to_i,
           :description => commit["message"].strip,
@@ -26,7 +26,7 @@ class Service::Toggl < Service
           :created_with => "github",
           :stop => Time.now.iso8601
         }
-      }.to_json
+      )
 
     end
   end

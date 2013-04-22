@@ -8,7 +8,7 @@ class Service::Depending < Service
   def receive_push
     http.ssl[:verify] = false
     http.basic_auth "github", token
-    http_post "http://depending.in/hook", :payload => payload.to_json
+    http_post "http://depending.in/hook", :payload => generate_json(payload)
   end
 
   def token

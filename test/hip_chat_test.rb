@@ -8,7 +8,7 @@ class HipChatTest < Service::TestCase
   def test_push
     payload = {'a' => 1, 'ref' => 'refs/heads/master'}
     @stubs.post "/v1/webhooks/github" do |env|
-      form = Rack::Utils.parse_query(env[:body])
+      form = Faraday::Utils.parse_query(env[:body])
       assert_equal payload, JSON.parse(form['payload'])
       assert_equal 'a', form['auth_token']
       assert_equal 'r', form['room_id']

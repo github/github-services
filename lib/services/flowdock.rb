@@ -12,7 +12,7 @@ class Service::Flowdock < Service
 
       http.headers['X-GitHub-Event'] = event.to_s
       http.headers['content-type'] = 'application/json'
-      http_post "https://api.flowdock.com/v1/github/#{token}", JSON.generate(payload)
+      http_post "https://api.flowdock.com/v1/github/#{token}", generate_json(payload)
     end
   end
 end

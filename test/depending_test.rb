@@ -21,7 +21,7 @@ class DependingTest < Service::TestCase
       assert_equal 'depending.in', env[:url].host
       assert_equal basic_auth('github', 'bf215181b5140522137b3d4f6b73544a'),
         env[:request_headers]['authorization']
-      assert_equal payload, JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
+      assert_equal payload, JSON.parse(Faraday::Utils.parse_query(env[:body])['payload'])
     end
 
     @svc.receive_push

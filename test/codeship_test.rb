@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require File.expand_path('../helper', __FILE__)
 
 class CodeshipTest < Service::TestCase
@@ -13,6 +15,15 @@ class CodeshipTest < Service::TestCase
     @stubs.post "/hook/#{project_uuid}" do |env|
       assert_equal "https://www.codeship.io/hook/#{project_uuid}", env[:url].to_s
       assert_match 'application/json', env[:request_headers]['content-type']
+      assert_equal payload, JSON.parse(env[:body])
+    end
+    svc.receive_push
+  end
+
+  def test_json_encoding
+    payload = {'unicodez' => "rtiaü\n\n€ý5:q"}
+    svc = service({'project_uuid' => 'abc'}, payload)
+    @stubs.post "/hook/abc" do |env|
       assert_equal payload, JSON.parse(env[:body])
     end
     svc.receive_push

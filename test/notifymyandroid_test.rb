@@ -8,7 +8,7 @@ class NMATest < Service::TestCase
   def test_push
     @stubs.post "/publicapi/notify" do |env|
       assert_equal 'www.notifymyandroid.com', env[:url].host
-      data = Rack::Utils.parse_query(env[:body])
+      data = Faraday::Utils.parse_query(env[:body])
       assert_equal 'a', data['apikey']
       [200, {}, '']
     end

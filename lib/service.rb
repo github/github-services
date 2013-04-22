@@ -574,7 +574,7 @@ class Service
   #     req.basic_auth("username", "password")
   #     req.params[:page] = 1 # http://github.com/create?page=1
   #     req.headers['Content-Type'] = 'application/json'
-  #     req.body = {:foo => :bar}.to_json
+  #     req.body = generate_json(:foo => :bar)
   #   end
   #   # => <Faraday::Response>
   #
@@ -606,7 +606,7 @@ class Service
   #     req.basic_auth("username", "password")
   #     req.params[:page] = 1 # http://github.com/create?page=1
   #     req.headers['Content-Type'] = 'application/json'
-  #     req.body = {:foo => :bar}.to_json
+  #     req.body = generate_json(:foo => :bar)
   #   end
   #   # => <Faraday::Response>
   #
@@ -644,7 +644,7 @@ class Service
       Faraday.new(options) do |b|
         b.use HttpReporter, self
         b.request :url_encoded
-        b.adapter *(options[:adapter] || :net_http)
+        b.adapter *(options[:adapter] || :excon)
       end
     end
   end
@@ -682,6 +682,10 @@ class Service
     raise err
   end
 
+  def generate_json(body)
+    JSON.generate(body)
+  end
+
   # Public: Checks for an SSL error, and re-raises a Services configuration error.
   #
   # Returns nothing.
@@ -697,7 +701,7 @@ class Service
   # Returns a String.
   def log_message(status = 0)
     "[%s] %03d %s/%s %s" % [Time.now.utc.to_s(:db), status,
-      self.class.hook_name, @event, JSON.generate(log_data)]
+      self.class.hook_name, @event, generate_json(log_data)]
   end
 
   # Public: Builds a sanitized Hash of the Data hash without passwords.
@@ -775,6 +779,20 @@ class Service
     @helper ? @helper.sample_payload : {}
   end
 
+  def reportable_http_env(env, time)
+    {
+      :request => {
+        :url => env[:url].to_s,
+        :headers => env[:request_headers]
+      }, :response => {
+        :status => env[:status],
+        :headers => env[:response_headers],
+        :body => env[:body].to_s,
+        :duration => "%.02fs" % [Time.now - time]
+      }
+    }
+  end
+
   # Raised when an unexpected error occurs during service hook execution.
   class Error < StandardError
     attr_reader :original_exception
@@ -804,18 +822,7 @@ class Service
     end
 
     def on_complete(env)
-      ms = ((Time.now - @time) * 1000).round
-      @service.receive_http(
-        :request => {
-          :url => env[:url].to_s,
-          :headers => env[:request_headers]
-        }, :response => {
-          :status => env[:status],
-          :headers => env[:response_headers],
-          :body => env[:body].to_s,
-          :duration => "%.02fs" % [Time.now - @time]
-        }
-      )
+      @service.receive_http(@service.reportable_http_env(env, @time))
     end
   end
 end

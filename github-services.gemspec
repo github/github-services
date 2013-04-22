@@ -25,8 +25,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mash",                   "~> 0.1.1"
   spec.add_dependency "mime-types",             "~> 1.15"
   spec.add_dependency "ruby-hmac",              "0.4.0"
-  spec.add_dependency "faraday",                "0.7.6"
-  spec.add_dependency "SystemTimer"
+  spec.add_dependency "faraday",                "0.8.7"
+  spec.add_dependency "excon",                  "~> 0.20.1"
 
   # Basecamp Classic
   spec.add_dependency "activeresource",         "~> 3.0.0"
@@ -44,7 +44,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mail",                   "~>2.3"
 
   # Jabber
-  spec.add_dependency "xmpp4r-simple",          "0.8.8"
+  spec.add_dependency "xmpp4r-simple-19",       "~> 1.0.0"
 
   # Twilio
   spec.add_dependency "twilio-ruby",            "3.4.2"
