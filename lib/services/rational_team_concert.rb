@@ -2,6 +2,7 @@ class Service::RationalTeamConcert < Service
 	string   :server_url, :username, :project_area_uuid
 	password :password
 	boolean :basic_authentication
+	boolean :no_verify_ssl
 	white_list :server_url, :username, :basic_authentication
 	attr_accessor :cookies
 
@@ -20,6 +21,9 @@ class Service::RationalTeamConcert < Service
 	end
 
 	def prepare
+		if data['no_verify_ssl']
+			http.ssl[:verify] = false
+		end 
 		http.headers['X-com-ibm-team-userid']= data['username']
 	end
 
