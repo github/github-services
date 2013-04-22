@@ -22,6 +22,7 @@ class PushalotTest < Service::TestCase
       data = Rack::Utils.parse_query(env[:body])
       assert_equal "be82304d88d74eb884e384a98a282b8a", data["authorizationToken"]
       assert_equal payload, JSON.parse(data['payload'])
+      [200, {}, 'ok']
     end
 
     @svc.receive_push
