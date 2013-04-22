@@ -1,0 +1,14 @@
+Pushalot
+========
+
+Pushalot is a platform for receiving custom push notifications to connected devices running Windows Phone or Windows 8. Custom means that those push notifications can be sent from virtually any source, as long as that source can interact with our open [REST API](https://pushalot.com/api).
+
+Install Notes
+-------------
+
+1. Install the [Windows 8 app](https://pushalot.com/apps) from the Windows Store, or the [Windows Phone app](https://pushalot.com/apps) from the Windows Phone Apps+Games Store.
+
+2. Sign in to [Pushalot](https://pushalot.com/) and copy your authorization token.
+
+3. Add your authorization token in the field above.
+
