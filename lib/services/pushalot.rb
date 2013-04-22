@@ -9,7 +9,7 @@ class Service::Pushalot < Service
   def receive_push
     res = http_post "https://pushalot.com/api/githubhook",
       :authorizationToken => authorization_token,
-      :payload => payload.to_json 
+      :payload => generate_json(payload)
 
     if res.status != 200
       raise_config_error
