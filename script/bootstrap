@@ -2,6 +2,6 @@
 # Usage: script/bootstrap
 # Ensures all gems are in vendor/cache and installed locally.
 
-bundle package --all
 bundle install --binstubs --local --path=vendor/gems
+bundle package --all
 

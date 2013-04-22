@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    github-services (1.0.0.7640c50)
+    github-services (1.0.0.0adf809)
       activeresource (~> 3.0.0)
       addressable (~> 2.2.7)
       aws-sdk (~> 1.8.0)
@@ -24,7 +24,7 @@ PATH
       yajl-ruby (= 1.1.0)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     activemodel (3.0.10)
       activesupport (= 3.0.10)
