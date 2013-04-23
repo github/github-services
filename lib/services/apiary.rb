@@ -8,7 +8,7 @@ class Service::Apiary < Service
   supported_by :web => 'http://support.apiary.io/',
     :email => 'support@apiary.io'
 
-  APIARY_URL = "http://api.apiary.io/github/service-hook/"
+  APIARY_URL = "http://api.apiary.io/github/service-hook"
   
   def make_apiary_call
     return true if not domain
