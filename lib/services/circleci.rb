@@ -13,8 +13,7 @@ class Service::Circleci < Service
   def receive_event
 
     http.headers['content-type'] = 'application/x-www-form-urlencoded'
-    http.params.merge!(:payload => JSON.generate(payload) , :event_type =>  JSON.generate({ :event_type => self.event }))
-    http_post circleci_url, payload.to_json
+    http_post circleci_url, "payload" => JSON.generate(payload) , "event_type" =>  JSON.generate({ :event_type => self.event })
     
   end
 
