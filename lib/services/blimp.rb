@@ -59,7 +59,7 @@ class Service::Blimp < Service
     }
 
     url = "https://app.getblimp.com/api/v2/github_service/"
-    response = http_post url, params.to_json
+    response = http_post url, generate_json(params)
 
     case response.status
     when 401; raise_config_error "Invalid Username + API Key"
