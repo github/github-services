@@ -47,7 +47,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "xmpp4r-simple-19",       "~> 1.0.0"
 
   # Twilio
-  spec.add_dependency "twilio-ruby",            "3.4.2"
+  spec.add_dependency "twilio-ruby",            "~> 3.9.0"
 
   # Amazon SQS
   spec.add_dependency "right_aws",              "3.0.3"
