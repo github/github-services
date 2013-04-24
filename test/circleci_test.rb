@@ -98,7 +98,7 @@ class CircleciTest < Service::TestCase
     svc = service(event_name, {'token' => 'abc'}, payload)
 
     @stubs.post "/hooks/github" do |env|
-      body = CGI.parse env[:body]
+      body = Faraday::Utils.parse_query env[:body]
       assert_match "https://circleci.com/hooks/github", env[:url].to_s
       assert_match 'application/x-www-form-urlencoded', env[:request_headers]['content-type']
       assert_equal payload, JSON.parse(body["payload"].to_s)
