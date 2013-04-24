@@ -1,0 +1,13 @@
+CircleCI continuous integration 
+
+[CircleCi](https://circleci.com) will add these hooks automatically to projects which you test using CircleCi. By enabling all the events github offers it allows tighter integeration between github and CircleCI. To sign up, go to https://circleci.com, sign in, and start testing!
+
+Install Notes
+-------------
+
+1.  Sign up at https://circleci.com with your github credentials
+2.  Follow your repository
+3.  You're done!
+
+For more details about CircleCI go to https://circleci.com
+
