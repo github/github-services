@@ -1,0 +1,7 @@
+[Apiary.io](http://apiary.io/) is a REST API documentation, mocking and testing service. It auto-updates your hosted API documentation generated from [Markdown files](http://apiary.io/blueprint) in your repository. See more at [http://apiary.io/](http://apiary.io/)
+
+Install Notes
+-------------
+
+1.  `branch` - commits to this GitHub branch will trigger an update at Apiary; other branches will be ignored
+2.  `domain` - your API domain at Apiary (can be found [in settitngs](http://apiary.io/home))
