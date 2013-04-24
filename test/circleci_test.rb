@@ -1,8 +1,6 @@
 require File.expand_path('../helper', __FILE__)
-
 class CircleciTest < Service::TestCase
-
-
+  
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
@@ -103,12 +101,13 @@ class CircleciTest < Service::TestCase
   def post_to_service(event_name)
     assert Service::ALL_EVENTS.include? event_name.to_s
     svc = service(event_name, {'token' => 'abc'},payload)
-    
+
     @stubs.post "/hooks/github" do |env|
+      body = CGI.parse env[:body]
       assert_match "https://circleci.com/hooks/github", env[:url].to_s
-      assert_match 'application/x-www-form-urlencoded', env[:request_headers]['content-type']
-      assert_equal payload, JSON.parse(env[:params]["payload"])
-      assert_equal event_name.to_s, JSON.parse(env[:params]["event_type"])["event_type"]
+      assert_match 'application/x-www-form-urlencoded', env[:request_headers]['content-type']      
+      assert_equal payload, JSON.parse(body["payload"].to_s)
+      assert_equal event_name.to_s, JSON.parse(body["event_type"].to_s)["event_type"]
     end
     
     svc.receive_event
