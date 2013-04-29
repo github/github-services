@@ -18,7 +18,7 @@ class Service::Travis < Service
 
   def user
     if data['user'].to_s == ''
-      payload['repository']['owner']['name']
+      owner_payload['login'] || owner_payload['name']
     else
       data['user']
     end.strip
@@ -37,6 +37,10 @@ class Service::Travis < Service
   end
 
   protected
+
+  def owner_payload
+    payload['repository']['owner']
+  end
 
   def full_domain
     if data['domain'].present?
