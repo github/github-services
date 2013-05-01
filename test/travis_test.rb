@@ -55,6 +55,17 @@ class TravisTest < Service::TestCase
     @svc.receive_event
   end
 
+  def test_pull_request_payload_without_username
+    data = {
+      'user' => '',
+      'token' => '5373dd4a3648b88fa9acb8e46ebc188a'
+    }
+    svc = service(:pull_request, blank_user_config, pull_payload)
+
+    assert_equal pull_payload['repository']['owner']['login'], svc.user
+    assert_equal '5373dd4a3648b88fa9acb8e46ebc188a', svc.token
+  end
+
   def test_strips_whitespace_from_form_values
     data = {
       'user' => 'kronn  ',
@@ -105,6 +116,13 @@ class TravisTest < Service::TestCase
   def basic_config
     {
       'user' => 'kronn',
+      'token' => '5373dd4a3648b88fa9acb8e46ebc188a'
+    }
+  end
+
+  def blank_user_config
+    {
+      'user' => '',
       'token' => '5373dd4a3648b88fa9acb8e46ebc188a'
     }
   end
