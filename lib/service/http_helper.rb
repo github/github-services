@@ -63,7 +63,7 @@ class Service
     end
 
     def original_body
-      {:payload => payload, :event => event.to_s, :config => data}
+      raise NotImplementedError
     end
 
     def encode_body(content_type = nil)
