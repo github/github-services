@@ -2,6 +2,22 @@ class Service
   module HttpHelper
     HMAC_DIGEST = OpenSSL::Digest::Digest.new('sha1')
 
+    def deliver_event_payload
+      wrap_http_errors do
+        url = set_url(data['url'])
+
+        if data['insecure_ssl'].to_i == 1
+          http.ssl[:verify] = false
+        end
+
+        body = encode_body(data['content_type'])
+
+        set_body_signature(body, data['secret'])
+
+        http_post url, body
+      end
+    end
+
     def wrap_http_errors
       yield
     rescue Addressable::URI::InvalidURIError, Errno::EHOSTUNREACH
