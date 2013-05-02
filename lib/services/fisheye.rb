@@ -1,4 +1,4 @@
-class Service::Fisheye < Service
+class Service::FishEye < Service
 
   string  :url_base, :token, :repository_name
   white_list :url_base, :repository_name
@@ -22,7 +22,7 @@ class Service::Fisheye < Service
       when 200
         "Ok"
       when 401
-        raise_config_error("Invalid token")
+        raise_config_error("Invalid REST API token")
       when 404
         raise_config_error("Invalid repository name")
       else
@@ -38,11 +38,20 @@ class Service::Fisheye < Service
   end
 
   def repository_name
-    @repository_name ||= (data['custom_repository_name'].to_s.strip.length != 0) ? data['custom_repository_name'] : payload['repository']['name']
+    @repository_name ||= (data['repository_name'].to_s.strip.length != 0) ? data['repository_name'] : payload['repository']['name']
   end
 
   def url_base
-    @url_base ||= data['url_base']
+    @url_base ||= begin
+      url_base = data['url_base']
+      if (!(url_base.nil? || url_base.empty?))
+        if url_base !~ /^https?\:\/\//
+          url_base = "http://#{url_base}"
+        end
+        url_base = url_base.gsub(/\/+$/, '')
+      end
+      url_base
+    end	
   end
 
   def token

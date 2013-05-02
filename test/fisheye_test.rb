@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class FisheyeTest < Service::TestCase
+class FishEyeTest < Service::TestCase
   def app
     Service::App
   end
@@ -13,7 +13,7 @@ class FisheyeTest < Service::TestCase
     {
         "url_base" => "http://localhost:6060/foo",
         "token" => "515848d216e3baa46e10d92f21f890f67fea1d12",
-        "custom_repository_name" => "myRepo"
+        "repository_name" => "myRepo"
     }
   end
 
@@ -23,6 +23,34 @@ class FisheyeTest < Service::TestCase
     end
 
     svc = service :push, data_my_repo, payload
+    assert_equal("Ok", svc.receive_push)
+
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_triggers_scanning_url_with_slash
+    @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/myRepo/scan" do |env|
+      [200, {}]
+    end
+
+    data = data_my_repo
+    data['url_base'] = "http://localhost:6060/foo/"
+
+    svc = service :push, data, payload
+    assert_equal("Ok", svc.receive_push)
+
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_triggers_scanning_url_without_http
+    @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/myRepo/scan" do |env|
+      [200, {}]
+    end
+
+    data = data_my_repo
+    data['url_base'] = "localhost:6060/foo"
+
+    svc = service :push, data, payload
     assert_equal("Ok", svc.receive_push)
 
     @stubs.verify_stubbed_calls
@@ -52,7 +80,7 @@ class FisheyeTest < Service::TestCase
     data = {
       "url_base" => "http://localhost:6060/foo",
       "token" => "515848d216e3baa46e10d92f21f890f67fea1d12",
-      "custom_repository_name" => "   "
+      "repository_name" => "   "
     }
 
     svc = service :push, data, payload
@@ -163,7 +191,7 @@ class FisheyeTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::Fisheye, *args
+    super Service::FishEye, *args
   end
 
 end
