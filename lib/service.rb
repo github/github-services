@@ -792,7 +792,8 @@ class Service
         :headers => env[:response_headers],
         :body => env[:body].to_s,
         :duration => "%.02fs" % [Time.now - time]
-      }
+      },
+      :adapter => env[:adapter]
     }
   end
 
