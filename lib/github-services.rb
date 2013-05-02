@@ -38,6 +38,7 @@ require 'addressable/uri'
 require 'faraday'
 require 'ostruct'
 require File.expand_path("../service/structs", __FILE__)
+require File.expand_path("../service/http_helper", __FILE__)
 
 class Addressable::URI
   attr_accessor :validation_deferred

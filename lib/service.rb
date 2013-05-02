@@ -444,6 +444,9 @@ class Service
   # Returns a Symbol.
   attr_reader :event
 
+  # Optional String unique identifier for this exact event.
+  attr_accessor :delivery_guid
+
   # Sets the Faraday::Connection for this Service instance.
   #
   # http - New Faraday::Connection instance.
@@ -633,7 +636,9 @@ class Service
   # Returns a Faraday::Connection instance.
   def http(options = {})
     @http ||= begin
-      self.class.default_http_options.each do |key, sub_options|
+      config = self.class.default_http_options
+      config.each do |key, sub_options|
+        next if key == :adapter
         sub_hash = options[key] ||= {}
         sub_options.each do |sub_key, sub_value|
           sub_hash[sub_key] ||= sub_value
@@ -642,15 +647,16 @@ class Service
       options[:ssl][:ca_file] ||= ca_file
 
       Faraday.new(options) do |b|
-        b.use HttpReporter, self
-        b.request :url_encoded
-        b.adapter *(options[:adapter] || :excon)
+        b.request(:url_encoded)
+        b.adapter(*Array(options[:adapter] || config[:adapter]))
+        b.use(HttpReporter, self)
       end
     end
   end
 
   def self.default_http_options
     @@default_http_options ||= {
+      :adapter => :net_http,
       :request => {:timeout => 10, :open_timeout => 5},
       :ssl => {:verify_depth => 5},
       :headers => {}
@@ -789,7 +795,8 @@ class Service
         :headers => env[:response_headers],
         :body => env[:body].to_s,
         :duration => "%.02fs" % [Time.now - time]
-      }
+      },
+      :adapter => env[:adapter]
     }
   end
 
