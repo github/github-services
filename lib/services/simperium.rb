@@ -18,19 +18,8 @@ class Service::Simperium < Service::HttpPost
     :twitter => '@simperium'
 
   def receive_event
-    appid = data['app_id'].to_s
-    appid.gsub! /\s/, ''
-
-    token = data['token'].to_s
-    token.gsub! /\s/, ''
-
-    if appid.empty?
-      raise_config_error 'Invalid app id.'
-    end
-
-    if token.empty?
-      raise_config_error 'Invalid token.'
-    end
+    appid = required_config_value('app_id')
+    token = required_config_value('token')
 
     wrap_http_errors do
       url = set_url "https://api.simperium.com/1/#{appid}/#{event.to_s}/i/"

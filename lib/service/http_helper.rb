@@ -23,6 +23,16 @@ class Service
       end
     end
 
+    def required_config_value(key)
+      value = data[key].to_s
+      value.strip!
+      if value.empty?
+        raise_config_error(key)
+      else
+        value
+      end
+    end
+
     def wrap_http_errors
       yield
     rescue Addressable::URI::InvalidURIError, Errno::EHOSTUNREACH
