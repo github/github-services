@@ -644,9 +644,9 @@ class Service
       options[:ssl][:ca_file] ||= ca_file
 
       Faraday.new(options) do |b|
-        b.use(HttpReporter, self)
         b.request(:url_encoded)
         b.adapter(*Array(options[:adapter] || config[:adapter]))
+        b.use(HttpReporter, self)
       end
     end
   end
