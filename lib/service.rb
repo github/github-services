@@ -444,6 +444,9 @@ class Service
   # Returns a Symbol.
   attr_reader :event
 
+  # Optional String unique identifier for this exact event.
+  attr_accessor :delivery_guid
+
   # Sets the Faraday::Connection for this Service instance.
   #
   # http - New Faraday::Connection instance.
