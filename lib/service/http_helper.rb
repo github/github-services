@@ -2,6 +2,20 @@ class Service
   module HttpHelper
     HMAC_DIGEST = OpenSSL::Digest::Digest.new('sha1')
 
+    def wrap_http_errors
+      yield
+    rescue Addressable::URI::InvalidURIError, Errno::EHOSTUNREACH
+      raise_missing_error $!.to_s
+    rescue SocketError
+      if $!.to_s =~ /getaddrinfo:/
+        raise_missing_error "Invalid host name."
+      else
+        raise
+      end
+    rescue EOFError
+      raise_config_error "Invalid server response. Make sure the URL uses the correct protocol."
+    end
+
     def set_url(url)
       url = url.to_s
       url.gsub! /\s/, ''
