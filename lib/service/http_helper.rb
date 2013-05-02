@@ -44,11 +44,5 @@ class Service
       http.headers['content-type'] = 'application/json'
       generate_json(original_body)
     end
-
-    def encode_body_as_form
-      http.headers['content-type'] = 'application/x-www-form-urlencoded'
-      Faraday::Utils.build_nested_query(
-        http.params.merge(:payload => generate_json(original_body)))
-    end
   end
 end
