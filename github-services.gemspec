@@ -26,7 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mime-types",             "~> 1.15"
   spec.add_dependency "ruby-hmac",              "0.4.0"
   spec.add_dependency "faraday",                "0.8.7"
-  spec.add_dependency "excon",                  "~> 0.20.1"
 
   # Basecamp Classic
   spec.add_dependency "activeresource",         "~> 3.0.0"
