@@ -15,21 +15,9 @@ class Service::Web < Service
   boolean :insecure_ssl # :(
 
   def receive_event
-    wrap_http_errors do
-      url = set_url(data['url'])
+    http.headers['X-GitHub-Event'] = event.to_s
 
-      http.headers['X-GitHub-Event'] = event.to_s
-
-      if data['insecure_ssl'].to_i == 1
-        http.ssl[:verify] = false
-      end
-
-      body = encode_body(data['content_type'])
-
-      set_body_signature(body, data['secret'])
-
-      http_post url, body
-    end
+    deliver_event_payload
   end
 
   def original_body

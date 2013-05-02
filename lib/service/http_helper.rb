@@ -2,17 +2,22 @@ class Service
   module HttpHelper
     HMAC_DIGEST = OpenSSL::Digest::Digest.new('sha1')
 
-    def deliver_event_payload
-      wrap_http_errors do
-        url = set_url(data['url'])
+    def deliver_event_payload(options = {})
+      url_value = options.fetch(:url) { data['url'] }
+      insecure = options.fetch(:insecure_ssl) { data['insecure_ssl'].to_i == 1 }
+      ctype = options.fetch(:content_type) { data['content_type'] }
+      secret = options.fetch(:secret) { data['secret'] }
 
-        if data['insecure_ssl'].to_i == 1
+      wrap_http_errors do
+        url = set_url(url_value)
+
+        if insecure
           http.ssl[:verify] = false
         end
 
-        body = encode_body(data['content_type'])
+        body = encode_body(ctype)
 
-        set_body_signature(body, data['secret'])
+        set_body_signature(body, secret)
 
         http_post url, body
       end
