@@ -3,5 +3,4 @@
 # Ensures all gems are in vendor/cache and installed locally.
 
 bundle install --binstubs --local --path=vendor/gems
-bundle package --all
 
