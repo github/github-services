@@ -108,6 +108,7 @@ class Service
     end
 
     def load_services
+      require File.expand_path("../services/http_post", __FILE__)
       path = File.expand_path("../services/**/*.rb", __FILE__)
       Dir[path].each { |lib| require(lib) }
     end
