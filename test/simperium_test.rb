@@ -6,18 +6,22 @@ class SimperiumTest < Service::TestCase
   def test_push
     test_app_id = "sample-app-name"
     test_token = "0123456789abcde"
+    test_bucket = "github-event"
 
     data = {
       'app_id' => test_app_id,
-      'token' => test_token
+      'token' => test_token,
+      'bucket' => test_bucket
     }
 
     payload = {'commits'=>[{'id'=>'test'}]}
-    @stubs.post "/1/#{test_app_id}/push/i" do |env|
+    svc = service(data, payload)
+
+    @stubs.post "/1/#{test_app_id}/#{test_bucket}/i/#{svc.delivery_guid}" do |env|
       body = JSON.parse(env[:body])
 
       assert_equal env[:url].host, "api.simperium.com"
-      assert_equal env[:request_headers]['X-Simperium-Token'], test_token
+      assert_equal env[:request_headers]['Authorization'], "Token #{test_token}"
       assert_equal 'test', body['payload']['commits'][0]['id']
       assert_match 'guid-', body['guid']
       assert_equal data, body['config']
@@ -25,8 +29,8 @@ class SimperiumTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service(data, payload)
     svc.receive_event
+    @stubs.verify_stubbed_calls
   end
 
   def service_class

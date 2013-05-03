@@ -1,7 +1,7 @@
 class Service::Simperium < Service::HttpPost
-  string :app_id, :token
+  string :app_id, :token, :bucket
 
-  white_list :app_id
+  white_list :app_id, :bucket
 
   default_events :push, :issues, :issue_comment, :commit_comment,
     :pull_request, :pull_request_review_comment, :watch, :fork,
@@ -20,12 +20,25 @@ class Service::Simperium < Service::HttpPost
   def receive_event
     appid = required_config_value('app_id')
     token = required_config_value('token')
+    bucket = required_config_value('bucket')
+
+    if appid.match(/^[A-Za-z0-9-]+$/) == nil
+      raise_config_error "Invalid app id"
+    end
+
+    if token.match(/^[A-Za-z0-9]+$/) == nil
+      raise_config_error "Invalid token"
+    end
+
+    if bucket.match(/^[A-Za-z0-9\-\.@]+$/) == nil
+      raise_config_error "Invalid bucket name"
+    end
 
     wrap_http_errors do
-      url = set_url "https://api.simperium.com/1/#{appid}/#{event.to_s}/i/"
-      http.headers['X-Simperium-Token'] = token
-
       body = encode_body
+      url = set_url "https://api.simperium.com:443/1/#{appid}/#{bucket}/i/#{delivery_guid}"
+      http.headers['Authorization'] = "Token #{token}"
+
       http_post(url, body)
     end
   end
