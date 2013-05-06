@@ -34,13 +34,10 @@ class Service::Simperium < Service::HttpPost
       raise_config_error "Invalid bucket name"
     end
 
-    wrap_http_errors do
-      body = encode_body
-      url = set_url "https://api.simperium.com:443/1/#{appid}/#{bucket}/i/#{delivery_guid}"
-      http.headers['Authorization'] = "Token #{token}"
+    http.headers['Authorization'] = "Token #{token}"
 
-      http_post(url, body)
-    end
+    url = "https://api.simperium.com:443/1/#{appid}/#{bucket}/i/#{delivery_guid}"
+    deliver_event_payload :url => url
   end
 end
 
