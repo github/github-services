@@ -17,7 +17,8 @@ class Service::Web < Service
   def receive_event
     http.headers['X-GitHub-Event'] = event.to_s
 
-    deliver_event_payload
+    deliver data['url'], :content_type => data['content_type'],
+      :insecure_ssl => data['insecure_ssl'].to_i == 1, :secret => data['secret']
   end
 
   def original_body

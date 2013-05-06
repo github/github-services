@@ -37,7 +37,7 @@ class Service::Simperium < Service::HttpPost
     http.headers['Authorization'] = "Token #{token}"
 
     url = "https://api.simperium.com:443/1/#{appid}/#{bucket}/i/#{delivery_guid}"
-    deliver_event_payload :url => url
+    deliver url
   end
 end
 
