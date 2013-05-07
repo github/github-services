@@ -6,12 +6,11 @@
 7.  `nickserv_password` - Password for the server's [NickServ](http://en.wikipedia.org/wiki/Internet_Relay_Chat_services) (optional)
 6.  `long_url` - If enabled, displays full compare/commit url's. If disabled uses git.io.
 7.  `message_without_join` - If enabled prevents joining and immediately leaving the channel.  Make sure you configure the channel to support outside messages ("/mode #yourchannelname -n" or "/msg chanserv set mlock -n")
-8. `no_colors` - Disables color support for messages
-9. `notice` - Sends as a notice rather than a channel message.
+8.  `no_colors` - Disables color support for messages
+9.  `notice` - Sends as a notice rather than a channel message.
 10. `branch_regexes` - Regular expressions for branch name matching (optional, comma separated). For example, only master => `^master$`, master & starts with bug => `master,^bug`.
-11. `no_pull_requests` - Turns off notifications of opened pull requests.
-12. `active` - Enables the bot
-13. Configure your IRC channel to allow external messages (/mode #yourchannelname -n).
+11. `active` - Enables the bot
+12. Configure your IRC channel to allow external messages (/mode #yourchannelname -n).
 
 For freenode, try the following:
 
