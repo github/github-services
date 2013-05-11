@@ -8,7 +8,10 @@ class Service::Web < Service
 
     # old hooks send form params ?payload=JSON(...)
     # new hooks should set content_type == 'json'
-    :content_type
+    :content_type,
+
+    # 2 or 3
+    :ssl_version
 
   white_list :url, :content_type
 
@@ -16,6 +19,10 @@ class Service::Web < Service
 
   def receive_event
     http.headers['X-GitHub-Event'] = event.to_s
+
+    if data['ssl_version'].to_i == 3
+      http.ssl[:sslversion] = :sslv3
+    end
 
     deliver data['url'], :content_type => data['content_type'],
       :insecure_ssl => data['insecure_ssl'].to_i == 1, :secret => data['secret']
