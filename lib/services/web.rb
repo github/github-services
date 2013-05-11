@@ -21,7 +21,7 @@ class Service::Web < Service
     http.headers['X-GitHub-Event'] = event.to_s
 
     if data['ssl_version'].to_i == 3
-      http.ssl[:sslversion] = :sslv3
+      http.ssl[:version] = :sslv3
     end
 
     deliver data['url'], :content_type => data['content_type'],
