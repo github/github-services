@@ -13,7 +13,7 @@ class Service::Web < Service
     # 2 or 3
     :ssl_version
 
-  white_list :url, :content_type
+  white_list :url, :content_type, :ssl_version
 
   boolean :insecure_ssl # :(
 
