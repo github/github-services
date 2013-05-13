@@ -1,6 +1,6 @@
 class Service::Apiary < Service
   string :branch, :domain, :apiary_address
-  white_list :branch, :domain, :apiary_address
+  white_list :branch
 
   url "http://apiary.io"
   logo_url "http://static.apiary.io/css/design2/apiary-io-symbol-1x.png"
