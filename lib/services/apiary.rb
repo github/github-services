@@ -1,6 +1,6 @@
 class Service::Apiary < Service
   string :branch, :domain, :apiary_address
-  white_list :branch, :domain, :apiary_address
+  white_list :branch
 
   url "http://apiary.io"
   logo_url "http://static.apiary.io/css/design2/apiary-io-symbol-1x.png"
@@ -25,7 +25,7 @@ class Service::Apiary < Service
   def domain
     @domain ||= (not data['domain'].to_s.strip.empty?) ? data['domain'].to_s.strip : nil
   end
-
+  
   def apiary_address
     @apiary_address ||= (not data['apiary_address'].to_s.strip.empty?) ? data['apiary_address'].to_s.strip : APIARY_URL
   end
