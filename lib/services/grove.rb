@@ -7,6 +7,6 @@ class Service::Grove < Service
     raise_config_error "Missing channel token" if token.empty?
 
     res = http_post "https://grove.io/api/services/github/#{token}", 
-      :payload => JSON.generate(payload)
+      :payload => generate_json(payload)
   end
 end

@@ -30,7 +30,6 @@ class Service::Asana < Service
         check_commit( commit, push_msg )
       end
     end
-        
   end
 
   def check_commit(commit, push_msg)
@@ -39,6 +38,7 @@ class Service::Asana < Service
     task_list = []
     message.split("\n").each do |line|
       task_list.concat( line.scan(/#(\d+)/) )
+      task_list.concat( line.scan(/https:\/\/app\.asana\.com\/\d+\/\d+\/(\d+)/) )
     end
 
     # post commit to every taskid found

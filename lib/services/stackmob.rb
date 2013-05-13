@@ -11,7 +11,7 @@ class Service::Stackmob < Service
     http.url_prefix = BASE_URL
     http.headers['Content-Type'] = 'application/json'
 
-    http_post token, payload.to_json
+    http_post token, generate_json(payload)
   end
 end
 

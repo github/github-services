@@ -14,6 +14,6 @@ class Service::JenkinsGitHub < Service
     http.ssl[:verify] = false # :(
     http.url_prefix = url
     http_post url,
-      :payload => JSON.generate(payload)
+      :payload => generate_json(payload)
   end
 end

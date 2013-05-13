@@ -4,7 +4,7 @@ class Service::CodeClimate < Service
   def receive_push
     http.ssl[:verify] = false
     http.basic_auth "github", token
-    http_post "https://codeclimate.com/github_pushes", :payload => payload.to_json
+    http_post "https://codeclimate.com/github_pushes", :payload => generate_json(payload)
   end
 
   def token

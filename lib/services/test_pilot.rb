@@ -4,7 +4,7 @@ class Service::TestPilot < Service
   def receive_push
     http.ssl[:verify] = false
     http.params.merge!(authentication_param)
-    http_post test_pilot_url, :payload => payload.to_json
+    http_post test_pilot_url, :payload => generate_json(payload)
   end
 
   def test_pilot_url

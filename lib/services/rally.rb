@@ -137,7 +137,7 @@ class Service::Rally < Service
   def rallyCreate(entity, data)
       create_url = "%s/create.js?workspace=%s" % [entity, @wksp_ref]
       payload = {"#{entity}" => data}
-      res = @http.post(create_url, payload.to_json)
+      res = @http.post(create_url, generate_json(payload))
       raise_config_error("Unable to create the Rally #{entity} for #{data['Name']}") unless res.success?
       cr = JSON.parse(res.body)['CreateResult']
       item = cr['Object']

@@ -9,7 +9,7 @@ class Service::Tenxer < Service
 
   def receive_event
     url = "https://www.tenxer.com/updater/githubpubsubhubbub/"
-    res = http_post url, {'payload' => JSON.generate(payload)},
+    res = http_post url, {'payload' => generate_json(payload)},
       {'X_GITHUB_EVENT' => event.to_s}
     if res.status != 200
       raise Error, "Error sending event to tenXer. Status: " +

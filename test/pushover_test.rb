@@ -14,7 +14,7 @@ class PushoverTest < Service::TestCase
 
     @stubs.post "/1/messages.json" do |env|
       assert_equal "api.pushover.net", env[:url].host
-      data = Rack::Utils.parse_query(env[:body])
+      data = Faraday::Utils.parse_query(env[:body])
       assert_equal "a", data["user"]
       assert_equal "hi", data["device"]
       [200, {}, '']

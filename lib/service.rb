@@ -108,6 +108,7 @@ class Service
     end
 
     def load_services
+      require File.expand_path("../services/http_post", __FILE__)
       path = File.expand_path("../services/**/*.rb", __FILE__)
       Dir[path].each { |lib| require(lib) }
     end
@@ -444,6 +445,9 @@ class Service
   # Returns a Symbol.
   attr_reader :event
 
+  # Optional String unique identifier for this exact event.
+  attr_accessor :delivery_guid
+
   # Sets the Faraday::Connection for this Service instance.
   #
   # http - New Faraday::Connection instance.
@@ -574,7 +578,7 @@ class Service
   #     req.basic_auth("username", "password")
   #     req.params[:page] = 1 # http://github.com/create?page=1
   #     req.headers['Content-Type'] = 'application/json'
-  #     req.body = {:foo => :bar}.to_json
+  #     req.body = generate_json(:foo => :bar)
   #   end
   #   # => <Faraday::Response>
   #
@@ -606,7 +610,7 @@ class Service
   #     req.basic_auth("username", "password")
   #     req.params[:page] = 1 # http://github.com/create?page=1
   #     req.headers['Content-Type'] = 'application/json'
-  #     req.body = {:foo => :bar}.to_json
+  #     req.body = generate_json(:foo => :bar)
   #   end
   #   # => <Faraday::Response>
   #
@@ -633,7 +637,9 @@ class Service
   # Returns a Faraday::Connection instance.
   def http(options = {})
     @http ||= begin
-      self.class.default_http_options.each do |key, sub_options|
+      config = self.class.default_http_options
+      config.each do |key, sub_options|
+        next if key == :adapter
         sub_hash = options[key] ||= {}
         sub_options.each do |sub_key, sub_value|
           sub_hash[sub_key] ||= sub_value
@@ -642,15 +648,16 @@ class Service
       options[:ssl][:ca_file] ||= ca_file
 
       Faraday.new(options) do |b|
-        b.use HttpReporter, self
-        b.request :url_encoded
-        b.adapter *(options[:adapter] || :net_http)
+        b.request(:url_encoded)
+        b.adapter(*Array(options[:adapter] || config[:adapter]))
+        b.use(HttpReporter, self)
       end
     end
   end
 
   def self.default_http_options
     @@default_http_options ||= {
+      :adapter => :net_http,
       :request => {:timeout => 10, :open_timeout => 5},
       :ssl => {:verify_depth => 5},
       :headers => {}
@@ -682,6 +689,10 @@ class Service
     raise err
   end
 
+  def generate_json(body)
+    JSON.generate(body)
+  end
+
   # Public: Checks for an SSL error, and re-raises a Services configuration error.
   #
   # Returns nothing.
@@ -697,7 +708,7 @@ class Service
   # Returns a String.
   def log_message(status = 0)
     "[%s] %03d %s/%s %s" % [Time.now.utc.to_s(:db), status,
-      self.class.hook_name, @event, JSON.generate(log_data)]
+      self.class.hook_name, @event, generate_json(log_data)]
   end
 
   # Public: Builds a sanitized Hash of the Data hash without passwords.
@@ -775,6 +786,21 @@ class Service
     @helper ? @helper.sample_payload : {}
   end
 
+  def reportable_http_env(env, time)
+    {
+      :request => {
+        :url => env[:url].to_s,
+        :headers => env[:request_headers]
+      }, :response => {
+        :status => env[:status],
+        :headers => env[:response_headers],
+        :body => env[:body].to_s,
+        :duration => "%.02fs" % [Time.now - time]
+      },
+      :adapter => env[:adapter]
+    }
+  end
+
   # Raised when an unexpected error occurs during service hook execution.
   class Error < StandardError
     attr_reader :original_exception
@@ -804,18 +830,7 @@ class Service
     end
 
     def on_complete(env)
-      ms = ((Time.now - @time) * 1000).round
-      @service.receive_http(
-        :request => {
-          :url => env[:url].to_s,
-          :headers => env[:request_headers]
-        }, :response => {
-          :status => env[:status],
-          :headers => env[:response_headers],
-          :body => env[:body].to_s,
-          :duration => "%.02fs" % [Time.now - @time]
-        }
-      )
+      @service.receive_http(@service.reportable_http_env(env, @time))
     end
   end
 end

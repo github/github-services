@@ -19,7 +19,7 @@ class Service::Lingohub < Service
     end
 
     res = http_post "http://lingohub.com/github_callback?auth_token=#{project_token}",
-                    :payload => JSON.generate(payload)
+                    :payload => generate_json(payload)
 
     if res.status < 200 || res.status > 299
       raise_config_error res.body

@@ -13,6 +13,8 @@ class HumbugTest < Service::TestCase
       assert_match "email=e", env[:body]
       assert_match "api-key=a", env[:body]
       assert_match "event=" + event, env[:body]
+      assert_match "stream=commits", env[:body]
+      assert_match "branches=b1%2Cb2", env[:body]
       return [200, {}, ''] }
   end
 
@@ -20,7 +22,9 @@ class HumbugTest < Service::TestCase
     checker = post_checker "push"
     @stubs.post "/api/v1/external/github", &checker
 
-    svc = service(:push, {'email' => 'e', 'api_key' => 'a'}, {'test' => 'payload'})
+    svc = service(:push,
+        {'email' => 'e', 'api_key' => 'a', 'stream' => 'commits', 'branches' => 'b1,b2'},
+        {'test' => 'payload'})
     svc.receive_event
   end
 
@@ -28,7 +32,9 @@ class HumbugTest < Service::TestCase
     checker = post_checker "pull_request"
     @stubs.post "/api/v1/external/github", &checker
 
-    svc = service(:pull_request, {'email' => 'e', 'api_key' => 'a'}, {'test' => 'payload'})
+    svc = service(:pull_request,
+        {'email' => 'e', 'api_key' => 'a', 'stream' => 'commits', 'branches' => 'b1,b2'},
+        {'test' => 'payload'})
     svc.receive_event
   end
 

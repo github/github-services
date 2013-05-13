@@ -7,7 +7,7 @@ class Service::ZohoProjects < Service
       :pId       => data['project_id'],
       :authtoken => data['token'],
       :scope     => "projectsapi",
-      :payload   => JSON.generate(payload)
+      :payload   => generate_json(payload)
     if res.status != 200
       raise_config_error
     end

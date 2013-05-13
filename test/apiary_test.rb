@@ -1,7 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
 class ApiaryTest < Service::TestCase
-
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
     options = {
@@ -13,7 +12,7 @@ class ApiaryTest < Service::TestCase
 
   def test_push
     @stubs.post "/github/service-hook" do |env|
-      body = Rack::Utils.parse_query(env[:body])
+      body = Faraday::Utils.parse_query(env[:body])
       assert_equal 'api.apiary.io', env[:url].host
       assert_equal @svc.payload, JSON.parse(body['payload'])
       assert_equal @svc.branch, body['branch']

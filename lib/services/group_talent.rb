@@ -3,7 +3,7 @@ class Service::GroupTalent < Service
 
   def receive_push
     res = http_post "https://grouptalent.com/github/receive_push/#{data[:token]}",
-      {'payload' => payload.to_json}
+      {'payload' => generate_json(payload)}
 
     if res.status != 200
       raise_config_error

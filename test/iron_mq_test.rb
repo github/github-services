@@ -7,7 +7,7 @@ class IronMQTest < Service::TestCase
 
   def test_push
     @stubs.post "/v1/webhooks/github" do |env|
-      form = Rack::Utils.parse_query(env[:body])
+      form = Faraday::Utils.parse_query(env[:body])
       p form
       assert_equal payload, JSON.parse(form['payload'])
       assert_equal 't', form['token']

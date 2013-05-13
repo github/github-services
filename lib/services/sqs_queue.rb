@@ -20,7 +20,7 @@ class Service::SqsQueue < Service
     end
 
     # Encode payload to JSON
-    payload_json_data = JSON.generate(payload)
+    payload_json_data = generate_json(payload)
 
     # Send payload to SQS queue
     notify_sqs( access_key(), secret_key(), queue_name(), payload_json_data )

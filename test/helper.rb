@@ -21,6 +21,7 @@ class Service::TestCase < Test::Unit::TestCase
 
     service = klass.new(event, data, payload)
     service.http :adapter => [:test, @stubs]
+    service.delivery_guid = "guid-#{rand}"
     service
   end
 
@@ -43,6 +44,21 @@ class Service::TestCase < Test::Unit::TestCase
 
   def basic_payload
     Service::HelpersWithMeta.sample_payload
+  end
+end
+
+module Service::HttpTestMethods
+  def setup
+    @stubs = Faraday::Adapter::Test::Stubs.new
+  end
+
+
+  def service(event_or_data, data, payload = nil)
+    super(service_class, event_or_data, data, payload)
+  end
+
+  def service_class
+    raise NotImplementedError
   end
 end
 

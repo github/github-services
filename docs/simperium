@@ -1,0 +1,25 @@
+This service posts an event object for Github events to a Simperium app.
+A Simperium object is created for each hook event in a bucket you choose.
+
+Supported events are currently:
+'push', 'issues', 'issue_comment', 'commit_comment', 'pull_request',
+'pull_request_review_comment', 'watch', 'fork', 'fork_apply',
+'member', 'public', 'team_add', 'status'
+
+Simperium IDs:
+Each object ID will be a guid, eg. 'guid-0.3939192'
+
+Data:
+'event' - The github event type, eg. 'push' for commits
+'payload' - The data for the event, varies by event type.
+
+More details on Github events: http://developer.github.com/v3/repos/hooks/
+
+Install Notes
+------------
+
+App ID: Your Simperium app id created on https://simperium.com/dashboard
+Token: You'll need to generate an access token for a specific user (not an API key)
+Bucket: Name of the bucket you want events posted to
+
+See https://simperium.com/docs/reference/http/#auth for more details on Simperium authentication.

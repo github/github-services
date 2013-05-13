@@ -9,11 +9,11 @@ class Service::Apiary < Service
     :email => 'support@apiary.io'
 
   APIARY_URL = "http://api.apiary.io/github/service-hook"
-  
+
   def make_apiary_call
     return true if not domain
     http_post apiary_address,
-      :payload => JSON.generate(payload),
+      :payload => generate_json(payload),
       :branch => branch,
       :vanity => domain
   end

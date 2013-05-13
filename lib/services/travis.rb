@@ -9,7 +9,7 @@ class Service::Travis < Service
     http.ssl[:verify] = false
     http.basic_auth user, token
     http.headers['X-GitHub-Event'] = event.to_s
-    http_post travis_url, :payload => payload.to_json
+    http_post travis_url, :payload => generate_json(payload)
   end
 
   def travis_url
@@ -18,7 +18,7 @@ class Service::Travis < Service
 
   def user
     if data['user'].to_s == ''
-      payload['repository']['owner']['name']
+      owner_payload['login'] || owner_payload['name']
     else
       data['user']
     end.strip
@@ -37,6 +37,10 @@ class Service::Travis < Service
   end
 
   protected
+
+  def owner_payload
+    payload['repository']['owner']
+  end
 
   def full_domain
     if data['domain'].present?

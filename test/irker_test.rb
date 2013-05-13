@@ -60,8 +60,10 @@ class IrkerTest < Service::TestCase
     assert_equal @server.messages.size, 0
 
     svc_long.receive_push
-    assert_equal @server.messages.size, 4
-    @server.messages.shift 4
+    assert_equal @server.messages.size, 1
+    assert msg = @server.messages.shift
+    to_irker = JSON.parse(msg)
+    assert_equal to_irker["privmsg"].scan("\n").size, 3
   end
 
   def test_duplicates

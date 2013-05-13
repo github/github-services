@@ -41,7 +41,7 @@ class Service::Zendesk < Service
     http.headers['X-GitHub-Event'] = event.to_s
 
     url = service_url(data['subdomain'], ticket_id)
-    res = http_post(url, { :payload => payload }.to_json)
+    res = http_post(url, generate_json(:payload => payload))
 
     if res.status != 201
       raise_config_error("Unexpected response code:#{res.status}")

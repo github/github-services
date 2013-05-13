@@ -8,7 +8,7 @@ class StatusNetTest < Service::TestCase
   def test_push
     @stubs.post "/api/statuses/update.xml" do |env|
       assert_equal 's.com', env[:url].host
-      data = Rack::Utils.parse_nested_query(env[:body])
+      data = Faraday::Utils.parse_nested_query(env[:body])
       assert_equal 'github', data['source']
       [200, {}, '']
     end

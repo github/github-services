@@ -32,6 +32,8 @@ class Service::Lighthouse < Service
         </changeset>
       XML
 
+      @lighthouse_body = changeset_xml
+
       account = "http://#{data['subdomain']}.lighthouseapp.com"
 
       begin
@@ -44,5 +46,12 @@ class Service::Lighthouse < Service
         raise_config_error "Invalid subdomain: #{data['subdomain']}"
       end
     end
+  end
+
+  def reportable_http_env(env, time)
+    hash = super(env, time)
+    hash[:request][:body] = @lighthouse_body
+    @lighthouse_body = nil
+    hash
   end
 end

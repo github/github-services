@@ -15,7 +15,7 @@ class Service::DeployHq < Service
 
     http.url_prefix = data['deploy_hook_url']
     http.headers['content-type'] = 'application/x-www-form-urlencoded'
-    body = Faraday::Utils.build_nested_query(http.params.merge(:payload => JSON.generate(payload), :notify => email_pusher))
+    body = Faraday::Utils.build_nested_query(http.params.merge(:payload => generate_json(payload), :notify => email_pusher))
 
     http_post data['deploy_hook_url'], body
   end

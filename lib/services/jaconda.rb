@@ -13,7 +13,7 @@ class Service::Jaconda < Service
     http.basic_auth data['room_token'], 'X'
 
     res = http_post "https://#{data['subdomain']}.jaconda.im/api/v2/rooms/#{data['room_id']}/notify/github.json",
-      :payload => JSON.generate(payload),
+      :payload => generate_json(payload),
       :digest => data['digest'],
       :event => event
 

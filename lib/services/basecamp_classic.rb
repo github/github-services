@@ -4,7 +4,6 @@ class Service::BasecampClassic < Service
   boolean     :ssl
   white_list  :url, :project, :category, :username
 
-
   self.hook_name = 'basecamp'
 
   def receive_push
