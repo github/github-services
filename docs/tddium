@@ -1,0 +1,16 @@
+Tddium Continuous Integration
+
+
+Install Notes
+-------------
+
+Tddium will automatically enable this hook for every repository configured for a GitHub-connected account.
+
+To configure by hand (no OAuth needed):
+
+1. Go to the Tddium repo detail page for this repo
+2. Enter the Repo token
+
+Whenever you push, delete a branch, open or update a pull request, Tddium will do the right thing, automatically.
+
+
