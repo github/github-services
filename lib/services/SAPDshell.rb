@@ -35,7 +35,7 @@ class Service::SAPDshell < Service
     # http.headers['Content-Type'] = 'application/json'
     
     # Uses this URL as a prefix for every request.
-    http.url_prefix = "https://"
+    http.url_prefix = "http://"
     
     
     repository = payload['repository']['url'].to_s
