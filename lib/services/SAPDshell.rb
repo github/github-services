@@ -42,7 +42,7 @@ class Service::SAPDshell < Service
     
     call_url =  "{dshell_url}/?repo={repository}"
       
-    res = http_post call_url 
+    res = http_post call_url, generate_json(payload)
 
     if res.status < 200 || res.status > 299
       raise_config_error "Failed with #{res.status}"
