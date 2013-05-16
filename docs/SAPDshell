@@ -9,7 +9,7 @@ Integrating with GitHub will allow you to associate Git commits to specific HANA
 Install Notes
 -------------
 
-1. **DShell URL** - This is the DShell instance you are using
+1. **DShell URL** - This is the URL of the DShell instance and port you are using 
 2. **User** - This is the user on your HANA instance.
 3. **Password** - This is your Passowrd on the HANA instance.
 
