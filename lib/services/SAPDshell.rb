@@ -1,7 +1,6 @@
 class Service::SAPDshell < Service
   string   :dshell_url, :user_id
   password :password
-  white_list :space_id, :user_id
 
 
   url "http://dshell.saphana.com"
