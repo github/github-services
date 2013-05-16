@@ -23,16 +23,16 @@ class Service::SAPDshell < Service
       raise_config_error "SAP Dshell URL not set"
     end
     if data['user_id'].to_s.empty?
-      raise_config_error "user_id not set"
+      raise_config_error "User id not set"
     end
     if data['password'].to_s.empty?
-      raise_config_error "password not set"
+      raise_config_error "Password not set"
     end
     
     # Sets this basic auth info for every request.
     http.basic_auth(data['user_id'], data['password'])
     
-    http.headers['Content-Type'] = 'application/json'
+    # http.headers['Content-Type'] = 'application/json'
     
     # Uses this URL as a prefix for every request.
     http.url_prefix = "https://"
