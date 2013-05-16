@@ -19,6 +19,7 @@ class Service::Web < Service
 
   def receive_event
     http.headers['X-GitHub-Event'] = event.to_s
+    http.headers['X-GitHub-Delivery'] = delivery_guid.to_s
 
     if data['ssl_version'].to_i == 3
       http.ssl[:version] = :sslv3
@@ -42,4 +43,3 @@ class Service::Web < Service
       http.params.merge(:payload => generate_json(original_body)))
   end
 end
-
