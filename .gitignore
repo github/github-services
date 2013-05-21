@@ -2,6 +2,7 @@
 .idea
 deploy.rb
 *~
+*.sw[po]
 config/secrets.yml
 config/services.json
 /bin
