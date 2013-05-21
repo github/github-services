@@ -40,7 +40,7 @@ class Service::SAPDshell < Service
     repository = payload['repository']['url'].to_s
     dshell_url = data['dshell_url']
     
-    call_url =  "{dshell_url}/?repo={repository}"
+    call_url =  "#{dshell_url}/?repo=#{repository}"
       
     res = http_post call_url, generate_json(payload)
 
