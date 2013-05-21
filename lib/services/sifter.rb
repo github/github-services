@@ -13,8 +13,11 @@ class Service::Sifter < Service
   end
 
   def hook_url
-    host = ENV.fetch('SIFTER_HOST', 'sifterapp.com')
+    # For development/troubleshooting, the host and protocol can be set
+    # with the SIFTER_HOST variable, e.g. SIFTER_HOST=http://sifter.dev
+    host  = ENV.fetch('SIFTER_HOST', 'sifterapp.com')
     proto = ENV.has_key?('SIFTER_HOST') ? 'http' : 'https'
+
     "#{proto}://#{subdomain}.#{host}/api/github"
   end
 
