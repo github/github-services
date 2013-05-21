@@ -1,0 +1,10 @@
+LeChat
+=====
+
+LeChat is a team chat service with an emphasis on search, user interface, and reliability.
+
+After integration with Github everyone in room specified by webhook url will be notified about pushes, issues and comments.
+
+Install Notes
+-------------
+1. **Webhook Url** - Webhook url that you get from Integrations panel in room's settings at httls://www.lechat.im
