@@ -2,18 +2,24 @@ class Service::JenkinsGitHub < Service
   self.title = 'Jenkins (GitHub plugin)'
   self.hook_name = 'jenkins' # legacy hook name
 
-  string :jenkins_hook_url
-  white_list :jenkins_hook_url
+  string :jenkins_hook_urls
+  white_list :jenkins_hook_urls
 
   def receive_push
-    if data['jenkins_hook_url'].present?
-      url = data['jenkins_hook_url']
+    if data['jenkins_hook_urls'].present?
+      hook_str = data['jenkins_hook_urls']
     else
       raise_config_error "Jenkins Hook Url not set"
     end
+
+    urls = hook_str.rstrip().split()
+    urls.each { |url| post_payload(url) }
+  end
+
+  def post_payload(url)
     http.ssl[:verify] = false # :(
     http.url_prefix = url
     http_post url,
-      :payload => generate_json(payload)
+      :payload => generate_json(payload)    
   end
 end
