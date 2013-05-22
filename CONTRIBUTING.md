@@ -8,12 +8,18 @@ GitHub will accept service hooks for the following types of services:
 In order to provide quality service and support for our users, we require the
 following:
 
-* Implement endpoints that take the full, untouched payload.
-Good example: [CodeClimate](https://github.com/github/github-services/blob/master/services/codeclimate.rb).
-Bad Example: [Campfire](https://github.com/github/github-services/blob/master/services/campfire.rb).
+* Implement endpoints that take the new payload, completely unmodified.
+  * Good example: [Simperium](https://github.com/github/github-services/blob/master/services/simperium.rb)
+    has minimal logic (just config parameters, an HTTP header, and a custom url).
+  * Bad example: [CodeClimate](https://github.com/github/github-services/blob/master/services/codeclimate.rb)
+    uses the old payload format.
+  * Bad Example: [Campfire](https://github.com/github/github-services/blob/master/services/campfire.rb)
+    modifies the payload to make multiple calls to the Campfire service.
 * Thorough documentation about what the hook does, and what the options do.
 * Tested code that works.  If we have to make changes to the Services infrastructure,
 it helps a lot to have passing tests so we know we're not breaking things.
+
+Any new hooks that don't meet the above criteria will be rejected.
 
 We'd also like the following information to help provide quality service and
 support to our users:
@@ -59,4 +65,3 @@ You can annotate Supporters and Maintainers by the following methods:
 * `:web` - A URL to a contact form.
 * `:email` - An email address.
 * `:twitter` - A Twitter handle.
-
