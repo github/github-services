@@ -68,7 +68,8 @@ class Service::YouTrack < Service
       xml_body.root.each_element do |user_ref|
         res = http_get "rest/admin/user/#{user_ref.attributes['login']}"
         verify_response(res)
-        if REXML::Document.new(res.body).root.attributes["email"].upcase == email.upcase
+        attributes = REXML::Document.new(res.body).root.attributes
+        if attributes['email'].upcase == email.upcase || (attributes['jabber'] ? attributes['jabber'].upcase == email.upcase : false)
           return if !found_user.nil?
           found_user = user_ref.attributes["login"]
         end
