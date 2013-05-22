@@ -2,12 +2,12 @@ class Service::JenkinsGitHub < Service
   self.title = 'Jenkins (GitHub plugin)'
   self.hook_name = 'jenkins' # legacy hook name
 
-  string :jenkins_hook_urls
-  white_list :jenkins_hook_urls
+  string :jenkins_hook_url
+  white_list :jenkins_hook_url
 
   def receive_push
-    if data['jenkins_hook_urls'].present?
-      hook_str = data['jenkins_hook_urls']
+    if data['jenkins_hook_url'].present?
+      hook_str = data['jenkins_hook_url']
     else
       raise_config_error "Jenkins Hook Url not set"
     end

@@ -16,13 +16,13 @@ class JenkinsGitHubTest < Service::TestCase
     end
 
     svc = service :push,
-      {'jenkins_hook_urls' => 'http://monkey:secret@jenkins.example.com/github-webhook/'}, payload
+      {'jenkins_hook_url' => 'http://monkey:secret@jenkins.example.com/github-webhook/'}, payload
     svc.receive_push
   end
 
   def test_push_with_multiple_endpoints
     svc = service :push,
-      {'jenkins_hook_urls' => 
+      {'jenkins_hook_url' => 
       'http://monkey:secret@jenkins.example1.com/github-webhook/ http://monkey:secret@jenkins.example2.com/github-webhook/'}, payload
 
     (1..2).each do |endpoint|
@@ -41,7 +41,7 @@ class JenkinsGitHubTest < Service::TestCase
   def test_no_jenkins_hook_url
     assert_raises Service::ConfigurationError do
       svc = service :push,
-        {'jenkins_hook_urls' => ''}, payload
+        {'jenkins_hook_url' => ''}, payload
       svc.receive_push
     end
   end
