@@ -31,7 +31,7 @@ class Service::SAPDshell < Service
     # Sets this basic auth info for every request.
     http.basic_auth(data['user_id'], data['password'])
     
-    # http.headers['Content-Type'] = 'application/json'
+    http.headers['Content-Type'] = 'application/json'
     
     # Uses this URL as a prefix for every request.
     http.url_prefix = "http://"
