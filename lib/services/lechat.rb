@@ -1,4 +1,4 @@
-class Service::LeChat < Service
+class Service::LeChat < Service::HttpPost
   string :webhook_url
 
   # include 'webhook_url' in the debug logs
@@ -13,17 +13,16 @@ class Service::LeChat < Service
   supported_by :email => 'support@lechat.im'
 
   def receive_event
-    if data['webhook_url'].to_s.empty?
-      raise_config_error "webhook_url url is missing"
-    end
+    webhook_url = required_config_value('webhook_url')
 
-    http.headers['content-type'] = 'application/x-www-form-urlencoded'
-    res = http_post data['webhook_url'],
-      "payload" => generate_json(payload),
-      "event" => event.to_s
+    res = deliver webhook_url, :content_type => 'form'
 
     if res.status < 200 || res.status > 299
-      raise_config_error("Unexpected response code:#{res.status}")
+      raise_missing_error "Unexpected response code:#{res.status}"
     end
+  end
+
+  def original_body
+    {:payload => generate_json(payload), :event => event.to_s}
   end
 end

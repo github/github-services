@@ -84,6 +84,11 @@ class Service
       encode_body_as_json
     end
 
+    def encode_body_as_form
+      http.headers['content-type'] = 'application/x-www-form-urlencoded'
+      original_body
+    end
+
     def encode_body_as_json
       http.headers['content-type'] = 'application/json'
       generate_json(original_body)
