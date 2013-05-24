@@ -1,23 +1,30 @@
 require File.expand_path('../helper', __FILE__)
 
 class DockerTest < Service::TestCase
-  def setup
-    @stubs = Faraday::Adapter::Test::Stubs.new
-  end
+  include Service::HttpTestMethods
 
   def test_push
+    data = {}
+
+    payload = {'commits'=>[{'id'=>'test'}]}
+    svc = service(data, payload)
+
     @stubs.post "/hooks/github" do |env|
-      assert_equal 'index.docker.io', env[:url].host
-      data = Faraday::Utils.parse_query(env[:body])
-      assert_equal 1, JSON.parse(data['payload'])['a']
+      body = JSON.parse(env[:body])
+
+      assert_equal env[:url].host, "index.docker.io"
+      assert_equal 'test', body['payload']['commits'][0]['id']
+      assert_match 'guid-', body['guid']
+      assert_equal data, body['config']
+      assert_equal 'push', body['event']
       [200, {}, '']
     end
 
-    svc = service({}, :a => 1)
-    svc.receive_push
+    svc.receive_event
+    @stubs.verify_stubbed_calls
   end
 
-  def service(*args)
-    super Service::Docker, *args
+  def service_class
+    Service::Docker
   end
 end

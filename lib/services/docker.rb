@@ -1,4 +1,4 @@
-class Service::Docker < Service
+class Service::Docker < Service::HttpPost
 
   url "http://www.Docker.io"
 
@@ -14,8 +14,8 @@ class Service::Docker < Service
   supported_by :github => 'kencochrane',
     :twitter => '@getdocker'
 
-  def receive_push
-    http_post "https://index.docker.io/hooks/github", :payload => generate_json(payload)
+  def receive_event
+    deliver "https://index.docker.io/hooks/github"
   end
 end
 
