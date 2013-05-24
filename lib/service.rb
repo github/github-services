@@ -129,7 +129,7 @@ class Service
       if events.empty?
         @default_events ||= [:push]
       else
-        @default_events = events
+        @default_events = events.flatten
       end
     end
 
@@ -842,4 +842,3 @@ begin
 rescue LoadError
   Service::Timeout = Timeout
 end
-

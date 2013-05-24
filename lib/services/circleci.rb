@@ -18,7 +18,6 @@ class Service::Circleci < Service
   private
 
   def circleci_url
-    "https://circleci.com/hooks/github" 
+    "https://circleci.com/hooks/github"
   end
 end
-
