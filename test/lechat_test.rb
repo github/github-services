@@ -17,11 +17,11 @@ class LechatTest < Service::TestCase
     @stubs.post path do |env|
 
       assert_equal host, env[:url].host
-      assert_equal 'application/x-www-form-urlencoded', env[:request_headers]['Content-type']
+      assert_equal 'application/json', env[:request_headers]['Content-type']
 
-      data = Faraday::Utils.parse_nested_query(env[:body])
+      data = JSON.parse(env[:body])
       assert_equal "push", data['event']
-      assert_equal payload_example, JSON.parse(data['payload'])
+      assert_equal payload_example, data['payload']
       [200, {}, '']
     end
 

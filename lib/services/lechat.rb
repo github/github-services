@@ -15,14 +15,10 @@ class Service::LeChat < Service::HttpPost
   def receive_event
     webhook_url = required_config_value('webhook_url')
 
-    res = deliver webhook_url, :content_type => 'form'
+    res = deliver webhook_url
 
     if res.status < 200 || res.status > 299
       raise_missing_error "Unexpected response code:#{res.status}"
     end
-  end
-
-  def original_body
-    {:payload => generate_json(payload), :event => event.to_s}
   end
 end
