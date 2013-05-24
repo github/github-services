@@ -20,7 +20,7 @@ class Service::LeChat < Service
     http.headers['content-type'] = 'application/x-www-form-urlencoded'
     res = http_post data['webhook_url'],
       "payload" => generate_json(payload),
-      "event_type" => event
+      "event" => event.to_s
 
     if res.status < 200 || res.status > 299
       raise_config_error("Unexpected response code:#{res.status}")

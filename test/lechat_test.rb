@@ -20,7 +20,7 @@ class LechatTest < Service::TestCase
       assert_equal 'application/x-www-form-urlencoded', env[:request_headers]['Content-type']
 
       data = Faraday::Utils.parse_nested_query(env[:body])
-      assert_equal "push", data['event_type']
+      assert_equal "push", data['event']
       assert_equal payload_example, JSON.parse(data['payload'])
       [200, {}, '']
     end
