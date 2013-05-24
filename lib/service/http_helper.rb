@@ -21,15 +21,21 @@ class Service
         http_post url, body
       end
     end
-
-    def required_config_value(key)
-      value = data[key].to_s
+    
+    # Grabs a sanitized configuration value.
+    def config_value(key)
+      value = data[key.to_s].to_s
       value.strip!
-      if value.empty?
-        raise_config_error(key)
-      else
-        value
+      value
+    end
+
+    # Grabs a sanitized configuration value and ensures it is set.
+    def required_config_value(key)
+      if (value = config_value(key)).empty?
+        raise_config_error("#{key.inspect} is empty")
       end
+      
+      value
     end
 
     def wrap_http_errors
