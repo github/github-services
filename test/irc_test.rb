@@ -228,6 +228,20 @@ class IRCTest < Service::TestCase
     assert_nil msgs.shift
   end
 
+  def test_issue_comment
+    svc = service(:issue_comment, {'room' => 'r', 'nick' => 'n'}, issue_comment_payload)
+
+    svc.receive_issue_comment
+    msgs = svc.writable_irc.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match "USER n", msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+
   def test_default_port_with_ssl
     svc = service({'ssl' => '1'}, payload)
     assert_equal 9999, svc.port

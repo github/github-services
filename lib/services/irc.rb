@@ -29,6 +29,10 @@ class Service::IRC < Service
     send_messages "#{irc_issue_summary_message}  #{fmt_url url}"
   end
 
+  def receive_issue_comment
+    send_messages "#{irc_issue_comment_summary_message} #{fmt_url url}"
+  end
+
   def send_messages(messages)
     messages = Array(messages)
 
@@ -266,6 +270,14 @@ class Service::IRC < Service
 
   def irc_issue_summary_message
     "[#{fmt_repo repo.name}] #{fmt_name sender.login} #{action} issue \##{issue.number}: #{issue.title}"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def irc_issue_comment_summary_message
+    short  = comment.body.split("\r\n", 2).first.to_s
+    short += '...' if short != comment.body
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} comment on issue \##{issue.number}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
