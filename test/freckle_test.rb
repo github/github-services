@@ -7,7 +7,7 @@ class FreckleTest < Service::TestCase
 
   def test_posts_with_2_entries
     data = call_service :push
-    assert_equal 2, data['entries'].size
+    assert_equal 3, data['entries'].size
   end
 
   def test_includes_auth_token
@@ -15,18 +15,12 @@ class FreckleTest < Service::TestCase
     assert_equal '12345', data['token']
   end
 
-  def test_parses_minutes_from_commit_message
+  def test_sends_entire_commit_message
     data = call_service :push
-    assert_equal '15', data['entries'][0]['minutes']
-    assert_equal '2hrs', data['entries'][1]['minutes']
-  end
-
-  def test_strips_freckle_tags
-    data = call_service :push
-    assert_equal 'stub git call for Grit#heads test',
-      data['entries'][0]['description']
-    assert_equal 'clean up heads test',
-      data['entries'][1]['description']
+    assert_equal 'stub git call for Grit#heads test f:15 Case#1',
+      data['entries'][0]['message']
+    assert_equal 'clean up heads test f:2hrs',
+      data['entries'][1]['message']
   end
 
   def test_includes_project_name
@@ -68,7 +62,7 @@ class FreckleTest < Service::TestCase
   def call_service(event)
     res = nil
     svc  = service data, payload
-    @stubs.post '/api/entries/import' do |env|
+    @stubs.post '/api/github/commits' do |env|
       res = JSON.parse env[:body]
     end
     svc.send "receive_#{event}"
