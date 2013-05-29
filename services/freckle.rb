@@ -11,7 +11,7 @@ class Service::Freckle < Service
         :message => commit["message"].strip,
         :url => commit['url'],
         :project_name => project,
-        :user => commit['author']['email']
+        :author_email => commit['author']['email']
       }
     end
 

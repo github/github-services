@@ -32,7 +32,7 @@ class FreckleTest < Service::TestCase
   def test_includes_author_email_as_user
     data = call_service :push
     assert_equal 'tom@mojombo.com',
-      data['entries'][0]['user']
+      data['entries'][0]['author_email']
   end
 
   def test_includes_commit_url
