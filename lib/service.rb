@@ -682,7 +682,7 @@ class Service
 
       Faraday.new(options) do |b|
         b.request :url_encoded
-        b.adapter :net_http
+        b.adapter :typhoeus
       end
     end
   end
