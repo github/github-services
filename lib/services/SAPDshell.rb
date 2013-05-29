@@ -37,19 +37,19 @@ class Service::SAPDshell < Service
     http.url_prefix = "http://"
     
     
-    repository = payload['repository']['url'].to_s
-    dshell_url = data['dshell_url']
+    l_repository = payload['repository']['url'].to_s
+    l_dshell_url = data['dshell_url']
     
-    call_url =  "#{dshell_url}/?repo=#{repository}"
+    l_call_url =  "#{l_dshell_url}/?repo=#{l_repository}"
       
-    res = http_post call_url, generate_json(payload)
+    res = http_post l_call_url, generate_json(payload)
 
     if res.status < 200 || res.status > 299
       raise_config_error "Failed with #{res.status}"
     end
 
   rescue URI::InvalidURIError
-    raise_config_error "Invalid URL: #{call_url}"
+    raise_config_error "Invalid URL: #{l_call_url}"
     
     
 end
