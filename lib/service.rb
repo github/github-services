@@ -123,7 +123,7 @@ class Service
       @stats ||= begin
         if (hash = secrets['statsd']) && url = hash[env]
           uri   = Addressable::URI.parse(url)
-          stats = Statsd.new uri.host, uri.port 
+          stats = Statsd.new uri.host, uri.port
           stats.namespace = 'services'
           stats
         else
@@ -809,4 +809,3 @@ begin
 rescue LoadError
   Service::Timeout = Timeout
 end
-
