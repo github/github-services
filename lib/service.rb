@@ -1,5 +1,6 @@
 require 'addressable/uri'
 require 'faraday'
+require 'typhoeus/adapters/faraday'
 require 'ostruct'
 require File.expand_path("../service/structs", __FILE__)
 
@@ -123,7 +124,7 @@ class Service
       @stats ||= begin
         if (hash = secrets['statsd']) && url = hash[env]
           uri   = Addressable::URI.parse(url)
-          stats = Statsd.new uri.host, uri.port 
+          stats = Statsd.new uri.host, uri.port
           stats.namespace = 'services'
           stats
         else
@@ -682,7 +683,7 @@ class Service
 
       Faraday.new(options) do |b|
         b.request :url_encoded
-        b.adapter :net_http
+        b.adapter :typhoeus
       end
     end
   end
@@ -809,4 +810,3 @@ begin
 rescue LoadError
   Service::Timeout = Timeout
 end
-

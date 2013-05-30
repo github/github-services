@@ -17,7 +17,7 @@ gem "xmpp4r-simple-19",       "~> 1.0.0"
 #gem "yammer4r",              "0.1.5"
 gem "ruby-hmac",              "0.4.0"
 gem "thin",                   "1.2.2"
-gem "faraday",                "0.7.6"
+gem "faraday",                "0.8.7"
 gem "rake",                   "0.8.7"
 gem "SystemTimer", :platforms => :ruby_18
 gem "statsd-ruby",            "0.3.0.github.1"
@@ -29,3 +29,4 @@ gem "mqtt", 			      "0.0.8"
 gem "softlayer_messaging", "~> 1.0.2"
 gem "aws-sdk", "1.6.8"
 gem "unicorn", "~> 4.5.0"
+gem 'typhoeus',                     '~> 0.6.3'
