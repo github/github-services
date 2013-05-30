@@ -1,5 +1,6 @@
 require 'addressable/uri'
 require 'faraday'
+require 'typhoeus/adapters/faraday'
 require 'ostruct'
 require File.expand_path("../service/structs", __FILE__)
 
