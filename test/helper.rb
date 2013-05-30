@@ -42,6 +42,10 @@ class Service::TestCase < Test::Unit::TestCase
     Service::IssueHelpers.sample_payload
   end
 
+  def issue_comment_payload
+    Service::IssueCommentHelpers.sample_payload
+  end
+
   def basic_payload
     Service::HelpersWithMeta.sample_payload
   end
