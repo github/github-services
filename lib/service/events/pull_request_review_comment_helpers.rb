@@ -15,7 +15,7 @@ module Service::PullRequestReviewCommentHelpers
   end
 
   def summary_message
-    "[%s] %s %s comment pull request #%d: %s. %s" % [
+    "[%s] %s comment pull request #%d: %s. %s" % [
       repo.name,
       sender.login,
       issue.number,
