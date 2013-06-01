@@ -17,6 +17,10 @@ class Service::IRC < Service
     send_messages messages
   end
 
+  def receive_commit_comment
+    send_messages "#{irc_commit_comment_summary_message} #{fmt_url url}"
+  end
+
   def receive_pull_request
     return unless opened?
 
@@ -278,6 +282,15 @@ class Service::IRC < Service
     short  = comment.body.split("\r\n", 2).first.to_s
     short += '...' if short != comment.body
     "[#{fmt_repo repo.name}] #{fmt_name sender.login} comment on issue \##{issue.number}: #{short}"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def irc_commit_comment_summary_message
+    short  = comment.body.split("\r\n", 2).first.to_s
+    short += '...' if short != comment.body
+    sha1   = comment.commit_id
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} comment on commit #{fmt_hash sha1[0..6]}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
