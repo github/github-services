@@ -23,6 +23,10 @@ class Service::IRC < Service
     send_messages "#{irc_pull_request_summary_message}  #{fmt_url url}"
   end
 
+  def receive_pull_request_review_comment
+    send_messages "#{irc_pull_request_review_comment_summary_message}  #{fmt_url url}"
+  end
+
   def receive_issues
     return unless opened?
 
@@ -289,6 +293,14 @@ class Service::IRC < Service
 
     "[#{fmt_repo repo.name}] #{fmt_name sender.login} #{action} pull request " +
     "\##{pull.number}: #{pull.title} (#{fmt_branch base_ref}...#{fmt_branch head_ref})"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def irc_pull_request_review_comment_summary_message
+    short  = comment.body.split("\r\n", 2).first.to_s
+    short += '...' if short != comment.body
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} comment on pull request \##{issue.number}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
