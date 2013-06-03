@@ -7,7 +7,7 @@ class Service::Freckle < Service
 
     payload['commits'].each do |commit|
       entries << {
-        :date => commit["timestamp"],
+        :timestamp => commit["timestamp"],
         :message => commit["message"].strip,
         :url => commit['url'],
         :project_name => project,

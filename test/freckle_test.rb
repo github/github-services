@@ -41,10 +41,10 @@ class FreckleTest < Service::TestCase
       data['entries'][0]['url']
   end
 
-  def test_includes_timestamp_as_date
+  def test_includes_timestamp
     data = call_service :push
     assert_equal '2007-10-10T00:11:02-07:00',
-      data['entries'][0]['date']
+      data['entries'][0]['timestamp']
   end
 
   def data
