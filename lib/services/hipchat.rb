@@ -34,7 +34,7 @@ class Service::HipChat < Service
     else
       [data['room'].to_s]
     end
-    
+
     room_ids.each do |room_id|
       res = http_post "https://api.hipchat.com/v1/webhooks/github",
         :auth_token => data['auth_token'],
