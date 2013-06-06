@@ -45,10 +45,9 @@ A huge thanks goes out to [our many contributors](https://github.com/github/gith
 Running the server locally
 --------------------------
 
-1. [sudo] gem install hpricot
-2. git clone git://github.com/github/github-services.git
-3. cd github-services
-4. ruby github-services.rb
+1. git clone git://github.com/github/github-services.git
+2. cd github-services
+3. script/bootstrap
 
 * Bugs in the code should be filed under the Issues tab
 * Problems with the service hooks can be filed
