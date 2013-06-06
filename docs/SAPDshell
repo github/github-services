@@ -1,0 +1,19 @@
+SAPDshell
+=========
+
+The SAP HANA Deployment shell (Dshell) is a cloud-hosted service provided by SAP for developers to deploy HTML and JavaScript sources to SAP HANA development edition.
+
+Integrating with GitHub will allow you to associate Git commits to specific HANA database. 
+
+
+Install Notes
+-------------
+
+1. **DShell URL** - This is the URL of the DShell instance and port you are using 
+2. **User** - This is the user on your HANA instance.
+3. **Password** - This is your Passowrd on the HANA instance.
+
+Need Help?
+----------
+
+Check out our [step by step instructions](http://scn.sap.com/docs/DOC-41137).
