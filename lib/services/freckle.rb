@@ -1,12 +1,26 @@
-class Service::Freckle < Service
+class Service::Freckle < Service::HttpPost
   string :subdomain, :project, :token
   white_list :subdomain, :project
 
-  def receive_push
-    subdomain, token, project = data['subdomain'].strip, data['token'].strip, data['project'].strip
+  default_events :push
 
+  url "https://letsfreckle.com"
+
+  maintained_by :github => 'LockeCole117', :twitter => '@LockeCole117'
+
+  supported_by :web => 'https://letsfreckle.com',
+  	:email => 'support@letsfreckle.com',
+  	:twitter => '@letsfreckle'
+
+  def receive_event
+  	subdomain = required_config_value('subdomain').strip
+  	token = required_config_value('token').strip
+  	project = required_config_value('project').strip
+
+  	http.headers['X-FreckleToken'] 	 = token
+  	http.headers['X-FreckleProject'] = project
     http.headers['Content-Type'] = 'application/json'
-    http_post "http://#{data['subdomain']}.letsfreckle.com/api/github/commits",
-      {:payload => payload, :token => data['token'], :project => project}.to_json
+    url = "https://#{data['subdomain']}.letsfreckle.com/api/github/commits"
+    deliver url
   end
 end
