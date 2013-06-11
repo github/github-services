@@ -6,21 +6,23 @@ How the services work
 
 1. A post-receive background job is submitted when someone pushes their
    commits to GitHub
-2. If the repository the commits belong to has any "Service Hooks" setup, the
+2. If the repository the commits belong to has any "Service Hooks" set up, the
    job makes a request to `http://services-server/service_name/push` with the
    following data:
     - `params[:payload]` containing all of the commit data (the same data you get using the API)
     - `params[:data]` containing the service data (username, password, room, etc)
-3. Sinatra (github-services.rb) processes the request (twitters your data, says
+3. Sinatra (github-services.rb) processes the request (tweets your data, says
    something in campfire, posts it to lighthouse, etc)
 4. Rinse and repeat
 
 Steps to contributing
 ---------------------
 
+Start by reading the [Contributing Guidelines](https://github.com/github/github-services/blob/master/CONTRIBUTING.md).
+
 1. Fork the project
-2. Create a new file in /services/ called `service_name.rb`, using the [following
-   template](https://github.com/github/github-services/tree/master/services#readme):
+2. Create a new file in lib/services/ called `service_name.rb`, using the [following
+   template](https://github.com/github/github-services/tree/master/lib/services#readme):
 
     ```ruby
     class Service::ServiceName < Service
@@ -36,17 +38,16 @@ Steps to contributing
 6. Once it's accepted we'll add any new necessary data fields to the GitHub
    front-end so people can start using your addition.
 
-*Patches including tests are encouraged*
+*Patches including tests are required*
 
 A huge thanks goes out to [our many contributors](https://github.com/github/github-services/contributors)!
 
 Running the server locally
 --------------------------
 
-1. [sudo] gem install hpricot
-2. git clone git://github.com/github/github-services.git
-3. cd github-services
-4. ruby github-services.rb
+1. git clone git://github.com/github/github-services.git
+2. cd github-services
+3. script/bootstrap
 
 * Bugs in the code should be filed under the Issues tab
 * Problems with the service hooks can be filed
@@ -57,7 +58,9 @@ How to test your service
 
 You can test your service in a ruby irb console:
 
-1. Run `rake console` to start irb.
+0. Cache gems and install them to `vendor/gems` by doing:
+   `script/bootstrap`
+1. Start irb: `bundle exec irb -r config/load.rb -r lib/services/myservice.rb`
 2. Instantiate your Service:
 
     ```ruby
@@ -81,6 +84,12 @@ You can test your service in a ruby irb console:
     svc.receive_push
     ```
 
+You can also use this one-liner in the shell instead:
+
+  ```bash
+  bundle exec ruby -r config/load.rb -r lib/services/myservice.rb -e \
+    "Service::MyService.new(:push, {'foo' => 'bar'}).receive_push"
+  ```
 You can also test your hook with the Sinatra web service:
 
 1. Start the github-services Sinatra server with `ruby github-services.rb`. By
@@ -89,3 +98,19 @@ You can also test your hook with the Sinatra web service:
    just editing the "data" values but leaving the "payload" alone.)
 3. Send the docs/github_payload file to your service by calling:
    `./script/deliver_payload [service-name]`
+
+Other hook types
+----------------
+
+The default hook for a service is `push`. You may wish to have services respond
+to other event types, like `pull_request` or `issues`. The full list may be
+found in [service.rb](https://github.com/github/github-services/blob/master/lib/service.rb#L106).
+Unless your service specifies `default_events <list_of_types>`, only the `push`
+hook will be called, see
+[service.rb#default_events](https://github.com/github/github-services/blob/55a1fb10a44a80dec6a744d0828c769b00d97ee2/lib/service.rb#L122-L133).
+
+To make use of these additional types, your service will either need to define
+`receive_<type>` (like `receive_pull_request_review_comment`) or a generic
+`receive_event`.
+
+You can read more about the Hooks in the [API Documentation](http://developer.github.com/v3/repos/hooks/).

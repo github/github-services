@@ -1,0 +1,26 @@
+1. YouTrack Requirements
+
+  - Requires YouTrack version 2.0 or above. YouTrack Energy EAP builds are
+    supported as well.
+
+  - Your YouTrack server should be acessible from the internet.
+
+  - REST API must be enabled in your YouTrack server.
+
+  - Committer's email addresses in GitHub and YouTrack should be the same.
+    YouTrack looks for user account of a committer by an email address, which the
+    commiter has registered in GitHub. If YouTrack doesn't find a user account with the
+    same email as committer's email, a command specified in commit's comment won't be applied.
+
+2. Settings in GitHub
+
+  In the GitHub integration config, the following settings should be provided:
+
+  - YouTrack Server URL
+
+  - Administrator's account (e.g. 'root' user) credentials to access your YouTrack server.
+
+  - Name of a user group in YouTrack, in which YouTrack will search for committer's account.
+
+  - Branch name to track. If a branch is provided, only commits to that branch will trigger
+    YouTrack commands and commits to others will be ignored. If the branch is left empty, commits on any branch will trigger commands.

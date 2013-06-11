@@ -1,0 +1,36 @@
+Nodejitsu
+=========
+
+Nodejitsu – Intelligent, scalable Node.js clouds.
+
+Install Notes
+-------------
+
+Create an account at http://nodejitsu.com and login there.
+
+  1.  Enter your credentials
+      - Username
+      - Password (Authorization Token suggested, password also works)
+      - Branch, if specified will only deploy from the specified branch
+  3.  Check the "Active" checkbox and click "Update Settings".
+  4.  Click on the "Nodejitsu" service name and then click the "Test Hook" link.
+
+API Documentation
+-----------------
+
+Please refer to https://webhooks.nodejitsu.com for documentation.
+
+Travis CI Integration
+---------------------
+
+It is possible to integrate this endpoint with Travis-CI. Check out blog for more information.
+
+Running in your own Nodejitsu Cloud
+-----------------------------------
+
+If you own a copy of Nodejitsu Enterprise you can set the `endpoint` that you wish to use for your installation. Simply enter the host of your Nodejitsu Web Hooks API Copy (defaults to https://webhooks.nodejitsu.com).
+
+Support
+-------
+
+Join #nodejitsu on irc.freenode.net and get immediate assistance from our support team!

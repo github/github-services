@@ -1,27 +1,12 @@
-Basecamp
-========
+Basecamp Classic
+================
 
 Install Notes
 -------------
 
-  1. url should be your Basecamp url
-  2. username should be the username or API token of the user that you want to use to post messages into your Basecamp - you can setup a user just for this purpose
-  3. password should be the password of the user that you want to use to post the messages.  If username is an API token, set password to 'x'.
-  4. project should be the name of the project that you want to post the message into (not the id)
-  5. category should be the name of the category that you want to post the message using (not the id)
-  6. ssl should be enabled for accounts that need SSL.
-
-
-Developer Notes
----------------
-
-data
-  - url
-  - username
-  - password
-  - project
-  - category
-  - ssl
-
-payload
-  - refer to docs/github_payload
+  1. **Url** should be your Basecamp url
+  2. **Username** should be the username or API token of the user that you want to use to post messages into your Basecamp - you can setup a user just for this purpose
+  3. **Password** should be the password of the user that you want to use to post the messages.  If username is an API token, set password to 'x'.
+  4. **Project** should be the name of the project that you want to post the message into (not the id)
+  5. **Category** should be the name of the category that you want to post the message using (not the id)
+  6. **SSL** should be enabled for accounts that need SSL.

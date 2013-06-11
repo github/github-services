@@ -1,0 +1,10 @@
+[Apiary.io](http://apiary.io/) is a REST API documentation, mocking and testing service. This service hook auto-updates your hosted API documentation generated from [API Blueprint](http://apiary.io/blueprint) in your repository. See more at [http://apiary.io/](http://apiary.io/)
+
+Install Notes
+-------------
+
+Apiary needs your OAuth token in order to download your `apiary.apib` (that describes your API) file from your repository. Set up this service by:
+
+1. Go to [Apiary Settings](http://apiary.io/settings)
+2. Click the **Connect to GitHub** button
+3. _(optional)_ After completing the steps above you can always edit `Branch` field right here. Commits to this GitHub branch will trigger an update at Apiary; other branches will be ignored

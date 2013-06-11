@@ -1,0 +1,10 @@
+Grove.io
+=========
+
+This delivers updates to your GitHub repository to Grove.io's IRC channels.
+Events include Git pushes, issues, wiki changes, and comments.
+
+Install Notes
+-------------
+
+  `channel_token` - Channel's unique token which can be found from channel settings (available for organization owners)

@@ -1,0 +1,18 @@
+With the [Puppet Online Linter](http://www.puppetlinter.com) you can verify
+your Puppet manifests against the [Puppet Labs Style
+Guide](http://docs.puppetlabs.com/guides/style_guide.html) and have them
+validated for correct syntax with the Puppet parser. Any new commits generated
+in a project with this hook enabled will be sent to the linter for review. Only
+files with the Puppet `.pp` file extension will be linted. Reports will be
+emailed back to the author of the commit to the email address specified in the
+commit.
+
+The [public Web API](http://www.puppetlinter.com/api) can also be used to validate stand-alone transactions.
+
+Install Notes
+-------------
+
+1. Any members of your project wants to opt out of receiving linting
+reports then they can do so [here](http://www.puppetlinter.com/optout).
+
+2. If you wish to lint a private repository you must authorize the linter via [this link](http://www.puppetlinter.com/auth/github).

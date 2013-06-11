@@ -1,0 +1,12 @@
+RailsBrakeman is an online service to find security issues in your Rails
+projects.
+
+1. Create an account on rails-brakeman.com (just sign in with GitHub)
+2. Create a repository on rails-brakeman.com
+3. Enter your token
+  - the token which you can find on repository edit page on rails-brakeman.com
+4. Enter your rails_brakeman_url if you deploy the proxy on your own server
+5. Check the "Active" checkbox and click "Update Settings"
+
+For more details about RailsBrakeman, go to https://rails-brakeman.com
+

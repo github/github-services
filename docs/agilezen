@@ -1,0 +1,20 @@
+AgileZen
+========
+
+AgileZen is a simple and easy to use project management tool that helps you collaborate with your team and visualize all your work in progress.
+
+Integrating with GitHub will allow you to associate Git commits to specific story cards. If you add a story number to your commit message, AgileZen will associate the commit with the story, making it visible on the board and story focus screen. For example, if you add the text `#123` to your commit message, AgileZen will attach the commit to story card 123.
+
+This allows your team to stay up to date on the latest development work and view a history of commits for each story.
+
+Install Notes
+-------------
+
+1. **API Key** - This is your AgileZen API key.
+2. **Project ID** - This is the project's numeric ID (the number in the project's URL on AgileZen) to associate with the repository.
+3. **Branches** - This is an optional space-separated list of branches to watch commits for. Commits to other branches will not be notified to AgileZen. If no branches are specified, AgileZen will be notified of all commits.
+
+Need Help?
+----------
+
+Check out our [step by step instructions](http://help.agilezen.com/kb/integrations/github).

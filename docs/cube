@@ -1,23 +1,6 @@
-Cube
-==========
-
-Cube is a timetracking app for individuals or companies; for more details see http://cube.bitrzr.com
-This service lets your broadcast commits on Cube so they can  be seen in the unified project log.
-
 Install Notes
 -------------
 
-  1. domain (company domain for Google Apps account or user email address for individual accounts)
-  2. project (project name)
-  3. token (project integration token as seen in the project's Settings tab)
-
-Developer Notes
----------------
-
-data
-  - domain
-  - project
-  - token
-
-payload
-  - refer to docs/github_payload
+  1. **Domain**  should be the company domain for Google Apps account or user email address for individual accounts.
+  2. **Project** should be your project name.
+  3. **Token** should be the project integration token as seen in the project's Settings tab.

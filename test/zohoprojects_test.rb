@@ -16,14 +16,14 @@ class ZohoProjectsTest < Service::TestCase
     url = "/serviceHook"
     @stubs.post url do |env|
       assert_equal 'projects.zoho.com', env[:url].host
-      params = Rack::Utils.parse_query env[:body]
+      params = Faraday::Utils.parse_query env[:body]
       assert_equal '1234', params['pId']
       assert_equal 'a13d', params['authtoken']
-      assert_equal payload.to_json, params['payload']
+      assert_equal payload, JSON.parse(params['payload'])
       [200, {}, '']
     end
-	
-    svc = service :push, data , payload
+
+    svc = service :push, data, payload
     svc.receive
   end
 

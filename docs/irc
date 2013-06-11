@@ -1,39 +1,39 @@
-IRC
-========
+1.  `server` - IRC server (e.g. irc.freenode.net)
+2.  `port` - The port to connect to the server (optional). Default values: 6667 (No SSL) when `Ssl` not checked, 9999 (SSL) when `Ssl` is checked.  
+     Freenode servers listen on ports 6665, 6666, 6667, 6697 (SSL only), 7000 (SSL only), 7070 (SSL only), 8000, 8001 and 8002.
+3.  `room` - Supports single or multiple rooms (comma separated).
+     Also supports room passwords (room_name::password). Prefixing '#' to the room is optional.
+4.  `password` - Server password (optional)
+5.  `nick` - Nickname for the bot (optional)
+7.  `nickserv_password` - Password for the server's [NickServ](http://en.wikipedia.org/wiki/Internet_Relay_Chat_services) (optional)
+6.  `long_url` - Displays full compare/commit url's. Uses git.io if disabled.
+7.  `message_without_join` - Prevents join/part spam by the bot. See step 12.
+8.  `no_colors` - Disables color support for messages.
+9.  `notice` - Sends as a notice rather than a channel message.
+10. `branch_regexes` - Regular expressions for branch name matching (optional, comma separated).
+     For example, only master => `^master$`, master & starts with bug => `master,^bug`.
+11. `active` - Activates the bot.
+12. Configure your IRC channel to allow external messages, necessary for the `message_without_join` option.  
+    `/mode #channelname -n` or `/msg chanserv set #channelname mlock -n`
 
-Install Notes
--------------
+Here's an example for Freenode:
 
-1.  `server` (ie. irc.freenode.net)
-2.  `port` is normally 6667 / 9999 for ssl
-3.  the `room` field can support multiple rooms (comma separated)
-4.  the `password` field is for the server password
-5.  room passwords can be specified for each room like this:
-        room_name::password
-6.  prefixing '#' to the room field is optional
-7.  `nick` is not required.  If provided, the IRCBot will use that
-    nick.
-8.  Enable `long_url` so that compare/commit url's are not passed
-    through bit.ly.
-9.  Enable `message_without_join' to keep the GitHub IRC bot from
-    joining and immediately leaving the channel for each push.
-10. Enable `no_colors` to disable colors in the messages sent by the
-    Github IRC bot.
+    # server: irc.freenode.net
+    # port: 6667
+    # room: #channelname
+    # message_without_join: checked
+    # long_url: checked
+    # notice: checked
+    # active: checked
+    # NOTE: Ensure you enable notice support (see above)
 
+For troubleshooting, run the following curl command to get diagnostic information from GitHub. 
 
-Developer Notes
----------------
+    # Replace 
+    # USERNAME:PASSWORD with your GitHub username and password. Username is
+    # your full username as used when signing in.
+    #
+    # USERNAME/REPONAME with your repo name as it shows in GitHub.
 
-data
-  - server
-  - port
-  - room
-  - password
-  - ssl
-  - nick
-  - long_url
-  - message_without_join
-  - no_colors
-
-payload
-  - refer to docs/github_payload
+    $ curl -u "USERNAME:PASSWORD" -in \
+      https://api.github.com/repos/USERNAME/REPONAME/hooks

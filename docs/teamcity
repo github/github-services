@@ -1,35 +1,28 @@
-TeamCity
-=======
-
-TeamCity is a continuous integration server that automates the building and testing of your software.
-The github TeamCity service can be used to trigger builds after code has been pushed to your git repository.
+TeamCity is a continuous integration server that automates the building and
+testing of your software.  The GitHub TeamCity service can be used to trigger
+builds after code has been pushed to your git repository.
 
 Install Notes
 -------------
 
-  1.  Your TeamCity server must be accessible from the internet.
+1. Your TeamCity server must be accessible from the internet.
 
-  2.  "base_url" is the URL to your TeamCity server
-      Example: https://teamcity.example.com/ or http://teamcity.example.com/teamcity/
+2. "base_url" is the URL to your TeamCity server
+   Example: https://teamcity.example.com/ or http://teamcity.example.com/teamcity/
 
-  3.  "build_type_id" is the identifier of the build configuration you want to trigger
-      Example: "bt123", which can be found in URL of the build configuration page ("...viewType.html?buildTypeId=bt123&...")
+3. "build_type_id" is the identifier of the build configuration you want to trigger
+   Example: "bt123", which can be found in URL of the build configuration page
+   ("...viewType.html?buildTypeId=bt123&...")
 
-  4.  "username" and "password" - username and password of a TeamCity user that can
-      trigger a manual build of the TeamCity build configuration defined in "build_type_id"
+4. "username" and "password" - username and password of a TeamCity user that can
+   trigger a manual build of the TeamCity build configuration defined in
+   "build_type_id"
 
-  5.  Since TeamCity uses BASIC authentication, it is highly recommended that the TeamCity server
-      use HTTPS/SSL to protect the password that is passed unencrypted over the internet.
+5. "branches" is an optional space-separated list of branches to watch commits
+   for.  Commits to other branches will be ignored. If no branches are
+   specified, TeamCity will be notified of all commits.
 
+6. Since TeamCity uses BASIC authentication, it is highly recommended that the
+   TeamCity server use HTTPS/SSL to protect the password that is passed
+   unencrypted over the internet.
 
-Developer Notes
----------------
-
-data
-  - base_url
-  - build_type_id
-  - username
-  - password
-
-payload
-  - unused by this service

@@ -1,0 +1,11 @@
+With NotifyMyAndroid (NMA) you can push notifications to your Android devices
+through Google's C2DM notification system. The [public Web API](http://www.notifymyandroid.com/api.php)
+can be used by virtually any application to delivery push notifications to
+your Android.
+
+Install Notes
+-------------
+
+1. Register at https://www.notifymyandroid.com/register.php.
+
+2. Generate an API key at https://www.notifymyandroid.com/account.php to be used on GitHub.

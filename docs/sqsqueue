@@ -1,0 +1,11 @@
+AWS SqsQueue
+========
+
+Install Notes
+-------------
+
+SqsQueue allows GitHub to send a notification to a queue inside your Amazon AWS SQS service.
+
+1. Configure your Amazon AWS account with an appropriately set up access-key/secret-key (Either parent account or IAM)
+   that has permissions to perform 'SendMessage' operations. (https://console.aws.amazon.com/sqs/)
+

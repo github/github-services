@@ -1,0 +1,14 @@
+Pushover
+========
+
+Pushover is a cross-platform push notification service with a [simple API](https://pushover.net/api).
+
+Install Notes
+-------------
+
+1. Install the [iOS client](https://pushover.net/clients) from the App Store, or the [Android client](https://pushover.net/clients) from the Android Market.
+
+2. Login to [Pushover](https://pushover.net/) and copy your user key.
+
+3. Add your user key in the field above.  Optionally enter a device name to have notifications go to a single device, or leave blank to send to all active devices on your account.
+

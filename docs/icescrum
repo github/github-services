@@ -1,0 +1,23 @@
+iceScrum
+========
+
+iceScrum is a an open source web application for using Scrum while keeping the spirit of a collaborative workspace. It also offers virtual boards with post-its for sprint backlog, product backlog and others. You can use iceScrum on your own server or in the cloud (SaaS) with Kagilum.
+
+Integrating with GitHub will allow you to associate Git commits to specific tasks. If you add a task number (ID) to your commit message, iceScrum Pro will associate the commit with the task. 
+
+For example, if you add the text 'T76' to your commit message, iceScrum Pro will attach the commit to task 76 and move the task to in Progress column in the Sprint Plan. One or more TXX in the same commit message. You can also update the remaining time on the task if you write : 'T76-4' : iceScrum will update the remaining time to 4 hours for the task 76.
+
+This allows your team to stay up to date on the latest development work and view a history of commits for each story / task.
+
+More information on iceScrum : http://www.icescrum.org
+More information on iceScrum : https://www.kagilum.com/icescrum-pro/ 
+More information on Kagilum  : https://www.kagilum.com
+
+Install Notes
+-------------
+
+1. **project_key** - This is your iceScrum Project key.
+2. **username**    - Username of one team member in the project (such as the ScrumMaster).
+3. **password**    - Password of one team member in the project.
+4. **base_url**    - Base_url is the url where your iceScrum is alive (http://www.example.com/icescrum). This input is optional. If not set, "https://www.kagilum.com/a" will be used for iceScrum Cloud customers.
+

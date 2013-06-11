@@ -1,29 +1,19 @@
-Unfuddle
-========
-
 Unfuddle is a lovely ticket management, time tracking, project hosting service.
 
 Install Notes
 ---------------
 
-Create a new Git repository in your Unfuddle project. 
-Once created, edit the repository settings. Check the 
+Create a new Git repository in your Unfuddle project.
+Once created, edit the repository settings. Check the
 "Changesets Managed Manually" checkbox.
 
 Make note of the following from the URL:
 
-http://example.unfuddle.com/a#/projects/32429/repositories/28573/browse
+    http://example.unfuddle.com/a#/projects/32429/repositories/28573/browse
 
 In the above, the data you need for configuration is:
 
-  - subdomain: example
-  - repo_id:  28573
+* subdomain: example
+* repo_id: 28573
 
-Developer Notes
----------------
-
-data
-  - repo_id     (Unfuddle respository ID)
-  - subdomain
-  - username    (Unfuddle API account holder)
-  - password    (Unfuddle API account password)
+If your URL begins with http:// rather than https:// check the Httponly box when setting up the service hook.

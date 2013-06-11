@@ -1,21 +1,7 @@
-Email
-========
-
 Install Notes
 -------------
 
-1. `address` (only one is allowed)
+1. `address` whitespace separated email addresses (at most two)
 2. `secret` fills out the Approved header to automatically approve the message
    in a read-only or moderated mailing list.
 3. `send_from_author` uses the commit author email address in the From address of the email.
-
-Developer Notes
----------------
-
-data
-  - address
-  - secret
-  - send_from_author
-
-payload
-  - refer to docs/github_payload

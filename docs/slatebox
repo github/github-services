@@ -1,0 +1,15 @@
+Slatebox
+=======
+
+Slatebox is a platform for developing 'off-rail' applications that live on "slates".
+Use this service to create and manage new apps that live in the Slatebox environment.
+
+Install Notes
+-------------
+
+1. Log into Slatebox and find your "developer deployment key" in your developer dashboard. Note: this is NOT the same thing as your API key or secret key. Paste this key into the above "token" textfield.
+
+2. "App Id" is a list of unique application names separated by "," (i.e. "foo" or "foo,bar") that inform Slatebox what application(s) should build when this repository is updated. In order to get an app identifier, simply create the app first in your Slatebox developer dashboard and paste it into the "App Id" textfield above.
+
+3. If your GitHub repository is private you need to add the "slatebox" GitHub user as a collaborator. This enables Slatebox to download the source code.
+

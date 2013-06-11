@@ -1,0 +1,17 @@
+Railsbp
+=======
+
+Railsbp - a code analyzer service for rails projects.
+
+Install Notes
+-------------
+
+1. Create an account on railsbp.com (just sign in with GitHub)
+2. Create a repository on railsbp.com
+3. Enter your token
+  - the token which you can find on repository edit page on railsbp.com
+4. Enter your railsbp_url if you deploy the proxy on your own server
+5. Check the "Active" checkbox and click "Update Settings"
+
+For more details about Railsbp, go to https://railsbp.com
+

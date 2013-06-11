@@ -1,0 +1,25 @@
+This service integrates github with Rational Team Concert (http://www.jazz.net). The service automatically adds comments into work item specified by the commit message. Additionally, this hook allows you to create new work items from commits.
+
+Use the pattern "[#<workItemNumber>] Commit text" to add a comment to the work item with the number specified in the commit message. E.g.
+	"[#32] Fix an annoying bug."
+
+Note that the '#' is optional. 
+
+Use the pattern "[workItemType] Fix an annoying bug" to create a new work item for type workItemType. Note, that you have to enter the workItemType id instead of the name. E.g.
+	"[defect] Fox an annoying bug"
+
+This implementation supports both form based and basic authentication.
+
+Install Notes
+-------------
+
+A user with the correct licenses to add comments and create work items needs to be created. 
+
+Configuring the github hook:
+
+1. Server Url - This is your server url (including the jazz application suffix). A valid example would be https://yourdomain:port/jazz or https://yourdomain:port/ccm.
+2. Username - This is the username of the user used to access your Rational Team Concert instance.
+3. Password - This is the password of the user used to access your Rational Team Concert instance.
+4. Project Area UUID - This is the uuid of your project area. It is needed to create new work items. You can find out the uuid by accessing your project using the web ui (using the admin panel). The uuid will be after the itemId parameter in the url. E.g. itemId=_VZsIQOehEeGMALe74yZ8ZQ. Enter just the itemId, which in this example is _VZsIQOehEeGMALe74yZ8ZQ
+5. Basic Authentication - Check this option if you have configured your server to use basic authentication instead of form authentication.
+6. No Verify SSL - Check this option if you need the hook to skip the verification of your server's SSL certificate.  Not recommended for production use, but necessary if your server is running with a self-signed certificate or with a wildcard certificate, since the current Ruby level does not understand SNA/SNI.

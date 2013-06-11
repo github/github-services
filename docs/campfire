@@ -1,11 +1,8 @@
-Campfire
-========
-
 Install Notes
 -------------
 
   1. subdomain is your campfire subdomain
-	(ie 'your-subdomain' if you visit 'https://your-subdomain.campfirenow.com')
+     (ie 'your-subdomain' if you visit 'https://your-subdomain.campfirenow.com')
 
   2. room is the actual room name, not the id
 
@@ -17,16 +14,5 @@ Install Notes
 
   5. play_sound is a boolean flag indicating whether a sound should be played
 
-
-Developer Notes
----------------
-
-data
-  - subdomain
-  - token
-  - room
-  - master_only
-  - play_sound
-
-payload
-  - refer to docs/github_payload
+  6. sound is the sound that should be played if play_sound is
+     true. defaults to 'rimshot'

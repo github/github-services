@@ -1,0 +1,3 @@
+Hubcap enables you to create a post-receive hook that automatically publishes
+your library's documentation to GitHub pages.  Users must sign up at
+http://hubcap.it/ before the service will operate.

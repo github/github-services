@@ -1,0 +1,5 @@
+PythonPackages
+==============
+
+Automatically release Python packages from GitHub to the [Python Package Index](http://pypi.python.org). For more information, please see: http://docs.pythonpackages.com/en/latest/github-service.html.
+

@@ -1,10 +1,7 @@
-Twilio
-======
-
 Allows you to setup a GitHub repository to send out SMS messages on git pushes.
 Currently the SMS message is built to say:
 
-[pusher name] has pushed [# commits] commit(s) to [repository name]
+    "#{payload['pusher']['name']} has pushed #{payload['commits'].size} commit(s) to #{payload['repository']['name']}"
 
 Install Notes
 -------------
@@ -13,17 +10,5 @@ Install Notes
 2. You can find your account_sid and auth_token on your account page at https://www.twilio.com/user/account
 3. from_phone must be a "Twilio phone number enabled for SMS. Only phone numbers or short codes purchased from Twilio work here"
 4. to_phone is the "destination phone number. Format with a '+' and country code e.g., +16175551212 (E.164 format)."
-5. Check master_only if you only want to recieve updates for master
+5. Check master_only if you only want to recieve updates for master.
 
-Developer Notes
----------------
-
-data
-  - account_sid
-  - auth_token
-  - from_phone
-  - to_phone
-  - master_only
-
-payload
-  - refer to docs/github_payload

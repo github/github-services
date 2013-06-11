@@ -2,36 +2,21 @@ Bugly
 =====
 
 Bugly is a hosted bug and issue tracker. Integrating it with GitHub
-allows you to associate commits with issues and see commits in all 
+allows you to associate commits with issues and see commits in all
 timelines.
 
 
 Install Notes
 -------------
 
-  1. 'token' (REQUIRED) is an API token with read/write access to the 
-     account/project. Click the '+' sign in the lower left corner of
-     your Bugly account, then click New token to create a new token
-     for your user. Or click Quick Access, then the user you wish to
-     create a token for, then click the API tokens tab, then click
-     New API token.
+  1. 'token' (REQUIRED) is an API token with read/write access to the
+     account/project. Go to Control Panel, Users, click on a user,
+     click the API Tokens tab, then click New token to create a new token.
 
-  2. 'account_name' (REQUIRED) is your Bugly account name. It would be 
+  2. 'account_name' (REQUIRED) is your Bugly account name. It would be
      'foobar' in the following URL: http://foobar.bug.ly/
 
-  3. 'project_id' (OPTIONAL) is the ID of the Bugly project to associate 
+  3. 'project_id' (OPTIONAL) is the ID of the Bugly project to associate
      all commits with. If no project_id is provided, commits will only
-     appear in the account-wide timeline, not project timelines. The ID 
+     appear in the account-wide timeline, not project timelines. The ID
      would be '321' in this URL: http://foo.bug.ly/projects/321-MyProject
-
-
-Developer Notes
----------------
-
-data
-  - token
-  - account_name
-  - project_id
-
-payload
-  - refer to docs/github_payload

@@ -14,10 +14,10 @@ class JacondaTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc = service(
+    svc = service(:push,
       { 'subdomain' => 's', 'digest' => 'd',
         'room_id' => 'r', 'room_token' => 'rt'}, 'a' => 1)
-    svc.receive_push
+    svc.receive_event
   end
 
   def service(*args)

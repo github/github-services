@@ -1,0 +1,7 @@
+Install Notes
+-------------
+
+Requires the Source Integration plugins from http://leetcode.net/projects/source-integration/
+
+  1. Base URL to MantisBT install
+  2. Secret API Key set at http://yoursite/mantis/plugin.php?page=Source/manage_config_page

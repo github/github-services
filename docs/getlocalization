@@ -1,0 +1,9 @@
+1. Project name is your project name in Get Localization URL e.g:
+
+  Given this URL:
+
+        http://www.getlocalization.com/Example/
+
+  Your project name is "Example"
+
+2. Project token is available at your project settings if you've GitHub support enabled.

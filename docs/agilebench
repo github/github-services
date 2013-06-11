@@ -1,0 +1,13 @@
+Agile Bench
+===========
+
+[Agile Bench](http://agilebench.com/) is planning software for agile teams with backlog management and story walls.
+
+Install Notes
+-------------
+
+1. **token** - is a user's API token.  Get it from your Agile Bench's user settings page.
+
+2. **project_id** - can be found in your Agile Bench project URL.  i.e. if the URL is http://agilebench.com/projects/3000-my-project, then the project id will be 3000.
+
+Git Commit example: `$ git commit -am "[Fixes #5 #6] Added even more documentation"` - will add _"Added even more documentation"_ to stories #5 and #6 and move stories #5 & #6 into the last (the fixed!) workflow state.

@@ -1,0 +1,14 @@
+Backlog
+===========
+
+Backlog is a project management, hosting service.
+http://backlogtool.com, http://www.backlog.jp (Japanese)
+
+Install Notes
+-------------
+
+1. **api_url** is a API URL. e.g. if the Space ID is example, then the api_url will be https://example.backlog.jp/XML-RPC or https://example.backlogtoo.com/XML-RPC
+
+2. **user_id** and **password** - user_id and password of a Backlog user that can post comment and update issue.
+
+You can specify issue keys (e.g. DORA-1) and status keywords (#fixed, #closed) to change issue status (Resolved, Closed).

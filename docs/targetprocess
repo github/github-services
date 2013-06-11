@@ -1,0 +1,39 @@
+Integration with TargetProcess allows GitHub user to change current entity states
+and add comments directly from their commit messages.
+
+--------------
+Install Notes
+--------------
+
+1. TargetProcess Requirements
+
+  - Requires TargetProcess version 2.22.4.19887 or newer.
+
+  - Your TargetProcess must should be accessible from the internet.
+
+  - Committer's email addresses in GitHub and TargetProcess should be the same.
+
+2. Settings in GitHub
+
+  In the GitHub integration config, the following settings should be provided:
+
+  - TargetProcess Server URL
+
+  - A project admin's account credentials to access your TargetProcess server.
+
+---------------------
+Commit Message Syntax
+---------------------
+
+General comment format for adding comments and/or changing entity states:
+
+
+    (#|id:)[Entity ID]:<new state>
+    Eg: Fixed out of memory exceptions #1221:Fixed
+        id:1221:Fixed Fixed out of memory exceptions
+
+
+The entire line will appear as a comment in your User Story, Bug, Feature, or Task; and the entity's
+state will be changed to the state name, if specified.  A new state is not required, and an
+Assignable's state will not change unless it is specified.  Entity ID is required.  This 
+text sequence can appear anywhere in your commit message.

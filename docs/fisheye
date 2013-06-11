@@ -1,0 +1,23 @@
+FishEye
+=======
+
+Atlassian FishEye is a revision-control browser and search engine.
+The GitHub FishEye service can be used to trigger repository scan after code has been pushed to your git repository.
+
+Requires FishEye 2.10 or later.
+
+Install Notes
+-------------
+
+1.  Your FishEye server must be accessible from the internet
+
+2.  "url_base" is the URL to your FishEye server
+    Example: http://fisheye.example.com/ or http://fisheye.example.com/fisheye/
+
+3.  "token" is the REST API token for your FishEye server
+    It is defined in FishEye Administration > Security Settings > Authentication > REST API Token
+
+4. "repository_name" is the repository name (optional)
+    If not set github repository name is used
+
+

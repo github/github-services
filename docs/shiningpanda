@@ -1,0 +1,18 @@
+ShiningPanda
+============
+
+ShiningPanda is the first Hosted Continuous Integration service dedicated to Python.
+
+It allows you to build, test and deploy your projects in a matter of minutes!
+
+See https://www.shiningpanda-ci.com for more information.
+
+Install Notes
+-------------
+
+1. Workspace - This your workspace key. For instance if your Jenkins URL is https://jenkins.shiningpanda-ci.com/shiningpanda.org/, then your workspace key is "shiningpanda.org".
+2. Job - This is the name of the job you want to trigger upon commit. For instance if the URL of your job in Jenkins is https://jenkins.shiningpanda-ci.com/shiningpanda.org/job/selenose/, then your job name is selenose.
+3. Token - This is the value of the "Authentication Token" field of the "Trigger builds remotely (e.g., from scripts)" option in the "Build Triggers" section of your job configuration.
+4. Branches (optional) - This is a space-separated list of branches to listen for commits on. Commits to other branches will not trigger your job. If no branches are specified, jobs are triggered for all commits.
+5. Parameters (optional) - If your job takes parameters, this is the query string built from the parameters and their value (for instance "arg1=foo&arg2=bar"). All parameters have to be properly URL-escaped.
+

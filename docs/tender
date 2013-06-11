@@ -1,0 +1,9 @@
+Install Notes
+-------------
+
+If your URL is http://mysite.tenderapp.com, then:
+
+* Your **domain** is `mysite.tenderapp.com`
+
+* You can find your token in the tracker settings:
+  http://mysite.tenderapp.com/settings/trackers

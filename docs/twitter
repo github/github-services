@@ -1,29 +1,11 @@
-Twitter
-========
-
 Install Notes
 -------------
 
-1. Get an OAuth Token for Your Twitter Account from the services hooks edit page for your repo.
-2. You're going to be redirected to twitter to allow GitHub to tweet on your behalf.
-3. Be sure that you're logged in as the twitter user you would like to tweet from.
+  1. [Get an OAuth Token for Your Twitter Account][authorize_url].
+  2. You're going to be redirected to Twitter to allow GitHub to tweet on your behalf.
+  3. Be sure that you're logged in as the Twitter user you would like to tweet from.
 
-Developer Notes
----------------
+Check "short format" to omit the repository and commiter's names from the tweet to get more
+space for the commit message.
 
-data
-  - token
-  - secret
-  - digest (boolean)
-
-payload
-  - refer to docs/github_payload
-
-Deployment Notes
-----------------
-
-The secrets.yml file should include an entry for the consumer keys github needs to post for people.
-
-    twitter:
-      key: <get it from twitter>
-      secret: <get it from twitter>
+[authorize_url]: <%= twitter_oauth_path(current_repository.user, current_repository) %>

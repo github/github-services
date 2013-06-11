@@ -1,0 +1,12 @@
+This service will notify Weblate about pushes to your repository.
+Weblate will then refresh updated translations and merge them with your
+changes.
+
+More info: http://weblate.org/
+
+Install Notes
+-------------
+
+You need to have enabled hooks in your Weblate installation (this is default)
+see documentation for more information: 
+https://weblate.readthedocs.org/en/latest/api.html#notification-hooks

@@ -1,0 +1,9 @@
+1. `address` is the irker service address.
+2. `channels` is the channel or list of channels the commit notification should be posted to. Format is irc://chat.freenode.net/#commits. Multiple urls should be semicolon (;) separated.
+3. `project` is the optional project name, defaults to the Repository name.
+4. `branch` lets you specify the branch name, or a template with `%s` to fill the branch name in.
+5. `long_urls` enables full URLs instead of shortened URLs.
+6. `module` sets the module name in the project.
+7. `color` adds mIRC color codes to the message.
+8. `full_commits` sends multiple messages to show up to 5 lines of the commit message.
+

@@ -1,0 +1,49 @@
+Rally
+=====
+
+Rally (http://www.rallydev.com) is the recognized leader in Agile 
+application lifecycle management (ALM). Rally is dedicated to helping 
+organizations embrace Agile and Lean development and portfolio management 
+practices that dramatically increase the pace of innovation, improve 
+product quality and boost customer satisfaction.
+
+The GitHub-Services integration for Rally creates Changeset/Change 
+information in Rally associated with the Workspace and SCMRepository 
+of your choice.  In Rally, when looking at an artifact, you can see 
+detail on Changesets associated with commits from GitHub push activities.  
+Rally also provides reports that use the Artifact, Changeset and Change 
+information to provide insight into files that get changed frequently 
+or that are associated with higher than normal defect rates and other 
+useful metrics based reports.
+
+The integration scans for tokens in the commit message that conform to a
+Rally Artifact FormattedID format.  These tokens are validated against 
+Rally so that a reference to a valid Rally Artifact (UserStory, Defect, 
+TestCase, Task, etc.) results in the association of the Artifact to the 
+Changeset posted in Rally performed by this integration.
+Commits containing a commit message that doesn't have a valid artifact 
+reference also get posted to Rally so that they show up in any Rally 
+reports against Changesets/Changes.
+
+NB: Uri fields in Rally Changeset/Change records refer the to master branch.
+
+Install Notes
+-------------
+
+You'll need a Rally account (see http://rally.rallydev.com).
+
+1. server - (REQUIRED) is the hostname of the Rally server.  
+   You do not have to provide the domain name portion of the server
+   if the name of the server is a Rally SaaS server, 
+     ie., rally1 or trial or demo.
+   If you are utilizing the Rally OnPrem product, you'll need 
+   to provide fully qualified hostname.
+2. username - (REQUIRED) is the Rally UserName for the subscription.  
+   Make sure you specify the UserName (not the DisplayName or FirstName and LastName or Email).
+3. password - (REQUIRED) is the password associated with the UserName for the Rally Subscription.
+4. workspace - (REQUIRED) is the name of the Rally Workspace in which the target SCMRepository
+   resides.
+5. repository - (OPTIONAL) is the name of the Rally SCMRepository.  By default, if not provided,
+   this integration will use the name of your GitHub repository as the SCMRepository name.
+   But, you have the ability to name the Rally SCMRepository to your choice of a name.
+

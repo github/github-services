@@ -1,20 +1,4 @@
-toggl
-========
-
-Install Notes
--------------
-
-  1. API Key: Your toggl api key.  (Get it at https://www.toggl.com/user/edit)
-  2. Project: the id of the toggl project that this repo links to
-  3. Activate and go!
-  4. To track your time simply add t:number-of-minutes (integer) to your commit message
-
-Developer Notes
----------------
-
-data
-  - api_key
-  - project
-
-payload
-  - refer to docs/github_payload
+1. API Key: Your toggl api key.  (Get it at https://www.toggl.com/user/edit)
+2. Project: the id of the toggl project that this repo links to
+3. Activate and go!
+4. To track your time simply add t:number-of-minutes (integer) to your commit message

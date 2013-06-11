@@ -1,0 +1,17 @@
+Trello
+======
+
+Adds a card to a Trello list for each commit when you push to GitHub. You can optionally limit this to the master branch, and provide an exclusion regex.
+
+Install Notes
+-------------
+
+1. You will need to [create a consumer token][create] that authorises GitHub to write to the Trello api.
+2. Supply the list identifier for the list you want cards added to. You may specify a different list for pull requests to be added to than commits. You can get the lists for a board at this api url (NB: Swap TOKEN for the token from step 1, and BOARDID with the id of the board that the list is on - this is the last part of the Trello URL for the board):
+
+        https://api.trello.com/1/board/BOARDID?token=TOKEN&key=db1e35883bfe8f8da1725a0d7d032a9c&lists=all
+
+3. If you want to ignore commits based on a regular expression match on the commit name, enter it here: e.g. "Merge Branch"
+4. If you only want to create cards for commits on the master branch, tick 'Master Only'
+
+[create]: https://trello.com/1/authorize?key=db1e35883bfe8f8da1725a0d7d032a9c&name=GitHub+Services&expiration=never&response_type=token&scope=read,write

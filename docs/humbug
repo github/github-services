@@ -1,0 +1,7 @@
+Install Notes
+-------------
+
+1. **Email** - The user to authenticate as.
+2. **Api Key** - The API key associated with the provided user. See: https://humbughq.com/#settings
+3. **Stream** - The Humbug stream where you want messages to be sent.  (If you leave this blank, it defaults to the "commits" stream in Humbug.)  Whether you use the default stream or specify it explicitly, you need to set up the stream on the Humbug side.
+4. **Branches** - If you want to restrict Humbug notifications to certain GitHub branches, then provide a comma delimited list of git branches here (e.g. master,staging,prod).  Otherwise, leave it empty.

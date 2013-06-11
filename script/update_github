@@ -1,0 +1,7 @@
+#!/bin/sh
+# Usage: script/update_github
+# Updates the documentation for Services on GitHub.com
+
+# Expects github/github to be in the default Boxen location
+# https://github.com/github/github-services/blob/master/Rakefile#L56-L58
+bundle exec rake services:build

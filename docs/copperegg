@@ -1,0 +1,12 @@
+Allows you to setup a GitHub repository to create Annotations on git pushes.
+Annotations are created like so:
+
+    "GitHub: #{payload['pusher']['name']} has pushed
+    #{payload['commits'].size} commit(s) to
+    #{payload['repository']['name']}"
+
+Install Notes
+-------------
+1. **API Key** - Your API key. See: Settings tab, Personal Settings: https://app.copperegg.com/
+2. **Tag** - Tag to automatically apply to each created Annotation.
+3. **Master Only** - Only create Annotations for pushes to the master branch.

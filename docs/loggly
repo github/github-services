@@ -1,0 +1,7 @@
+This service hook allows you to log pushed commits directly to a Loggly HTTP
+input. 
+
+Install Notes
+-------------
+
+1. input token -- take this from the detail page for your HTTP input.

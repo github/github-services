@@ -1,6 +1,3 @@
-Bugzilla
-========
-
 This service hook posts comments on Bugzilla bugs when commit messages
 reference a bug by id number.
 
@@ -31,15 +28,3 @@ is included in the bug comment.
 
 This hook requires Bugzilla version >= 3.4 to function correctly
 and >= 4.0 to be able to close bugs.
-
-Settings
---------
-
-  - server_url - The URL for the Bugzilla installation,
-    eg `https://bugzilla.mozilla.org/`
-  - username - Email address for Bugzilla user account
-  - password - Password for the user account
-  - integration_branch - If entered, only commits to this branch will result
-    in bugs being closed
-  - central_repository - Set to true to enable closing bugs and commenting on
-    commits that were already pushed to another user's repository

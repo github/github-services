@@ -1,5 +1,3 @@
-Sourcemint
-==========
-
 Notify the [Sourcemint](http://sourcemint.com/) package repository and build service when a new release has been tagged
 or changes have been pushed to a branch.
+

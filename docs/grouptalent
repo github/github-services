@@ -1,0 +1,11 @@
+GroupTalent
+=======
+
+GroupTalent is a marketplace and platform for doing freelance work. Integrating it with GitHub lets you communicate progress to project owners. See http://www.grouptalent.com/ for more information.
+
+
+Install Notes
+-------------
+
+  1. Token - GitHub Service Hook Token for your GroupTalent project. Get it from the project configuration page.
+

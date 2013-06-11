@@ -1,0 +1,13 @@
+Amazon Simple Notification Service
+==================================
+
+This service lets you publish event messages to Amazon's Simple Notification Service.  Optionally, you can set up an Amazon SQS subscriber if 'sqs_queue' is specified.
+
+Install Notes
+-------------
+
+1. 'aws_key' (REQUIRED) is the Amazon Access Key ID of an account with permission to publish SNS notifications.
+2. 'aws_secret' (REQUIRED) is the Amazon Secret Access Key associated with the aws_key
+3. 'sns_topic' (REQUIRED) is either the name of the Amazon SNS topic or the topic's ARN.  If no topic exists by this name, one will be created.  This service will not attempt to create the topic if the ARN is specified, thus allowing the minimum level of permissions (namely: 'sns:Publish') to be used.
+4. 'sqs_queue' (OPTIONAL) is the name of an Amazon SQS Queue to be subscribed to the sns_topic.  If no queue exists by this name, one will be created.
+

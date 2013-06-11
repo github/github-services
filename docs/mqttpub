@@ -1,0 +1,19 @@
+MQTT
+========
+
+This service lets you publish push and commit messages to a message broker via the MQTT protocol.
+
+Install Notes
+-------------
+
+1. OPTIONAL. 'broker' is the hostname of the MQTT broker (default is q.m2m.io).
+2. OPTIONAL. 'port' is the port to connect (default is 1883, MQTT standard).
+3. 'topic' is the name of the topic to publish on.  Suggested example: 'github/{github_username}/{repo_name} .
+4. OPTIONAL. 'clientid' is the unique client ID which publishes the payload message (default is a prefixed epoc time long, e.g. "github_1336363787").
+5. OPTIONAL. 'user' is the v3.1 username (default is none).
+6. OPTIONAL. 'pass' is the v3.1 password (default is none).
+7. OPTIONAL. 'retain' specifies whether or not the publication should be retained as the last/most recent message for new subscribers.
+8. The payload of the message is JSON received from GitHub (refer to docs/github_payload).
+9. ruby-mqtt only supports QoS 0.
+10. For testing, you can use mqtt.io as your web MQTT client.  broker: q.m2m.io, port: 1883, clientid: {github_username}.  You will "Subscribe to Topics": 'github/{github_username}/{repo_name}'.  Unauthenticated username/password sets default to the public channel!
+

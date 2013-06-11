@@ -1,0 +1,13 @@
+Snowy Evening
+==========
+
+Notifies your project account on Snowy-Evening.com of commits.
+
+Install Notes
+-------------
+
+1. Login or create a free or paid account with Snowy-Evening.com
+2. Create a project and visit the Project Edit page
+3. Find the GitHub integration box, which contains the API Key and Project ID
+4. Copy those credentials into these fields.
+

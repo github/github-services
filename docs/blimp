@@ -1,0 +1,13 @@
+Blimp
+=====
+
+Blimp is a project management software for doers, people that want to do more and manage less.
+
+Integrating it with Github allows you to add all your Github Issues activity to any project in Blimp. Issues along with their comments will be created as tasks inside the goal you specifiy.
+
+Install Notes
+-------------
+1. **Project Url** - Use your full Blimp project Url which looks like: https://app.getblimp.com/example-company/example-project/
+2. **Username** - Should be the username of the user that you want to use to create tasks and comments. You can setup a user just for this purpose. See: https://app.getblimp.com/user/settings/
+3. **API Key** - Should be the API Key for the user you chose to use. See: https://app.getblimp.com/user/settings/api/
+4. **Goal Title** *(optional)* - The title for the goal that will contain the tasks for each issue. The default is "Github Issues - owner/repo".

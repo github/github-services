@@ -1,9 +1,3 @@
-Gemnasium
-=========
-
-Install Notes
--------------
-
 Gemnasium notifies you when new versions are released for your GitHub repositories' gem dependencies.
 
 ----
@@ -14,9 +8,3 @@ Gemnasium notifies you when new versions are released for your GitHub repositori
 4.  Check "Active"
 5.  Click "Update Settings"
 
-Developer Notes
----------------
-
-    data
-      - name
-      - token
