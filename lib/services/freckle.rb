@@ -13,13 +13,12 @@ class Service::Freckle < Service::HttpPost
   	:twitter => '@letsfreckle'
 
   def receive_event
-  	subdomain = required_config_value('subdomain').strip
-  	token = required_config_value('token').strip
-  	project = required_config_value('project').strip
+    subdomain = required_config_value('subdomain').strip
+    token = required_config_value('token').strip
+    project = required_config_value('project').strip
 
-  	http.headers['X-FreckleToken'] 	 = token
-  	http.headers['X-FreckleProject'] = project
-    http.headers['Content-Type'] = 'application/json'
+    http.headers['X-FreckleToken'] 	 = token
+    http.headers['X-FreckleProject'] = project
     url = "https://#{data['subdomain']}.letsfreckle.com/api/github/commits"
     deliver url
   end
