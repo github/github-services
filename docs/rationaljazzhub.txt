@@ -8,14 +8,10 @@ Note that the '#' is optional.
 Use the pattern "[workItemType] Fix an annoying bug" to create a new work item for type workItemType. Note, that you have to enter the workItemType id instead of the name. E.g.
 	"[defect] Fox an annoying bug"
 
-This implementation supports both form based and basic authentication.
-
 Install Notes
 -------------
 
-A user with the correct licenses to add comments and create work items needs to be created. 
+Configuring the JazzHub hook:
 
-Configuring the github hook:
-
-1. Username - This is the username of the user used to access your Rational Team Concert instance.
-2. Password - This is the password of the user used to access your Rational Team Concert instance.
+1. Username - This is the username of the user used to access JazzHub.
+2. Password - This is the password of the user used to access JazzHub.

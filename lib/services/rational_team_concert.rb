@@ -30,7 +30,6 @@ class Service::RationalTeamConcert < Service
 			http.ssl[:verify] = false
 		end 
 		http.headers['X-com-ibm-team-userid']= data['username']
-		http.builder.response :logger
 	end
 
 	def authenticate 
