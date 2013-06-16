@@ -313,7 +313,8 @@ class Service::IRC < Service
   def irc_pull_request_review_comment_summary_message
     short  = comment.body.split("\r\n", 2).first.to_s
     short += '...' if short != comment.body
-    "[#{fmt_repo repo.name}] #{fmt_name sender.login} comment on pull request \##{issue.number}: #{short}"
+    sha1   = comment.commit_id
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} comment on commit of pull request #{fmt_hash sha1[0..6]}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
