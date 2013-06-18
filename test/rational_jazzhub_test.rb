@@ -8,7 +8,7 @@ class RationalJazzhubTest < Service::TestCase
 
   def test_push
     svc = service(
-      {'username' => username, 
+      {'username' => username,
        'password' => password},
         payload)
 
@@ -25,11 +25,11 @@ class RationalJazzhubTest < Service::TestCase
 
   def test_push_override
     svc = service(
-      {'username' => username, 
+      {'username' => username,
        'password' => password,
        'override_server_url' => "https://test.example.org/foo"},
         payload)
-        
+
     @stubs.post "/foo/processGitHubPayload" do |env|
        assert_equal 'test.example.org', env[:url].host
        params = Faraday::Utils.parse_nested_query(env[:url].query)
@@ -42,7 +42,7 @@ class RationalJazzhubTest < Service::TestCase
   end
 
   def username
-    return 'test_user' 
+    return 'test_user'
   end
 
   def password
