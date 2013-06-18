@@ -12,6 +12,11 @@ class Service::RationalTeamConcert < Service
 		authenticate
 		commit_changes
 	end
+	
+	def server_url
+		#trim trailing / if provided
+    	@server_url ||= data['server_url'].gsub(/\/$/, '')
+  	end
 
 	def checkSettings
 		raise_config_error "Server Url url not set" if data['server_url'].blank?
@@ -36,7 +41,7 @@ class Service::RationalTeamConcert < Service
 	end
 
 	def form_based_authentification
-		res= http_get '%s/authenticated/identity' % data['server_url']
+		res= http_get '%s/authenticated/identity' % server_url
 		if not 'authrequired'.eql? res.headers['X-com-ibm-team-repository-web-auth-msg']
 			# Expect one follow for WAS login
 			if res.env[:status] == 302
@@ -53,7 +58,7 @@ class Service::RationalTeamConcert < Service
 		http.headers['Cookie']= captureCookies res
 		http.headers['Content-Type']= 'application/x-www-form-urlencoded'
 
-		res= http_post '%s/authenticated/j_security_check' % data['server_url'], 
+		res= http_post '%s/authenticated/j_security_check' % server_url, 
 					   Faraday::Utils.build_nested_query(http.params.merge(:j_username => data['username'], :j_password => data['password'])) 
 
 		if 'authrequired'.eql? res.headers['X-com-ibm-team-repository-web-auth-msg']
@@ -62,7 +67,7 @@ class Service::RationalTeamConcert < Service
 	
 		http.headers['Cookie']= captureCookies res
 		http.headers['Content-Type']= ''
-		res= http_get '%s/authenticated/identity' % data['server_url']
+		res= http_get '%s/authenticated/identity' % server_url
 		captureCookies res
 	end
 	
@@ -121,7 +126,7 @@ class Service::RationalTeamConcert < Service
 
 	def get_work_item (work_item_number)
 		http.headers['Cookie']= cookieString
-		res= http_get "%s/resource/itemName/com.ibm.team.workitem.WorkItem/%s?oslc.properties=oslc:discussedBy" % [ data['server_url'], work_item_number ]  
+		res= http_get "%s/resource/itemName/com.ibm.team.workitem.WorkItem/%s?oslc.properties=oslc:discussedBy" % [ server_url, work_item_number ]  
 		# Expect one follow for WAS login
 		if res.env[:status] == 302
 			captureCookies res
@@ -132,7 +137,7 @@ class Service::RationalTeamConcert < Service
 	end
 
 	def new_work_item (commit, work_item_type)
-		url= "%s/oslc/contexts/%s/workitems/%s" % [data['server_url'], data['project_area_uuid'], work_item_type]
+		url= "%s/oslc/contexts/%s/workitems/%s" % [server_url, data['project_area_uuid'], work_item_type]
 		work_item= { 'dcterms:title' => commit['message']}
 		http.headers['Cookie']= cookieString
 		res= http_post url, generate_json(work_item)
