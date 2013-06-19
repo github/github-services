@@ -9,10 +9,16 @@ module Service::PullRequestReviewCommentHelpers
     comment.html_url
   end
 
+  def pull_request_number
+    comment.pull_request_url =~ /\/(\d+)$/
+    $1
+  end
+
   def summary_message
-    "[%s] %s comment on commit of pull request %s: %s. %s" % [
+    "[%s] %s comment on pull request #%d %s: %s. %s" % [
       repo.name,
       sender.login,
+      pull_request_number,
       comment.commit_id,
       comment.body,
       comment.html_url
