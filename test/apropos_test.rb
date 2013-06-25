@@ -9,7 +9,7 @@ class WebTest < Service::TestCase
     @stubs.post "/api/v1/githook/abcdefg01234" do |env|
       assert_equal 'application/json', env[:request_headers]['Content-Type']
       assert_equal 'www.apropos.io', env[:url].host
-      ssert_equal payload, JSON.parse(env[:body])
+      assert_equal payload, JSON.parse(env[:body])
       [200, {}, '{"message":"OK"}']
     end
 
