@@ -25,6 +25,12 @@ class Service::Apropos < Service::HttpPost
     http.headers['X-Github-Event'] = 'pull_request'
     deliver apropos_url
   end
+
+  def receive_issues
+    http.headers['content-type'] = 'application/json'
+    http.headers['X-Github-Event'] = 'issues'
+    deliver apropos_url
+  end
   
   def receive_push
     http.headers['content-type'] = 'application/json'
