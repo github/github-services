@@ -1,6 +1,4 @@
-class Service::Phraseapp < Service
-  include Service::HttpHelper
-
+class Service::Phraseapp < Service::HttpPost
   title "PhraseApp"
 
   string :auth_token
