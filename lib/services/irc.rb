@@ -22,8 +22,6 @@ class Service::IRC < Service
   end
 
   def receive_pull_request
-    return unless opened?
-
     send_messages "#{irc_pull_request_summary_message}  #{fmt_url url}"
   end
 
@@ -32,8 +30,6 @@ class Service::IRC < Service
   end
 
   def receive_issues
-    return unless opened?
-
     send_messages "#{irc_issue_summary_message}  #{fmt_url url}"
   end
 
