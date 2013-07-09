@@ -52,7 +52,7 @@ module Service::PullRequestReviewCommentHelpers
         "id" => comment_id,
         "user" => { "login" => "defunkt", },
         "body" => "very\r\ncool"
-      },
+      }
     )
   end
 end

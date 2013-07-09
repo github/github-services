@@ -39,7 +39,7 @@ module Service::IssueCommentHelpers
       "comment" => {
         "user" => { "login" => "defunkt" },
         "body" => "this\r\nis\r\ntest comment"
-      },
+      }
     )
   end
 end
