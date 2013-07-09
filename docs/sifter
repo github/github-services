@@ -1,0 +1,13 @@
+Sifter is a simple issue tracker designed explicitly for teams with non-technical team members. (https://sifterapp.com)
+
+The integration enables you to comment on, resolve, and close issues via commit messages.
+
+Install Notes
+-------------
+
+0. Sign up for Sifter (https://sifterapp.com)
+1. Create a new project.
+2. Go to your Sifter project 
+3. Go to the "Project Settings" > "Integrations" page. 
+4. Copy the token on the page for GitHub and add it here along with your account's subdomain. 
+5. Any team members that want to use the integration will need to visit their profile page and explicitly link their Sifter user account with their GitHub user account so that we can identify individuals from their commits.
