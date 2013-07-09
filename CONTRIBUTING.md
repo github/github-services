@@ -65,3 +65,50 @@ You can annotate Supporters and Maintainers by the following methods:
 * `:web` - A URL to a contact form.
 * `:email` - An email address.
 * `:twitter` - A Twitter handle.
+
+How to test your service
+------------------------
+
+You can test your service in a ruby irb console:
+
+0. Cache gems and install them to `vendor/gems` by doing:
+   `script/bootstrap`
+1. Start a console: `script/console`
+2. Instantiate your Service:
+
+    ```ruby
+    svc = Service::MyService.new(:push,
+      # Hash of configuration information.
+      {'token' => 'abc'},
+      # Hash of payload.
+      {'blah' => 'payload!'})
+
+    svc.receive_push
+    ```
+
+3. The third argument is optional if you just want to use the sample
+   payload.
+
+    ```ruby
+    svc = Service::MyService.new(:push,
+      # Hash of configuration information.
+      {'token' => 'abc'})
+
+    svc.receive_push
+    ```
+
+Other hook types
+----------------
+
+The default hook for a service is `push`. You may wish to have services respond
+to other event types, like `pull_request` or `issues`. The full list may be
+found in [service.rb](https://github.com/github/github-services/blob/master/lib/service.rb#L106).
+Unless your service specifies `default_events <list_of_types>`, only the `push`
+hook will be called, see
+[service.rb#default_events](https://github.com/github/github-services/blob/55a1fb10a44a80dec6a744d0828c769b00d97ee2/lib/service.rb#L122-L133).
+
+To make use of these additional types, your service will either need to define
+`receive_<type>` (like `receive_pull_request_review_comment`) or a generic
+`receive_event`.
+
+You can read more about the Hooks in the [API Documentation](http://developer.github.com/v3/repos/hooks/).
