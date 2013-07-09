@@ -1,0 +1,13 @@
+PhraseApp Translation Management
+================================
+
+*Your companion to become a global player. The translation management software for websites and mobile apps.*
+
+This service lets you connect your GitHub repository to an existing [PhraseApp](https://phraseapp.com) translation project to automatically push new translations from your locale files into PhraseApp.
+
+Read more: [Documentation](https://phraseapp.com/docs)
+
+Install Notes
+-------------
+
+Just add your project **auth token** to the hook configuration. You find your token on your project overview page after creating the first project in PhraseApp.
