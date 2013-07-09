@@ -30,7 +30,7 @@ module Service::CommitCommentHelpers
         "commit_id" => commit_id,
         "body" => "this\r\nis\r\ntest comment",
         "html_url" => "https://github.com/mojombo/magik/commit/#{commit_id}#commitcomment-#{comment_id}"
-      },
+      }
     )
   end
 end
