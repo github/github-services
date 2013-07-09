@@ -1,4 +1,5 @@
-class Service::LeChat < Service::HttpPost
+class Service::Kato < Service::HttpPost
+  hook_name 'lechat'
   string :webhook_url
 
   # include 'webhook_url' in the debug logs
@@ -6,11 +7,11 @@ class Service::LeChat < Service::HttpPost
 
   default_events Service::ALL_EVENTS
 
-  url "https://lechat.im/"
+  url "https://kato.im/"
 
   maintained_by :github => 'JLarky'
 
-  supported_by :email => 'support@lechat.im'
+  supported_by :email => 'support@kato.im'
 
   def receive_event
     webhook_url = required_config_value('webhook_url')
