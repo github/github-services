@@ -68,9 +68,3 @@ class Service::Devaria < Service::HttpPost
 		make_request(url, body)
 	end
 end
-
-def test
-	# encoding: UTF-8
-	svc = Service::Devaria.new(:push, {'username'=>'jonbonazza', 'project_name'=>'Testeroos', 'user_class_id'=>5629499534213120})
-	svc.receive_push
-end
