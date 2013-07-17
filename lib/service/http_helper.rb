@@ -21,7 +21,7 @@ class Service
         http_post url, body
       end
     end
-    
+
     # Grabs a sanitized configuration value.
     def config_value(key)
       value = data[key.to_s].to_s
@@ -34,7 +34,7 @@ class Service
       if (value = config_value(key)).empty?
         raise_config_error("#{key.inspect} is empty")
       end
-      
+
       value
     end
 
@@ -91,7 +91,7 @@ class Service
     end
 
     def encode_body_as_json
-      http.headers['content-type'] = 'application/json'
+      http.headers['content-type'] = 'application/json; charset=utf-8'
       generate_json(original_body)
     end
   end
