@@ -690,7 +690,31 @@ class Service
   end
 
   def generate_json(body)
-    JSON.generate(body)
+    JSON.generate(clean_for_json(body))
+  end
+
+  def clean_hash_for_json(hash)
+    hash.keys.each do |key|
+      hash[key] = clean_for_json(hash[key])
+    end
+    hash
+  end
+
+  def clean_array_for_json(array)
+    array.map! { |value| clean_for_json(value) }
+  end
+
+  def clean_string_for_json(str)
+    str.to_s
+  end
+
+  def clean_for_json(value)
+    case value
+    when Hash then clean_hash_for_json(value)
+    when Array then clean_array_for_json(value)
+    when String then clean_string_for_json(value)
+    else value
+    end
   end
 
   # Public: Checks for an SSL error, and re-raises a Services configuration error.
