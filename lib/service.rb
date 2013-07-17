@@ -694,14 +694,15 @@ class Service
   end
 
   def clean_hash_for_json(hash)
+    new_hash = {}
     hash.keys.each do |key|
-      hash[key] = clean_for_json(hash[key])
+      new_hash[key] = clean_for_json(hash[key])
     end
-    hash
+    new_hash
   end
 
   def clean_array_for_json(array)
-    array.map! { |value| clean_for_json(value) }
+    array.map { |value| clean_for_json(value) }
   end
 
   def clean_string_for_json(str)
