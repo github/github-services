@@ -19,7 +19,7 @@ class IDoneThisTest < Service::TestCase
       body = JSON.parse(env[:body])
 
       assert_equal env[:url].host, "idonethis.com"
-      assert_equal env[:request_headers]['Authorization'], "Token #{test_token}"
+      assert_equal env[:request_headers]['Authorization'], "#{test_token}"
       assert_equal 'test', body['payload']['commits'][0]['id']
       assert_equal 'push', body['event']
       [200, {}, '']
