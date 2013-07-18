@@ -91,7 +91,7 @@ class Service
     end
 
     def encode_body_as_json
-      http.headers['content-type'] = 'application/json; charset=utf-8'
+      http.headers['content-type'] = 'application/json'
       generate_json(original_body)
     end
   end
