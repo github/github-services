@@ -1,6 +1,7 @@
 # Represents a single triggered Service call.  Each Service tracks the event
 # type, the configuration data, and the payload for the current call.
 class Service
+  UTF8 = "UTF-8".freeze
   class Contributor < Struct.new(:value)
     def self.contributor_types
       @contributor_types ||= []
@@ -705,8 +706,9 @@ class Service
     array.map { |value| clean_for_json(value) }
   end
 
+  # overridden in Hookshot for proper UTF-8 transcoding with CharlockHolmes
   def clean_string_for_json(str)
-    str.to_s
+    str.to_s.force_encoding(Service::UTF8)
   end
 
   def clean_for_json(value)
