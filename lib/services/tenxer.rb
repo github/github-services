@@ -1,5 +1,5 @@
 class Service::Tenxer < Service
-
+  self.title = 'tenXer'
   url "https://www.tenxer.com"
   logo_url "https://www.tenxer.com/static.b58bf75/image/touch-icon-144.png"
 
