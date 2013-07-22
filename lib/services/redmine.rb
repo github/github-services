@@ -29,7 +29,6 @@ class Service::Redmine < Service
             issue_no = id.gsub('#','')
 
             # Send the commit information to the related issue on redmine
-            http.ssl[:verify] = false
             http.url_prefix = data['address']
             
             http_method :put, "/issues/#{issue_no}.json" do |req|
