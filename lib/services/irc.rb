@@ -114,7 +114,7 @@ class Service::IRC < Service
 
   def irc_gets
     response = readable_irc.gets
-    debug_incoming(response) unless !response || response.empty?
+    debug_incoming(clean_string_for_json(response)) unless !response || response.empty?
     response
   end
 
