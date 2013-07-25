@@ -7,6 +7,8 @@ class Service::Tenxer < Service
   supported_by :web => 'http://www.tenxer.com/faq',
     :email => 'support@tenxer.com'
 
+  default_events Service::ALL_EVENTS
+
   def receive_event
     url = "https://www.tenxer.com/updater/githubpubsubhubbub/"
     res = http_post url, {'payload' => generate_json(payload)},
