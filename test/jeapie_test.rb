@@ -19,7 +19,7 @@ class JeapieTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc.receive_push
+    svc.receive_event
   end
 
   def service(*args)

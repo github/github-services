@@ -1,12 +1,27 @@
-class Service::Jeapie < Service
+class Service::Jeapie < Service::HttpPost
   string :token
 
-  def receive_push
+  default_events :push, :pull_request, :commit_comment
+
+  url "http://jeapie.com"
+  logo_url "http://jeapie.com/images/icon48.png"
+
+  maintained_by :github => 'Jeapie',
+      :twitter => '@JeapieCom'
+
+  supported_by :web => 'http://jeapie.com/en/site/contact',
+      :email => 'jeapiecompany@gmail.com',
+      :twitter => '@JeapieCom'
+
+  def receive_event
+
     if !payload["commits"].any?
       return
     end
 
-    if !data["token"]
+    token = required_config_value('token')
+
+    if !token
       raise_config_error "Invalid Jeapie token."
     end
 
@@ -32,6 +47,6 @@ class Service::Jeapie < Service
     http_post url.to_s,
       :token => data["token"],
       :title => title,
-      :message => message,
+      :message => message
   end
 end
