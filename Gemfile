@@ -29,4 +29,4 @@ gem "mqtt", 			      "0.0.8"
 gem "softlayer_messaging", "~> 1.0.2"
 gem "aws-sdk", "1.6.8"
 gem "unicorn", "~> 4.5.0"
-gem 'typhoeus',                     '~> 0.6.3'
+gem 'typhoeus',  "0.6.4.f872f12"
