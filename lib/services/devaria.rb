@@ -9,7 +9,7 @@ class Service::Devaria < Service::HttpPost
 	maintained_by :github => 'jonbonazza'
 	
 	supported_by :web => 'http://www.createtank.com/contactUs/'
-	@@url_base = "http://localhost:8080/hooks"
+	@@url_base = "http://devaria.com/hooks"
 	def receive_push
 		username = required_config_value('username')
 		project = required_config_value('project_name')
