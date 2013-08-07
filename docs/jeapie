@@ -1,0 +1,18 @@
+Jeapie
+========
+
+Jeapie is a platform for building mobile notifications subscription. We provide Jeapie mobile apps to receive and store push notifications from many services including GitHub. Also you can create you own providers. [Jeapie site](http://jeapie.com/).
+
+Install Notes
+-------------
+
+1. Sign up in [Dashboard](http://dashboard.jeapie.com) and create your notification provider. Copy the provider token. You can invite team-members to subscribe on this provider.
+
+2. Install the [iOS client](http://jeapie.com/en/site/start) from the App Store, or the [Android client](http://jeapie.com/en/site/start) from the Google Play.
+
+3. Login to Jeapie app using your Dashboard login and password.
+
+3. Add your provider token in the field above. After that all of the subscribers including you will get notified about every commit in the repository. 
+
+
+Get your productivity on the next level!
