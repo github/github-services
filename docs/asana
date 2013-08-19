@@ -8,7 +8,7 @@ A commit with the message:
 Fixes layout rendering bug. Reported in https://app.asana.com/0/12345678/9012345
 ```
 
-Will show up as:
+will show up as:
 ```<commiter> pushed to branch <branch> of <user>/<repo> 
 (http://github.com/<user>/<repo>/commit/<commit id>)
 -Fixes layout rendering bug. Reported in https://app.asana.com/0/12345678/9012345```
