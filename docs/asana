@@ -1,16 +1,18 @@
-This service adds commit messages as comments to Asana tasks. Once enabled, commits messages are checked for Asana task ID
-in the format #<task id>. Every task ID found will get the commit comment added to it. 
+This service adds commit messages as comments to Asana tasks. Once enabled, commit messages
+are checked for Asana task URLs (for example, https://app.asana.com/0/12345678/9012345) or task IDs
+starting with # (for example, #9012345). Every task ID found will get the commit comment added to it. 
 
 A commit with the message:
-`stub git call for Grit#heads test f:15 Case#1234`
+
+`Fixes layout rendering bug. Reported in https://app.asana.com/0/12345678/9012345`
 
 Will show up as:
 `<commiter> pushed to branch <branch> of <user>/<repo> 
 (http://github.com/<user>/<repo>/commit/<commit id>)
--stub git call for Grit#heads test f:15 Case#1234`
+-Fixes layout rendering bug. Reported in https://app.asana.com/0/12345678/9012345`
 
 Install Notes
 -------------
 1. **Auth Token** - User API token. User must have access to task, all comments will be attributed to this user. See: http://developer.asana.com/documentation/#Authentication
-2. **Restrict to Branch** - List of branches to which will be inspected for task ID's, if blank all will be inspected
-3. **Restrict to Last Comment** - Will only look in the last comment of the push for task ID's
+2. **Restrict to Branch** - Comma-separated list of branches which will be automatically inspected. Leave blank to include all branches.
+3. **Restrict to Last Commit** - Will only inspect the last commit of each push for task IDs.
