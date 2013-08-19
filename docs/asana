@@ -4,12 +4,14 @@ starting with # (for example, #9012345). Every task ID found will get the commit
 
 A commit with the message:
 
-`Fixes layout rendering bug. Reported in https://app.asana.com/0/12345678/9012345`
+```
+Fixes layout rendering bug. Reported in https://app.asana.com/0/12345678/9012345
+```
 
 Will show up as:
-`<commiter> pushed to branch <branch> of <user>/<repo> 
+```<commiter> pushed to branch <branch> of <user>/<repo> 
 (http://github.com/<user>/<repo>/commit/<commit id>)
--Fixes layout rendering bug. Reported in https://app.asana.com/0/12345678/9012345`
+-Fixes layout rendering bug. Reported in https://app.asana.com/0/12345678/9012345```
 
 Install Notes
 -------------
