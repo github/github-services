@@ -12,7 +12,7 @@ class JeapieTest < Service::TestCase
       "short"
     end
 
-    @stubs.post "/v1/broadcast/send/message.json" do |env|
+    @stubs.post "/v2/broadcast/send/message.json" do |env|
       assert_equal "api.jeapie.com", env[:url].host
       data = Faraday::Utils.parse_query(env[:body])
       assert_equal "a", data["token"]
