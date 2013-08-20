@@ -1,13 +1,14 @@
 class Service::IRC < Service
   string   :server, :port, :room, :nick, :branch_regexes, :nickserv_password
   password :password
-  boolean  :ssl, :message_without_join, :no_colors, :long_url, :notice
+  boolean  :ssl, :message_without_join, :no_colors, :long_url, :notice, :pull_requests_only
   white_list :server, :port, :room, :nick
 
   default_events :push, :pull_request
 
   def receive_push
-    return unless branch_name_matches?
+    return unless branch_name_matches? && !prs_only?
+    
 
     messages = []
     messages << "#{irc_push_summary_message}: #{fmt_url url}"
@@ -18,7 +19,7 @@ class Service::IRC < Service
   end
 
   def receive_commit_comment
-    send_messages "#{irc_commit_comment_summary_message} #{fmt_url url}"
+    send_messages "#{irc_commit_comment_summary_message} #{fmt_url url}" unless prs_only?
   end
 
   def receive_pull_request
@@ -26,15 +27,15 @@ class Service::IRC < Service
   end
 
   def receive_pull_request_review_comment
-    send_messages "#{irc_pull_request_review_comment_summary_message}  #{fmt_url url}"
+    send_messages "#{irc_pull_request_review_comment_summary_message}  #{fmt_url url}" unless prs_only?
   end
 
   def receive_issues
-    send_messages "#{irc_issue_summary_message}  #{fmt_url url}"
+    send_messages "#{irc_issue_summary_message}  #{fmt_url url}" unless prs_only?
   end
 
   def receive_issue_comment
-    send_messages "#{irc_issue_comment_summary_message} #{fmt_url url}"
+    send_messages "#{irc_issue_comment_summary_message} #{fmt_url url}" unless prs_only?
   end
 
   def send_messages(messages)
@@ -325,4 +326,9 @@ class Service::IRC < Service
     end
     false
   end
+  
+  def prs_only?
+    data['pull_requests_only'].to_i == 1
+  end
+    
 end
