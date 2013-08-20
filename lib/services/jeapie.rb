@@ -25,7 +25,7 @@ class Service::Jeapie < Service::HttpPost
       raise_config_error "Invalid Jeapie token."
     end
 
-    url = URI.parse("https://api.jeapie.com/v1/broadcast/send/message.json")
+    url = URI.parse("https://api.jeapie.com/v2/broadcast/send/message.json")
 
     commits = payload["commits"].length
     repo = payload["repository"]["url"].split("/")[-2 .. -1].join("/")
@@ -45,7 +45,7 @@ class Service::Jeapie < Service::HttpPost
     end
 
     http_post url.to_s,
-      :token => data["token"],
+      :token => token,
       :title => title,
       :message => message
   end
