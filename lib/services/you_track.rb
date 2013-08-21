@@ -23,8 +23,9 @@ class Service::YouTrack < Service
   end
 
   def active_branch?
-    ref = payload['ref'].to_s
-    data['branch'].to_s.empty? or data['branch'].to_s == ref.split('/').last
+    pushed_branch = payload['ref'].to_s[/refs\/heads\/(.*)/, 1]
+    active_branch = data['branch'].to_s
+    active_branch.empty? or active_branch.split(' ').include?(pushed_branch)
   end
 
   def login
@@ -50,19 +51,19 @@ class Service::YouTrack < Service
 
   def process_commit(commit)
     author = nil
-    commit["message"].split("\n").each { |commit_line|
+    commit['message'].split("\n").each { |commit_line|
       issue_id = commit_line[/( |^)#(\w+-\d+)\b/, 2]
       next if issue_id.nil?
 
       login
       # lazily load author
-      author ||= find_user_by_email(commit["author"]["email"])
+      author ||= find_user_by_email(commit['author']['email'])
       return if author.nil?
 
       command = commit_line[/( |^)#\w+-\d+ (.+)/, 2]
-      command = "Fixed" if command.nil?
+      command = 'Fixed' if command.nil?
       command.strip!
-      comment_string = "Commit made by '''" + commit["author"]["name"] + "''' on ''" + commit["timestamp"] + "''\n" + commit["url"] + "\n\n{quote}" + commit["message"].to_s + "{quote}"
+      comment_string = "Commit made by '''" + commit['author']['name'] + "''' on ''" + commit['timestamp'] + "''\n" + commit['url'] + "\n\n{quote}" + commit['message'].to_s + '{quote}'
       execute_command(author, issue_id, command, comment_string)
     }
   end
@@ -71,8 +72,8 @@ class Service::YouTrack < Service
     counter = 0
     found_user = nil
     while true
-      body = ""
-      res = http_get "rest/admin/user", :q => email, :group => data['committers'], :start => counter
+      body = ''
+      res = http_get 'rest/admin/user', :q => email, :group => data['committers'], :start => counter
       verify_response(res)
       xml_body = REXML::Document.new(res.body)
       xml_body.root.each_element do |user_ref|

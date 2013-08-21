@@ -66,7 +66,7 @@ class YouTrackTest < Service::TestCase
     hash['ref'] = 'refs/heads/master'
 
     svc = service({'base_url' => 'http://yt.com/abc', 'committers' => 'c',
-                   'username' => 'u', 'password' => 'p', 'branch' => 'master'}, hash)
+                   'username' => 'u', 'password' => 'p', 'branch' => 'master dev'}, hash)
     svc.receive_push
 
     @stubs.verify_stubbed_calls
