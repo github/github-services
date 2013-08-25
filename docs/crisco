@@ -1,0 +1,3 @@
+[Crisco](http://github.com/darvin/crisco) helps you to do lightweight code reviews in Github commit comments interface or in your mail.
+
+__Url__ is your private Crisco installation url. If empty, it will use the public shared installation [http://crisco-review.herokuapp.com/](http://crisco-review.herokuapp.com/)
