@@ -36,6 +36,8 @@ class Service::Campfire < Service
     send_messages "#{summary_message}: #{configured_summary_url}"
   end
 
+  alias receive_gollum receive_public
+
   def send_messages(messages)
     raise_config_error 'Missing campfire token' if data['token'].to_s.empty?
 

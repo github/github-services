@@ -58,6 +58,10 @@ class Service::TestCase < Test::Unit::TestCase
     Service::PublicHelpers.sample_payload
   end
 
+  def gollum_payload
+    Service::GollumHelpers.sample_payload
+  end
+
   def basic_payload
     Service::HelpersWithMeta.sample_payload
   end
