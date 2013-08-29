@@ -15,31 +15,39 @@ module Service::GollumHelpers
 
   def summary_message
     if pages.size == 1
-      summary = pages[0]['summary']
-
-      '[%s] %s %s wiki page %s%s' % [
-        repo.name,
-        sender.login,
-        pages[0]['action'],
-        pages[0]['title'],
-        summary ? ": #{summary}" : '',
-      ]
+      single_page_summary_message
     else
-      counts = {}
-      counts.default = 0
-      pages.each { |page| counts[page['action']] += 1 }
-
-      actions = []
-      counts.each { |action, count| actions << "#{action} #{count}" }
-
-      '[%s] %s %s wiki pages' % [
-        repo.name,
-        sender.login,
-        actions.sort.to_sentence,
-      ]
+      pages_summary_message
     end
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def single_page_summary_message
+    summary = pages[0]['summary']
+
+    '[%s] %s %s wiki page %s%s' % [
+      repo.name,
+      sender.login,
+      pages[0]['action'],
+      pages[0]['title'],
+      summary ? ": #{summary}" : '',
+    ]
+  end
+
+  def pages_summary_message
+    counts = {}
+    counts.default = 0
+    pages.each { |page| counts[page['action']] += 1 }
+
+    actions = []
+    counts.each { |action, count| actions << "#{action} #{count}" }
+
+    '[%s] %s %s wiki pages' % [
+      repo.name,
+      sender.login,
+      actions.sort.to_sentence,
+    ]
   end
 
   def self.sample_payload
