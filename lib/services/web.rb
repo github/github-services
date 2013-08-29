@@ -28,7 +28,7 @@ class Service::Web < Service
     res = deliver data['url'], :content_type => data['content_type'],
       :insecure_ssl => data['insecure_ssl'].to_i == 1, :secret => data['secret']
 
-    if res.status > 199 && res.status < 300
+    if res.status < 200 || res.status > 299
       raise_config_error "Invalid HTTP Response: #{res.status}"
     end
   end
