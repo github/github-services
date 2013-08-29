@@ -5,15 +5,15 @@
      Also supports room passwords (room_name::password). Prefixing '#' to the room is optional.
 4.  `password` - Server password (optional)
 5.  `nick` - Nickname for the bot (optional)
-7.  `nickserv_password` - Password for the server's [NickServ](http://en.wikipedia.org/wiki/Internet_Relay_Chat_services) (optional)
-6.  `long_url` - Displays full compare/commit url's. Uses git.io if disabled.
-7.  `message_without_join` - Prevents join/part spam by the bot. See step 12.
-8.  `no_colors` - Disables color support for messages.
-9.  `notice` - Sends as a notice rather than a channel message.
-10. `branch_regexes` - Regular expressions for branch name matching (optional, comma separated).
+6.  `nickserv_password` - Password for the server's [NickServ](http://en.wikipedia.org/wiki/Internet_Relay_Chat_services) (optional)
+7.  `long_url` - Displays full compare/commit url's. Uses git.io if disabled.
+8.  `message_without_join` - Prevents join/part spam by the bot. See step 13.
+9.  `no_colors` - Disables color support for messages.
+10. `notice` - Sends as a notice rather than a channel message.
+11. `branch_regexes` - Regular expressions for branch name matching (optional, comma separated).
      For example, only master => `^master$`, master & starts with bug => `master,^bug`.
-11. `active` - Activates the bot.
-12. Configure your IRC channel to allow external messages, necessary for the `message_without_join` option.
+12. `active` - Activates the bot.
+13. Configure your IRC channel to allow external messages, necessary for the `message_without_join` option.
     `/mode #channelname -n` or `/msg chanserv set #channelname mlock -n`
 
 Here's an example for Freenode:
