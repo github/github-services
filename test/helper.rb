@@ -54,6 +54,14 @@ class Service::TestCase < Test::Unit::TestCase
     Service::CommitCommentHelpers.sample_payload
   end
 
+  def public_payload
+    Service::PublicHelpers.sample_payload
+  end
+
+  def gollum_payload
+    Service::GollumHelpers.sample_payload
+  end
+
   def basic_payload
     Service::HelpersWithMeta.sample_payload
   end
