@@ -5,13 +5,6 @@ module Service::GollumHelpers
     payload['pages']
   end
 
-  def human_join(things)
-    if things.size >= 2
-      things << "%s, and %s" % things.pop(2)
-    end
-    things.join ', '
-  end
-
   def summary_url
     if pages.size == 1
       pages[0]['html_url']
@@ -42,7 +35,7 @@ module Service::GollumHelpers
       '[%s] %s %s wiki pages' % [
         repo.name,
         sender.login,
-        human_join(actions.sort),
+        actions.sort.to_sentence,
       ]
     end
   rescue
