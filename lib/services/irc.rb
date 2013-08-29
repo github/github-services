@@ -22,7 +22,7 @@ class Service::IRC < Service
   end
 
   def receive_pull_request
-    send_messages "#{irc_pull_request_summary_message}  #{fmt_url url}"
+    send_messages "#{irc_pull_request_summary_message}  #{fmt_url url}" if action =~ /(open)|(close)/
   end
 
   def receive_pull_request_review_comment
