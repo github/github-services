@@ -28,7 +28,7 @@ class Service::Talker < Service
     return unless opened?
 
     prepare_http
-    say summary_message
+    say "#{summary_message}. #{summary_url}"
   end
 
   def receive_issues
