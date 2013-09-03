@@ -24,7 +24,7 @@ class Service::Jira < Service
         if key =~ /(?i)status|(?i)transition/
           changeset.merge!(:transition => value.to_s)
         elsif key =~ /(?i)resolution/
-          changeset.merge!(:fields => { :resolution => value.to_s })
+          changeset.merge!(:fields => { :resolution => { :id => value.to_s } })
         else
           changeset.merge!(:fields => { key.to_sym => "Resolved" })
         end
