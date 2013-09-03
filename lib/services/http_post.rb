@@ -1,6 +1,4 @@
 class Service::HttpPost < Service
-  Service.services.delete(self)
-
   include HttpHelper
 
   alias receive_event deliver
@@ -15,4 +13,3 @@ class Service::HttpPost < Service
      :guid => delivery_guid}
   end
 end
-
