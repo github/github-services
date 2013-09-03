@@ -23,15 +23,13 @@ class Service::OnTime < Service
 
     if (version['major'] == 11 and version['minor'] >= 1) or (version['major'] == 12 and version['minor'] < 2)
       result = http_post "api/github", :payload => json, :hash_data => hash_data, :source => :github
-    elsif (version['major'] == 12 and version['minor'] >= 2) or version['major'] > 12
+    elsif (version['major'] == 12 and version['minor'] >= 2) or (version['major'] == 13 and   version['minor'] < 3)
       result = http_post "api/v1/github", :payload => json, :hash_data => hash_data, :source => :github
+    elsif (version['major'] == 13 and version['minor'] >= 3) or version['major'] > 13
+      http.headers['Content-Type'] = 'application/json'
+      result = http_post("api/v2/github?hash_data=#{hash_data}", json)
     else
       raise_config_error "Unexpected API version. Please update to the latest version of OnTime to use this service."
-    end
-
-    if (version['major'] == 13 and version['minor'] >= 3  or version['major'] > 13)
-      #Versions prior to 13.3 expect encoded form data (the default), not json.
-      http.headers['Content-Type'] = 'application/json'
     end
 
     verify_response(result)
