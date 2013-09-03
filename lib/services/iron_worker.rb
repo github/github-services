@@ -1,4 +1,4 @@
-class Service::IronWorker < HttpPost
+class Service::IronWorker < Service::HttpPost
   string :token
   string :project_id
   string :queue_name
