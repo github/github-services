@@ -29,6 +29,11 @@ class Service::OnTime < Service
       raise_config_error "Unexpected API version. Please update to the latest version of OnTime to use this service."
     end
 
+    if (version['major'] == 13 and version['minor'] >= 3  or version['major'] > 13)
+      #Versions prior to 13.3 expect encoded form data (the default), not json.
+      http.headers['Content-Type'] = 'application/json'
+    end
+
     verify_response(result)
   end
 
