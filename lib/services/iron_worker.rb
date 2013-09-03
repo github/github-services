@@ -1,4 +1,4 @@
-class Service::IronWorker < Service
+class Service::IronWorker < HttpPost
   string :token
   string :project_id
   string :queue_name
@@ -11,11 +11,11 @@ class Service::IronWorker < Service
   logo_url "http://www.iron.io/assets/resources/worker/ironworker-logo-290x160.png"
 
   # Technoweenie on GitHub is pinged for any bugs with the Hook code.
-  maintained_by :github => "adelevie"  # I'm happy to get pinged for bugs, but feel free to remove me and add Iron.io staff.
+  maintained_by :github => "treeder"  # I'm happy to get pinged for bugs, but feel free to remove me and add Iron.io staff.
 
   # Support channels for user-level Hook problems (service failure,
   # misconfigured
-  supported_by :web => 'http://support.iron.io',
+  supported_by :web => 'http://get.iron.io/chat',
                :email => 'support@iron.io'
 
   def receive_event
