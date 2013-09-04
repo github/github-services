@@ -1,8 +1,8 @@
 class Service::IronWorker < Service::HttpPost
   string :token
   string :project_id
-  string :queue_name
-  white_list :project_id, :queue_name
+  string :code_name
+  white_list :project_id, :code_name
 
   default_events :commit_comment, :download, :fork, :fork_apply, :gollum,
                  :issues, :issue_comment, :member, :public, :pull_request, :push, :watch
