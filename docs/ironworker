@@ -1,0 +1,13 @@
+IronWorker
+======
+
+Posts all of your GitHub events to IronWorker so you can write IronWorker scripts for testing and deploying applications.
+
+For more information about IronWorker, see [www.iron.io](http://www.iron.io).
+
+Install Notes
+-------------
+
+1. **token** - Your Iron.io OAuth token. Get yours at: http://hud.iron.io/tokens
+2. **project_id** - The Iron.io project ID you you'd like to use.
+3. **code_name** - The name of the worker code to post to.
