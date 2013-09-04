@@ -1,5 +1,5 @@
-class Service::Devaria < Service::HttpPost
-	string :project_name, :username, :user_class_id
+class Service::Devaria < Service
+	string :project_name, :username
 	
 	white_list :project_name, :username, :user_class_id
 	
