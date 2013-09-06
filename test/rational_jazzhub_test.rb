@@ -23,6 +23,24 @@ class RationalJazzhubTest < Service::TestCase
     assert_equal 1, @Pushes
   end
 
+  def test_push_empty_server_override
+    svc = service(
+      {'username' => username, 
+       'password' => password,
+        'override_server_url' => ""},
+        payload)
+
+    @stubs.post "/manage/processGitHubPayload" do |env|
+       assert_equal 'hub.jazz.net', env[:url].host
+       params = Faraday::Utils.parse_nested_query(env[:url].query)
+       assert_equal({'jazzhubUsername' => username,'jazzhubPassword' => password}, params)
+       @Pushes += 1
+       [200, {}, '']
+    end
+    svc.receive_push
+    assert_equal 1, @Pushes
+  end
+
   def test_push_override
     svc = service(
       {'username' => username, 
