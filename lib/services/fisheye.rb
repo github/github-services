@@ -8,6 +8,7 @@ class Service::FishEye < Service
     verify_config
 
     http.headers['X-Api-Key'] = token
+    http.headers['Content-Type'] = 'application/json'
 
     url = "%s/rest-service-fecru/admin/repositories-v1/%s/scan" % [url_base, repository_name]
 
