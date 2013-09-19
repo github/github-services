@@ -17,8 +17,14 @@ class FishEyeTest < Service::TestCase
     }
   end
 
+  def assert_headers_valid(env)
+    assert_equal(data_my_repo["token"], env[:request_headers]["X-Api-Key"])
+    assert_equal("application/json", env[:request_headers]["Content-Type"])
+  end
+
   def test_triggers_scanning_custom_repository
     @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/myRepo/scan" do |env|
+      assert_headers_valid(env)
       [200, {}]
     end
 
@@ -30,6 +36,7 @@ class FishEyeTest < Service::TestCase
 
   def test_triggers_scanning_url_with_slash
     @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/myRepo/scan" do |env|
+      assert_headers_valid(env)
       [200, {}]
     end
 
@@ -44,6 +51,7 @@ class FishEyeTest < Service::TestCase
 
   def test_triggers_scanning_url_without_http
     @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/myRepo/scan" do |env|
+      assert_headers_valid(env)
       [200, {}]
     end
 
@@ -74,6 +82,7 @@ class FishEyeTest < Service::TestCase
 
   def test_triggers_scanning_empty_custom_repository
     @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/grit/scan" do |env|
+      assert_headers_valid(env)
       [200, {}]
     end
 
@@ -139,6 +148,7 @@ class FishEyeTest < Service::TestCase
 
   def test_triggers_scanning_missing_payload
     @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/myRepo/scan" do |env|
+      assert_headers_valid(env)
       [200, {}]
     end
 
