@@ -4,7 +4,8 @@ class Service::HipChat < Service
   white_list :room, :restrict_to_branch
 
   default_events :commit_comment, :download, :fork, :fork_apply, :gollum,
-    :issues, :issue_comment, :member, :public, :pull_request, :push, :watch
+    :issues, :issue_comment, :member, :public, :pull_request, :pull_request_review_comment,
+    :push, :watch
 
   def receive_event
     # make sure we have what we need
