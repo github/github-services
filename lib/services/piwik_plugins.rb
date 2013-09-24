@@ -11,7 +11,7 @@ class Service::PiwikPlugins < Service::HttpPost
   supported_by :email => 'fabian@piwik.org'
 
   def receive_push
-    http_post "http://plugins.piwik.org/postreceive-hook", :payload => generate_json(payload)
+    deliver "http://plugins.piwik.org/postreceive-hook"
   end
 
 end
