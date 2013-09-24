@@ -30,7 +30,7 @@ class RationalJazzhubTest < Service::TestCase
         'override_server_url' => ""},
         payload)
 
-    @stubs.post "/processGitHubPayload" do |env|
+    @stubs.post "/manage/processGitHubPayload" do |env|
        assert_equal 'hub.jazz.net', env[:url].host
        params = Faraday::Utils.parse_nested_query(env[:url].query)
        assert_equal({'jazzhubUsername' => username,'jazzhubPassword' => password}, params)
@@ -71,4 +71,3 @@ class RationalJazzhubTest < Service::TestCase
     super Service::RationalJazzHub, *args
   end
 end
-
