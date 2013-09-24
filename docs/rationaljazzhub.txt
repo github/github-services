@@ -1,9 +1,9 @@
 JazzHub
 =======
 
-This service integrates GitHub with Rational's JazzHub service (http://hub.jazz.net). The hook automatically adds change set links into the work item specified by the commit message. 
+This service integrates GitHub with Rational's JazzHub service (http://hub.jazz.net). The hook automatically adds change set links into the work item specified by the commit message.
 
-The hook will recognize any of the common work item type names in the commit message and look for a corresponding work item.  
+The hook will recognize any of the common work item type names in the commit message and look for a corresponding work item.
 
 For example:
    - "Fix bug 42"

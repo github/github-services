@@ -25,7 +25,7 @@ class RationalJazzhubTest < Service::TestCase
 
   def test_push_empty_server_override
     svc = service(
-      {'username' => username, 
+      {'username' => username,
        'password' => password,
         'override_server_url' => ""},
         payload)
