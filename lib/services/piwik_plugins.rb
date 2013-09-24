@@ -1,4 +1,4 @@
-class Service::PiwikPlugins < Service
+class Service::PiwikPlugins < Service::HttpPost
 
   self.title = 'Piwik Plugins'
 
