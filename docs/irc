@@ -1,31 +1,35 @@
-1.  `server` - IRC server, IE. irc.freenode.net
-2.  `port` - Normally 6667 (No SSL) or 9999 (SSL) (optional). These are the defaults based on whether the value of `ssl` checkbox.
-3.  `room` - Supports single or multiple rooms (comma separated).  Also supports room passwords (room_name::password).  Prefixing '#' to the room is optional.
+1.  `server` - IRC server (e.g. irc.freenode.net)
+2.  `port` - The port to connect to the server (optional). Default values: 6667 (No SSL) when `Ssl` not checked, 9999 (SSL) when `Ssl` is checked.
+     freenode servers listen on ports 6665, 6666, 6667, 6697 (SSL only), 7000 (SSL only), 7070 (SSL only), 8000, 8001 and 8002.
+3.  `room` - Supports single or multiple rooms (comma separated).
+     Also supports room passwords (room_name::password). Prefixing '#' to the room is optional.
 4.  `password` - Server password (optional)
-5.  `nick` - Nickname (optional)
-7.  `nickserv_password` - Password for the server's [NickServ](http://en.wikipedia.org/wiki/Internet_Relay_Chat_services) (optional)
-6.  `long_url` - If enabled, displays full compare/commit url's. If disabled uses git.io.
-7.  `message_without_join` - If enabled prevents joining and immediately leaving the channel.  Make sure you configure the channel to support outside messages ("/mode #yourchannelname -n" or "/msg chanserv set mlock -n")
-8.  `no_colors` - Disables color support for messages
-9.  `notice` - Sends as a notice rather than a channel message.
-10. `branch_regexes` - Regular expressions for branch name matching (optional, comma separated). For example, only master => `^master$`, master & starts with bug => `master,^bug`.
-11. `active` - Enables the bot
-12. Configure your IRC channel to allow external messages (/mode #yourchannelname -n).
+5.  `nick` - Nickname for the bot (optional)
+6.  `nickserv_password` - Password for the server's [NickServ](http://en.wikipedia.org/wiki/Internet_Relay_Chat_services) (optional)
+7.  `long_url` - Displays full compare/commit url's. Uses git.io if disabled.
+8.  `message_without_join` - Prevents join/part spam by the bot. See step 13.
+9.  `no_colors` - Disables color support for messages.
+10. `notice` - Sends as a notice rather than a channel message.
+11. `branch_regexes` - Regular expressions for branch name matching (optional, comma separated).
+     For example, only master => `^master$`, master & starts with bug => `master,^bug`.
+12. `active` - Activates the bot.
+13. Configure your IRC channel to allow external messages, necessary for the `message_without_join` option.
+    `/mode #channelname -n` or `/msg chanserv set #channelname mlock -n`
 
-For freenode, try the following:
+Here's an example for freenode:
 
     # server: irc.freenode.net
     # port: 6667
-    # room: #yourroom
+    # room: #channelname
     # message_without_join: checked
     # long_url: checked
     # notice: checked
     # active: checked
     # NOTE: Ensure you enable notice support (see above)
 
-For troubleshooting, run the following curl command to get diagnostic information from GitHub. 
+For troubleshooting, run the following curl command to get diagnostic information from GitHub.
 
-    # Replace 
+    # Replace
     # USERNAME:PASSWORD with your GitHub username and password. Username is
     # your full username as used when signing in.
     #

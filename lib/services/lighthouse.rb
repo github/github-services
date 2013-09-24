@@ -9,7 +9,8 @@ class Service::Lighthouse < Service
 
     payload['commits'].each do |commit|
       next if commit['message'] =~ /^x /
-      next if data['send_only_ticket_commits'] == false && (commit['message'] =~ check_for_lighthouse_flags).nil?
+      next if data['send_only_ticket_commits'] == '1' \
+        && (commit['message'] =~ check_for_lighthouse_flags).nil?
 
       commit_id = commit['id']
       added     = commit['added'].map    { |f| ['A', f] }

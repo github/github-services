@@ -38,8 +38,28 @@ class Service::TestCase < Test::Unit::TestCase
     Service::PullRequestHelpers.sample_payload
   end
 
+  def pull_request_review_comment_payload
+    Service::PullRequestReviewCommentHelpers.sample_payload
+  end
+
   def issues_payload
     Service::IssueHelpers.sample_payload
+  end
+
+  def issue_comment_payload
+    Service::IssueCommentHelpers.sample_payload
+  end
+
+  def commit_comment_payload
+    Service::CommitCommentHelpers.sample_payload
+  end
+
+  def public_payload
+    Service::PublicHelpers.sample_payload
+  end
+
+  def gollum_payload
+    Service::GollumHelpers.sample_payload
   end
 
   def basic_payload

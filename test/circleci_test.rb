@@ -54,7 +54,7 @@ class CircleciTest < Service::TestCase
     post_to_service(:issues)
   end
 
-  def test_member    
+  def test_member
     post_to_service(:member)
   end
 
@@ -85,6 +85,7 @@ class CircleciTest < Service::TestCase
 
   def test_supported_events
     assert_equal Service::Circleci.supported_events.sort , Service::ALL_EVENTS.sort
+    assert_equal Service::Circleci.default_events.sort , Service::ALL_EVENTS.sort
   end
 
   private
@@ -108,4 +109,3 @@ class CircleciTest < Service::TestCase
     svc.receive_event
   end
 end
-

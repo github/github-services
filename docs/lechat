@@ -1,0 +1,10 @@
+Kato
+=====
+
+Kato is a team chat service with an emphasis on search, user interface, and reliability.
+
+Integrating with GitHub will cause certain information about commits, issues, and comments to appear in a specified Kato room.
+
+Install Notes
+-------------
+**Webhook Url** -  GitHub webhook URL from the Integrations tab in room settings in your [Kato](http://kato.im) account

@@ -200,6 +200,20 @@ class IRCTest < Service::TestCase
     assert_nil msgs.shift
   end
 
+  def test_commit_comment
+    svc = service(:commit_comment, {'room' => 'r', 'nick' => 'n'}, commit_comment_payload)
+
+    svc.receive_commit_comment
+    msgs = svc.writable_irc.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match "USER n", msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+
   def test_pull_request
     svc = service(:pull_request, {'room' => 'r', 'nick' => 'n'}, pull_payload)
 
@@ -223,6 +237,34 @@ class IRCTest < Service::TestCase
     assert_match "USER n", msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+
+  def test_issue_comment
+    svc = service(:issue_comment, {'room' => 'r', 'nick' => 'n'}, issue_comment_payload)
+
+    svc.receive_issue_comment
+    msgs = svc.writable_irc.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match "USER n", msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+
+  def test_pull_request_review_comment
+    svc = service(:pull_request_review_comment, {'room' => 'r', 'nick' => 'n'}, pull_request_review_comment_payload)
+
+    svc.receive_pull_request_review_comment
+    msgs = svc.writable_irc.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match "USER n", msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*grit.*pull request #5 /, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift

@@ -8,6 +8,7 @@ class TddiumTest < Service::TestCase
 
     data = {
       'token' => test_token,
+      'override_url' => ""
     }
 
     svc = service(data, push_payload)

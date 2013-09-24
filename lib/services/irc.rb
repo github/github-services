@@ -17,16 +17,24 @@ class Service::IRC < Service
     send_messages messages
   end
 
-  def receive_pull_request
-    return unless opened?
+  def receive_commit_comment
+    send_messages "#{irc_commit_comment_summary_message} #{fmt_url url}"
+  end
 
-    send_messages "#{irc_pull_request_summary_message}  #{fmt_url url}"
+  def receive_pull_request
+    send_messages "#{irc_pull_request_summary_message}  #{fmt_url url}" if action =~ /(open)|(close)/
+  end
+
+  def receive_pull_request_review_comment
+    send_messages "#{irc_pull_request_review_comment_summary_message}  #{fmt_url url}"
   end
 
   def receive_issues
-    return unless opened?
-
     send_messages "#{irc_issue_summary_message}  #{fmt_url url}"
+  end
+
+  def receive_issue_comment
+    send_messages "#{irc_issue_comment_summary_message} #{fmt_url url}"
   end
 
   def send_messages(messages)
@@ -106,7 +114,7 @@ class Service::IRC < Service
 
   def irc_gets
     response = readable_irc.gets
-    debug_incoming(response) unless !response || response.empty?
+    debug_incoming(clean_string_for_json(response)) unless !response || response.empty?
     response
   end
 
@@ -270,6 +278,23 @@ class Service::IRC < Service
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
 
+  def irc_issue_comment_summary_message
+    short  = comment.body.split("\r\n", 2).first.to_s
+    short += '...' if short != comment.body
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} comment on issue \##{issue.number}: #{short}"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def irc_commit_comment_summary_message
+    short  = comment.body.split("\r\n", 2).first.to_s
+    short += '...' if short != comment.body
+    sha1   = comment.commit_id
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} comment on commit #{fmt_hash sha1[0..6]}: #{short}"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
   def irc_pull_request_summary_message
     base_ref = pull.base.label.split(':').last
     head_ref = pull.head.label.split(':').last
@@ -277,6 +302,16 @@ class Service::IRC < Service
 
     "[#{fmt_repo repo.name}] #{fmt_name sender.login} #{action} pull request " +
     "\##{pull.number}: #{pull.title} (#{fmt_branch base_ref}...#{fmt_branch head_ref})"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def irc_pull_request_review_comment_summary_message
+    short  = comment.body.split("\r\n", 2).first.to_s
+    short += '...' if short != comment.body
+    sha1   = comment.commit_id
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} comment on pull request " +
+    "\##{pull_request_number} #{fmt_hash sha1[0..6]}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end

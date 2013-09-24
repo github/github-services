@@ -1,6 +1,7 @@
 # Represents a single triggered Service call.  Each Service tracks the event
 # type, the configuration data, and the payload for the current call.
 class Service
+  UTF8 = "UTF-8".freeze
   class Contributor < Struct.new(:value)
     def self.contributor_types
       @contributor_types ||= []
@@ -129,7 +130,7 @@ class Service
       if events.empty?
         @default_events ||= [:push]
       else
-        @default_events = events
+        @default_events = events.flatten
       end
     end
 
@@ -690,7 +691,33 @@ class Service
   end
 
   def generate_json(body)
-    JSON.generate(body)
+    JSON.generate(clean_for_json(body))
+  end
+
+  def clean_hash_for_json(hash)
+    new_hash = {}
+    hash.keys.each do |key|
+      new_hash[key] = clean_for_json(hash[key])
+    end
+    new_hash
+  end
+
+  def clean_array_for_json(array)
+    array.map { |value| clean_for_json(value) }
+  end
+
+  # overridden in Hookshot for proper UTF-8 transcoding with CharlockHolmes
+  def clean_string_for_json(str)
+    str.to_s.force_encoding(Service::UTF8)
+  end
+
+  def clean_for_json(value)
+    case value
+    when Hash then clean_hash_for_json(value)
+    when Array then clean_array_for_json(value)
+    when String then clean_string_for_json(value)
+    else value
+    end
   end
 
   # Public: Checks for an SSL error, and re-raises a Services configuration error.
@@ -842,4 +869,3 @@ begin
 rescue LoadError
   Service::Timeout = Timeout
 end
-

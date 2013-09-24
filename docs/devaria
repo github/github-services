@@ -1,0 +1,17 @@
+This service posts an event object for Github events to Devaria
+
+Supported events are currently:
+'push', 'issues', 'member', 'public'
+
+Data:
+'owner' - the Devaria user who owns the project
+'project_name' - The name of the Devaria project tied to this github project
+'payload' - The data for the event, varies by event type.
+
+More details on Github events: http://developer.github.com/v3/repos/hooks/
+
+Install Notes
+------------
+
+owner: The Devaria user who owns the project
+project_name: The name of the Devaria project tied to this github project

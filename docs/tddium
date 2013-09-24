@@ -5,15 +5,19 @@ Learn more at [tddium.com](https://www.tddium.com).
 Install Notes
 -------------
 
-If you've connected your GitHub account with Tddium, your repos will be automatically set up with this hook.
+This hook will be automatically configured for GitHub repos you've configured
+with a connected Tddium account.
 
-If you don't want to connect your Github account, or you want to give Tddium GitHub repo privileges, follow these steps:
+If you don't want to connect your Github account, or you don't want to give
+Tddium `repo` privileges, follow these steps:
 
 1. Go to your Tddium dashboard
-2. Open the Configuration page for this repo and find the 'CI Setup' section
-3. Copy the 32-character hex value listed under 'CI Token'
+2. Open the Configuration page for this repo and click on the 'CI Setup' section
+3. Copy the hex value listed under 'CI Token'
 4. Paste the token above.
 5. Install Tddium's repo-specific public key into this repo's deploy keys.  
+
+You can safely leave the Override URL field blank.
 
 Supported Events
 ----------------

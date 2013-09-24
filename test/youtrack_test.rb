@@ -27,6 +27,10 @@ class YouTrackTest < Service::TestCase
       assert_equal 'sc', env[:request_headers]['Cookie']
       [200, {}, %(<u email="tom@mojombo.com" />)]
     end
+  end
+
+  def test_push
+    valid_process_stubs
 
     @stubs.post "/abc/rest/issue/case-1/execute" do |env|
       assert_equal 'yt.com', env[:url].host
@@ -35,10 +39,6 @@ class YouTrackTest < Service::TestCase
       assert_equal 'mojombo', env[:params]['runAs']
       [200, {}, '']
     end
-  end
-
-  def test_push
-    valid_process_stubs
 
     hash = payload
     hash['commits'].first['message'].sub! /Case#1/, '#case-1 zomg omg'
@@ -46,13 +46,23 @@ class YouTrackTest < Service::TestCase
     svc = service({'base_url' => 'http://yt.com/abc', 'committers' => 'c',
                    'username' => 'u', 'password' => 'p'}, hash)
     svc.receive_push
+
+    @stubs.verify_stubbed_calls
   end
 
   def test_branch_match
     valid_process_stubs
 
+    @stubs.post "/abc/rest/issue/case-2/execute" do |env|
+      assert_equal 'yt.com', env[:url].host
+      assert_equal 'sc', env[:request_headers]['Cookie']
+      assert_equal 'Fixed', env[:params]['command']
+      assert_equal 'mojombo', env[:params]['runAs']
+      [200, {}, '']
+    end
+
     hash = payload
-    hash['commits'].first['message'].sub! /Case#1/, '#case-1 zomg omg'
+    hash['commits'].first['message'].sub! /Case#1/, '#case-2!! zomg omg'
     hash['ref'] = 'refs/heads/master'
 
     svc = service({'base_url' => 'http://yt.com/abc', 'committers' => 'c',
@@ -76,4 +86,3 @@ class YouTrackTest < Service::TestCase
     super Service::YouTrack, *args
   end
 end
-

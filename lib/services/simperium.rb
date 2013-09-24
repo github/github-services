@@ -40,4 +40,3 @@ class Service::Simperium < Service::HttpPost
     deliver url
   end
 end
-
