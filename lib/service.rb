@@ -354,7 +354,8 @@ class Service
         hash = (File.exist?(email_config_file) && YAML.load_file(email_config_file)) || {}
         EMAIL_KEYS.each do |key|
           env_key = "EMAIL_SMTP_#{key.upcase}"
-          if value = ENV[env_key]
+          value = ENV[env_key]
+          if value && value != ''
             hash[key] = value
           end
         end
