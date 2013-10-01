@@ -4,6 +4,7 @@ class TravisTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
     @svc   = service(basic_config, push_payload)
+    @svc.delivery_guid = 'guid-123'
   end
 
   def test_reads_user_from_config
@@ -38,6 +39,7 @@ class TravisTest < Service::TestCase
       assert_equal basic_auth('kronn', '5373dd4a3648b88fa9acb8e46ebc188a'),
         env[:request_headers]['authorization']
       assert_equal 'push', env[:request_headers]['x-github-event']
+      assert_equal 'guid-123', env[:request_headers]['x-github-guid']
       assert_equal payload, JSON.parse(Faraday::Utils.parse_query(env[:body])['payload'])
     end
     @svc.receive_event
