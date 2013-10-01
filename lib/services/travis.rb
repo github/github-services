@@ -9,6 +9,7 @@ class Service::Travis < Service
     http.ssl[:verify] = false
     http.basic_auth user, token
     http.headers['X-GitHub-Event'] = event.to_s
+    http.headers['X-GitHub-GUID'] = delivery_guid.to_s
     http_post travis_url, :payload => generate_json(payload)
   end
 
