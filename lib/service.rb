@@ -762,7 +762,7 @@ class Service
     string.strip!
     if string =~ /^[a-z]+\:\/\//
       uri = Addressable::URI.parse(string)
-      uri.password = "*" * uri.password.size if uri.password
+      uri.password = "*" * 8 if uri.password
       uri.to_s
     else
       string
