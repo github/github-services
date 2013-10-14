@@ -117,7 +117,7 @@ class WebTest < Service::TestCase
 
     svc = service(data, payload)
     assert_equal 2, svc.log_data.size, svc.log_data.inspect
-    assert_equal 'http://user:****@abc.com/def', svc.log_data['url']
+    assert_equal 'http://user:********@abc.com/def', svc.log_data['url']
     assert_equal data['content_type'], svc.log_data['content_type']
   end
 
