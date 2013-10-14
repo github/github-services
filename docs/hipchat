@@ -15,4 +15,5 @@ Options
 2. **Quiet Fork** - Suppress the room notice if a projcet has been forked.
 3. **Quiet Watch** - Suppress the room notice that someone has started to watch the project.
 4. **Quiet Comments** - Suppress the room notice if a comment has been made on repo.
-5. **Active** - Turn On or Off the service hook.
+5. **Quiet Wiki** - Suppress the room notice if a wiki item has been updated.
+6. **Active** - Turn On or Off the service hook.
