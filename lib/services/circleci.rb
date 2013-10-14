@@ -1,4 +1,5 @@
 class Service::Circleci < Service
+  self.title = "CircleCI"
   url "https://circleci.com"
   logo_url "https://circleci.com/favicon.ico"
 
