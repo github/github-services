@@ -1,0 +1,13 @@
+Namecast - DNS for DevOps 
+
+[Namecast](https://www.namecast.net) is a next generation DNS platform that allows you to manage DNS and your domains by attaching them to a github repository. Just sign up at https://www.namecast.net, allow access to our application, and add the 'Namecast' hook to any repositories you want us to monitor for DNS updates. You can check out more documentation on our site at https://www.namecast.net/.
+
+Install Notes
+-------------
+
+1.  Sign up at https://www.namecast.net with your github credentials
+2.  Be sure to add a domain (or use the free provided domain) and attach it to a repository. We will only monitor one repo for a given domain's updates. Pro users can use private repositories.
+3.  Add the 'Namecast' service hook to your repository so that we'll be able to pull any updates you make.
+4.  You're all set!
+
+For more details about Namecast go to https://www.namecast.net, or contact us at support@namecast.net.
