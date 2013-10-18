@@ -14,7 +14,7 @@ class Service::Namecast < Service::HttpPost
     :twitter => '@Namecast'
 
   def receive_event
-    deliver "https://www.namecast.net/hooks/dnssync"
+    deliver "https://www.namecast.net/hooks/dnssync.php"
   end
 end
 
