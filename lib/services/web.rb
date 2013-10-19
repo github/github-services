@@ -17,6 +17,8 @@ class Service::Web < Service
 
   boolean :insecure_ssl # :(
 
+  default_events Service::ALL_EVENTS
+
   def receive_event
     http.headers['X-GitHub-Event'] = event.to_s
     http.headers['X-GitHub-Delivery'] = delivery_guid.to_s

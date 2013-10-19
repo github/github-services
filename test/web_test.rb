@@ -5,6 +5,10 @@ class WebTest < Service::TestCase
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
 
+  def test_listens_to_all_events
+    assert_equal Service::ALL_EVENTS, Service::Web.default_events
+  end
+
   def test_push
     svc = service({
       'url' => 'http://monkey:secret@abc.com/foo/?a=1',
@@ -102,6 +106,19 @@ class WebTest < Service::TestCase
                                         'monkey', env[:body]),
         env[:request_headers]['X-Hub-Signature']
       assert_equal payload, JSON.parse(env[:body])
+      [200, {}, '']
+    end
+
+    svc.receive_event
+  end
+
+  def test_issue
+    svc = service(:issue, {
+      'url' => 'http://abc.com/bar/'
+    }, issues_payload)
+
+    @stubs.post "/bar/" do |env|
+      assert_equal 'issue', env[:request_headers]['x-github-event']
       [200, {}, '']
     end
 
