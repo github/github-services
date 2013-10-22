@@ -11,20 +11,21 @@ class LandscapeTest < Service::TestCase
     }
 
     payload = {
-        'commits'=>[{'id'=>'test'}]
+        'commits'=>[{'id'=>'test'}],
+        'repository'=>{'id'=>'repoid'}
     }
     svc = service(data, payload)
 
     @stubs.post "/hooks/github" do |env|
       body = JSON.parse(env[:body])
 
-      print env[:body]
       assert_equal env[:url].host, "landscape.io"
       assert_equal env[:request_headers]['Authorization'], "Token #{test_token}"
       assert_equal 'test', body['payload']['commits'][0]['id']
       assert_match 'guid-', body['guid']
       assert_equal data, body['config']
       assert_equal 'push', body['event']
+      assert_equal 'repoid', body['payload']['repository']['id']
       [200, {}, '']
     end
 
