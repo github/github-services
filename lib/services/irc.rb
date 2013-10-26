@@ -22,15 +22,15 @@ class Service::IRC < Service
   end
 
   def receive_pull_request
-    send_messages "#{irc_pull_request_summary_message}  #{fmt_url url}" if action =~ /(open)|(close)/
+    send_messages "#{irc_pull_request_summary_message} #{fmt_url url}" if action =~ /(open)|(close)/
   end
 
   def receive_pull_request_review_comment
-    send_messages "#{irc_pull_request_review_comment_summary_message}  #{fmt_url url}"
+    send_messages "#{irc_pull_request_review_comment_summary_message} #{fmt_url url}"
   end
 
   def receive_issues
-    send_messages "#{irc_issue_summary_message}  #{fmt_url url}"
+    send_messages "#{irc_issue_summary_message} #{fmt_url url}"
   end
 
   def receive_issue_comment
