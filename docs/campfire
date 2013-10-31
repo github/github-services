@@ -4,7 +4,8 @@ Install Notes
   1. subdomain is your campfire subdomain
      (ie 'your-subdomain' if you visit 'https://your-subdomain.campfirenow.com')
 
-  2. room is the actual room name, not the id
+  2. room_id is the id of the room, not the name. get it from the URL when you
+     open your room in a browser.
 
   3. token is your API token. get it from campfire's "Edit my Campfire
      account" screen

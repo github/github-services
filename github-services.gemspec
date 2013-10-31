@@ -33,9 +33,6 @@ Gem::Specification.new do |spec|
   # Twitter
   spec.add_dependency "oauth",                  "0.4.4"
 
-  # Campfire
-  spec.add_dependency "tinder",                 "1.8.0.github"
-
   # Bamboo, Buddycloud
   spec.add_dependency "xml-simple",             "1.0.11"
 
