@@ -1,10 +1,10 @@
-class Service::VersionEye < Service
+class Service::Versioneye < Service
 
   string :api_key
   string :project_id
 
-  url "http://www.versioneye.com"
-  logo_url "https://www.versioneye.com/images/versioneye_01.jpg"
+  url "http://www.VersionEye.com"
+  logo_url "https://www.VersionEye.com/images/versioneye_01.jpg"
 
   maintained_by :github => 'reiz'
   supported_by  :web    => 'https://twitter.com/VersionEye',
@@ -12,13 +12,7 @@ class Service::VersionEye < Service
 
   def receive_push
     http.headers['content-type'] = 'application/json'
-    http_get versioneye_hook
+    http_get( "https://www.versioneye.com/api/v2/github/hook/#{data['project_id']}?api_key=#{data['api_key']}" )
   end
-
-  private
-
-    def versioneye_hook
-      "https://www.versioneye.com/hook/#{data['project_id']}?api_key=#{data['api_key']}"
-    end
 
 end
