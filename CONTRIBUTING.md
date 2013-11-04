@@ -11,8 +11,6 @@ following:
 * Implement endpoints that take [the new payload](https://github.com/github/github-services/blob/56baa4ce03e64ebf67105ee22f752bf7c2383274/lib/services/http_post.rb#L13-L16), completely unmodified.
   * Good example: [Simperium](https://github.com/github/github-services/blob/master/lib/services/simperium.rb)
     has minimal logic (just config parameters, an HTTP header, and a custom url).
-  * Bad example: [CodeClimate](https://github.com/github/github-services/blob/master/lib/services/codeclimate.rb)
-    uses the old payload format.
   * Bad Example: [Campfire](https://github.com/github/github-services/blob/master/lib/services/campfire.rb)
     modifies the payload to make multiple calls to the Campfire service.
 * Thorough documentation about what the hook does, and what the options do.
