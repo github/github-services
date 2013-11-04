@@ -25,7 +25,7 @@ class CodeClimateTest < Service::TestCase
       assert_equal "test", JSON.parse(env[:body])["payload"]["commits"][0]["id"]
     end
 
-    @svc.receive_push
+    @svc.receive_event
   end
 
 private
