@@ -1,4 +1,4 @@
-class Service::Versioneye < Service
+class Service::Versioneye < Service::HttpPost
 
   string :api_key
   string :project_id
