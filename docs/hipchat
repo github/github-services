@@ -12,7 +12,7 @@ Install Notes
 
 Options
 1. **Notify** - Whether or not to notify room members.
-2. **Quiet Fork** - Suppress the room notice if a projcet has been forked.
+2. **Quiet Fork** - Suppress the room notice if a project has been forked.
 3. **Quiet Watch** - Suppress the room notice that someone has started to watch the project.
 4. **Quiet Comments** - Suppress the room notice if a comment has been made on repo.
 5. **Quiet Wiki** - Suppress the room notice if a wiki item has been updated.
