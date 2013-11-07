@@ -1,4 +1,4 @@
-This service posts a payload for Github 'push' event to a Windows Azure WebSites (WAWS).
+This service posts a payload for GitHub 'push' event to a Windows Azure WebSites (WAWS).
 This enables continuous integration and deployment with WAWS.
 
 More Info: http://www.windowsazure.com/en-us/develop/net/common-tasks/publishing-with-git/

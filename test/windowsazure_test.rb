@@ -35,20 +35,6 @@ class WindowsAzureTest < Service::TestCase
   def service_class
     Service::WindowsAzure
   end
-  
-=begin
-  def test_actual_push
-    payload = JSON.parse('copy-paste payload from requestb.in')
-    
-    svc = Service::WindowsAzure.new(:push, {
-        "hostname" => 'scm-hostname',
-        "username" => 'username',
-        "password" => 'password'
-      }, payload)
-      
-    svc.receive_event
-  end
-=end
-      
+        
 end
 
