@@ -9,7 +9,7 @@ class NamecastTest < Service::TestCase
     payload = {'commits'=>[{'id'=>'test'}]}
     svc = service(data, payload)
 
-    @stubs.post "/hooks/dnssync" do |env|
+    @stubs.post "/hooks/dnssync.php" do |env|
       body = JSON.parse(env[:body])
 
       assert_equal env[:url].host, "www.namecast.net"
