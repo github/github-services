@@ -10,7 +10,9 @@ Install Notes
 2. "base_url" is the URL to your TeamCity server
    Example: https://teamcity.example.com/ or http://teamcity.example.com/teamcity/
 
-3. "build_type_id" is the identifier of the build configuration you want to trigger
+3. "build_type_id" is the identifier of the build configuration you want to
+   trigger. Multiple configurations can be triggered by specifying a
+   comma-separated list of identifiers.
    Example: "bt123", which can be found in URL of the build configuration page
    ("...viewType.html?buildTypeId=bt123&...")
 
