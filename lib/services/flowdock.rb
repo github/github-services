@@ -1,7 +1,7 @@
 require 'uri'
 
 class Service::Flowdock < Service
-  default_events :commit_comment, :gollum, :issues, :issue_comment, :pull_request, :push
+  default_events :commit_comment, :gollum, :issues, :issue_comment, :pull_request, :push, :pull_request_review_comment
   string :token
 
   url "https://www.flowdock.com"
