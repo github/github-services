@@ -15,7 +15,7 @@ Install Notes
     # osc token --create
 
     You may already specify the package here
-    # osc token --create <PROJECT> <PACKAGE>
+    # osc token --create _PROJECT_ _PACKAGE_
 
     That means the token can only be used for this package. It also means you do not have
     to specify it in github.com. Just using the token is enough.
