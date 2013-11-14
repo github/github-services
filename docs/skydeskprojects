@@ -1,7 +1,7 @@
 SkyDesk Projects Requirements:
 
 Log into the SkyDesk portal first.
-URL : https://www.skydesk.jp
+SkyDesk Portal URL : https://www.skydesk.jp
 Then access SkyDesk projects using https://projects.skydesk.jp.
 
 Project ID and Token is required for configuration which will be available under "Dashboard" --> "Project Settings" --> "Service Hooks".
