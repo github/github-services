@@ -1,10 +1,10 @@
 PATH
   remote: .
   specs:
-    github-services (1.0.0.fb64b5c)
+    github-services (1.0.0.a8983ad)
       activeresource (~> 3.0.0)
       addressable (~> 2.2.7)
-      aws-sdk (~> 1.8.0)
+      aws-sdk (~> 1.27)
       faraday (= 0.8.7)
       httparty (= 0.7.4)
       mail (~> 2.3)
@@ -32,7 +32,7 @@ GEM
       activesupport (= 3.0.20)
     activesupport (3.0.20)
     addressable (2.2.8)
-    aws-sdk (1.8.5)
+    aws-sdk (1.27.0)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
