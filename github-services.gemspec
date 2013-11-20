@@ -55,7 +55,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "softlayer_messaging", "~> 1.0.2"
 
   # Amazon SNS, Amazon SQS
-  spec.add_dependency "aws-sdk", "~> 1.8.0"
+  spec.add_dependency "aws-sdk", "~> 1.27"
   spec.add_dependency "httparty", "0.7.4"
 
   spec.files = %w(Gemfile LICENSE README.mkdn CONTRIBUTING.md Rakefile)
