@@ -1,7 +1,7 @@
-class Service::SqsQueue < Service
-  string :aws_access_key, :sqs_queue_name
+class Service::SqsQueue < Service::HttpPost
+  string :aws_access_key, :sqs_queue_name, :aws_sqs_arn
   password :aws_secret_key
-  white_list :aws_access_key, :sqs_queue_name
+  white_list :aws_access_key, :sqs_queue_name, :aws_sqs_arn
 
   # receive_event()
   def receive_event
@@ -43,7 +43,29 @@ class Service::SqsQueue < Service
   end
 
   def queue_name
-    data['sqs_queue_name'].strip
+    has_arn? ? arn[:queue_name] : data['sqs_queue_name'].strip
   end
 
+  def region
+    has_arn? ? arn[:region] : 'us-east-1'
+  end
+
+  private
+
+  def has_arn?
+    data['aws_sqs_arn'].present?
+  end
+
+  def arn
+    @arn ||= parse_arn
+  end
+
+  def parse_arn
+    _,_,service,region,id,queue_name = data['aws_sqs_arn'].split(":")
+    {service:  service.strip,
+     region:   region.strip,
+     id:       id.strip,
+     queue_name: queue_name.strip
+    }
+  end
 end
