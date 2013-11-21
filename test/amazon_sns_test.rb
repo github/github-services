@@ -10,6 +10,17 @@ class AmazonSNSTest < Service::TestCase
      }
   end
 
+  def test_stripping_of_key_and_secret
+    unstripped_data = {
+      'aws_key' => 'k ',
+      'aws_secret' => 's ',
+      'sns_topic' => 't'
+    }
+    svc = service :push, unstripped_data, payload
+
+    assert_equal ({:access_key_id => 'k', :secret_access_key => 's'}), svc.aws_config
+  end
+
   def test_event
     svc = service :push, data, payload
     svc.aws_sdk_sns = aws_sns_stub
