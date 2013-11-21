@@ -32,7 +32,7 @@ class Service::AmazonSNS < Service
   end
 
   def aws_config
-    {:access_key_id => data['aws_key'].strip!, :secret_access_key => data['aws_secret'].strip!}
+    {:access_key_id => data['aws_key'].strip, :secret_access_key => data['aws_secret'].strip}
   end
 
   def get_topic(name_or_arn)
