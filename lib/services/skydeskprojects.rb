@@ -1,4 +1,4 @@
-class Service::ZohoProjects < Service::HttpPost
+class Service::SkyDeskProjects < Service::HttpPost
   string :project_id, :token
   
   white_list :project_id
