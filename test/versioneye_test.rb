@@ -12,13 +12,14 @@ class VersioneyeTest < Service::TestCase
     payload = {'app_name' => "VersionEye"}
     project_id = "987654321"
     api_key = "123456789"
+    url = "api/v2/github/hook/#{project_id}"
 
     svc = service(:push, {'api_key' => api_key, 'project_id' => project_id }, payload)
-    @stubs.get "api/v2/github/hook/#{project_id}" do |env|
+    @stubs.post url do |env|
       assert_equal "https://www.versioneye.com/api/v2/github/hook/#{project_id}?api_key=#{api_key}", env[:url].to_s
       assert_match 'application/json', env[:request_headers]['content-type']
     end
-    svc.receive_push
+    svc.receive_event
   end
 
   private
