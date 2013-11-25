@@ -3,7 +3,9 @@ require 'aws/sqs'
 
 class Service::AmazonSNS < Service
 
-  string :aws_key, :aws_secret, :sns_topic, :sns_region
+  string :aws_key, :sns_topic, :sns_region
+
+  password :aws_secret
 
   white_list :aws_key, :sns_topic, :sns_region
 
@@ -30,10 +32,13 @@ class Service::AmazonSNS < Service
       # older version of AWS SDK does not support region configuration
       # http://ruby.awsblog.com/post/TxVOTODBPHAEP9/Working-with-Regions
       AWS.config(sns_endpoint: "sns.#{cfg['sns_region']}.amazonaws.com")
-      sns = aws_sns(config(cfg['aws_key'], cfg['aws_secret']))
+      sns = aws_sns.new(config(cfg['aws_key'], cfg['aws_secret']))
       topic = sns.topics[cfg['sns_topic']]
       topic.publish(json)
-    rescue AWS::SNS::Errors::AuthorizationError => e
+
+    rescue AWS::SNS::Errors::AuthorizationError,
+           AWS::SNS::Errors::InvalidClientTokenId,
+           AWS::SNS::Errors::SignatureDoesNotMatch => e
       raise_config_error e.message
     rescue AWS::SNS::Errors::NotFound => e
       raise_missing_error e.message
@@ -55,7 +60,7 @@ class Service::AmazonSNS < Service
 
   # Return a new AWS SNS Object
   def aws_sns
-    @aws_sns ||= AWS::SNS.new
+    @aws_sns || AWS::SNS
   end
 
   # Validate the data that has been passed to the event. 
