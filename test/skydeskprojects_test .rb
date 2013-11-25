@@ -28,7 +28,7 @@ class SkyDeskProjectsTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::ZohoProjects, *args
+    super Service::SkyDeskProjects, *args
   end
 end
 
