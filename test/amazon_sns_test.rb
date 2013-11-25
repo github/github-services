@@ -44,7 +44,7 @@ class AmazonSNSTest < Service::TestCase
 
     assert_nil svc.aws_sns.topics.topic
     assert_equal 1, svc.aws_sns.topics.topic_by_arn.messages.size
-    
+
     assert_equal 'arn:aws:sns:us-east-1:111222333444:t', svc.aws_sns.topics.topic_by_arn.arn
     assert_equal data_copy['aws_key'], svc.data['aws_key']
     assert_equal data_copy['aws_secret'], svc.data['aws_secret']
@@ -93,7 +93,7 @@ class AmazonSNSTest < Service::TestCase
   end
 
   def aws_sns_stub
-    FakeSNS.new
+    FakeSNS
   end
 
   class FakeSNS
