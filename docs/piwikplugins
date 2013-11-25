@@ -1,0 +1,4 @@
+Piwik Plugins
+==============
+
+This service notifies the [Piwik Marketplace](http://plugins.piwik.org) of any new releases to your Piwik plugin. See [http://developer.piwik.org/guides/marketplace](http://developer.piwik.org/guides/marketplace) for more information.
