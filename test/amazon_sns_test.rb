@@ -33,29 +33,28 @@ class AmazonSNSTest < Service::TestCase
     assert_equal data['aws_secret'], svc.data['aws_secret']
     assert_equal data['sns_topic'], svc.data['sns_topic']
     assert_equal data['sns_region'], svc.data['sns_region']
-
   end
 
-  def test_require(svc)
+  def verify_requires(svc)
     assert_raise Service::ConfigurationError do
       svc.receive_event
     end
   end
 
   def test_requires_aws_key
-    test_require(service :push, data.except!(:aws_key), payload)
+    verify_requires(service :push, data.except!(:aws_key), payload)
   end
 
   def test_requires_aws_secret
-    test_require(service :push, data.except!(:aws_secret), payload)
+    verify_requires(service :push, data.except!(:aws_secret), payload)
   end
 
   def test_requires_sns_topic
-    test_require(service :push, data.except!(:sns_topic), payload)
+    verify_requires(service :push, data.except!(:sns_topic), payload)
   end
 
   def test_requires_sns_topic
-    test_require(service :push, data.except!(:sns_topic), payload)
+    verify_requires(service :push, data.except!(:sns_topic), payload)
   end
 
   def test_defaults_sns_region
