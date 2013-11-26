@@ -26,15 +26,16 @@ class Service::AmazonSNS < Service
   # cfg - Configuration hash of key, secret, etc.
   # json - THe valid JSON payload to send.
   #
-  # Returns nothing.
+  # Returns the instantiated Amazon SNS Object
   def publish_to_sns(cfg, json)
     begin
       # older version of AWS SDK does not support region configuration
       # http://ruby.awsblog.com/post/TxVOTODBPHAEP9/Working-with-Regions
       AWS.config(sns_endpoint: "sns.#{cfg['sns_region']}.amazonaws.com")
-      sns = aws_sns.new(config(cfg['aws_key'], cfg['aws_secret']))
+      sns = AWS::SNS.new(config(cfg['aws_key'], cfg['aws_secret']))
       topic = sns.topics[cfg['sns_topic']]
       topic.publish(json)
+      return sns
 
     rescue AWS::SNS::Errors::AuthorizationError,
            AWS::SNS::Errors::InvalidClientTokenId,
@@ -56,11 +57,6 @@ class Service::AmazonSNS < Service
       access_key_id: key,
       secret_access_key: secret,
     }
-  end
-
-  # Return a new AWS SNS Object
-  def aws_sns
-    @aws_sns || AWS::SNS
   end
 
   # Validate the data that has been passed to the event. 
