@@ -42,26 +42,26 @@ class AmazonSNSTest < Service::TestCase
   end
 
   def test_requires_aws_key
-    verify_requires(service :push, data.except!(:aws_key), payload)
+    verify_requires(service :push, data.except!('aws_key'), payload)
   end
 
   def test_requires_aws_secret
-    verify_requires(service :push, data.except!(:aws_secret), payload)
+    verify_requires(service :push, data.except!('aws_secret'), payload)
   end
 
   def test_requires_sns_topic
-    verify_requires(service :push, data.except!(:sns_topic), payload)
+    verify_requires(service :push, data.except!('sns_topic'), payload)
   end
 
   def test_requires_sns_topic
-    verify_requires(service :push, data.except!(:sns_topic), payload)
+    verify_requires(service :push, data.except!('sns_topic'), payload)
   end
 
   def test_defaults_sns_region
-    svc = service :push, data.except!(:sns_region), payload
+    svc = service :push, data.except!('sns_region'), payload
     svc.validate_data
 
-    assert_equal svc.data['sns_region'], data[:sns_region]
+    assert_equal svc.data['sns_region'], data['sns_region']
   end
 
   def service(*args)
