@@ -16,4 +16,5 @@ docs/payload_data
 log
 tmp
 pkg
+.ruby-gemset
 .ruby-version
