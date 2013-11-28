@@ -10,5 +10,5 @@ SqsQueue allows GitHub to send a notification to a queue inside your Amazon AWS 
    that has permissions to perform 'SendMessage' operations. (https://console.aws.amazon.com/sqs/)
 
 2. Aws SQS ARN is the unique code SQS references your queue with. It can be copied from the console
-   or fetched through the API. It takes the form of arn:aws:sqs:us-<region>-<dc>:<id>:<name>. Copy and
+   or fetched through the API. It takes the form of arn:aws:sqs:us-(region)-(dc):(id):(name). Copy and
    paste the entire string. This hook parses the necessary details from the arn.
