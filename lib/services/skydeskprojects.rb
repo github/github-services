@@ -17,6 +17,7 @@ class Service::SkyDeskProjects < Service::HttpPost
     http.headers['Authorization'] = "Token #{token}"
 
     url = "https://projects.skydesk.jp/serviceHook",
+      :payload => generate_json(payload),
       :pId => data['project_id'],
       :authtoken => data['token'],
       :scope => "projectsapi"
