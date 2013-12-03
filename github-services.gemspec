@@ -54,7 +54,7 @@ Gem::Specification.new do |spec|
   # Softlayer Messaging
   spec.add_dependency "softlayer_messaging", "~> 1.0.2"
 
-  # Amazon SNS, Amazon SQS
+  # Amazon SNS, Amazon SQS, AWS OpsWorks
   spec.add_dependency "aws-sdk", "~> 1.27"
   spec.add_dependency "httparty", "0.7.4"
 
