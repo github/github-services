@@ -1,6 +1,7 @@
-class Service::Apiary < Service
+class Service::Apiary < Service::HttpPost
   string :branch, :domain
   white_list :branch
+  default_events  :push
 
   url "http://apiary.io"
   logo_url "http://static.apiary.io/css/design2/apiary-io-symbol-1x.png"
@@ -26,7 +27,7 @@ class Service::Apiary < Service
     @domain ||= (not data['domain'].to_s.strip.empty?) ? data['domain'].to_s.strip : nil
   end
 
-  def receive_push
+  def receive_event
     return make_apiary_call
   end
 end
