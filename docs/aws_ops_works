@@ -1,0 +1,27 @@
+AWS OpsWorks
+============
+
+This service lets you deploy apps in AWS OpsWorks after pushing to the configured branch.
+
+You need to provide an AWS access key id and the corresponding secret access key having at least the permission for the `opsworks:CreateDeployment` action. That's the minimal required policy file:
+
+```
+{
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "opsworks:CreateDeployment",
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+Install Notes
+-------------
+
+1. **Stack Id** (required) - "OpsWorks ID" on the **stack setting page** in the AWS OpsWorks Console or see `StackId` at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_Stack.html
+2. **App Id** (required) - "OpsWorks ID" on the **app setting page** in the AWS OpsWorks Console or see `AppId` at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_App.html
+3. **Branch Name** (required) - "Branch/Revision" configured for that app in the AWS OpsWorks Console or see `Revision` at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_Source.html
+4. **Aws Access Key Id** (required) - Access key id of an AWS IAM user having the permission for the `opsworks:CreateDeployment` action.
+5. **Aws Secret Access Key** (required) - Corresponding secret access key of the AWS IAM user.
