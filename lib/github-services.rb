@@ -26,8 +26,6 @@ require 'rubyforge'
 require 'oauth'
 require 'yammer4r'
 require 'twilio-ruby'
-require 'right_aws'
-require 'right_http_connection'
 
 # vendor
 require 'basecamp'

@@ -1,9 +1,12 @@
-class Service::SqsQueue < Service
-  string :aws_access_key, :sqs_queue_name
+class Service::SqsQueue < Service::HttpPost
+  string :aws_access_key, :aws_sqs_arn
   password :aws_secret_key
-  white_list :aws_access_key, :sqs_queue_name
+  # NOTE: at some point, sqs_queue_name needs to be deprecated and removed
+  white_list :aws_access_key, :sqs_queue_name, :aws_sqs_arn
 
-  # receive_event()
+  maintained_by github: 'brycem',
+                twitter: 'brycemcd'
+
   def receive_event
     return unless data && payload
 
@@ -15,22 +18,27 @@ class Service::SqsQueue < Service
       raise_config_error "You must define an AWS secret key."
     end
 
-    if data['sqs_queue_name'].to_s.empty?
-      raise_config_error "You must define an SQS queue."
+    if data['sqs_queue_name'].to_s.empty? && data['aws_sqs_arn'].to_s.empty?
+      raise_config_error "You must define an SQS queue name or SQS queue ARN."
     end
 
     # Encode payload to JSON
     payload_json_data = generate_json(payload)
 
     # Send payload to SQS queue
-    notify_sqs( access_key(), secret_key(), queue_name(), payload_json_data )
+    notify_sqs( access_key, secret_key, payload_json_data )
   end
 
-  # notify_sqs()
-  # Note: If the queue does not exist, it is automatically created
-  def notify_sqs(aws_access_key, aws_secret_key, queue_name, payload)
-    sqs = RightAws::SqsGen2.new(aws_access_key, aws_secret_key)
-    queue = sqs.queue(queue_name)
+  def notify_sqs(aws_access_key, aws_secret_key, payload)
+    sqs = AWS::SQS.new(
+        access_key_id: access_key,
+        secret_access_key: secret_key,
+        region: region)
+    if data['aws_sqs_arn'] && data['aws_sqs_arn'].match(/^http/)
+        queue = sqs.queues[data['aws_sqs_arn']]
+    else
+        queue = sqs.queues.named(queue_name)
+    end
     queue.send_message(clean_for_json(payload))
   end
 
@@ -43,7 +51,26 @@ class Service::SqsQueue < Service
   end
 
   def queue_name
-    data['sqs_queue_name'].strip
+    arn[:queue_name] || data['sqs_queue_name'].strip
   end
 
+  def region
+    arn[:region] || 'us-east-1'
+  end
+
+  private
+
+  def arn
+    @arn ||= parse_arn
+  end
+
+  def parse_arn
+    return {} unless data['aws_sqs_arn'] && !data['aws_sqs_arn'].match(/^http/)
+    _,_,service,region,id,queue_name = data['aws_sqs_arn'].split(":")
+    {service:  service.strip,
+     region:   region.strip,
+     id:       id.strip,
+     queue_name: queue_name.strip
+    }
+  end
 end

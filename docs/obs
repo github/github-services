@@ -1,0 +1,31 @@
+Open Build Service(OBS) is a distribution build system.
+
+By enabling this hook, any Open Build Service instance (running version 2.5 or higher) will list
+to push events. OBS Source Service will get execute for a defined package which will update
+the sources in OBS and therefore rebuild automatically.
+
+Install Notes
+-------------
+
+0. Prequire
+   You need to have a package using a source service to update the sources.
+   Check the OBS manual how to set this up.
+
+1.  Create an authentification token for your account using "osc" commandline tool:
+    # osc token --create
+
+    You may already specify the package here
+    # osc token --create _PROJECT_ _PACKAGE_
+
+    That means the token can only be used for this package. It also means you do not have
+    to specify it in github.com. Just using the token is enough.
+
+2.  Enter your credentials at github.com
+    - The token which got created (use "osc token" if you lost it)
+    - optional: Modify the api url, if you do not use the openSUSE Build Service instance.
+    - optional: Enter the project and package name in case you have a generic token.
+
+3.  Make sure the "Active" checkbox is ticked, and click "Update Settings".
+
+For more details about OBS, go to http://www.openbuildservice.org
+

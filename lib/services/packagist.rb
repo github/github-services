@@ -1,5 +1,7 @@
 class Service::Packagist < Service
-  string :user, :token, :domain
+  string :user
+  password :token
+  string :domain
   white_list :domain, :user
 
   def receive_push
