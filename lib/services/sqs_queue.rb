@@ -34,7 +34,7 @@ class Service::SqsQueue < Service::HttpPost
         access_key_id: access_key,
         secret_access_key: secret_key,
         region: region)
-    if data['aws_sqs_arn'] and data['aws_sqs_arn'].match(/^http/)
+    if data['aws_sqs_arn'] && data['aws_sqs_arn'].match(/^http/)
         queue = sqs.queues[data['aws_sqs_arn']]
     else
         queue = sqs.queues.named(queue_name)
@@ -65,7 +65,7 @@ class Service::SqsQueue < Service::HttpPost
   end
 
   def parse_arn
-    return {} unless data['aws_sqs_arn'] and not data['aws_sqs_arn'].match(/^http/)
+    return {} unless data['aws_sqs_arn'] && !data['aws_sqs_arn'].match(/^http/)
     _,_,service,region,id,queue_name = data['aws_sqs_arn'].split(":")
     {service:  service.strip,
      region:   region.strip,
