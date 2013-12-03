@@ -76,9 +76,7 @@ class Service::Irker < Service
     if file_string.size > 80 and files.size > 1
       prefix = files[0]
       files.each do |file|
-        while not file.match prefix
-          prefix = prefix.rpartition("/")[0]
-        end
+        prefix = prefix.rpartition("/")[0] until file.match prefix
       end
       file_string = "#{prefix}/ (#{files.size} files)"
     end
