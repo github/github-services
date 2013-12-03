@@ -14,6 +14,8 @@ class Service::AwsOpsWorks < Service::HttpPost
              :branch_name,
              :aws_access_key_id
 
+  url "http://docs.aws.amazon.com/opsworks/latest/APIReference/API_CreateDeployment.html"
+
   def receive_event
     create_deployment if branch_name == required_config_value('branch_name')
   end
