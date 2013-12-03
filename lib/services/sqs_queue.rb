@@ -26,15 +26,19 @@ class Service::SqsQueue < Service::HttpPost
     payload_json_data = generate_json(payload)
 
     # Send payload to SQS queue
-    notify_sqs( access_key, secret_key, queue_name, payload_json_data )
+    notify_sqs( access_key, secret_key, payload_json_data )
   end
 
-  def notify_sqs(aws_access_key, aws_secret_key, queue_name, payload)
+  def notify_sqs(aws_access_key, aws_secret_key, payload)
     sqs = AWS::SQS.new(
         access_key_id: access_key,
         secret_access_key: secret_key,
         region: region)
-    queue = sqs.queues.named(queue_name)
+    if data['aws_sqs_arn'].match(/^http/)
+        queue = sqs.queues[data['aws_sqs_arn']]
+    else
+        queue = sqs.queues.named(queue_name)
+    end
     queue.send_message(clean_for_json(payload))
   end
 
@@ -61,7 +65,7 @@ class Service::SqsQueue < Service::HttpPost
   end
 
   def parse_arn
-    return {} unless data['aws_sqs_arn']
+    return {} unless data['aws_sqs_arn'] and not data['aws_sqs_arn'].match(/^http/)
     _,_,service,region,id,queue_name = data['aws_sqs_arn'].split(":")
     {service:  service.strip,
      region:   region.strip,
