@@ -34,7 +34,7 @@ class Service::SqsQueue < Service::HttpPost
         access_key_id: access_key,
         secret_access_key: secret_key,
         region: region)
-    if data['aws_sqs_arn'].match(/^http/)
+    if data['aws_sqs_arn'] and data['aws_sqs_arn'].match(/^http/)
         queue = sqs.queues[data['aws_sqs_arn']]
     else
         queue = sqs.queues.named(queue_name)
