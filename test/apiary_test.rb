@@ -19,7 +19,7 @@ class ApiaryTest < Service::TestCase
       assert_equal @svc.domain, body['vanity']
       [200, {}, '']
     end
-    @svc.receive_push
+    @svc.receive_event
   end
 
   def service(*args)
