@@ -16,7 +16,7 @@ class SkyDeskProjectsTest < Service::TestCase
     url = "/serviceHook"
     @stubs.post url do |env|
       assert_equal 'projects.skydesk.jp', env[:url].host
-      params = Faraday::Utils.parse_query env[:body]
+      params = Faraday::Utils.parse_query(env[:body])
       assert_equal '1234', params['pId']
       assert_equal 'a13d', params['authtoken']
       assert_equal payload, JSON.parse(params['payload'])
