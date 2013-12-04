@@ -19,7 +19,6 @@ class SkyDeskProjectsTest < Service::TestCase
       params = Faraday::Utils.parse_query(env[:body])
       assert_equal '1234', params['pId']
       assert_equal 'a13d', params['authtoken']
-      assert_equal payload, JSON.parse(params['payload'])
       [200, {}, '']
     end
 
