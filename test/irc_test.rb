@@ -279,7 +279,12 @@ class IRCTest < Service::TestCase
     svc = service({'ssl' => '0'}, payload)
     assert_equal 6667, svc.port
   end
-  
+
+  def test_default_port_with_empty_string
+    svc = service({'port' => ''}, payload)
+    assert_equal 6667, svc.port
+  end
+
   def test_overridden_port
     svc = service({'port' => '1234'}, payload)
     assert_equal 1234, svc.port

@@ -179,7 +179,7 @@ class Service::IRC < Service
   end
 
   def port
-    data['port'] ? data['port'].to_i : default_port
+    data['port'].to_i > 0 ? data['port'].to_i : default_port
   end
 
   def url
