@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Service::SkyDeskProjects < Service::HttpPost
   string :project_id, :token
   
@@ -13,13 +14,12 @@ class Service::SkyDeskProjects < Service::HttpPost
     
    def receive_push
     token = required_config_value('token')
-    
-    http.headers['Authorization'] = "Token #{token}"
+    pId = required_config_value('project_id')
+    body = {'pId'=>pId, 'authtoken'=>token,:scope => 'projectsapi' , 'payload'=>payload}
+    body = generate_json(body)     
+    #http.headers['Authorization'] = "Token #{token}"
 
-    url = "https://projects.skydesk.jp/serviceHook",
-      :pId => data['project_id'],
-      :authtoken => data['token'],
-      :scope => "projectsapi"
+    url = "https://projects.skydesk.jp/serviceHook"
     deliver url
   end
 end
