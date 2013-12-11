@@ -15,11 +15,16 @@ class Service::SkyDeskProjects < Service::HttpPost
    def receive_push
     token = required_config_value('token')
     pId = required_config_value('project_id')
-    body = {'pId'=>pId, 'authtoken'=>token,:scope => 'projectsapi' , 'payload'=>payload}
-    body = generate_json(body)     
     #http.headers['Authorization'] = "Token #{token}"
 
-    url = "https://projects.skydesk.jp/serviceHook"
-    deliver url
+    #url = "https://projects.skydesk.jp/serviceHook"
+    res = http_post "https://projects.skydesk.jp/serviceHook",
+      :pId       => pId,
+      :authtoken => token,
+      :scope     => "projectsapi",
+      :payload   => generate_json(payload)
+    if res.status != 200
+      raise_config_error
+    end
   end
 end
