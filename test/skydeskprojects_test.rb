@@ -13,7 +13,7 @@ class SkyDeskProjectsTest < Service::TestCase
     }
     svc = service(data, payload)
     @stubs.post url do |env|
-      #assert_equal 'projects.skydesk.jp', env[:url].host
+      assert_equal 'projects.skydesk.jp', env[:url].host
       params = Faraday::Utils.parse_query(env[:body])
       assert_equal '1234', params['pId']
       assert_equal 'a13d', params['authtoken']
