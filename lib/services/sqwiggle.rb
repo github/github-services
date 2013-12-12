@@ -4,6 +4,8 @@ class Service::Sqwiggle < Service::HttpPost
   # only include 'room' in the debug logs, skip the api token.
   white_list :room
 
+  #accept all events and filter on sqwiggle servers so we can add events as
+  #requested without the need to wait on Github PR's
   default_events :push, :issues, :issue_comment, :commit_comment,
     :pull_request, :pull_request_review_comment, :watch, :fork,
     :fork_apply, :member, :public, :team_add, :status
@@ -20,16 +22,14 @@ class Service::Sqwiggle < Service::HttpPost
 
   def receive_event
     token = required_config_value('token')
-
-    #TODO
-    # if token.match(/^[A-Za-z0-9]+$/) == nil
-    #   raise_config_error "Invalid token"
-    # end
-    
     http.basic_auth token, 'X'
 
-    # url = "https://api.simperium.com:443/1/#{appid}/#{bucket}/i/#{delivery_guid}"
-    url = "http://localhost:3001/integrations/github/#{data['room']}"
+    #dev url
+    # url = "http://localhost:3001/integrations/github/#{data['room']}"
+    
+    #production url
+    url = "https://api.sqwiggle.com:443/integrations/github/#{data['room']}"
+
     deliver url
   end
 end
