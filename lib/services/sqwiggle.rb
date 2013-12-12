@@ -20,7 +20,6 @@ class Service::Sqwiggle < Service::HttpPost
 
   def receive_event
     token = required_config_value('token')
-    room = required_config_value('room')
 
     #TODO
     # if token.match(/^[A-Za-z0-9]+$/) == nil
