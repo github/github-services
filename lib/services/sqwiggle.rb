@@ -29,7 +29,7 @@ class Service::Sqwiggle < Service::HttpPost
     http.basic_auth token, 'X'
 
     # url = "https://api.simperium.com:443/1/#{appid}/#{bucket}/i/#{delivery_guid}"
-    url = "http://localhost:3001/integrations/github/#{room}"
+    url = "http://localhost:3001/integrations/github/#{data['room']}"
     deliver url
   end
 end
