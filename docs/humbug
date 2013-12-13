@@ -1,7 +1,23 @@
 Install Notes
--------------
+=============
+
+Zulip is a group communication tool.
+
+https://zulip.com/hello
+
+Configuration Fields
+--------------------
 
 1. **Email** - The user to authenticate as.
-2. **Api Key** - The API key associated with the provided user. See: https://humbughq.com/#settings
-3. **Stream** - The Humbug stream where you want messages to be sent.  (If you leave this blank, it defaults to the "commits" stream in Humbug.)  Whether you use the default stream or specify it explicitly, you need to set up the stream on the Humbug side.
-4. **Branches** - If you want to restrict Humbug notifications to certain GitHub branches, then provide a comma delimited list of git branches here (e.g. master,staging,prod).  Otherwise, leave it empty.
+2. **Api Key** - The API key associated with the provided user. See: https://zulip.com/#settings
+3. **Stream** - Default Zulip stream where you want messages to be sent.  (If you leave this blank, it defaults to "commits".)  Whether you use the default stream or specify it explicitly, you need to ensure that the stream exists in Zulip.
+4. **Commit Stream** - The Zulip stream where you want git traffic to go to. Defaults to **Stream** if left blank.
+5. **Issue Stream** - The Zulip stream where you want Github issues traffic to go to. Defaults to **Stream** if left blank.
+6. **Branches** - If you want to restrict Zulip notifications to certain GitHub branches, then provide a comma delimited list of git branches here (e.g. `master,staging,prod`).  Otherwise, leave it empty.
+
+Checkboxes
+----------
+
+1. **Exclude Pull Requests** - Exclude Github pull requests traffic when forwarding to Zulip.
+2. **Exclude Issues** - Exclude Github issues traffic when forwarding to Zulip.
+3. **Exclude Commits** - Exclude git traffic when forwarding to Zulip.
