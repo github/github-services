@@ -5,10 +5,13 @@ By enabling this hook, Landscape will listen for pushes and on each push, instig
 Install Notes
 -------------
 
-If you have created an account already at https://landscape.io, you can simply enable or disable
-checking of your repositories. The hooks will automatically be installed and uninstalled.
+Currently, Landscape operates by polling GitHub for changes. This hook is an optional extra which will
+speed up Landscape's reaction to pushes, but it is not necessary.
 
-If you wish to install the hook manually, you will need your authentication token, which you can find
-on your Landscape account information page (https://landscape.io/account/profile).
+To install:
+
+1.  Create an account at https://landscape.io (you can sign in with GitHub)
+2.  Enable this hook - there are no additional details required.
+    - If a repository has not been enabled for checking on Landscape, it will be enabled automatically once the first push is received
 
 For more information about Landscape, see https://landscape.io/docs/
