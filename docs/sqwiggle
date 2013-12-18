@@ -8,6 +8,6 @@ Install Notes
 (create one here: https://www.sqwiggle.com/company/clients) 
 
 **Room**: (optional) The last part of the url for the room you would like the
-messages to appear in. Leave blank if you want to use the default room. 
+messages to appear in e.g sqwiggle.com/company_name/ROOM_ID_HERE. Leave blank if you want to use the default room. 
 
 See https://www.sqwiggle.com/docs for more info on the Sqwiggle API 
