@@ -6,9 +6,7 @@ class Service::Sqwiggle < Service::HttpPost
 
   #accept all events and filter on sqwiggle servers so we can add events as
   #requested without the need to wait on Github PR's
-  default_events :push, :issues, :issue_comment, :commit_comment,
-    :pull_request, :pull_request_review_comment, :watch, :fork,
-    :fork_apply, :member, :public, :team_add, :status
+  default_events Service::ALL_EVENTS
 
   url "https://www.sqwiggle.com"
   logo_url "https://sqwiggle-assets.s3.amazonaws.com/assets/logo-header-b4bc3b6e82e42a0beb96b7fa413537f6.png"
