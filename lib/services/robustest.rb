@@ -45,7 +45,7 @@ class Service::RobusTest < Service
 
       begin
         http.headers['Content-Type'] = 'application/json'
-        res = http_post 'http://dev.robustest.com/project/%s/integration/git/%s' % [data['project_key'],  issue_id],
+        res = http_post 'http://www.robustest.com/project/%s/integration/git/%s' % [data['project_key'],  issue_id],
           generate_json(changeset)
       rescue URI::InvalidURIError
         raise_config_error "Invalid project: #{data['project_key']}"
