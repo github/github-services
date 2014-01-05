@@ -1,3 +1,26 @@
+Robustest
+==========
+
+About - 
+----------------- 
 With RobustTest, you can Create and Manage Manual and Automation Test Cases, Perform Cross Browser Testing, Convert Functional Tests into Regression and Performance Tests.
+
+
+Update RobusTest Tickets (Issues/Bugs/Enhancements) about related commits
+------------------------------------------------------------------------
+
+Updates an Issue on RobusTest, whenever a commit happened and is related to this issue
+Commits which are related to RobusTest issues are detected by matching '#IssueNo' in the commit message (i.e "fixing bug #123" is related to issue #123)
+
+
+Install Notes
+-------------
+
+1. Create a project with RobusTest (It will create a Unique Project ID for newly created project). 
+2. Set your github repository as git repository for your project.
+3. Enter the Unique Project ID to  project_key's identifier.
+
+
+
 
 
