@@ -1,6 +1,8 @@
 require File.expand_path('../helper', __FILE__)
 
 class TwitterTest < Service::TestCase
+  TWITTER_SHORT_URL_LENGTH_HTTPS = 23
+
   def test_push
     svc = service({'token' => 't', 'secret' => 's'}, payload)
 
@@ -45,7 +47,7 @@ class TwitterTest < Service::TestCase
     svc.receive_push
     
     svc.statuses.each do |st|
-      st = st.gsub(/http[^ ]+/, "a"*21) # replace the URL with a substitute for the shortened one
+      st = st.gsub(/http[^ ]+/, "a"*TWITTER_SHORT_URL_LENGTH_HTTPS) # replace the URL with a substitute for the shortened one
       assert st.length<=140
     end
   end
