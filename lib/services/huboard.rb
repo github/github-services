@@ -3,7 +3,7 @@ class Service::HuBoard < Service::HttpPost
   default_events :issue_comment, :issues
 
   url "https://huboard.com"
-  logo_url "https://img/LogoFullPurpleLight.png"
+  logo_url "https://huboard.com/img/LogoFullPurpleLight.png"
   maintained_by :github => 'rauhryan'
   supported_by :email => 'huboard@huboard.com'
 
