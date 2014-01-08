@@ -5,7 +5,6 @@ class Service::RobusTest < Service
 
   url "http://www.robustest.com"
   logo_url "http://www.robustest.com/img/logo.png"
-  # Technoweenie on GitHub is pinged for any bugs with the Hook code.
   maintained_by :github => 'omnarayan'
   # Support channels for user-level Hook problems (service failure,
   # misconfigured
@@ -13,7 +12,6 @@ class Service::RobusTest < Service
     :email => 'care@robustest.com'
   
   def receive_push
-  	puts payload
     payload['commits'].each do |commit|
       next if commit['message'] =~ /^x /
 
