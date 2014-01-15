@@ -180,7 +180,7 @@ class Service::Email < Service
       if first_commit
         "[#{repository_name}] [#{branch_ref}] #{first_commit_sha.slice(0, 6)}: #{first_commit_title}"
       else
-        "[#{repository_name}]"
+        "[#{repository_name}] [#{branch_ref}]"
       end
     end
 
