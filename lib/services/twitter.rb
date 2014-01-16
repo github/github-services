@@ -84,6 +84,6 @@ class Service::Twitter < Service
 
   def consumer
     @consumer ||= ::OAuth::Consumer.new(consumer_key, consumer_secret,
-                                        {:site => "http://api.twitter.com"})
+                                        {:site => "https://api.twitter.com"})
   end
 end
