@@ -17,7 +17,7 @@ class Service::Humbug < Service
     raise_config_error "Missing 'api_key'" if data['api_key'].to_s == ''
 
     # url = 'http://localhost:9991/api/v1/external/github'
-    url = 'https://humbughq.com/api/v1/external/github'
+    url = 'https://api.zulip.com/v1/external/github'
     res = http_post url,
       :email => data['email'],
       'api-key' => data['api_key'],
