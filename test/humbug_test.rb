@@ -8,7 +8,7 @@ class HumbugTest < Service::TestCase
   def post_checker(event)
     return lambda { |env|
       assert_equal "https", env[:url].scheme
-      assert_equal "humbughq.com", env[:url].host
+      assert_equal "api.zulip.com", env[:url].host
       assert_match "payload=%7B%22test%22%3A%22payload%22%7D", env[:body]
       assert_match "email=e", env[:body]
       assert_match "api-key=a", env[:body]
@@ -20,7 +20,7 @@ class HumbugTest < Service::TestCase
 
   def test_push
     checker = post_checker "push"
-    @stubs.post "/api/v1/external/github", &checker
+    @stubs.post "/v1/external/github", &checker
 
     svc = service(:push,
         {'email' => 'e', 'api_key' => 'a', 'stream' => 'commits', 'branches' => 'b1,b2'},
@@ -30,7 +30,7 @@ class HumbugTest < Service::TestCase
 
   def test_pull_request
     checker = post_checker "pull_request"
-    @stubs.post "/api/v1/external/github", &checker
+    @stubs.post "/v1/external/github", &checker
 
     svc = service(:pull_request,
         {'email' => 'e', 'api_key' => 'a', 'stream' => 'commits', 'branches' => 'b1,b2'},
