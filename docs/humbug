@@ -10,14 +10,14 @@ Configuration Fields
 
 1. **Email** - The user to authenticate as.
 2. **Api Key** - The API key associated with the provided user. See: https://zulip.com/#settings
-3. **Stream** - Default Zulip stream where you want messages to be sent.  (If you leave this blank, it defaults to "commits".)  Whether you use the default stream or specify it explicitly, you need to ensure that the stream exists in Zulip.
-4. **Commit Stream** - The Zulip stream where you want git traffic to go to. Defaults to **Stream** if left blank.
-5. **Issue Stream** - The Zulip stream where you want Github issues traffic to go to. Defaults to **Stream** if left blank.
-6. **Branches** - If you want to restrict Zulip notifications to certain GitHub branches, then provide a comma delimited list of git branches here (e.g. `master,staging,prod`).  Otherwise, leave it empty.
+3. **Stream** - The default Zulip stream where event notifications will be sent. Defaults to "commits" if left empty. The stream (or the "commits" stream if empty) must exist in Zulip.
+4. **Commit Stream** - Overrides **Stream** for Git commit notifications. The stream must exist in Zulip.
+5. **Issue Stream** - Overrides **Stream** for Github issues notifications. The stream must exist in Zulip.
+6. **Branches** - A comma-delimited whitelist of branches to receive event notifications about. If empty, event notifications will be sent about all branches. Example: "master,staging,prod"
 
 Checkboxes
 ----------
 
-1. **Exclude Pull Requests** - Exclude Github pull requests traffic when forwarding to Zulip.
-2. **Exclude Issues** - Exclude Github issues traffic when forwarding to Zulip.
-3. **Exclude Commits** - Exclude git traffic when forwarding to Zulip.
+1. **Exclude Pull Requests** - Don't send Github pull request notifications to Zulip.
+2. **Exclude Issues** - Don't send Github issues notifications to Zulip.
+3. **Exclude Commits** - Don't send Git commit notifcations to Zulip.
