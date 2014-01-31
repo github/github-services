@@ -1,6 +1,7 @@
 class Service::Twitter < Service
   string  :token, :secret
   boolean :digest, :short_format
+  TWITTER_SHORT_URL_LENGTH_HTTPS = 23
 
   def receive_push
     return unless payload['commits']
@@ -18,11 +19,11 @@ class Service::Twitter < Service
       else
         "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
       end
-      length = status.length - url.length + 21 # The URL is going to be shortened by twitter. It's length will be at most 21 chars (HTTPS).
+      length = status.length - url.length + TWITTER_SHORT_URL_LENGTH_HTTPS # The URL is going to be shortened by twitter. It's length will be at most 23 chars (HTTPS).
       # How many chars of the status can we actually use?
       # We can use 140 chars, have to reserve 3 chars for the railing dots (-3)
-      # also 21 chars for the t.co-URL (-21) but can fit the whole URL into the tweet (+url.length)
-      usable_chars = 140 - 3 - 21 + url.length
+      # also 23 chars for the t.co-URL (-23) but can fit the whole URL into the tweet (+url.length)
+      usable_chars = 140 - 3 - TWITTER_SHORT_URL_LENGTH_HTTPS + url.length
       length >= 140 ? statuses << status[0..(usable_chars-1)] + '...' : statuses << status
     else
       payload['commits'].each do |commit|
@@ -34,11 +35,11 @@ class Service::Twitter < Service
         else
           "[#{repository}] #{url} #{author['name']} - #{commit['message']}"
         end
-        length = status.length - url.length + 21 # The URL is going to be shortened by twitter. It's length will be at most 21 chars (HTTPS).
+        length = status.length - url.length + TWITTER_SHORT_URL_LENGTH_HTTPS # The URL is going to be shortened by twitter. It's length will be at most 23 chars (HTTPS).
         # How many chars of the status can we actually use?
         # We can use 140 chars, have to reserve 3 chars for the railing dots (-3)
-        # also 21 chars for the t.co-URL (-21) but can fit the whole URL into the tweet (+url.length)
-        usable_chars = 140 - 3 - 21 + url.length
+        # also 23 chars for the t.co-URL (-23) but can fit the whole URL into the tweet (+url.length)
+        usable_chars = 140 - 3 - TWITTER_SHORT_URL_LENGTH_HTTPS + url.length
         length >= 140 ? statuses << status[0..(usable_chars-1)] + '...' : statuses << status
       end
     end
