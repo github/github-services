@@ -5,13 +5,11 @@ By enabling this hook, Landscape will listen for pushes and on each push, instig
 Install Notes
 -------------
 
-Currently, Landscape operates by polling GitHub for changes. This hook is an optional extra which will
-speed up Landscape's reaction to pushes, but it is not necessary.
+Landscape will automatically install this hook, there is no need to do it manually.
 
 To install:
 
 1.  Create an account at https://landscape.io (you can sign in with GitHub)
-2.  Enable this hook - there are no additional details required.
-    - If a repository has not been enabled for checking on Landscape, it will be enabled automatically once the first push is received
+2.  Enable checking on a repository. The hook will be automatically installed.
 
 For more information about Landscape, see https://landscape.io/docs/
