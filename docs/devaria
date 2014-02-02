@@ -5,7 +5,7 @@ Supported events are currently:
 
 Data:
 'owner' - the Devaria user who owns the project
-'project_name' - The name of the Devaria project tied to this github project
+'project_id' - The id of the Devaria project tied to this github project
 'payload' - The data for the event, varies by event type.
 
 More details on Github events: http://developer.github.com/v3/repos/hooks/
@@ -14,4 +14,4 @@ Install Notes
 ------------
 
 owner: The Devaria user who owns the project
-project_name: The name of the Devaria project tied to this github project
+project_id: The id of the Devaria project tied to this github project

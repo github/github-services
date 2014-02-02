@@ -1,7 +1,7 @@
-class Service::Devaria < Service::HttpPost
-	string :project_name, :username, :user_class_id
+class Service::Devaria < Service
+	string :project_id, :username
 	
-	white_list :project_name, :username, :user_class_id
+	white_list :project_id, :username, :user_class_id
 	
 	default_events :push, :member, :public, :issues, :gollum
 	
@@ -12,9 +12,9 @@ class Service::Devaria < Service::HttpPost
 	@@url_base = "http://www.devaria.com/hooks"
 	def receive_push
 		username = required_config_value('username')
-		project = required_config_value('project_name')
+		project = required_config_value('project_id')
 		url = @@url_base + "/push"
-		body = {'owner'=>username, 'project_name'=>project, 'payload'=>payload}
+		body = {'owner'=>username, 'project_id'=>project, 'payload'=>payload}
 		body = generate_json(body)
 		make_request(url, body)
 		print body
@@ -30,40 +30,40 @@ class Service::Devaria < Service::HttpPost
 	
 	def receive_member
 		username = required_config_value('username')
-		project = required_config_value('project_name')
+		project = required_config_value('project_id')
 		
 		url = @@url_base + "/member"
-		body = {'owner'=>username, 'project_name'=>project, 'payload'=>payload}
+		body = {'owner'=>username, 'project_id'=>project, 'payload'=>payload}
 		body = generate_json(body)
 		make_request(url, body)
 	end
 	
 	def receive_public
 		username = required_config_value('username')
-		project = required_config_value('project_name')
+		project = required_config_value('project_id')
 		
 		url = @@url_base + "/public"
-		body = {'owner'=>username, 'project_name'=>project, 'payload'=>payload}
+		body = {'owner'=>username, 'project_id'=>project, 'payload'=>payload}
 		body = generate_json(body)
 		make_request(url, body)
 	end
 	
 	def receive_issues
 		username = required_config_value('username')
-		project = required_config_value('project_name')
+		project = required_config_value('project_id')
 		
 		url = @@url_base + "/issues"
-		body = {'owner'=>username, 'project_name'=>project, 'payload'=>payload}
+		body = {'owner'=>username, 'project_id'=>project, 'payload'=>payload}
 		body = generate_json(body)
 		make_request(url, body)
 	end
 	
 	def receive_gollum
 		username = required_config_value('username')
-		project = required_config_value('project_name')
+		project = required_config_value('project_id')
 		
 		url = @@url_base + "/gollum"
-		body = {'owner'=>username, 'project_name'=>project, 'payload'=>payload}
+		body = {'owner'=>username, 'project_id'=>project, 'payload'=>payload}
 		body = generate_json(body)
 		make_request(url, body)
 	end
