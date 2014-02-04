@@ -18,7 +18,7 @@
 
 Here's an example for freenode:
 
-    # server: irc.freenode.net
+    # server: chat.freenode.net
     # port: 6667
     # room: #channelname
     # message_without_join: checked
