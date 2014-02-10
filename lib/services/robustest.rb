@@ -39,7 +39,7 @@ class Service::RobusTest < Service
       end
 
       # Don't need to continue if we don't have a transition to perform
-      next unless changeset.has_key?(:transition)
+      # next unless changeset.has_key?(:transition)
 
       begin
         http.headers['Content-Type'] = 'application/json'
