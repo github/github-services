@@ -5,7 +5,7 @@ class Service::HuBoard < Service::HttpPost
   url "https://huboard.com"
   logo_url "https://huboard.com/img/LogoFullPurpleLight.png"
   maintained_by :github => 'rauhryan'
-  supported_by :email => 'huboard@huboard.com'
+  supported_by :email => 'support@huboard.com'
 
   HUBOARD_URL = "https://huboard.com/api"
 
