@@ -6,7 +6,7 @@ class HuBoardTest < Service::TestCase
   end
 
   def test_issues
-    @stubs.post "api/webhook/issue" do |env|
+    @stubs.post "api/site/webhook/issue" do |env|
       assert_equal 'huboard.com', env[:url].host
       assert_equal 'application/x-www-form-urlencoded',
         env[:request_headers]['content-type']
@@ -17,7 +17,7 @@ class HuBoardTest < Service::TestCase
   end
 
   def test_comment
-    @stubs.post "api/webhook/comment" do |env|
+    @stubs.post "api/site/webhook/comment" do |env|
       assert_equal 'huboard.com', env[:url].host
       assert_equal 'application/x-www-form-urlencoded',
         env[:request_headers]['content-type']
