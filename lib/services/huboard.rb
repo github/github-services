@@ -7,14 +7,14 @@ class Service::HuBoard < Service::HttpPost
   maintained_by :github => 'rauhryan'
   supported_by :email => 'huboard@huboard.com'
 
-  HUBOARD_URL = "http://live.huboard.com"
+  HUBOARD_URL = "https://huboard.com/api"
 
   def receive_issues
-    http_post "#{HUBOARD_URL}/issue/webhook", :payload => generate_json(payload)
+    http_post "#{HUBOARD_URL}/webhook/issue", :payload => generate_json(payload)
   end
 
   def receive_issue_comment
-    http_post "#{HUBOARD_URL}/comment/webhook", :payload => generate_json(payload)
+    http_post "#{HUBOARD_URL}/webhook/comment", :payload => generate_json(payload)
   end
 
 end
