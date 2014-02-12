@@ -175,7 +175,7 @@ class Service::IRC < Service
   end
 
   def default_port
-    use_ssl? ? 9999 : 6667
+    use_ssl? ? 6697 : 6667
   end
 
   def port
