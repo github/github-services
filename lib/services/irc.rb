@@ -219,7 +219,7 @@ class Service::IRC < Service
 
   def irc_push_summary_message
     message = []
-    message << "\00301[#{fmt_repo repo_name}\00301] #{fmt_name pusher_name}"
+    message << "[#{fmt_repo repo_name}] #{fmt_name pusher_name}"
 
     if created?
       if tag?
