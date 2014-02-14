@@ -77,16 +77,10 @@ In the service hook here:
 Usage
 -----
 
-The hook uses the following regex to parse commit messages for bug ids. 
 The commit message will be added as a note to the case. You cannot resolve a case via the commit message.
-
-Regex: `\s*(?:Bug[zs]*\s*IDs*\s*|Case[s]*)[#:; ]+((\d+[ ,:;#]*)+)`
+The hook parses the commit messages for bug ids based on the below syntax.
 
 Examples:
 
   * case(s): 12345, 67890, [additional]
   * bug(s)ID: 12345, 67890, [additional]
-
-
-
-
