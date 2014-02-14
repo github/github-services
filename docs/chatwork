@@ -1,0 +1,10 @@
+ChatWork
+================
+
+Install Notes
+-------------
+
+1. AuthToken - should be your API token. Please check [here](http://developer.chatwork.com/)
+2. RoomID - should be your room id
+
+NOTE: This ServiceHook is not maintained by Chatwork.inc
