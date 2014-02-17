@@ -3,7 +3,7 @@
   - Requires YouTrack version 2.0 or above. YouTrack Energy EAP builds are
     supported as well.
 
-  - Your YouTrack server should be acessible from the internet.
+  - Your YouTrack server should be accessible from the internet.
 
   - REST API must be enabled in your YouTrack server.
 
@@ -24,3 +24,6 @@
 
   - Branch names to track separated by space. If branches are provided, only commits to those branches will trigger
     YouTrack commands and commits to others will be ignored. If the branch field is left empty, commits on any branch will trigger commands.
+
+  - If only distinct commits should be processed. If this setting is false, same commit may be processed several times
+    (for example, when branches are merged)
