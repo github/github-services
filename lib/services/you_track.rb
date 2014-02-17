@@ -1,5 +1,6 @@
 class Service::YouTrack < Service
   string :base_url, :committers, :username, :branch
+  boolean :process_distinct
   password :password
   white_list :base_url, :username, :committers, :branch
 
@@ -51,6 +52,10 @@ class Service::YouTrack < Service
 
   def process_commit(commit)
     author = nil
+
+    #If only distinct commits should be processed, check this
+    return unless commit['distinct'] or !(data['process_distinct'])
+
     commit['message'].split("\n").each { |commit_line|
       issue_id = commit_line[/( |^)#(\w+-\d+)\b/, 2]
       next if issue_id.nil?
