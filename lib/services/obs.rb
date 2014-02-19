@@ -15,7 +15,7 @@ class Service::Obs < Service::HttpPost
 
   def receive_push
     # required
-    token = required_config_value('token')
+    token = required_config_value('token').to_s
     url = config_value('url')
     url = "https://api.opensuse.org:443" if url.blank?
 
@@ -23,18 +23,21 @@ class Service::Obs < Service::HttpPost
     project = config_value('project')
     package = config_value('package')
 
-    if token.match(/^[A-Za-z0-9+\/=]+$/) == nil
+    # multiple tokens? handle each one individually
+    token.split(",").each do |t|
       # token is not base64
-      raise_config_error "Invalid token"
-    end
+      if t.strip.match(/^[A-Za-z0-9+\/=]+$/) == nil
+        raise_config_error "Invalid token"
+      end
 
-    http.ssl[:verify] = false
-    http.headers['Authorization'] = "Token #{token}"
+      http.ssl[:verify] = false
+      http.headers['Authorization'] = "Token #{t.strip}"
 
-    url = "#{url}/trigger/runservice"
-    unless project.blank? or package.blank?
-      url << "?project=#{CGI.escape(project)}&package=#{CGI.escape(package)}"
+      url = "#{url}/trigger/runservice"
+      unless project.blank? or package.blank?
+        url << "?project=#{CGI.escape(project)}&package=#{CGI.escape(package)}"
+      end
+      deliver url
     end
-    deliver url
   end
 end
