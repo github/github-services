@@ -2,6 +2,6 @@ This service is deprecated. To integrate GitHub with Trac, follow the
 instructions at: http://github.com/aaugustin/trac-github
 
 If you're currently relying on this service, please consider upgrading to
-trac-github. It uses a standard Webhook to provide the same features and it's
+trac-github. It uses a standard webhook to provide the same features and it's
 more actively maintained.
 
