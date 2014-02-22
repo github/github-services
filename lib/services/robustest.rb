@@ -36,10 +36,18 @@ class Service::RobusTest < Service
         else
           changeset.merge!(:fields => { key.to_sym => "Resolved" })
         end
+        changeset[:gitsha]   = commit['id']
+        changeset[:added]    = commit['added'].map    { |f| ['A', f] }
+        changeset[:removed]  = commit['removed'].map  { |f| ['R', f] }
+        changeset[:modified] = commit['modified'].map { |f| ['M', f] }
+        changeset[:timestamp] = Date.parse(commit['timestamp'])
+        changeset[:name] = commit['author']['name']
+        changeset[:email]= commit['author']['email']
+
       end
 
       # Don't need to continue if we don't have a transition to perform
-      next unless changeset.has_key?(:transition)
+      # next unless changeset.has_key?(:transition)
 
       begin
         http.headers['Content-Type'] = 'application/json'
