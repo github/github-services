@@ -1,4 +1,4 @@
-class Service::Simperium < Service::HttpPost
+class Service::Honbu < Service::HttpPost
   string :token
 
 
@@ -17,7 +17,6 @@ class Service::Simperium < Service::HttpPost
 
   def receive_event
     token = required_config_value('token')
-
 
     if token.match(/^[A-Za-z0-9]+$/) == nil
       raise_config_error "Invalid token"
