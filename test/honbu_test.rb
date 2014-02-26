@@ -14,11 +14,11 @@ class HonbuTest < Service::TestCase
     payload = {'commits'=>[{'id'=>'test'}]}
     svc = service(data, payload)
 
-    @stubs.post "/#{svc.delivery_guid}" do |env|
+    @stubs.post "/" do |env|
       body = JSON.parse(env[:body])
 
-      assert_equal env[:url].host, "app.honbu.io/api"
-      assert_equal env[:request_headers]['Authorization'], "Token #{test_token}"
+      assert_equal env[:url].host, "https://app.honbu.io/api/integrations/github"
+      assert_equal env[:request_headers]['Authorization'], "#{test_token}"
       assert_equal 'test', body['payload']['commits'][0]['id']
       assert_match 'guid-', body['guid']
       assert_equal data, body['config']
