@@ -80,10 +80,10 @@ class Service::Pushbullet < Service
 
   def convert_to_ostruct(obj)
     if obj.is_a? Hash
-      obj.each  do |key, val| 
+      obj.each  do |key, val|
         obj[key] = convert_to_ostruct val
       end
-      obj = OpenStruct.new obj       
+      obj = OpenStruct.new obj
     elsif obj.is_a? Array
        obj = obj.map { |r| convert_to_ostruct r }
     end
