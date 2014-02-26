@@ -12,8 +12,8 @@ class Service::Honbu < Service::HttpPost
 
   maintained_by :github => 'RedFred7'
 
-  supported_by :web => 'https://honbu.io/contact',
-    :email => 'help@honbu.io'
+  supported_by :web => 'http://honbu.io/company',
+    :email => 'support@honbu.io'
 
   def receive_event
     token = required_config_value('token')
@@ -23,9 +23,9 @@ class Service::Honbu < Service::HttpPost
     end
 
 
-    http.headers['Authorization'] = "Token #{token}"
+    http.headers['Authorization'] = "#{token}"
 
-    url = "https://app.honbu.io/api/integrations/github/{delivery_guid}"
+    url = "https://app.honbu.io/api/integrations/github"
     deliver url
   end
 end
