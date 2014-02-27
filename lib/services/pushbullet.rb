@@ -1,4 +1,5 @@
 class Service::Pushbullet < Service
+
   string :api_key, :device_iden
 
   default_events :push, :issues, :pull_request
@@ -14,83 +15,76 @@ class Service::Pushbullet < Service
     :email => 'hey@pushbullet.com'
 
   def receive_push
-    check_api_key
+    check_config
 
-    return unless payload["commits"].any?
+    return unless commits.any?
 
-    p = convert_to_ostruct payload
-    message = truncate_if_too_long p.commits.last["message"], 200
-    repo    = p.repository
-
-    if p.commits.length == 1
-      title = "#{p.pusher.name} pushed to #{owner}/#{name}"
+    if commits.length == 1
+      title = "#{pusher_name} pushed to #{name_with_owner}"
+      message = commit_messages.first
     else
-      title   = "#{p.pusher.name} pushed #{p.commits.length} commits"
-      message = "Repo: #{repo.owner.name}/#{repo.name}\nLatest: #{message}"
+      title = "#{pusher_name} pushed #{commits.length} commits..."
+      message = "To #{name_with_owner}:\nL#{commit_messages.join("\n")}"
     end
 
     push_message title, message
   end
 
   def receive_issue
-    check_api_key
+    check_config
 
-    p = convert_to_ostruct payload
-    i    = p.issue
+    p = self.class.objectify payload
     repo = p.repository
+    body = truncate_too_long issue.body, 300
 
-    body = truncate_if_too_long i.body, 200
+    title = "%s %s issue #%d" % [p.sender.login, p.action, issue.number]
+    msg = "In %s/%s: \"%s\"\n%s" % [repo.owner.login, repo.name, issue.title,
+      body]
 
-    push_message "#{i.user.login} #{p.action} issue ##{i.number}",
-      "Repo: #{repo.owner.login}/#{repo.name}\n" +
-      "Issue: \"#{i.title}\"\n#{body}"
+    push_message title, msg
+
   end
 
   def receive_pull_request
-    check_api_key
+    check_config
 
-    p = convert_to_ostruct payload
-    i    = p.pull_request
+    p = self.class.objectify payload
     repo = p.repository
+    body = truncate_too_long pull.body, 200
 
-    body = truncate_if_too_long i.body, 200
+    base_ref = pull.base.label.split(':').last
+    head_ref = pull.head.label.split(':').last
+    head_ref = pull.head.label if head_ref == base_ref
 
-    push_message "#{i.user.login} #{p.action} pull request ##{i.number}",
-      "Repo: #{repo.owner.login}/#{repo.name}\n" +
-      "Pull Request: \"#{i.title}\"\n#{body}"
+    title = "%s %s pull request #%d" % [p.sender.login, p.action, pull.number]
+    msg = "In %s/%s: \"%s\" (%s...%s)\n%s" % [repo.owner.login, repo.name,
+      pull.title, base_ref, head_ref, body]
+
+    push_message title, msg
   end
 
   private
 
-  def check_api_key
-    raise_config_error "Invalid Pushbullet api key." unless data["api_key"]
+  def check_config
+    @api_key = data["api_key"].to_s
+    @iden = data["device_iden"].to_s
+    raise_config_error "Invalid or missing api key." unless @api_key.match(/\A[a-zA-Z0-9]{32}\z/)
+    raise_config_error "Invalid or missing device iden." unless @iden.match(/\A[a-zA-Z0-9]{16}\z/)
   end
 
   def push_message(title, message)
     # set api key
-    http.basic_auth(data["api_key"], "")
+    http.basic_auth(@api_key, "")
 
     # call api
     http_post "https://api.pushbullet.com:443/api/pushes",
-      :device_iden => data["device_iden"],
+      :device_iden => @iden,
       :type => "note",
       :title => title,
       :body => message
   end
 
-  def convert_to_ostruct(obj)
-    if obj.is_a? Hash
-      obj.each  do |key, val|
-        obj[key] = convert_to_ostruct val
-      end
-      obj = OpenStruct.new obj
-    elsif obj.is_a? Array
-       obj = obj.map { |r| convert_to_ostruct r }
-    end
-    return obj
-  end
-
-  def truncate_if_too_long(str, len)
+  def truncate_too_long(str, len)
     str.length > len ? str[0..len].gsub(/\s\w+\s*$/, '...') : str
   end
 end
