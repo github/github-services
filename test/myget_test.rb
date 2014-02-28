@@ -5,6 +5,7 @@ class MyGetTest < Service::TestCase
 
   def test_push
     test_hook_url = "https://www.myget.org/BuildSource/Hook/feedname?identifier=guid"
+    test_hook_pathandquery = "/BuildSource/Hook/feedname?identifier=guid"
 
     data = {
       'hook_url' => test_hook_url
@@ -13,10 +14,9 @@ class MyGetTest < Service::TestCase
     payload = {'commits'=>[{'id'=>'test'}]}
     svc = service(data, payload)
 
-    @stubs.post "#{test_hook_url}" do |env|
+    @stubs.post "#{test_hook_pathandquery}" do |env|
       body = JSON.parse(env[:body])
 
-      assert_equal env[:url].host, "www.myget.org"
       assert_equal 'test', body['payload']['commits'][0]['id']
       assert_match 'guid-', body['guid']
       assert_equal data, body['config']
