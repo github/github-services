@@ -1,0 +1,19 @@
+MyGet allows you to create and host your own NuGet feed. Include packages from
+the official NuGet feed or upload your own NuGet packages. We can also compile
+and package your source code from GitHub, BitBucket, CodePlex and more!
+
+The GitHub MyGet service can be used to trigger builds after changes have been
+pushed to your GitHub repository.
+
+Install Notes
+-------------
+
+1. Login to https://www.myget.org. If you are on the Enterprise plan,
+   login through that URL instead.
+   
+2. Navigate to the feed's build services setup for which you want to
+   automatically trigger builds when changes have been pushed to GitHub.
+   
+3. For the build, copy the Hook (HTTP POST) URL into the Hook URL field above.
+
+4. Show your love for MyGet and include the Status badge in your README.md
