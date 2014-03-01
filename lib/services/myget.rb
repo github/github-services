@@ -13,7 +13,7 @@ class Service::MyGet < Service::HttpPost
     :email => 'support@myget.org',
     :twitter => '@MyGetTeam'
 
-  def receive_push
-    http_post hook_url, :payload => generate_json(payload)
+  def receive_event
+    deliver data['hook_url']
   end
 end
