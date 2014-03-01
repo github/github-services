@@ -1,0 +1,9 @@
+This service starts a preview of your book on Leanpub whenever a push is made to your repository.
+
+Required values are:
+
+api_key: Your Leanpub api_key, which you can find at https://leanpub.com/dashboard/account.
+
+slug: The slug for your book. This is the part of the URL for your book after https://leanpub.com/. For example, for https://leanpub.com/thes3cookbook, the slug is thes3cookbook.
+
+See https://leanpub.com/help/api for more information on the Leanpub API.
