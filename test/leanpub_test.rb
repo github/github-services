@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class LeanpubText < Service::TestCase
+class LeanpubTest < Service::TestCase
   include Service::HttpTestMethods
 
   def test_push
