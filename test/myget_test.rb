@@ -21,7 +21,7 @@ class MyGetTest < Service::TestCase
       assert_match 'guid-', body['guid']
       assert_equal data, body['config']
       assert_equal 'push', body['event']
-      [200, {}, '']
+      [201, {}, '']
     end
 
     svc.receive_event

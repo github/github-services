@@ -5,6 +5,8 @@ class Service::MyGet < Service::HttpPost
 
   url "https://www.myget.org"
   logo_url "https://www.myget.org/Content/images/myget/myget_125x25.png"
+  
+  default_events :push
 
   maintained_by :github => 'myget',
     :twitter => '@MyGetTeam'
@@ -14,6 +16,8 @@ class Service::MyGet < Service::HttpPost
     :twitter => '@MyGetTeam'
 
   def receive_event
-    deliver data['hook_url']
+    url = required_config_value('hook_url')
+    
+    deliver url
   end
 end
