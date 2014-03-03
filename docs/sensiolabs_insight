@@ -1,0 +1,14 @@
+SensioLabsInsight
+=================
+
+Install Notes
+-------------
+
+  1.  Create an account on insight.sensiolabs.com
+  2.  Enter your credentials (https://insight.sensiolabs.com/account)
+      - Enter your user uuid
+      - Enter your api token
+
+  3.  Check the "Active" checkbox and click "Update Settings".
+
+For more details about SensioLabsInsight, visit https://insight.sensiolabs.com/account
