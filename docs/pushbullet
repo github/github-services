@@ -1,7 +1,9 @@
 Pushbullet
 ==========
 
-[Pushbullet](https://www.pushbullet.com/) makes getting things on and off your phone easy and fast. Never email yourself again!
+[Pushbullet](https://www.pushbullet.com/) makes getting things on and off your phone easy and fast.
+
+Supported events: push, issue and pull request.
 
 Install Notes
 -------------
@@ -14,4 +16,4 @@ Install Notes
 
 4. Open [Pushbullet API](https://api.pushbullet.com/api/devices) and paste your api key to the username field, leave password empty.
 
-5. Find your desired device from the output and copy it's iden field to the field above.
+5. Find your desired device from the output and copy it's iden to the field above.
