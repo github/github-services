@@ -11,10 +11,23 @@ class HipChatTest < Service::TestCase
       assert_equal simple_payload, JSON.parse(form['payload'])
       assert_equal 'a', form['auth_token']
       assert_equal 'r', form['room_id']
+      assert_equal nil, form['color']
       [200, {}, '']
     end
 
     svc = service({'auth_token' => 'a', 'room' => 'r'}, simple_payload)
+    svc.receive_event
+  end
+
+  def test_push_different_color
+    @stubs.post "/v1/webhooks/github" do |env|
+      form = Faraday::Utils.parse_query(env[:body])
+      assert_equal 'purple', form['color']
+      [200, {}, '']
+    end
+
+    params = {'auth_token' => 'a', 'room' => 'r', 'color' => 'purple'}
+    svc = service(params, simple_payload)
     svc.receive_event
   end
 

@@ -1,7 +1,23 @@
 Install Notes
--------------
+=============
+
+Zulip is a group communication tool.
+
+https://zulip.com/hello
+
+Configuration Fields
+--------------------
 
 1. **Email** - The user to authenticate as.
-2. **Api Key** - The API key associated with the provided user. See: https://humbughq.com/#settings
-3. **Stream** - The Humbug stream where you want messages to be sent.  (If you leave this blank, it defaults to the "commits" stream in Humbug.)  Whether you use the default stream or specify it explicitly, you need to set up the stream on the Humbug side.
-4. **Branches** - If you want to restrict Humbug notifications to certain GitHub branches, then provide a comma delimited list of git branches here (e.g. master,staging,prod).  Otherwise, leave it empty.
+2. **Api Key** - The API key associated with the provided user. See: https://zulip.com/#settings
+3. **Stream** - The default Zulip stream where event notifications will be sent. Defaults to "commits" if left empty. The stream (or the "commits" stream if empty) must exist in Zulip.
+4. **Commit Stream** - Overrides **Stream** for Git commit notifications. The stream must exist in Zulip.
+5. **Issue Stream** - Overrides **Stream** for Github issues notifications. The stream must exist in Zulip.
+6. **Branches** - A comma-delimited whitelist of branches to receive event notifications about. If empty, event notifications will be sent about all branches. Example: "master,staging,prod"
+
+Checkboxes
+----------
+
+1. **Exclude Pull Requests** - Don't send Github pull request notifications to Zulip.
+2. **Exclude Issues** - Don't send Github issues notifications to Zulip.
+3. **Exclude Commits** - Don't send Git commit notifcations to Zulip.

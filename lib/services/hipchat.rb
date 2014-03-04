@@ -1,7 +1,7 @@
 class Service::HipChat < Service
-  string :auth_token, :room, :restrict_to_branch
+  string :auth_token, :room, :restrict_to_branch, :color
   boolean :notify, :quiet_fork, :quiet_watch, :quiet_comments, :quiet_wiki
-  white_list :room, :restrict_to_branch
+  white_list :room, :restrict_to_branch, :color
 
   default_events :commit_comment, :download, :fork, :fork_apply, :gollum,
     :issues, :issue_comment, :member, :public, :pull_request, :pull_request_review_comment,
@@ -39,11 +39,16 @@ class Service::HipChat < Service
     end
 
     room_ids.each do |room_id|
-      res = http_post "https://api.hipchat.com/v1/webhooks/github",
+      params = {
         :auth_token => data['auth_token'],
         :room_id => room_id,
         :payload => generate_json(payload),
         :notify => data['notify'] ? 1 : 0
+      }
+      if data['color'].present?
+        params.merge!(:color => data['color'])
+      end
+      res = http_post "https://api.hipchat.com/v1/webhooks/github", params
       if res.status < 200 || res.status > 299
         raise_config_error
       end
