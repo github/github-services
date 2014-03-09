@@ -18,14 +18,10 @@ class Service::Honbu < Service::HttpPost
   def receive_event
     token = required_config_value('token')
 
-    if token.match(/^[A-Za-z0-9]+$/) == nil
-      raise_config_error "Invalid token"
-    end
-
-
     http.headers['Authorization'] = "#{token}"
 
-    url = "https://app.honbu.io/api/integrations/github"
+    url = "https://integrations.honbu.io/github"
+
     deliver url
   end
 end
