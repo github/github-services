@@ -10,4 +10,5 @@ How To Install
 
 1. Obtain your Project Key by visiting the settings area of your Crocagile project, at https://www.crocagile.com
 2. Use your Project Key when setting up Crocagile GitHub services for your GitHub repository.
-3. Visit https://blog.crocagile.com for a full list of supported integration commands.
+3. If your GitHub email address is not the same as your Crocagile address, append your commit messages with -email=[your crocagile email]
+4. Visit https://blog.crocagile.com for a full list of supported integration commands.
