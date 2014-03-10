@@ -5,38 +5,13 @@ class CrocagileTest < Service::TestCase
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
  
-  # Successful Request
   def test_push
     @stubs.post "/api/integration/github/" do |env|
       assert_equal 'www.crocagile.com', env[:url].host
       assert_equal 'application/json', env[:request_headers]['content-type']
-      [200, {}, '{"status":1,"message":"Githook Webook processed successfully."}']
+      [200, {}, '{"status":1,"message":"GitHub Webook processed successfully."}']
     end
     svc = service({'project_key'=>'foo'},payload)
-    svc.receive_event
-    @stubs.verify_stubbed_calls
-  end
-
-  # Invalid Key
-  def test_push_invalid_key
-    @stubs.post "/api/integration/github/" do |env|
-      assert_equal 'www.crocagile.com', env[:url].host
-      assert_equal 'application/json', env[:request_headers]['content-type']
-      [200, {}, '{"status":0,"message":"Your authorization key is invalid."}']
-    end
-    svc = service({'project_key'=>'foo'},payload)
-    svc.receive_event
-    @stubs.verify_stubbed_calls
-  end
-
-  # Missing Key
-  def test_push_missing_key
-    @stubs.post "/api/integration/github/" do |env|
-      assert_equal 'www.crocagile.com', env[:url].host
-      assert_equal 'application/json', env[:request_headers]['content-type']
-      [200, {}, '{"status":0,"message":"Your authorization key is invalid."}']
-    end
-    svc = service({},payload)
     svc.receive_event
     @stubs.verify_stubbed_calls
   end
