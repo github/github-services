@@ -1,7 +1,7 @@
 class Service::TeamCity < Service
-  string   :base_url, :build_type_id, :username, :branches
+  string   :base_url, :build_type_id, :branches, :username
   password :password
-  white_list :base_url, :build_type_id, :username, :branches
+  white_list :base_url, :build_type_id, :branches, :username
 
   def receive_push
     return if payload['deleted']
