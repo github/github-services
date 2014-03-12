@@ -3,7 +3,7 @@ class Service::Honbu < Service::HttpPost
 
 
   default_events :push, :issues, :issue_comment, :commit_comment,
-    :create, :delete, :pull_request, :pull_request_review_comment, 
+    :create, :delete, :pull_request,  
     :gollum, :watch, :release, :fork, :member, :public, :team_add, 
     :status, :deployment, :deployment_status
 

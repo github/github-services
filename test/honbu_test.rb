@@ -12,6 +12,7 @@ class HonbuTest < Service::TestCase
     }
 
 
+
     payload = {'commits'=>[{'id'=>'test'}]}
     svc = service(data, payload)
 
