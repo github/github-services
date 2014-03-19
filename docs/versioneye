@@ -1,12 +1,27 @@
-VersionEye is a notification system for software libraries. It notifies you about outdated dependencies in your repository and works currently for Ruby (Bundler), Python (Pypi), Node.JS (NPM), Java (Maven, Gradle), PHP (Composer) and Clojure (Lein). The integration for CocoaPods and Bower is on the way.
+VersionEye is a notification system for software libraries. It notifies you about outdated dependencies in your repository. 
+
+Currently works for:
+
+* Ruby (Bundler)
+* Python (Pypi)
+* Node.JS (NPM)
+* Java (Maven, Gradle)
+* PHP (Composer) 
+* Clojure (Lein)
+
+Coming soon:
+
+* CocoaPods 
+* Bower
 
 This service hook will inform VersionEye every time you push to GitHub. On every push VersionEye will reparse your project file.
+
 
 Install Notes
 -------------
 
-1.  Sign up for free at http://www.VersionEye.com with your GitHub Account.
-2.  Go to https://www.versioneye.com/user/projects/github_repositories.
-3.  Select a repository that you want VersionEye to monitor for you.
-4.  Go to the project page and copy the project_id from the URL.
-5.  Here you will find your API Key https://www.versioneye.com/settings/api
+1.  Sign up with your GitHub account (free): http://www.VersionEye.com
+2.  Go to: https://www.versioneye.com/user/projects/github_repositories
+3.  Choose a repository you want VersionEye to monitor
+4.  Go to the project page and copy the `project_id` from the URL
+5.  Find your API Key here: https://www.versioneye.com/settings/api
