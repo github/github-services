@@ -3,5 +3,4 @@ PythonPackages
 
 Automatically release Python packages from GitHub to the [Python Package Index](http://pypi.python.org). 
 
-For more information, please see: 
-http://docs.pythonpackages.com/en/latest/github-service.html
+For more information, please see [the docs](http://docs.pythonpackages.com/en/latest/github-service.html).
