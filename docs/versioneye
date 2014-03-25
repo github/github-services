@@ -1,4 +1,4 @@
-VersionEye is a notification system for software libraries. It notifies you about outdated dependencies in your repository. 
+VersionEye is a notification system for software libraries. It notifies you about outdated dependencies in your repository.
 
 Currently works for:
 
@@ -6,12 +6,12 @@ Currently works for:
 * Python (Pypi)
 * Node.JS (NPM)
 * Java (Maven, Gradle)
-* PHP (Composer) 
+* PHP (Composer)
 * Clojure (Lein)
 
 Coming soon:
 
-* CocoaPods 
+* CocoaPods
 * Bower
 
 This service hook will inform VersionEye every time you push to GitHub. On every push VersionEye will reparse your project file.
