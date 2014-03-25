@@ -109,6 +109,7 @@ class Service::IRC < Service
   rescue OpenSSL::SSL::SSLError
     raise_config_error 'Host does not support SSL'
   ensure
+    irc.close unless irc.closed?
     emit_debug_log
   end
 
