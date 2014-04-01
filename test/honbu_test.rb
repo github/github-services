@@ -21,6 +21,7 @@ class HonbuTest < Service::TestCase
 
       assert_equal env[:url].host, "integrations.honbu.io"
       assert_equal env[:request_headers]['Authorization'], "#{test_token}"
+      assert_equal env[:request_headers]['X-GitHub-Event'], "push"
       assert_equal 'test', body['payload']['commits'][0]['id']
       assert_match 'guid-', body['guid']
       assert_equal data, body['config']
