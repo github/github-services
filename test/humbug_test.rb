@@ -11,7 +11,7 @@ class HumbugTest < Service::TestCase
       assert_equal "api.zulip.com", env[:url].host
       assert_match "payload=%7B%22test%22%3A%22payload%22%7D", env[:body]
       assert_match "email=e", env[:body]
-      assert_match "api-key=a", env[:body]
+      assert_match "api_key=a", env[:body]
       assert_match "event=" + event, env[:body]
       assert_match "stream=commits", env[:body]
       assert_match "branches=b1%2Cb2", env[:body]

@@ -20,6 +20,8 @@ Install Notes
     That means the token can only be used for this package. It also means you do not have
     to specify it in github.com. Just using the token is enough.
 
+    You can also use a comma separated list of tokens to trigger several obs builds.
+
 2.  Enter your credentials at github.com
     - The token which got created (use "osc token" if you lost it)
     - optional: Modify the api url, if you do not use the openSUSE Build Service instance.

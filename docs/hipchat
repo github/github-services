@@ -9,6 +9,8 @@ Install Notes
 1. **Auth Token** - One of your group's API tokens. See: http://www.hipchat.com/docs/api/auth
 2. **Room** - The full name of the room to send the message to. The room's room_id will also work.
 3. **Restrict to Branch** - List of branches to which will be inspected.
+4. **Color** - Optional background color for the message. Available options are: yellow, red, green, purple, gray, or random. Defaults to yellow.
+5. **Server** - If you use a self-hosted HipChat server, enter the name of your server here, e.g. chat.example.com. Defaults to api.hipchat.com.
 
 Options
 1. **Notify** - Whether or not to notify room members.
