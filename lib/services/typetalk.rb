@@ -1,4 +1,4 @@
-class Service::Typetalk < Service
+class Service::Typetalk < Service::HttpPost
   string :client_id, :topic, :restrict_to_branch
   password :client_secret
   white_list :topic, :restrict_to_branch
