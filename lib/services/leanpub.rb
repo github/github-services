@@ -17,6 +17,7 @@ class Service::Leanpub < Service::HttpPost
     :twitter => '@leanpub'
 
   def receive_event
+    return unless branch_name == "master"
     slug = required_config_value('slug')
     api_key = required_config_value('api_key')
 
