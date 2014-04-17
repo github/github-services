@@ -52,7 +52,7 @@ class Service::IRC < Service
     end
 
     rooms   = rooms.gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
-    botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
+    botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick'][0..16]
     command = data['notice'].to_i == 1 ? 'NOTICE' : 'PRIVMSG'
 
     irc_password("PASS", data['password']) if !data['password'].to_s.empty?
