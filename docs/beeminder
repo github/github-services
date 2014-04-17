@@ -8,5 +8,5 @@ Install Notes
 
 1. [Signup](https://www.beeminder.com/users/sign_up) for a Beeminder account (you can sign in with GitHub)
 2. **username** - Use your Beeminder username
-3. **goal_slug** - How your goal appears in the url (eg. if user "alice" has a goal "foo", foo's url will be "http://www.beeminder.com/*alice*/goals/*foo*". Where "foo" is the goal's slug.)
+3. **goal_slug** - How your goal appears in the url (eg. if user "alice" has a goal "foo", foo's url will be "http://www.beeminder.com/*alice*/goals/*foo*", where "foo" is the goal's slug.)
 4. You can find your **auth_token** at https://www.beeminder.com/api/v1/auth_token.json
