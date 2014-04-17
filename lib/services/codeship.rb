@@ -2,7 +2,7 @@ class Service::Codeship < Service::HttpPost
   string :project_uuid
 
   url "http://www.codeship.io"
-  logo_url "http://www.codeship.io/assets/logo_codeship_topbar.png"
+  logo_url "http://www.codeship.io/logo_codeship_topbar.png"
 
   default_events :push
 
