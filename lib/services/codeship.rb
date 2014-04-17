@@ -13,7 +13,6 @@ class Service::Codeship < Service::HttpPost
                 twitter: '@codeship'
 
   def receive_event
-    http.headers['Content-Type'] = 'application/json'
     http.headers['X-GitHub-Event'] = event.to_s
     http_post codeship_url, payload: generate_json(payload)
   end
