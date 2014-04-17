@@ -4,7 +4,7 @@ class Service::Codeship < Service::HttpPost
   url "http://www.codeship.io"
   logo_url "http://www.codeship.io/logo_codeship_topbar.png"
 
-  default_events :push
+  default_events :push, :pull_request
 
   maintained_by github: 'beanieboi',
                 twitter: '@beanieboi'
