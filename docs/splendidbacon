@@ -4,5 +4,6 @@ Splendid Bacon
 Install Notes
 -------------
 
-  1. Token is your project token from Splendid Bacon. This is found on the project edit page on http://splendidbacon.com
-  2. Project ID is a unique identifier for your project. This is found on the project edit page or in any URL for the project.
+  1. Host Url is the host at which you are hosting Splendid Bacon. For example splendidbacon.herokuapp.com.
+  2. Token is your project token from Splendid Bacon. This is found on the project edit page on your Splendid Bacon host. 
+  3. Project ID is a unique identifier for your project. This is found on the project edit page or in any URL for the project.
