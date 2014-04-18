@@ -140,11 +140,11 @@ class Service::Email < Service
   end
 
   def smtp_enable_starttls_auto?
-    @smtp_enable_starttls_auto ||= (email_config['enable_starttls_auto'] != 'false' && true)
+    @smtp_enable_starttls_auto ||= (email_config['enable_starttls_auto'] != 'false')
   end
 
   def smtp_enable_tls?
-    @smtp_enable_tls ||= (email_config['enable_tls'] != 'false' && true)
+    @smtp_enable_tls ||= (email_config['enable_tls'] == 'true')
   end
 
   def smtp_openssl_verify_mode
