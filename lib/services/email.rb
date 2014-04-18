@@ -57,7 +57,7 @@ class Service::Email < Service
         :password             => my.smtp_password,
         :authentication       => my.smtp_authentication,
         :enable_starttls_auto => my.smtp_enable_starttls_auto?,
-        :tls                  => my.smtp_emable_tls?,
+        :tls                  => my.smtp_enable_tls?,
         :openssl_verify_mode  => my.smtp_openssl_verify_mode
     end
 
