@@ -11,11 +11,11 @@ class CodeshipTest < Service::TestCase
     svc = service(:push, data, payload)
 
     @stubs.post "/github/#{project_uuid}" do |env|
-      payload_body = JSON.parse(env[:body][:payload])
+      body = Faraday::Utils.parse_query env[:body]
       assert_equal "https://lighthouse.codeship.io/github/#{project_uuid}", env[:url].to_s
-      assert_match 'application/json', env[:request_headers]['Content-Type']
+      assert_match 'application/x-www-form-urlencoded', env[:request_headers]['Content-Type']
       assert_equal 'push', env[:request_headers]['X-GitHub-Event']
-      assert_equal payload, payload_body
+      assert_equal payload, JSON.parse(body["payload"].to_s)
     end
 
     svc.receive_event
