@@ -1,41 +1,29 @@
-# encoding: utf-8
-
 require File.expand_path('../helper', __FILE__)
 
 class CodeshipTest < Service::TestCase
-  def setup
-    @stubs = Faraday::Adapter::Test::Stubs.new
-  end
+  include Service::HttpTestMethods
 
   def test_push_event
-    payload = {'app_name' => random_name}
-    project_uuid = random_name
+    project_uuid = '2fe6bdb0-a6db-0131-f25b-0088653824b4'
 
-    svc = service({'project_uuid' => project_uuid}, payload)
-    @stubs.post "/hook/#{project_uuid}" do |env|
-      assert_equal "https://www.codeship.io/hook/#{project_uuid}", env[:url].to_s
-      assert_match 'application/json', env[:request_headers]['content-type']
-      assert_equal payload, JSON.parse(env[:body])
+    data = { 'project_uuid' => project_uuid }
+
+    svc = service(:push, data, payload)
+
+    @stubs.post "/github/#{project_uuid}" do |env|
+      body = Faraday::Utils.parse_query env[:body]
+      assert_equal "https://lighthouse.codeship.io/github/#{project_uuid}", env[:url].to_s
+      assert_match 'application/x-www-form-urlencoded', env[:request_headers]['Content-Type']
+      assert_equal 'push', env[:request_headers]['X-GitHub-Event']
+      assert_equal payload, JSON.parse(body["payload"].to_s)
     end
-    svc.receive_push
+
+    svc.receive_event
   end
 
-  def test_json_encoding
-    payload = {'unicodez' => "rtiaü\n\n€ý5:q"}
-    svc = service({'project_uuid' => 'abc'}, payload)
-    @stubs.post "/hook/abc" do |env|
-      assert_equal payload, JSON.parse(env[:body])
-    end
-    svc.receive_push
-  end
+  private
 
-private
-
-  def random_name letters=10
-    [*('a'..'z')].shuffle[0..letters-1]
-  end
-
-  def service(*args)
-    super Service::Codeship, *args
+  def service_class
+    Service::Codeship
   end
 end

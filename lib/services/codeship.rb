@@ -1,21 +1,29 @@
-class Service::Codeship < Service
+class Service::Codeship < Service::HttpPost
   string :project_uuid
 
   url "http://www.codeship.io"
-  logo_url "http://www.codeship.io/assets/logo_codeship_topbar.png"
+  logo_url "http://www.codeship.io/logo_codeship_topbar.png"
 
-  maintained_by :github => 'clemenshelm'
-  supported_by  :web => 'http://www.codeship.io/contact',
-                :email => 'clemens@codeship.io'
+  default_events :push, :pull_request
 
-  def receive_push
-    http.headers['content-type'] = 'application/json'
-    http_post codeship_url, generate_json(payload)
+  maintained_by github: 'beanieboi',
+                twitter: '@beanieboi'
+  supported_by  web: 'http://www.codeship.io/contact',
+                email: 'support@codeship.io',
+                twitter: '@codeship'
+
+  def receive_event
+    http.headers['X-GitHub-Event'] = event.to_s
+    http_post codeship_url, payload: generate_json(payload)
   end
 
   private
 
+  def project_uuid
+    required_config_value('project_uuid')
+  end
+
   def codeship_url
-    "https://www.codeship.io/hook/#{data['project_uuid']}"
+    "https://lighthouse.codeship.io/github/#{project_uuid}"
   end
 end
