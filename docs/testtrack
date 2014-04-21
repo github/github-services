@@ -1,0 +1,18 @@
+This service allows you to attach commits to items in TestTrack 2014.1 and later.
+
+Installation Notes
+------------------
+
+1. Configure a source control provider in TestTrack. See the TestTrack help for information.
+2. Enter the configuration information in the fields above.
+  - Server Url - URL for the ttextpro.exe CGI on your web server.
+  - Provider Key – Provider key displayed in the Source Control Providers dialog box in TestTrack.
+  - Issue Tag, Requirement Tag, Test Case Tag – Optional tag for the item type. The default tags are IS for issues, RQ for requirements, or TC for test cases.
+
+Attaching to TestTrack Items
+----------------------------
+
+To specify the item to attach to, add a tag in the commit message. The following example shows a tag that will attach the commit to issue #12345.
+
+    Fixes [IS-12345]
+
