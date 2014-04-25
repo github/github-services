@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "oauth",                  "0.4.4"
 
   # MaxCDN
-  spec.add_dependency "maxcdn",                  "0.1.5"
+  spec.add_dependency "maxcdn",                  "~> 0.1.6"
 
   # Campfire
   spec.add_dependency "tinder",                 "1.8.0.github"
