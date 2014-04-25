@@ -31,7 +31,7 @@ class Service::Redmine < Service
             # Send the commit information to the related issue on redmine
             http.url_prefix = data['address']
             
-            http_method :put, "/issues/#{issue_no}.json" do |req|
+            http_method :put, "issues/#{issue_no}.json" do |req|
               req.headers['Content-Type'] = 'application/json'
               req.headers['X-Redmine-API-Key'] = data['api_key']
               req.params['issue[notes]'] = commit_text(commit)

@@ -19,7 +19,7 @@ class RedmineTest < Service::TestCase
     svc.receive_push
   end
 
-  def test_update_issue_module
+  def test_update_issue_module_to_root_redmine_path
     @stubs.put "/issues/1234.json" do |env|
       assert_equal 'redmine.org', env[:url].host
       assert_equal 'application/json', env[:request_headers]['Content-type']
@@ -42,6 +42,34 @@ class RedmineTest < Service::TestCase
                        'added' => [], 'removed' => [], 'modified' => []
                     }
                   ]
+    }
+    svc = service(configurations, payloads)
+    assert svc.receive_push
+  end
+
+  def test_update_issue_module_to_non_root_redmine_path
+    @stubs.put "/a/issues/1234.json" do |env|
+      assert_equal 'redmine.org', env[:url].host
+      assert_equal 'application/json', env[:request_headers]['Content-type']
+      assert_equal 'API_KEY-654321', env[:request_headers]['X-Redmine-API-Key']
+      assert env[:params]['issue']['notes'].include?("Author: Mahmoud")
+      [200, {}, '']
+    end
+    configurations = {
+        'address' => "http://redmine.org/a",
+        'api_key' => "API_KEY-654321",
+        'update_redmine_issues_about_commits' => true
+    }
+    payloads = {
+        'commits' => [
+            { 'message' => "FIX Issue #1234",
+              'timestamp' => "2007-10-10T00:11:02-07:00",
+              'id' => "b44aa57a6c6c52cc20b9e396cfe3cf97bdfc2b33",
+              'url' => "https://github.com/modsaid/github-services/commit/b44aa57a6c6c52cc20b9e396cfe3cf97bdfc2b33",
+              'author' => {'name' => "Mahmoud", 'email' => "modsaid@example.com"},
+              'added' => [], 'removed' => [], 'modified' => []
+            }
+        ]
     }
     svc = service(configurations, payloads)
     assert svc.receive_push
