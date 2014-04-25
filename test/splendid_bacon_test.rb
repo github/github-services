@@ -1,5 +1,4 @@
 require File.expand_path('../helper', __FILE__)
-
 class SplendidBaconTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
