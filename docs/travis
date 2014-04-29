@@ -1,4 +1,3 @@
-# Travis CI
 Travis CI is a distributed continuous integration service.
 
 By enabling this hook, Travis CI will listen to push and pull request events to trigger new builds.
