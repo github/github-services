@@ -1,4 +1,4 @@
-class Service::Distiller < Service
+class Service::Distiller < Service::HttpPost
   self.title = "Distiller"
   url "https://distiller.io"
   logo_url "https://www.distiller.io/favicon.ico"
