@@ -25,7 +25,7 @@ class AmazonSNSTest < Service::TestCase
     }
   end
 
-  def test_event
+  def xtest_event
     svc = service :push, data, payload
     sns = svc.receive_event
 
