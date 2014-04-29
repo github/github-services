@@ -1,6 +1,3 @@
-TestPilot CI
-======
-
 TestPilot CI is a fully managed distributed Continuous Integration and Deployment Service
 for Ruby, Node.js, Clojure, Java, Python, and Scala applications.
 

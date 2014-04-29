@@ -1,6 +1,3 @@
-Kato
-=====
-
 Kato is a team chat service with an emphasis on search, user interface, and reliability.
 
 Integrating with GitHub will cause certain information about commits, issues, and comments to appear in a specified Kato room.

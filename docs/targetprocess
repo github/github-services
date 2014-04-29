@@ -1,7 +1,7 @@
 Integration with TargetProcess allows GitHub user to change current entity states
 and add comments directly from their commit messages.
 
---------------
+
 Install Notes
 --------------
 
@@ -21,7 +21,7 @@ Install Notes
 
   - A project admin's account credentials to access your TargetProcess server.
 
----------------------
+
 Commit Message Syntax
 ---------------------
 
