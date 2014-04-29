@@ -1,6 +1,3 @@
-Docker
-======
-
 **Important**: Only add this to a public GitHub repo, or else your private code will end up on the public Docker Index.
 
 When enabled this will let the Docker Index know when you have made changes to your repository. The Docker Index will then pull down your repository and build your Dockerfile to create a Docker repository and push it onto the Docker Index so that it is available for others to download. When you commit changes to your git Repo the Docker Index will keep the Docker Repository up to date.
