@@ -1,6 +1,3 @@
-MQTT
-========
-
 This service lets you publish push and commit messages to a message broker via the MQTT protocol.
 
 Install Notes

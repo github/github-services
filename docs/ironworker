@@ -1,6 +1,3 @@
-IronWorker
-======
-
 Posts all of your GitHub events to IronWorker so you can write IronWorker scripts for testing and deploying applications.
 
 For more information about IronWorker, see [www.iron.io](http://www.iron.io).

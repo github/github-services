@@ -1,6 +1,3 @@
-Geocommit
-==========
-
 With this service you can send your commits to geocommit. Geocommit analyzes geographical geocommit information in git notes and allows you to visualize your contributions geographically.
 
 Install Notes

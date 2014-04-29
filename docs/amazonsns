@@ -1,6 +1,3 @@
-Amazon Simple Notification Service
-==================================
-
 This service lets you publish event messages to Amazon's Simple Notification Service. Please note that SNS Topics are region specific.
 
 The AWS Key and Secret you proide can either be from your master account (not recommended) or from an IAM Resource. 

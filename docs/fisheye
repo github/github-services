@@ -1,6 +1,3 @@
-FishEye
-=======
-
 Atlassian FishEye is a revision-control browser and search engine.
 The GitHub FishEye service can be used to trigger repository scan after code has been pushed to your git repository.
 
