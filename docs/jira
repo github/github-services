@@ -1,5 +1,5 @@
 This service hook allows you to transition JIRA tickets using the REST API available in
-version 4.2+ of Jira. To interact with tickets in JIRA you will need to place markup
+version 4.2+ of JIRA. To interact with tickets in JIRA you will need to place markup
 similar to Lighthouse's in your commit message.
 
     Fixed an annoying bug [#WEB-210 transition:31 resolution:1]
