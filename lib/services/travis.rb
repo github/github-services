@@ -1,4 +1,5 @@
 class Service::Travis < Service
+  self.title = "Travis CI"
   default_events :push, :pull_request, :issue_comment, :public, :member
   string :user
   password :token
