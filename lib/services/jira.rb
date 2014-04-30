@@ -1,4 +1,4 @@
-class Service::Jira < Service
+class Service::JIRA < Service
   string   :server_url, :api_version, :username
   password :password
   white_list :api_version, :server_url, :username
