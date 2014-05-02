@@ -1,0 +1,24 @@
+Note: This service currently enables all of the available hook events including
+commit comments, downloads, forks, fork applies, wiki updates, issues, issue
+comments, member adds, pull requests, pushes, and watches. A full list with
+descriptions can be found here: http://developer.github.com/v3/repos/hooks/
+
+= Install Notes =
+
+
+1. **JID** - The JID (Jabber ID) with which to connect to the XMPP server
+2. **Password** - Password
+3. **Room** - The room you'd like to join
+4. **Server** - The server in which the room lives
+5. **Nickname** - The nickname that should be used (defaults to __github__)
+6. **Restrict to Branch** - List of branches to which will be inspected.
+
+__Note:__ You may wish to reserve the nickname for the user in question so that it will always be able to connect to the room.
+
+== Options ==
+1. **Notify** - Whether or not to notify room members.
+2. **Quiet Fork** - Suppress the room notice if a project has been forked.
+3. **Quiet Watch** - Suppress the room notice that someone has started to watch the project.
+4. **Quiet Comments** - Suppress the room notice if a comment has been made on repo.
+5. **Quiet Wiki** - Suppress the room notice if a wiki item has been updated.
+6. **Active** - Turn On or Off the service hook.
