@@ -38,14 +38,76 @@ class Service::XmppMuc < Service
     return false if event.to_s =~ /team/ && !data['notify_team']
     return false if event.to_s =~ /release/ && !data['notify_release']
 
-    build_message payload
+    build_message(event, payload)
   end
     
-  def build_message(payload)
-    puts payload
-  end
-      
+  def build_message(event, payload)
+    case event
+      when :push
+        messages = []
+        messages << "#{push_summary_message}: #{url}"
+        messages += distinct_commits.first(3).map {
+            |commit| self.format_commit_message(commit)
+        }
+        send_messages messages
+      when :commit_comment
+        send_messages "#{commit_comment_summary_message} #{url}"
+      when :create
+      when :delete
+      when :download
+      when :follow
+      when :fork
+      when :fork_apply
+      when :gist
+      when :gollum
+      when :issue_comment
+        send_messages "#{issue_comment_summary_message} #{url}"
+      when :issues
+        send_messages "#{issue_summary_message} #{url}"
+      when :member
+      when :public
+      when :pull_request
+        send_messages "#{pull_request_summary_message} #{url}" if action =~ /(open)|(close)/
+      when :push
+      when :team_add
+      when :watch
+      when :pull_request_review_comment
+        send_messages "#{pull_request_review_comment_summary_message} #{url}"
+      when :status
+      when :release
+      when :deployment
+      when :deployment_status
+    end
     
+  end
+    
+  def send_messages(messages)
+    messages = Array(messages)
+    setup_muc_connection()
+    messages.each do |message|
+        @muc.send ::Jabber::Message::new(::Jabber::JID.new(@data['muc_room']), message)
+    end
+    @muc.exit
+    ensure
+      @client.close if @client
+  end
+    
+  def setup_muc_connection
+      if (@muc.nil?) 
+        @client = ::Jabber::Client.new(::Jabber::JID::new(@data['JID']))
+        @client.connect
+        @client.auth(@data['password'])
+        ::Jabber::debug = true
+        @muc = ::Jabber::MUC::MUCClient.new(@client)
+        @muc.join(::Jabber::JID.new(@data['muc_room']), @data['password'])
+      end
+      @muc
+  end
+    
+  def set_muc_connection(muc)
+      @muc = muc
+  end
+          
   def check_config(data)
     
     raise_config_error 'JID is required' if data['JID'].to_s.empty?
@@ -55,7 +117,110 @@ class Service::XmppMuc < Service
     data['nickname'] = 'github' if data['nickname'].to_s.empty?
 
     data['muc_room'] = "#{data['room']}@#{data['server']}/#{data['nickname']}"
+    @data = data
+  end
 
+  def url
+    shorten_url(summary_url)
+  end
+
+  def push_summary_message
+    message = []
+    message << "[#{repo_name}] #{pusher_name}"
+
+    if created?
+      if tag?
+        message << "tagged #{tag_name} at"
+        message << (base_ref ? base_ref_name : after_sha)
+      else
+        message << "created #{branch_name}"
+
+        if base_ref
+          message << "from #{base_ref_name}"
+        elsif distinct_commits.empty?
+          message << "at #{after_sha}"
+        end
+
+        num = distinct_commits.size
+        message << "(+#{num} new commit#{num != 1 ? 's' : ''})"
+      end
+
+    elsif deleted?
+      message << "deleted #{branch_name} at #{before_sha}"
+
+    elsif forced?
+      message << "force-pushed #{branch_name} from #{before_sha} to #{after_sha}"
+
+    elsif commits.any? and distinct_commits.empty?
+      if base_ref
+        message << "merged #{base_ref_name} into #{branch_name}"
+      else
+        message << "fast-forwarded #{branch_name} from #{before_sha} to #{after_sha}"
+      end
+
+    else
+      num = distinct_commits.size
+      message << "pushed #{num} new commit#{num != 1 ? 's' : ''} to #{branch_name}"
+    end
+
+    message.join(' ')
+  end
+
+  def format_commit_message(commit)
+    short  = commit['message'].split("\n", 2).first.to_s
+    short += '...' if short != commit['message']
+
+    author = commit['author']['name']
+    sha1   = commit['id']
+    files  = Array(commit['modified'])
+    #dirs   = files.map { |file| File.dirname(file) }.uniq
+
+    "#{repo_name}/#{branch_name} #{sha1[0..6]} " +
+    "#{commit['author']['name']}: #{short}"
+  end
+
+  def issue_summary_message
+    "[#{repo.name}] #{sender.login} #{action} issue \##{issue.number}: #{issue.title}"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def issue_comment_summary_message
+    short  = comment.body.split("\r\n", 2).first.to_s
+    short += '...' if short != comment.body
+    "[#{repo.name}] #{sender.login} comment on issue \##{issue.number}: #{short}"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def commit_comment_summary_message
+    short  = comment.body.split("\r\n", 2).first.to_s
+    short += '...' if short != comment.body
+    sha1   = comment.commit_id
+    "[#{repo.name}] #{sender.login} comment on commit #{sha1[0..6]}: #{short}"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def pull_request_summary_message
+    base_ref = pull.base.label.split(':').last
+    head_ref = pull.head.label.split(':').last
+    head_label = head_ref != base_ref ? head_ref : pull.head.label
+
+    "[#{repo.name}] #{sender.login} #{action} pull request " +
+    "\##{pull.number}: #{pull.title} (#{base_ref}...#{head_ref})"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def pull_request_review_comment_summary_message
+    short  = comment.body.split("\r\n", 2).first.to_s
+    short += '...' if short != comment.body
+    sha1   = comment.commit_id
+    "[#{repo.name}] #{sender.login} comment on pull request " +
+    "\##{pull_request_number} #{sha1[0..6]}: #{short}"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
   end
 
   url 'http://xmpp.org/extensions/xep-0045.html'
