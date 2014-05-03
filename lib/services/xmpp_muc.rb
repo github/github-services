@@ -4,9 +4,11 @@ class Service::XmppMuc < Service
   self.hook_name = 'xmpp_muc'
     
   string :JID, :room, :server, :nickname
-  password :password
-  boolean :notify, :notify_fork, :notify_watch, :notify_comments, :notify_wiki
-  white_list :room, :filter_branch
+  password :password, :room_password
+  boolean :active, :notify_fork, :notify_wiki, :notify_comments,
+    :notify_watch, :notify_issue, :notify_deployment, :notify_team
+
+  white_list :room, :filter_branch, :JID, :room, :server, :nickname
 
   default_events :commit_comment, :create, :delete, :download, 
     :follow, :fork, :fork_apply, 
@@ -23,9 +25,26 @@ class Service::XmppMuc < Service
 
     # If filtering by branch then don't make a post
     if (filter_branch.length > 0) && (filter_branch.index(commit_branch) == nil)
-      return
+      return false
     end
+    
+    return false if event.to_s =~ /fork/ && !data['notify_fork']
+    return false if event.to_s =~ /watch/ && !data['notify_watch']
+    return false if event.to_s =~ /_comment/ && !data['notify_comments']
+    return false if event.to_s =~ /gollum/ && !data['notify_wiki']
+    return false if event.to_s =~ /issue/ && !data['notify_issue']
+    return false if event.to_s =~ /pull_/ && !data['notify_pull']
+    return false if event.to_s =~ /deployment/ && !data['notify_deployment']
+    return false if event.to_s =~ /team/ && !data['notify_team']
+    return false if event.to_s =~ /release/ && !data['notify_release']
+
+    build_message payload
   end
+    
+  def build_message(payload)
+    puts payload
+  end
+      
     
   def check_config(data)
     
