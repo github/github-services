@@ -186,6 +186,21 @@ class XmppMucTest < Service::TestCase
           @mock.get_messages()[0].body,
           'Expected push message not received'
       )
+      assert_equal(
+          "[grit/master] stub git call for Grit#heads test f:15 Case#1 - Tom Preston-Werner",
+          @mock.get_messages()[1].body,
+          'Expected push message not received'
+      )
+      assert_equal(
+          "[grit/master] clean up heads test f:2hrs - Tom Preston-Werner",
+          @mock.get_messages()[2].body,
+          'Expected push message not received'
+      )
+      assert_equal(
+          "[grit/master] add more comments throughout - Tom Preston-Werner",
+          @mock.get_messages()[3].body,
+          'Expected push message not received'
+      )
   end
           
   def service(*args)
