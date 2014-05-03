@@ -22,8 +22,9 @@ This service will connect to an XMPP MUC room with the provided details and then
 6. **Notify issues** - Get notifications on issues
 7. **Notify deployment** - Get notifications about deployments
 8. **Notify team** - Get notification about team events
+9. **Notify release** - Get notification about release events
 
-= Notes =
+== Notes ==
 
 You may wish to reserve the nickname for the user in question so that it will 
 always be able to connect to the room.

@@ -1,4 +1,22 @@
 class XmppMucTest < Service::TestCase
+    
+  class MockXmpp4r
+
+    def send(message)
+      @messages = [] if @messages.nil?
+      @messages.push message
+    end
+      
+    def get_messages
+        @messages
+    end
+      
+    def exit
+        
+    end
+
+  end
+
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
       
@@ -16,8 +34,10 @@ class XmppMucTest < Service::TestCase
       'notify_deployment' => true,
       'notify_team' => true,
       'notify_pull' => true,
-      'notify_release' => true
+      'notify_release' => true,
+      'is_test' => true
     }
+    @mock = MockXmpp4r.new()
   end
 
   def test_no_jid_provided
@@ -151,7 +171,27 @@ class XmppMucTest < Service::TestCase
       'Should not reported release event'
     )
   end
-  def service(*args)
-    super Service::XmppMuc, *args
+
+  def test_generates_expected_push_message
+      config = @config
+      message = ''
+      service(:push, config, payload).receive_event
+      assert_equal(
+          4,
+          @mock.get_messages().length,
+          'Expected 4 messages'
+      )
+      assert_equal(
+          "[grit] rtomayko pushed 3 new commits to master: http://github.com/mojombo/grit/compare/4c8124f...a47fd41",
+          @mock.get_messages()[0].body,
+          'Expected push message not received'
+      )
   end
+          
+  def service(*args)
+    xmppMuc = super Service::XmppMuc, *args
+    xmppMuc.set_muc_connection @mock
+    xmppMuc
+  end
+
 end

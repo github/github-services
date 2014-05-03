@@ -121,7 +121,8 @@ class Service::XmppMuc < Service
   end
 
   def url
-    shorten_url(summary_url)
+    shorten_url(summary_url) if not @data['is_test']
+    summary_url
   end
 
   def push_summary_message
