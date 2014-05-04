@@ -68,6 +68,12 @@ class Service::XmppMuc < Service
       when :fork_apply
       when :gist
       when :gollum
+        messages = []
+        messages << "#{gollum_summary_message} #{url}"
+        pages.first(3).map {
+            | page | messages << self.format_wiki_page_message(page)
+        }
+        send_messages messages
       when :member
       when :public
       when :push
@@ -132,6 +138,19 @@ class Service::XmppMuc < Service
   def url
     shorten_url(summary_url) if not @data['is_test']
     summary_url
+  end
+
+  def gollum_summary_message
+      num = pages.length
+      "[#{payload['repository']['name']}] @#{sender.login} modified #{num} page#{num != 1 ? 's' : ''}" 
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def format_wiki_page_message(page)
+    url = page['html_url']
+    url = shorten_url(url) if not @data['is_test']
+    "User #{page['action']} page \"#{page['title']}\" #{url}"
   end
 
   def push_summary_message

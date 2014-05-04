@@ -322,4 +322,29 @@ class XmppMucTest < Service::TestCase
     end
   end
     
+  def test_generates_expected_gollum_message
+      message = '[grit] @defunkt modified 1 page https://github.com/mojombo/magik/wiki/Foo'
+      service(:gollum, @config, gollum_payload).receive_event
+      assert_equal(
+          2,
+          @mock.get_messages().length,
+          'Expected 2 message'
+      )
+      assert_equal(
+          message,
+          @mock.get_messages()[0].body,
+          'Expected wiki edit summmary message not received'
+      )
+      assert_equal(
+          'User created page "Foo" https://github.com/mojombo/magik/wiki/Foo',
+          @mock.get_messages()[1].body,
+          'Expected wiki page edit not received'
+      )
+  end
+
+  def test_generates_error_if_gollum_cant_be_generated 
+    assert_raise_with_message(Service::ConfigurationError, /Unable to build message/) do
+      service(:gollum, @config, {}).receive_event
+    end
+  end    
 end
