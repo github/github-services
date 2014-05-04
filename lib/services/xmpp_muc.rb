@@ -52,6 +52,14 @@ class Service::XmppMuc < Service
         send_messages messages
       when :commit_comment
         send_messages "#{commit_comment_summary_message} #{url}"
+      when :issue_comment
+        send_messages "#{issue_comment_summary_message} #{url}"
+      when :issues
+        send_messages "#{issue_summary_message} #{url}"
+      when :pull_request
+        send_messages "#{pull_request_summary_message} #{url}" if action =~ /(open)|(close)/
+      when :pull_request_review_comment
+        send_messages "#{pull_request_review_comment_summary_message} #{url}"
       when :create
       when :delete
       when :download
@@ -60,19 +68,11 @@ class Service::XmppMuc < Service
       when :fork_apply
       when :gist
       when :gollum
-      when :issue_comment
-        send_messages "#{issue_comment_summary_message} #{url}"
-      when :issues
-        send_messages "#{issue_summary_message} #{url}"
       when :member
       when :public
-      when :pull_request
-        send_messages "#{pull_request_summary_message} #{url}" if action =~ /(open)|(close)/
       when :push
       when :team_add
       when :watch
-      when :pull_request_review_comment
-        send_messages "#{pull_request_review_comment_summary_message} #{url}"
       when :status
       when :release
       when :deployment
@@ -198,7 +198,7 @@ class Service::XmppMuc < Service
   def issue_comment_summary_message
     short  = comment.body.split("\r\n", 2).first.to_s
     short += '...' if short != comment.body
-    "[#{repo.name}] @#{sender.login} comment on issue \##{issue.number}: #{short}"
+    "[#{repo.name}] @#{sender.login} commented on issue \##{issue.number}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end

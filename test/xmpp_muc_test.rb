@@ -39,6 +39,12 @@ class XmppMucTest < Service::TestCase
     }
     @mock = MockXmpp4r.new()
   end
+    
+  def service(*args)
+    xmppMuc = super Service::XmppMuc, *args
+    xmppMuc.set_muc_connection @mock
+    xmppMuc
+  end
 
   def test_no_jid_provided
     assert_raise_with_message(Service::ConfigurationError, 'JID is required') do
@@ -230,10 +236,25 @@ class XmppMucTest < Service::TestCase
     end
   end
     
-  def service(*args)
-    xmppMuc = super Service::XmppMuc, *args
-    xmppMuc.set_muc_connection @mock
-    xmppMuc
+  def test_generates_expected_issue_comment_message
+      message = '[grit] @defunkt commented on issue #5: this... '
+      service(:issue_comment, @config, issue_comment_payload).receive_event
+      assert_equal(
+          1,
+          @mock.get_messages().length,
+          'Expected 1 message'
+      )
+      assert_equal(
+          message,
+          @mock.get_messages()[0].body,
+          'Expected issue comment message not received'
+      )
+  end
+
+  def test_generates_error_if_issue_comment_message_cant_be_generated 
+    assert_raise_with_message(Service::ConfigurationError, /Unable to build message/) do
+      service(:issue_comment, @config, {}).receive_event
+    end
   end
 
 end
