@@ -256,5 +256,70 @@ class XmppMucTest < Service::TestCase
       service(:issue_comment, @config, {}).receive_event
     end
   end
+    
+  def test_generates_expected_issues_message
+      message = '[grit] @defunkt opened issue #5: booya '
+      service(:issues, @config, issues_payload).receive_event
+      assert_equal(
+          1,
+          @mock.get_messages().length,
+          'Expected 1 message'
+      )
+      assert_equal(
+          message,
+          @mock.get_messages()[0].body,
+          'Expected issues message not received'
+      )
+  end
 
+  def test_generates_error_if_issues_message_cant_be_generated 
+    assert_raise_with_message(Service::ConfigurationError, /Unable to build message/) do
+      service(:issues, @config, {}).receive_event
+    end
+  end
+    
+  def test_generates_expected_pull_request_message
+      message = '[grit] @defunkt opened pull request #5: booya (master...feature) https://github.com/mojombo/magik/pulls/5'
+      service(:pull_request, @config, pull_request_payload).receive_event
+      assert_equal(
+          1,
+          @mock.get_messages().length,
+          'Expected 1 message'
+      )
+      assert_equal(
+          message,
+          @mock.get_messages()[0].body,
+          'Expected pull request message not received'
+      )
+  end
+
+  def test_generates_error_if_pull_request_message_cant_be_generated 
+    assert_raise_with_message(Service::ConfigurationError, /Unable to build message/) do
+      payload = pull_request_payload
+      payload['pull_request']['base'] = {}
+      service(:pull_request, @config, payload).receive_event
+    end
+  end
+    
+  def test_generates_expected_pull_request_review_comment_message
+      message = '[grit] @defunkt commented on pull request #5 03af7b9: very... https://github.com/mojombo/magik/pull/5#discussion_r18785396'
+      service(:pull_request_review_comment, @config, pull_request_review_comment_payload).receive_event
+      assert_equal(
+          1,
+          @mock.get_messages().length,
+          'Expected 1 message'
+      )
+      assert_equal(
+          message,
+          @mock.get_messages()[0].body,
+          'Expected pull request review comment message not received'
+      )
+  end
+
+  def test_generates_error_if_pull_request_review_comment_message_cant_be_generated 
+    assert_raise_with_message(Service::ConfigurationError, /Unable to build message/) do
+      service(:pull_request_review_comment, @config, {}).receive_event
+    end
+  end
+    
 end

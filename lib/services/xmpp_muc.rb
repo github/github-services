@@ -204,8 +204,6 @@ class Service::XmppMuc < Service
   end
 
   def commit_comment_summary_message
-    puts payload
-    puts comment
     short  = comment.body.split("\r\n", 2).first.to_s
     short += '...' if short != comment.body
     sha1   = comment.commit_id
@@ -229,7 +227,7 @@ class Service::XmppMuc < Service
     short  = comment.body.split("\r\n", 2).first.to_s
     short += '...' if short != comment.body
     sha1   = comment.commit_id
-    "[#{repo.name}] @#{sender.login} comment on pull request " +
+    "[#{repo.name}] @#{sender.login} commented on pull request " +
     "\##{pull_request_number} #{sha1[0..6]}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
