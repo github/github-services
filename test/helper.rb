@@ -37,6 +37,10 @@ class Service::TestCase < Test::Unit::TestCase
   def pull_payload
     Service::PullRequestHelpers.sample_payload
   end
+    
+  def pull_request_payload
+    Service::PullRequestHelpers.sample_payload
+  end
 
   def pull_request_review_comment_payload
     Service::PullRequestReviewCommentHelpers.sample_payload
