@@ -15,14 +15,16 @@ This service will connect to an XMPP MUC room with the provided details and then
 === Options ===
 
 1. **Active** - Master on/off switch
-2. **Notify fork** - Get notifications of fork events
-3. **Notify wiki** - Get notifications of wiki events
-4. **Notify comments**  - Get notifications of comments
-5. **Notify watch** - Get notifictions of watch events
-6. **Notify issues** - Get notifications on issues
-7. **Notify deployment** - Get notifications about deployments
-8. **Notify team** - Get notification about team events
-9. **Notify release** - Get notification about release events
+2. **Notify wiki** - Get notifications of wiki events
+3. **Notify comments**  - Get notifications of comments
+4. **Notify watch** - Get notifictions of watch events
+5. **Notify issues** - Get notifications on issues
+<!--
+  6. **Notify deployment** - Get notifications about deployments  **not currently supported**
+  7. **Notify team** - Get notification about team events  **not currently supported**
+  8. **Notify release** - Get notification about release events  **not currently supported**
+  9. **Notify fork** - Get notifications of fork events  **not currently supported**
+-->
 
 == Notes ==
 
@@ -31,5 +33,8 @@ always be able to connect to the room.
 
 Note: This service currently enables all of the available hook events including
 commit comments, downloads, forks, fork applies, wiki updates, issues, issue
-comments, member adds, pull requests, pushes, and watches. A full list with
-descriptions can be found here: http://developer.github.com/v3/repos/hooks/.
+comments, member adds, pull requests, pushes, and watches. However, not all 
+events are posted to the MUC room. If you would like these events supported 
+please raise an issue, or make a pull request!
+
+A full list of events with descriptions can be found here: http://developer.github.com/v3/repos/hooks/.

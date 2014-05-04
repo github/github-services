@@ -6,7 +6,8 @@ class Service::XmppMuc < Service
   string :JID, :room, :server, :nickname
   password :password, :room_password
   boolean :active, :notify_fork, :notify_wiki, :notify_comments,
-    :notify_watch, :notify_issue, :notify_deployment, :notify_team
+    :notify_issue 
+  #, :notify_watch, :notify_deployment, :notify_team */
 
   white_list :room, :filter_branch, :JID, :room, :server, :nickname
 
@@ -60,13 +61,6 @@ class Service::XmppMuc < Service
         send_messages "#{pull_request_summary_message} #{url}" if action =~ /(open)|(close)/
       when :pull_request_review_comment
         send_messages "#{pull_request_review_comment_summary_message} #{url}"
-      when :create
-      when :delete
-      when :download
-      when :follow
-      when :fork
-      when :fork_apply
-      when :gist
       when :gollum
         messages = []
         messages << "#{gollum_summary_message} #{url}"
@@ -74,9 +68,17 @@ class Service::XmppMuc < Service
             | page | messages << self.format_wiki_page_message(page)
         }
         send_messages messages
+      # The following events are not currently supported, but 
+      # included ready for implementation
+      when :create
+      when :delete
+      when :download
+      when :follow
+      when :fork
+      when :fork_apply
+      when :gist
       when :member
       when :public
-      when :push
       when :team_add
       when :watch
       when :status
