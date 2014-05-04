@@ -93,13 +93,23 @@ class Service::XmppMuc < Service
   end
     
   def setup_muc_connection
-      if (@muc.nil?) 
-        @client = ::Jabber::Client.new(::Jabber::JID::new(@data['JID']))
-        @client.connect
-        @client.auth(@data['password'])
-        ::Jabber::debug = true
-        @muc = ::Jabber::MUC::MUCClient.new(@client)
-        @muc.join(::Jabber::JID.new(@data['muc_room']), @data['password'])
+      if (@muc.nil?)
+        begin
+          @client = ::Jabber::Client.new(::Jabber::JID::new(@data['JID']))
+          @client.connect
+          @client.auth(@data['password'])
+          ::Jabber::debug = true
+          @muc = ::Jabber::MUC::MUCClient.new(@client)
+          @muc.join(::Jabber::JID.new(@data['muc_room']), @data['password'])
+        rescue ::Jabber::ErrorResponse
+          raise_config_error 'Error response'
+        rescue ::Jabber::ClientAuthenticationFailure
+          raise_config_error 'Authentication error'
+        rescue ::Jabber::JabberError
+          raise_config_error 'XMPP Error'
+        else
+          raise_config_error 'Unknown error'
+        end
       end
       @muc
   end
@@ -109,7 +119,6 @@ class Service::XmppMuc < Service
   end
           
   def check_config(data)
-    
     raise_config_error 'JID is required' if data['JID'].to_s.empty?
     raise_config_error 'Password is required' if data['password'].to_s.empty?
     raise_config_error 'Room is required' if data['room'].to_s.empty?
@@ -127,7 +136,7 @@ class Service::XmppMuc < Service
 
   def push_summary_message
     message = []
-    message << "[#{repo_name}] #{pusher_name}"
+    message << "[#{repo_name}] @#{pusher_name}"
 
     if created?
       if tag?
@@ -181,7 +190,7 @@ class Service::XmppMuc < Service
   end
 
   def issue_summary_message
-    "[#{repo.name}] #{sender.login} #{action} issue \##{issue.number}: #{issue.title}"
+    "[#{repo.name}] @#{sender.login} #{action} issue \##{issue.number}: #{issue.title}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
@@ -189,16 +198,18 @@ class Service::XmppMuc < Service
   def issue_comment_summary_message
     short  = comment.body.split("\r\n", 2).first.to_s
     short += '...' if short != comment.body
-    "[#{repo.name}] #{sender.login} comment on issue \##{issue.number}: #{short}"
+    "[#{repo.name}] @#{sender.login} comment on issue \##{issue.number}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
 
   def commit_comment_summary_message
+    puts payload
+    puts comment
     short  = comment.body.split("\r\n", 2).first.to_s
     short += '...' if short != comment.body
     sha1   = comment.commit_id
-    "[#{repo.name}] #{sender.login} comment on commit #{sha1[0..6]}: #{short}"
+    "[#{repo.name}] @#{sender.login} commented on commit #{sha1[0..6]}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
@@ -208,7 +219,7 @@ class Service::XmppMuc < Service
     head_ref = pull.head.label.split(':').last
     head_label = head_ref != base_ref ? head_ref : pull.head.label
 
-    "[#{repo.name}] #{sender.login} #{action} pull request " +
+    "[#{repo.name}] @#{sender.login} #{action} pull request " +
     "\##{pull.number}: #{pull.title} (#{base_ref}...#{head_ref})"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
@@ -218,7 +229,7 @@ class Service::XmppMuc < Service
     short  = comment.body.split("\r\n", 2).first.to_s
     short += '...' if short != comment.body
     sha1   = comment.commit_id
-    "[#{repo.name}] #{sender.login} comment on pull request " +
+    "[#{repo.name}] @#{sender.login} comment on pull request " +
     "\##{pull_request_number} #{sha1[0..6]}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"

@@ -182,7 +182,7 @@ class XmppMucTest < Service::TestCase
           'Expected 4 messages'
       )
       assert_equal(
-          "[grit] rtomayko pushed 3 new commits to master: http://github.com/mojombo/grit/compare/4c8124f...a47fd41",
+          "[grit] @rtomayko pushed 3 new commits to master: http://github.com/mojombo/grit/compare/4c8124f...a47fd41",
           @mock.get_messages()[0].body,
           'Expected push message not received'
       )
@@ -202,7 +202,34 @@ class XmppMucTest < Service::TestCase
           'Expected push message not received'
       )
   end
-          
+
+  def test_generates_error_if_push_message_cant_be_generated 
+    assert_raise_with_message(Service::ConfigurationError, /Unable to build message/) do
+      service(:commit_comment, @config, {}).receive_event
+    end
+  end
+    
+  def test_generates_expected_commit_comment_message
+      message = '[grit] @defunkt commented on commit 441e568: this... https://github.com/mojombo/magik/commit/441e5686a726b79bcdace639e2591a60718c9719#commitcomment-3332777'
+      service(:commit_comment, @config, commit_comment_payload).receive_event
+      assert_equal(
+          1,
+          @mock.get_messages().length,
+          'Expected 1 message'
+      )
+      assert_equal(
+          message,
+          @mock.get_messages()[0].body,
+          'Expected commit comment message not received'
+      )
+  end
+    
+  def test_generates_error_if_commit_comment_message_cant_be_generated 
+    assert_raise_with_message(Service::ConfigurationError, /Unable to build message/) do
+      service(:commit_comment, @config, {}).receive_event
+    end
+  end
+    
   def service(*args)
     xmppMuc = super Service::XmppMuc, *args
     xmppMuc.set_muc_connection @mock
