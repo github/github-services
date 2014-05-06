@@ -132,7 +132,7 @@ class Service::XmppMuc < Service
     raise_config_error 'Room is required' if data['room'].to_s.empty?
     raise_config_error 'Server is required' if data['server'].to_s.empty?
     data['nickname'] = 'github' if data['nickname'].to_s.empty?
-
+    data.delete(:room_password) if data['room_password'].to_s.empty?
     data['muc_room'] = "#{data['room']}@#{data['server']}/#{data['nickname']}"
     @data = data
   end
