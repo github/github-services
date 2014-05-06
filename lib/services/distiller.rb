@@ -1,10 +1,10 @@
 class Service::Distiller < Service::HttpPost
   self.title = "Distiller"
-  url "https://distiller.io"
-  logo_url "https://www.distiller.io/favicon.ico"
+  url "http://distiller.io"
+  logo_url "http://www.distiller.io/favicon.ico"
 
   maintained_by :github => 'travis'
-  supported_by  :web => 'https://distiller.io/chat',
+  supported_by  :web => 'http://distiller.io/chat',
     :email => 'help@distiller.io'
 
   default_events :push
