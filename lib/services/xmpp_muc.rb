@@ -1,6 +1,6 @@
 class Service::XmppMuc < Service
     
-  self.title = 'XMPP MUC Poster'
+  self.title = 'XMPP MUC'
   self.hook_name = 'xmpp_muc'
     
   string :JID, :room, :server, :nickname
