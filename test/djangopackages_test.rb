@@ -7,10 +7,9 @@ class DjangoPackagesTest < Service::TestCase
 
   def test_push
     @stubs.post "/packages/github-webhook/" do |env|
-      assert_equal 'djangopackages.com', env[:url].host
+      assert_equal 'www.djangopackages.com', env[:url].host
       data = Faraday::Utils.parse_query(env[:body])
       assert_equal 1, JSON.parse(data['payload'])['a']
-      assert_equal 1, 2
       [200, {}, '']
     end
 
