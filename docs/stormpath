@@ -1,6 +1,6 @@
 [Stormpath](http://stormpath.com/) is a User Management API that reduces development time with instant-on, scalable user infrastructure. Stormpath's intuitive API and expert support make it easy for developers to authenticate, manage, and secure users and roles in any application.
 
-This service will help you update the Single Sign On site configure in Stormpath based on modifications to the master branch of this repository.
+This service will help you update the Single Sign On site configured in Stormpath.  In the Stormpath Admin Console, you can specify which branch needs to be synced with Stormpath.
 
 Install Notes
 -------------
