@@ -1,0 +1,14 @@
+Distiller is a hosted continuous integration service.
+
+If you already connected this repository to Distiller we've probably already set up a webhook for this repository - check this list of webhooks above.
+
+If you haven't connected this project but want to:
+
+1. Go to http://distiller.io/ and sign up with your GitHub credentials.
+2. Create a New Project and add the GitHub repository.
+3. Configure the project.
+4. We'll add a webhook - you're done!
+
+If you or someone else has connected this repository to Distiller but wasn't able to configure the webhook (if, for example, they weren't an administrator for this repository), simply check “Active” to enable the hook and Distiller will automatically build this repository when you push.
+
+Learn more at http://distiller.io.
