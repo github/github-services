@@ -14,7 +14,7 @@ class Service::DjangoPackages < Service::HttpPost
   # ssl_version 2
 
   def receive_push
-    url = "https://www.djangopackages.com:443/packages/github-webhook/"
+    url = "https://www.djangopackages.com/packages/github-webhook/"
     http_post url, :payload => generate_json(payload)
   end
 end
