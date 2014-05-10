@@ -1,4 +1,4 @@
-class Service::XmppMuc < Service
+class Service::XmppMuc < Service::HttpPost
     
   self.title = 'XMPP MUC'
   self.hook_name = 'xmpp_muc'
