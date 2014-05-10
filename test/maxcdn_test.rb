@@ -63,9 +63,15 @@ class MaxCDNTest < Service::TestCase
 
     arguments = @arguments.clone
     arguments["static_only"] = true
-    svc = service(arguments, static_payload)
+    svc = service(arguments, payload)
 
     refute svc.receive_push
+
+    arguments = @arguments.clone
+    arguments["static_only"] = true
+    svc = service(arguments, static_payload)
+
+    assert svc.receive_push
   end
 
   def dynamic_payload
