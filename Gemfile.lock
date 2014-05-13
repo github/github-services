@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    github-services (1.0.0.abccd34)
+    github-services (1.0.0.c8ac9a5)
       activeresource (~> 3.0.0)
       addressable (~> 2.2.7)
       aws-sdk (~> 1.27)
