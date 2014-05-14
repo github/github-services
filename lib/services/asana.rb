@@ -52,7 +52,12 @@ class Service::Asana < Service
     http.headers['X-GitHub-Event'] = event.to_s
 
     res = http_post "https://app.asana.com/api/1.0/tasks/#{task_id}/stories", "text=#{text}"
-    if res.status < 200 || res.status > 299
+    case res.status
+    when 200..299
+      # Success
+    when 400
+      # Unknown task. Could be GitHub issue or pull request number. Ignore it.
+    else
       raise_config_error res.message
     end
   end
