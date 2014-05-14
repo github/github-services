@@ -58,7 +58,9 @@ class Service::Asana < Service
     when 400
       # Unknown task. Could be GitHub issue or pull request number. Ignore it.
     else
-      raise_config_error res.message
+      # Try to pull out an error message from the Asana response
+      error_message = JSON.parse(res.body)['errors'][0]['message'] rescue nil
+      raise_config_error(error_message || "Unexpected Error")
     end
   end
 end

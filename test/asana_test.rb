@@ -85,6 +85,21 @@ class AsanaTest < Service::TestCase
     assert_nothing_raised { svc.receive_push }
   end
 
+  def test_error_response
+    @stubs.post "/api/1.0/tasks/1234/stories" do |env|
+      [401, {"Content-Type" => "application/json; charset=UTF-8"}, '{"errors":[{"message":"Not Authorized"}]}']
+    end
+
+    svc = service( {'auth_token' => 'bad-token'}, modified_payload)
+
+    begin
+      svc.receive_push
+    rescue StandardError => e
+      assert_equal Service::ConfigurationError, e.class
+      assert_equal "Not Authorized", e.message
+    end
+  end
+
   def service(*args)
     super Service::Asana, *args
   end
