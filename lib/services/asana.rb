@@ -42,12 +42,12 @@ class Service::Asana < Service
     end
 
     # post commit to every taskid found
-    task_list.each do |taskid|
+    task_list.flatten.each do |taskid|
 
       http.basic_auth(data['auth_token'], "")
       http.headers['X-GitHub-Event'] = event.to_s
 
-      res = http_post "https://app.asana.com/api/1.0/tasks/" + taskid[0] + "/stories", "text=" + push_msg + message
+      res = http_post "https://app.asana.com/api/1.0/tasks/" + taskid + "/stories", "text=" + push_msg + message
       if res.status < 200 || res.status > 299
         raise_config_error res.message
       end
