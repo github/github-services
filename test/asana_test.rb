@@ -100,6 +100,21 @@ class AsanaTest < Service::TestCase
     end
   end
 
+  def test_asana_exception
+    @stubs.post "/api/1.0/tasks/1234/stories" do |env|
+      [500, {}, 'Boom!']
+    end
+
+    svc = service( {'auth_token' => '0000'}, modified_payload)
+
+    begin
+      svc.receive_push
+    rescue StandardError => e
+      assert_equal Service::ConfigurationError, e.class
+      assert_equal "Unexpected Error", e.message
+    end
+  end
+
   def service(*args)
     super Service::Asana, *args
   end
