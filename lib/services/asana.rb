@@ -33,7 +33,7 @@ class Service::Asana < Service
   end
 
   def check_commit(commit, push_msg)
-    message = " (" + commit['url'] + ")\n- " + commit['message']
+    message = "(#{commit['url']})\n- #{commit['message']}"
 
     task_list = []
     message.split("\n").each do |line|
@@ -43,15 +43,17 @@ class Service::Asana < Service
 
     # post commit to every taskid found
     task_list.flatten.each do |taskid|
-
-      http.basic_auth(data['auth_token'], "")
-      http.headers['X-GitHub-Event'] = event.to_s
-
-      res = http_post "https://app.asana.com/api/1.0/tasks/" + taskid + "/stories", "text=" + push_msg + message
-      if res.status < 200 || res.status > 299
-        raise_config_error res.message
-      end
+      deliver_story taskid, "#{push_msg} #{message}"
     end
   end
 
+  def deliver_story(task_id, text)
+    http.basic_auth(data['auth_token'], "")
+    http.headers['X-GitHub-Event'] = event.to_s
+
+    res = http_post "https://app.asana.com/api/1.0/tasks/#{task_id}/stories", "text=#{text}"
+    if res.status < 200 || res.status > 299
+      raise_config_error res.message
+    end
+  end
 end
