@@ -33,7 +33,7 @@ class Service::Asana < Service
   end
 
   def check_commit(commit, push_msg)
-    message = " (" + commit['url'] + ")\n- " + commit['message']
+    message = "(#{commit['url']})\n- #{commit['message']}"
 
     task_list = []
     message.split("\n").each do |line|
@@ -42,16 +42,25 @@ class Service::Asana < Service
     end
 
     # post commit to every taskid found
-    task_list.each do |taskid|
-
-      http.basic_auth(data['auth_token'], "")
-      http.headers['X-GitHub-Event'] = event.to_s
-
-      res = http_post "https://app.asana.com/api/1.0/tasks/" + taskid[0] + "/stories", "text=" + push_msg + message
-      if res.status < 200 || res.status > 299
-        raise_config_error res.message
-      end
+    task_list.flatten.each do |taskid|
+      deliver_story taskid, "#{push_msg} #{message}"
     end
   end
 
+  def deliver_story(task_id, text)
+    http.basic_auth(data['auth_token'], "")
+    http.headers['X-GitHub-Event'] = event.to_s
+
+    res = http_post "https://app.asana.com/api/1.0/tasks/#{task_id}/stories", "text=#{text}"
+    case res.status
+    when 200..299
+      # Success
+    when 400
+      # Unknown task. Could be GitHub issue or pull request number. Ignore it.
+    else
+      # Try to pull out an error message from the Asana response
+      error_message = JSON.parse(res.body)['errors'][0]['message'] rescue nil
+      raise_config_error(error_message || "Unexpected Error")
+    end
+  end
 end
