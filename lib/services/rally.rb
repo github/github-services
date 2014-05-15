@@ -19,7 +19,6 @@ class Service::Rally < Service
     raise_config_error("No Workspace value specified") if workspace.nil? or workspace.strip.length == 0
     branch     = payload['ref'].split('/')[-1]  # most of the time it'll be refs/heads/master ==> master
     repo       = payload['repository']['name']
-    repo_owner = payload['repository']['owner']['name']
     repo_uri   = payload['repository']['url']
 
     http.ssl[:verify] = false
@@ -37,7 +36,7 @@ class Service::Rally < Service
 
     # create the repo in Rally if it doesn't already exist
     @wksp_ref = validateWorkspace(workspace)
-    repo_ref = getOrCreateRepo(scm_repository, repo, repo_owner)
+    repo_ref = getOrCreateRepo(scm_repository, repo, repo_uri)
     @user_cache = {}
     payload['commits'].each do |commit|
       artifact_refs = snarfArtifacts(commit['message'])
@@ -96,13 +95,13 @@ class Service::Rally < Service
       return itemRef(target_workspace[0])
   end
 
-  def getOrCreateRepo(scm_repository, repo, repo_owner)
+  def getOrCreateRepo(scm_repository, repo, repo_uri)
       scm_repository = repo if (scm_repository.nil? or scm_repository == "")
       repo_item = rallyQuery('SCMRepository', 'Name', 'Name = "%s"' % scm_repository)
       return itemRef(repo_item) unless repo_item.nil?
       repo_info = { 'Workspace' => @wksp_ref, 'Name' => scm_repository, 'SCMType' => 'GitHub',
                     'Description' => 'GitHub-Service push changesets',
-                    'Uri' => 'http://github.com/%s/%s' % [repo_owner, repo] 
+                    'Uri' => '%s' % [repo_uri]
                   }
       repo_item = rallyCreate('SCMRepository', repo_info)
       return itemRef(repo_item)
