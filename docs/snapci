@@ -1,0 +1,11 @@
+[Snap-CI](https://snap-ci.com) will add these hooks automatically to projects which you test using Snap-CI.
+
+
+Install Notes
+-------------
+
+1.  Sign up at https://snap-ci.com with your github account
+2.  Add your repository
+3.  You're ready!
+
+For more details about Snap-CI, go to http://docs.snap-ci.com.
