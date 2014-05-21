@@ -1,0 +1,11 @@
+[GitBook](https://www.gitbook.io): Automatically updates & builds your book whenever you push.
+
+
+Install Notes
+-------------
+
+1. **Token** - API Token for your GitBook account
+2. **Username** - Your GitBook username
+3. **Book**- The id of your book (ex: `GitBookIO/javascript`)
+
+For more details about GitBook, go to http://help.gitbook.io.
