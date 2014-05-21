@@ -1,6 +1,3 @@
-Bamboo
-=======
-
 Bamboo is a continuous integration server that automates the building and testing of your software.
 The github Bamboo service can be used to trigger builds after code has been pushed to your git repository.
 

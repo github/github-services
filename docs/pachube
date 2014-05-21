@@ -1,6 +1,3 @@
-Pachube
-=======
-
 Publishes number of distinct commits per push as well as number of modified,
 removed and added files to a [Pachube](https://pachube.com/) feed. Datastreams
 are created / updated for each repository name. The data is taken for only one

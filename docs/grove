@@ -1,6 +1,3 @@
-Grove.io
-=========
-
 This delivers updates to your GitHub repository to Grove.io's IRC channels.
 Events include Git pushes, issues, wiki changes, and comments.
 

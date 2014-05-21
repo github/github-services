@@ -2,16 +2,16 @@ class Service::Web < Service
   include HttpHelper
 
   string :url,
-    # adds a X-Hub-Signature of the body content
-    # X-Hub-Signature: sha1=....
-    :secret,
-
     # old hooks send form params ?payload=JSON(...)
     # new hooks should set content_type == 'json'
     :content_type,
 
     # 2 or 3
     :ssl_version
+
+  # adds a X-Hub-Signature of the body content
+  # X-Hub-Signature: sha1=....
+  password :secret
 
   white_list :url, :content_type, :ssl_version
 

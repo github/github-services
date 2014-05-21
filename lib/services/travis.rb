@@ -1,4 +1,11 @@
 class Service::Travis < Service
+  self.title = "Travis CI"
+  url "https://travis-ci.org"
+
+  maintained_by :github => 'travisci'
+
+  supported_by :email => 'support@travis-ci.com'
+
   default_events :push, :pull_request, :issue_comment, :public, :member
   string :user
   password :token

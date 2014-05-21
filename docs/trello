@@ -1,6 +1,3 @@
-Trello
-======
-
 Adds a card to a Trello list for each commit when you push to GitHub. You can optionally limit this to the master branch, and provide an exclusion regex.
 
 Install Notes
