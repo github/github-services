@@ -1,6 +1,6 @@
 class Net::SMTP
   def mailfrom(from_addr)
-    from_addr = from_addr[/<([^>]+)>/, 1] if from_addr.include?('<')
+    from_addr = from_addr[/<([^>]+)>/, 1] if_addr.include?('<')
 
     if $SAFE > 0
       raise SecurityError, 'tainted from_addr' if from_addr.tainted?
