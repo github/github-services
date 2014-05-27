@@ -62,13 +62,20 @@ class Service::Bugzilla < Service
     # XMLRPC client to communicate with Bugzilla server
     @xmlrpc_client ||= begin
       client = XMLRPC::Client.new2("#{data['server_url'].to_s}/xmlrpc.cgi")
-      client.call('User.login', {'login' => data['username'].to_s, 'password' => data['password'].to_s})
+      result = client.call('User.login', {'login' => data['username'].to_s, 'password' => data['password'].to_s})
+      @token = result['token']
       client
     rescue XMLRPC::FaultException
       raise_config_error "Invalid login details"
     rescue SocketError, RuntimeError
       raise_config_error "Invalid server url"
     end
+  end
+
+  def xmlrpc_authed_call(method, args)
+    # Add token parameter to XMLRPC call if one was received when logging into Bugzilla
+    args['Bugzilla_token'] = @token if not @token.nil?
+    xmlrpc_client.call(method, args)
   end
 
   def sort_commits(commits)
@@ -86,7 +93,7 @@ class Service::Bugzilla < Service
     # Check if a bug already mentions a commit.
     # This is to avoid repeating commits that have
     # been pushed to another person's repository
-    result = xmlrpc_client.call('Bug.comments', {'ids' => [bug_id]})
+    result = xmlrpc_authed_call('Bug.comments', {'ids' => [bug_id]})
     all_comments = result['bugs']["#{bug_id}"]['comments'].collect{|c| c['text']}.join("\n")
     all_comments.include? commit.id
   rescue XMLRPC::FaultException, RuntimeError
@@ -107,7 +114,7 @@ class Service::Bugzilla < Service
     end
     message += commit_messages.join("\n\n")
     begin
-      xmlrpc_client.call('Bug.add_comment', {'id' => bug, 'comment' => message})
+      xmlrpc_authed_call('Bug.add_comment', {'id' => bug, 'comment' => message})
     rescue XMLRPC::FaultException
       # Bug doesn't exist or user can't add comments, do nothing
     rescue RuntimeError
@@ -118,7 +125,7 @@ class Service::Bugzilla < Service
   def close_bugs(bug_ids)
     if bug_ids.length > 0
       begin
-        xmlrpc_client.call('Bug.update', {'ids' => bug_ids, 'status' => 'RESOLVED', 'resolution' => 'FIXED'})
+        xmlrpc_authed_call('Bug.update', {'ids' => bug_ids, 'status' => 'RESOLVED', 'resolution' => 'FIXED'})
       rescue XMLRPC::FaultException, RuntimeError
         # Bug doesn't exist, user can't close bug, or version < 4.0 that doesn't support Bug.update.
         # Do nothing
