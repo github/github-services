@@ -3,24 +3,35 @@ class Service::Typetalk < Service::HttpPost
   password :client_secret
   white_list :topic, :restrict_to_branch
 
-  default_events :push
+  default_events :push, :pull_request
 
   url "http://typetalk.in"
   logo_url "https://deeb7lj8m1sjw.cloudfront.net/1.3.5/assets/images/common/logo.png"
 
-  def receive_event
+  def receive_push
+    check_config()
+
+    branch = payload['ref'].split('/').last
+    branch_restriction = data['restrict_to_branch'].to_s
+    if branch_restriction.length > 0 && branch_restriction.index(branch) == nil
+      return
+    end
+    send_message(format_pushed_message(payload))
+  end
+
+  def receive_pull_request
+    check_config()
+
+    send_message(format_pull_request_message(payload))
+  end
+
+  def check_config
     raise_config_error "Missing 'client_id'"     if data['client_id'].to_s == ''
     raise_config_error "Missing 'client_secret'" if data['client_secret'].to_s == ''
     raise_config_error "Missing 'topic'"         if data['topic'].to_s == ''
+  end
 
-    if event.to_s == 'push'
-      branch = payload['ref'].split('/').last
-      branch_restriction = data['restrict_to_branch'].to_s
-      if branch_restriction.length > 0 && branch_restriction.index(branch) == nil
-        return
-      end
-    end
-
+  def send_message(message)
     http.url_prefix = 'https://typetalk.in'
     http.headers['X-GitHub-Event'] = event.to_s
     
@@ -37,7 +48,7 @@ class Service::Typetalk < Service::HttpPost
     topics = data['topic'].to_s.split(",")
     topics.each do |topic|
       params = {
-        :message => format_pushed_message(payload)
+        :message => message
       }
       res = http_post "/api/v1/topics/#{topic}", params
       if res.status < 200 || res.status > 299
@@ -50,4 +61,8 @@ class Service::Typetalk < Service::HttpPost
     branch = payload['ref'].split('/').last
     return "#{payload['pusher']['name']} has pushed #{payload['commits'].size} commit(s) to #{branch} at #{payload['repository']['name']}\n#{payload['compare']}"
   end
+  def format_pull_request_message(payload)
+    return "#{payload['sender']['login']} #{payload['action']} pull request \##{payload['pull_request']['number']}: #{payload['pull_request']['title']}\n#{payload['pull_request']['html_url']}"
+  end
+
 end
