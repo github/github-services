@@ -6,7 +6,7 @@ class TogglTest < Service::TestCase
   end
 
   def test_push
-    url = "/api/v6/tasks.json"
+    url = "/api/v8/tasks.json"
     @stubs.post url do |env|
       assert_equal 'www.toggl.com', env[:url].host
       assert_equal basic_auth(:a, :api_token), env[:request_headers]['authorization']
