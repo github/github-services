@@ -21,7 +21,7 @@ class VisualOpsTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc.receive_push
+    svc.receive_event
   end
 
   def test_develop
@@ -37,7 +37,7 @@ class VisualOpsTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc.receive_push
+    svc.receive_event
   end
 
   def test_other_branch
@@ -48,7 +48,7 @@ class VisualOpsTest < Service::TestCase
       raise "This should not be called"
     end
 
-    svc.receive_push
+    svc.receive_event
   end
 
   def service(*args)

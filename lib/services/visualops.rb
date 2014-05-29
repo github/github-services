@@ -13,7 +13,7 @@ class Service::VisualOps < Service::HttpPost
 
   supported_by :email => 'support@visualops.io'
 
-  def receive_push
+  def receive_event
     return unless update_states?
 
     # Confirm all required config is present
