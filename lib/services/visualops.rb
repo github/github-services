@@ -1,4 +1,4 @@
-class Service::VisualOps < Service
+class Service::VisualOps < Service::HttpPost
   string :username, :app_list
   password :consumer_token
 
