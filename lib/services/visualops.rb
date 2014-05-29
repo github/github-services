@@ -47,12 +47,12 @@ class Service::VisualOps < Service::HttpPost
 
   def assert_required_credentials(event)
     if (consumer_token.empty? || username.empty?)
-      raise_config_error "You need a user ID and an authorization Token. See tips below."
+      raise_config_error "You need a user ID (#{username}) and an authorization Token (#{consumer_token}). See tips below."
     end
   end
 
   def update_apps(apps)
-    http_post "https://api.visualops.io/v1/apps" do |req|
+    http_post "https://api.visualops.io:443/v1/apps" do |req|
       req.headers['Content-Type'] = 'application/json'
       req.body = {
         :user  => username,
