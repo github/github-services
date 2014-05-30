@@ -12,12 +12,12 @@ class VisualOpsTest < Service::TestCase
 
     def svc.message_max_length; 4 end
 
-    @stubs.post "/v1/apps" do |env|
+    @stubs.post "/v1/github" do |env|
       assert_equal 'api.visualops.io', env[:url].host
       body = JSON.parse(env[:body])
-      assert_equal 'someuser',          body['user']
-      assert_equal 'madeira-visualops', body['token']
-      assert_equal ['abc123','madeira'], body['app']
+      assert_equal 'someuser',          body['config']['username']
+      assert_equal 'madeira-visualops', body['config']['consumer_token']
+      assert_equal ['abc123','madeira'], body['config']['app_list']
       [200, {}, '']
     end
 
@@ -28,12 +28,12 @@ class VisualOpsTest < Service::TestCase
     svc = service :push, @data,
       payload.update("ref" => "refs/heads/devel")
 
-    @stubs.post "/v1/apps" do |env|
+    @stubs.post "/v1/github" do |env|
       assert_equal 'api.visualops.io', env[:url].host
       body = JSON.parse(env[:body])
-      assert_equal 'someuser',          body['user']
-      assert_equal 'madeira-visualops', body['token']
-      assert_equal ['xyz456'], body['app']
+      assert_equal 'someuser',          body['config']['username']
+      assert_equal 'madeira-visualops', body['config']['consumer_token']
+      assert_equal ['xyz456'], body['config']['app_list']
       [200, {}, '']
     end
 
@@ -44,7 +44,7 @@ class VisualOpsTest < Service::TestCase
     svc = service :push, @data,
       payload.update("ref" => "refs/heads/no-such-branch")
 
-    @stubs.post "/v1/apps" do |env|
+    @stubs.post "/v1/github" do |env|
       raise "This should not be called"
     end
 

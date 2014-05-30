@@ -22,7 +22,8 @@ class Service::VisualOps < Service::HttpPost
     # Update State
     app = push_list(app_list)
     if not app.empty?
-      update_apps(app)
+      data.update('app_list' => app)
+      deliver update_url, :content_type => 'application/json'
     end
   end
 
@@ -51,16 +52,8 @@ class Service::VisualOps < Service::HttpPost
     end
   end
 
-  def update_apps(apps)
-    http_post "https://api.visualops.io:443/v1/apps" do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.body = {
-        :user  => username,
-        :app   => apps,
-        :token => consumer_token,
-        :src   => branch_url
-        }.to_json
-    end
+  def update_url
+    "https://api.visualops.io:443/v1/github"
   end
 
   def consumer_token
