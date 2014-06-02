@@ -61,6 +61,7 @@ module Faraday
   end
 end
 
+XMLRPC::Config::send(:remove_const, :ENABLE_MARSHALLING)
 XMLRPC::Config::ENABLE_MARSHALLING = false
 
 module GitHubServices
