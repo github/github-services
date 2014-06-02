@@ -61,6 +61,8 @@ module Faraday
   end
 end
 
+XMLRPC::Config::ENABLE_MARSHALLING = false
+
 module GitHubServices
   VERSION = '1.0.0'
 
