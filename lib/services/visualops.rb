@@ -17,7 +17,7 @@ class Service::VisualOps < Service::HttpPost
     return unless update_states?
 
     # Confirm all required config is present
-    assert_required_credentials :push
+    assert_required_credentials
 
     # Update State
     app = push_list(app_list)
@@ -30,8 +30,7 @@ class Service::VisualOps < Service::HttpPost
   private
 
   def update_states?
-    return false if payload['commits'].size == 0
-    true
+    payload['commits'].size != 0
   end
 
   def app_list
@@ -46,9 +45,9 @@ class Service::VisualOps < Service::HttpPost
     apps.keep_if{|x| x[1] == branch_name}.map{|x| x[0]}
   end
 
-  def assert_required_credentials(event)
+  def assert_required_credentials
     if (consumer_token.empty? || username.empty?)
-      raise_config_error "You need a user ID (#{username}) and an authorization Token (#{consumer_token}). See tips below."
+      raise_config_error "You need a user ID and an authorization Token."
     end
   end
 
