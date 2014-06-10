@@ -1,3 +1,6 @@
+This service processes commit comments and pull request descriptions and searches for YouTrack issue id's and commands.
+Commands are applied to issues, associated with commit or pull request.
+
 1. YouTrack Requirements
 
   - Requires YouTrack version 2.0 or above. YouTrack Energy EAP builds are

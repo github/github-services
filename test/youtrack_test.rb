@@ -132,6 +132,21 @@ class YouTrackTest < Service::TestCase
     @stubs.verify_stubbed_calls
   end
 
+  def test_pull_request_event
+    valid_process_stubs_case_1
+
+    hash = pull_payload
+    hash['action'] = 'closed'
+    hash['sender'] = { 'login' => 'Tom Preston-Werner', 'email' => 'tom@mojombo.com'}
+    hash['pull_request']['body'] = '#case-1 zomg omg'
+
+    svc = service(@data, hash)
+
+    svc.receive_pull_request
+
+    @stubs.verify_stubbed_calls
+  end
+
   def service(*args)
     super Service::YouTrack, *args
   end
