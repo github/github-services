@@ -10,8 +10,6 @@ class VisualOpsTest < Service::TestCase
   def test_push
     svc = service :push, @data
 
-    def svc.message_max_length; 4 end
-
     @stubs.post "/v1/github" do |env|
       assert_equal 'api.visualops.io', env[:url].host
       body = JSON.parse(env[:body])
