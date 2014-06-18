@@ -1,7 +1,8 @@
 require_relative './http_post'
 
 class Service::Hakiri < Service::HttpPost
-  string :token, :project_id
+  password :token
+  string :project_id
 
   white_list :project_id
 

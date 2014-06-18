@@ -9,7 +9,7 @@ class Service::Lingohub < Service
                :email => 'support@lingohub.com'
 
   default_events :push
-  string :project_token
+  password :project_token
 
   def receive_push
     project_token = data['project_token']

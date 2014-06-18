@@ -1,5 +1,6 @@
 class Service::CoOp < Service
-  string :group_id, :token
+  string :group_id
+  password :token
   white_list :group_id
 
   self.title = 'Co-Op'

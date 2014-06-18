@@ -1,5 +1,6 @@
 class Service::ZohoProjects < Service
-  string :project_id, :token
+  string :project_id
+  password :token
   white_list :project_id
 
   def receive_push

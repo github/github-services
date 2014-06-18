@@ -1,9 +1,9 @@
 class Service::Honbu < Service::HttpPost
-  string :token
+  password :token
 
 
   default_events :push, :issues, :issue_comment, :commit_comment,
-    :create, :delete, :pull_request, :follow, :gollum, :fork, 
+    :create, :delete, :pull_request, :follow, :gollum, :fork,
     :member, :team_add, :deployment, :deployment_status
 
 

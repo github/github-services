@@ -1,7 +1,8 @@
 require 'uri'
 class Service::Apoio < Service
   default_events :issues
-  string   :subdomain, :token
+  string   :subdomain
+  password :token
 
   def invalid_request?
    data['token'].to_s.empty? or

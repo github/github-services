@@ -1,5 +1,6 @@
 class Service::Lighthouse < Service
-  string  :subdomain, :project_id, :token
+  string  :subdomain, :project_id
+  password :token
   boolean :private, :send_only_ticket_commits
   white_list :subdomain, :project_id
 

@@ -1,5 +1,6 @@
 class Service::RailsBrakeman < Service
-  string :rails_brakeman_url, :token
+  string :rails_brakeman_url
+  password :token
   white_list :rails_brakeman_url
 
   def receive_push

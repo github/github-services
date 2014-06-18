@@ -1,6 +1,7 @@
 # coding: utf-8
 class Service::Talker < Service
-  string  :url, :token
+  string  :url
+  password :token
   boolean :digest
   white_list :url
 

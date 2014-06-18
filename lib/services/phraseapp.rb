@@ -1,8 +1,8 @@
 class Service::Phraseapp < Service::HttpPost
   title "PhraseApp"
 
-  string :auth_token
-  
+  password :auth_token
+
   white_list :auth_token
 
   default_events :push

@@ -1,5 +1,5 @@
 class Service::Planbox < Service
-  string :token
+  password :token
 
   def receive_push
     token = data['token']

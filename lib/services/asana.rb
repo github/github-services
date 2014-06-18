@@ -1,5 +1,6 @@
 class Service::Asana < Service
-  string :auth_token, :restrict_to_branch
+  password :auth_token
+  string :restrict_to_branch
   boolean :restrict_to_last_commit
   white_list :restrict_to_branch, :restrict_to_last_comment
 

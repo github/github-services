@@ -1,5 +1,6 @@
 class Service::Slatebox < Service
-  string :app_id, :token
+  string :app_id
+  password :token
   white_list :app_id
 
   def receive_push

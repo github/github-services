@@ -1,5 +1,6 @@
 class Service::Toggl < Service
-  string :project, :api_token
+  string :project
+  password :api_token
   white_list :project
 
   def receive_push

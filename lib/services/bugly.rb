@@ -1,5 +1,6 @@
 class Service::Bugly < Service
-  string :project_id, :account_name, :token
+  string :project_id, :account_name
+  password :token
   white_list :project_id, :account_name
 
   def receive_push

@@ -1,5 +1,6 @@
 class Service::Tender < Service
-  string :domain, :token
+  string :domain
+  password :token
   default_events :issues
 
   def receive_issues
