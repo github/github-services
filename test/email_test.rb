@@ -67,6 +67,33 @@ class EmailTest < Service::TestCase
     assert_nil svc.messages.shift
   end
 
+  def test_log_message_last
+    # Original behavior
+    svc = service( 
+      {'address' => 'a'},
+      payload)
+
+    svc.receive_push
+
+    msg, from, to = svc.messages.shift
+    
+    assert msg.index("Changed paths:") < msg.index("Log Message:")
+  end
+
+  def test_log_message_first
+    # New optional behavior
+    svc = service( 
+      {'address' => 'a', 'log_message_first' => '1'},
+      payload)
+
+    svc.receive_push
+
+    msg, from, to = svc.messages.shift
+
+    assert msg.index("Changed paths:") > msg.index("Log Message:")
+  end
+
+    
   def service(*args)
     svc = super Service::Email, *args
     def svc.messages
