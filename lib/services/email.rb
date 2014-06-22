@@ -13,6 +13,7 @@ class Service::Email < Service
   string     :address
   password   :secret
   boolean    :send_from_author
+  boolean    :log_message_first
   white_list :address
 
   def receive_push
@@ -112,6 +113,10 @@ class Service::Email < Service
 
   def send_from_author?
     data['send_from_author']
+  end
+
+  def log_message_first?
+    data['log_message_first']
   end
 
   def smtp_address
@@ -228,6 +233,18 @@ class Service::Email < Service
 
       EOH
 
+      log_message = align(<<-EOH)
+        Log Message:
+        -----------
+        #{commit['message']}
+
+
+      EOH
+
+      if log_message_first?
+        text << log_message
+      end
+
       if changed_paths.size > 0
         text << align(<<-EOH)
           Changed paths:
@@ -236,13 +253,9 @@ class Service::Email < Service
         EOH
       end
 
-      text << align(<<-EOH)
-        Log Message:
-        -----------
-        #{commit['message']}
-
-
-      EOH
+      if !log_message_first?
+        text << log_message
+      end
 
       text
     end
