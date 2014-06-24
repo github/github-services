@@ -10,32 +10,14 @@ class Service::RobusTest < Service
   # misconfigured
   supported_by :web => 'http://robustest.com/',
     :email => 'care@robustest.com'
-  
+
   def receive_push
     payload['commits'].each do |commit|
-      next if commit['message'] =~ /^x /
-
-      comment_body = "#{commit['message']}\n#{commit['url']}"
-
-      commit['message'].match(/\[#(.+)\]/)
-      # Don't need to continue if we don't have a commit message containing robustest markup
-      next unless $1
-
-      robustest_markup = $1.split
-      issue_id = robustest_markup.shift
-
-      changeset = { :comment => { :body => comment_body } }
-
-      robustest_markup.each do |entry|
-        key, value = entry.split(':')
-
-        if key =~ /(?i)status|(?i)transition/
-          changeset.merge!(:transition => value.to_s)
-        elsif key =~ /(?i)resolution/
-          changeset.merge!(:fields => { :resolution => { :id => value.to_s } })
-        else
-          changeset.merge!(:fields => { key.to_sym => "Resolved" })
-        end
+      message = commit['message'].clone
+      while !(id= message[/#(\d)+/]).nil? do
+        message.gsub!(id,'')
+        issue_no = id.gsub('#','')
+        changeset = { :message => commit['message'] }
         changeset[:gitsha]   = commit['id']
         changeset[:added]    = commit['added'].map    { |f| ['A', f] }
         changeset[:removed]  = commit['removed'].map  { |f| ['R', f] }
@@ -43,18 +25,13 @@ class Service::RobusTest < Service
         changeset[:timestamp] = Date.parse(commit['timestamp'])
         changeset[:name] = commit['author']['name']
         changeset[:email]= commit['author']['email']
-
-      end
-
-      # Don't need to continue if we don't have a transition to perform
-      # next unless changeset.has_key?(:transition)
-
-      begin
-        http.headers['Content-Type'] = 'application/json'
-        res = http_post 'http://www.robustest.com/project/%s/integration/git/%s' % [data['project_key'],  issue_id],
-          generate_json(changeset)
-      rescue URI::InvalidURIError
-        raise_config_error "Invalid project: #{data['project_key']}"
+        begin
+          http.headers['Content-Type'] = 'application/json'
+          res = http_post 'http://www.robustest.com/project/%s/integration/git/%s' % [data['project_key'],  issue_no],
+            generate_json(changeset)
+        rescue URI::InvalidURIError
+          raise_config_error "Invalid project: #{data['project_key']}"
+        end
       end
     end
   end
