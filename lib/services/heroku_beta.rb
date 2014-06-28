@@ -35,6 +35,19 @@ class Service::HerokuBeta < Service::HttpPost
     ref == sha ? sha : "#{ref}@#{sha}"
   end
 
+  def receive_event
+    # verify access to app name with heroku_token
+    verify_heroku
+    # verify auth plus required scopes (repo, gist)
+    verify_github
+
+    request_build
+  end
+
+  def heroku_application_name
+    required_config_value('name')
+  end
+
   def request_body
     {
       :source_blob => {
@@ -45,74 +58,87 @@ class Service::HerokuBeta < Service::HttpPost
   end
 
   def request_build
-    name         = required_config_value('name')
-    heroku_token = required_config_value('heroku_token')
-
-    response = http_post "https://api.heroku.com/apps/#{name}/builds" do |req|
-      req.headers['Accept']        = 'application/vnd.heroku+json; version=3'
-      req.headers['Content-Type']  = "application/json",
-      req.headers["Authorization"] = Base64.encode64(":#{heroku_token}")
+    response = http_post "https://api.heroku.com/apps/#{heroku_application_name}/builds" do |req|
+      req.headers.merge!(heroku_headers)
       req.body = JSON.dump(request_body)
     end
     unless response.success?
-      raise_config_error("Unable to create a build for #{name} on heroku with the provided token.")
+      raise_config_error_with_message(:no_heroku_app_build_access)
     end
   end
 
-  def receive_event
-    # verify access to app name with heroku_token
-    verify_heroku
-    # verify auth plus required scopes (repo, gist)
-    verify_github
-
-    request_build
+  def heroku_headers
+    {
+      'Accept'        => 'application/vnd.heroku+json; version=3',
+      'Content-Type'  => "application/json",
+      "Authorization" => Base64.encode64(":#{required_config_value('heroku_token')}")
+    }
   end
 
   def verify_heroku
-    name         = required_config_value('name')
-    heroku_token = required_config_value('heroku_token')
-
-    response = http_get "https://api.heroku.com/apps/#{name}" do |req|
-      req.headers['Accept']        = 'application/vnd.heroku+json; version=3'
-      req.headers['Content-Type']  = "application/json",
-      req.headers["Authorization"] = Base64.encode64(":#{heroku_token}")
+    response = http_get "https://api.heroku.com/apps/#{heroku_application_name}" do |req|
+      req.headers.merge!(heroku_headers)
     end
     unless response.success?
-      raise_config_error("Unable to access #{name} on heroku with the provided token.")
+      raise_config_error_with_message(:no_heroku_app_access)
     end
   end
 
   def verify_github
-    response = github_get("/user")
-    unless response.success?
-      raise_config_error("Unable to access GitHub with the provided token.")
+    ensure_github_get("/user") do
+      raise_config_error_with_message(:no_github_user_access)
     end
 
-    response = github_get("/repos/#{full_name}")
-    unless response.success?
-      raise_config_error("Unable to access the #{full_name} repository on GitHub with the provided token.")
+    response = ensure_github_get("/repos/#{full_name}") do
+      raise_config_error_with_message(:no_github_repo_access)
     end
 
     scopes = response.headers['X-OAuth-Scopes'].split(",").map(&:strip)
     unless scopes.include?("gist")
-      raise_config_error("No gist scope for your GitHub token, check the scopes of your personal access token.")
+      raise_config_error_with_message(:no_gist_scope)
     end
   end
 
   def repo_archive_link
-    response = github_get("/repos/#{full_name}/tarball/#{sha}")
-    unless response.success?
-      raise_config_error("Unable to generate an archive link for #{full_name} on GitHub with the provided token.")
+    response = ensure_github_get("/repos/#{full_name}/tarball/#{sha}") do
+      raise_config_error_with_message(:no_archive_link)
     end
     response.headers['Location']
   end
 
-  def github_get(path)
-    github_token = required_config_value('github_token')
+  def ensure_github_get(path, &block)
+    response = github_get(path)
+    unless response.success?
+      yield
+    end
+    response
+  end
 
+  def github_get(path)
     http_get "https://api.github.com#{path}" do |req|
       req.headers['Content-Type']  = "application/json",
-      req.headers["Authorization"] = "token #{github_token}"
+      req.headers["Authorization"] = "token #{required_config_value('github_token')}"
     end
+  end
+
+  def raise_config_error_with_message(sym)
+    raise_config_error error_messages[sym]
+  end
+
+  def error_messages
+    @default_error_messages ||= {
+      :no_gist_scope =>
+        "No gist scope for your GitHub token, check the scopes of your personal access token.",
+      :no_archive_link =>
+        "Unable to generate an archive link for #{full_name} on GitHub with the provided token.",
+      :no_github_repo_access =>
+        "Unable to access the #{full_name} repository on GitHub with the provided token.",
+      :no_github_user_access =>
+        "Unable to access GitHub with the provided token.",
+      :no_heroku_app_access =>
+        "Unable to access #{heroku_application_name} on heroku with the provided token.",
+      :no_heroku_app_build_access =>
+        "Unable to create a build for #{heroku_application_name} on heroku with the provided token."
+    }
   end
 end
