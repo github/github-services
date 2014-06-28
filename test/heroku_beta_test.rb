@@ -17,18 +17,15 @@ class HerokuBetaTest < Service::TestCase
     stub_heroku_access
     stub_github_access
 
-    uri = Addressable::URI.parse("https://169.254.1.1/events")
-    @stubs.post uri.path do |env|
-      body = JSON.parse(env[:body])
+    @stubs.get "/repos/atmos/my-robot/tarball/9be5c2b9" do |env|
+      [200, {'Location' => 'https://git.io/a'}, '']
+    end
 
-      assert_equal env[:url].host,   uri.host
-      assert_equal 'my-app',         body['config']['name']
-      assert_equal heroku_token,     body['config']['heroku_token']
-      assert_equal github_token,     body['config']['github_token']
-      assert_equal "atmos/my-robot", body['payload']['name']
-      assert_equal "master",         body['payload']['ref']
-      assert_equal "9be5c2b9",       body['payload']['sha'][0..7]
-      assert_equal "production",     body['payload']['environment']
+    post_body = {"source_blob" => {"url" => "https://git.io/a","version" => "master@9be5c2b9"}}
+
+    @stubs.post "/apps/my-app/builds" do |env|
+      assert_equal env[:url].host, 'api.heroku.com'
+      assert_equal post_body, JSON.parse(env[:body])
       [200, {}, '']
     end
 

@@ -15,14 +15,48 @@ class Service::HerokuBeta < Service::HttpPost
     :email => 'support@github.com',
     :twitter => '@atmos'
 
-  # A runtime configured endpoint that receives these payloads
-  # This should not be user configurable.
-  def heroku_builder_url
-    ENV['HEROKU_BUILDER_URL'] || 'https://169.254.1.1/events'
-  end
-
   def full_name
     payload['repository']['full_name']
+  end
+
+  def environment
+    payload['environment']
+  end
+
+  def ref
+    payload['ref']
+  end
+
+  def sha
+    payload['sha'][0..7]
+  end
+
+  def version_string
+    ref == sha ? sha : "#{ref}@#{sha}"
+  end
+
+  def request_body
+    {
+      :source_blob => {
+        :url     => repo_archive_link,
+        :version => version_string
+      }
+    }
+  end
+
+  def request_build
+    name         = required_config_value('name')
+    heroku_token = required_config_value('heroku_token')
+
+    response = http_post "https://api.heroku.com/apps/#{name}/builds" do |req|
+      req.headers['Accept']        = 'application/vnd.heroku+json; version=3'
+      req.headers['Content-Type']  = "application/json",
+      req.headers["Authorization"] = Base64.encode64(":#{heroku_token}")
+      req.body = JSON.dump(request_body)
+    end
+    unless response.success?
+      raise_config_error("Unable to create a build for #{name} on heroku with the provided token.")
+    end
   end
 
   def receive_event
@@ -31,7 +65,7 @@ class Service::HerokuBeta < Service::HttpPost
     # verify auth plus required scopes (repo, gist)
     verify_github
 
-    deliver heroku_builder_url
+    request_build
   end
 
   def verify_heroku
@@ -49,20 +83,12 @@ class Service::HerokuBeta < Service::HttpPost
   end
 
   def verify_github
-    github_token = required_config_value('github_token')
-
-    response = http_get "https://api.github.com/user" do |req|
-      req.headers['Content-Type']  = "application/json",
-      req.headers["Authorization"] = "token #{github_token}"
-    end
+    response = github_get("/user")
     unless response.success?
       raise_config_error("Unable to access GitHub with the provided token.")
     end
 
-    response = http_get "https://api.github.com/repos/#{full_name}" do |req|
-      req.headers['Content-Type']  = "application/json",
-      req.headers["Authorization"] = "token #{github_token}"
-    end
+    response = github_get("/repos/#{full_name}")
     unless response.success?
       raise_config_error("Unable to access the #{full_name} repository on GitHub with the provided token.")
     end
@@ -70,6 +96,23 @@ class Service::HerokuBeta < Service::HttpPost
     scopes = response.headers['X-OAuth-Scopes'].split(",").map(&:strip)
     unless scopes.include?("gist")
       raise_config_error("No gist scope for your GitHub token, check the scopes of your personal access token.")
+    end
+  end
+
+  def repo_archive_link
+    response = github_get("/repos/#{full_name}/tarball/#{sha}")
+    unless response.success?
+      raise_config_error("Unable to generate an archive link for #{full_name} on GitHub with the provided token.")
+    end
+    response.headers['Location']
+  end
+
+  def github_get(path)
+    github_token = required_config_value('github_token')
+
+    http_get "https://api.github.com#{path}" do |req|
+      req.headers['Content-Type']  = "application/json",
+      req.headers["Authorization"] = "token #{github_token}"
     end
   end
 end
