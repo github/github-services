@@ -1,5 +1,6 @@
 class Service::HerokuBeta < Service::HttpPost
   string :name
+  # boolean  :basic_auto_deploy, :status_driven_auto_deploy
   password :heroku_token, :github_token
 
   white_list :name
@@ -50,9 +51,7 @@ class Service::HerokuBeta < Service::HttpPost
       req.headers.merge!(heroku_headers)
       req.body = JSON.dump({:source_blob => {:url => repo_archive_link, :version => version_string}})
     end
-    unless response.success?
-      raise_config_error_with_message(:no_heroku_app_build_access)
-    end
+    raise_config_error_with_message(:no_heroku_app_build_access) unless response.success?
   end
 
   def heroku_headers
@@ -67,34 +66,20 @@ class Service::HerokuBeta < Service::HttpPost
     response = http_get "https://api.heroku.com/apps/#{heroku_application_name}" do |req|
       req.headers.merge!(heroku_headers)
     end
-    unless response.success?
-      raise_config_error_with_message(:no_heroku_app_access)
-    end
+    raise_config_error_with_message(:no_heroku_app_access) unless response.success?
   end
 
   def verify_github_user_and_repo_access
-    ensure_github_get("/user") do
-      raise_config_error_with_message(:no_github_user_access)
-    end
-
-    response = ensure_github_get("/repos/#{full_name}") do
-      raise_config_error_with_message(:no_github_repo_access)
-    end
+    response = github_get("/user")
+    raise_config_error_with_message(:no_github_user_access) unless response.success?
+    response = github_get("/repos/#{full_name}")
+    raise_config_error_with_message(:no_github_repo_access) unless response.success?
   end
 
   def repo_archive_link
-    response = ensure_github_get("/repos/#{full_name}/tarball/#{sha}") do
-      raise_config_error_with_message(:no_github_archive_link)
-    end
+    response = github_get("/repos/#{full_name}/tarball/#{sha}")
+    raise_config_error_with_message(:no_github_archive_link) unless response.success?
     response.headers['Location']
-  end
-
-  def ensure_github_get(path, &block)
-    response = github_get(path)
-    unless response.success?
-      yield
-    end
-    response
   end
 
   def github_get(path)
@@ -105,7 +90,7 @@ class Service::HerokuBeta < Service::HttpPost
   end
 
   def raise_config_error_with_message(sym)
-    raise_config_error error_messages[sym]
+    raise_config_error(error_messages[sym])
   end
 
   def error_messages
