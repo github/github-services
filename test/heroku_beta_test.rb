@@ -71,19 +71,6 @@ class HerokuBetaTest < Service::TestCase
     assert_equal message, exception.message
   end
 
-  def test_deployment_with_misconfigured_gist_scope
-    stub_heroku_access
-    stub_github_access(200, "repo, user")
-
-    exception = assert_raise(Service::ConfigurationError) do
-      heroku_service.receive_event
-    end
-    @stubs.verify_stubbed_calls
-
-    message = "No gist scope for your GitHub token, check the scopes of your personal access token."
-    assert_equal message, exception.message
-  end
-
   def service_class
     Service::HerokuBeta
   end

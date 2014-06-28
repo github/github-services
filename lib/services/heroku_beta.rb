@@ -36,31 +36,19 @@ class Service::HerokuBeta < Service::HttpPost
   end
 
   def receive_event
-    # verify access to app name with heroku_token
-    verify_heroku
-    # verify auth plus required scopes (repo, gist)
-    verify_github
-
-    request_build
+    verify_heroku_app_access
+    verify_github_user_and_repo_access
+    deploy
   end
 
   def heroku_application_name
     required_config_value('name')
   end
 
-  def request_body
-    {
-      :source_blob => {
-        :url     => repo_archive_link,
-        :version => version_string
-      }
-    }
-  end
-
-  def request_build
+  def deploy
     response = http_post "https://api.heroku.com/apps/#{heroku_application_name}/builds" do |req|
       req.headers.merge!(heroku_headers)
-      req.body = JSON.dump(request_body)
+      req.body = JSON.dump({:source_blob => {:url => repo_archive_link, :version => version_string}})
     end
     unless response.success?
       raise_config_error_with_message(:no_heroku_app_build_access)
@@ -75,7 +63,7 @@ class Service::HerokuBeta < Service::HttpPost
     }
   end
 
-  def verify_heroku
+  def verify_heroku_app_access
     response = http_get "https://api.heroku.com/apps/#{heroku_application_name}" do |req|
       req.headers.merge!(heroku_headers)
     end
@@ -84,7 +72,7 @@ class Service::HerokuBeta < Service::HttpPost
     end
   end
 
-  def verify_github
+  def verify_github_user_and_repo_access
     ensure_github_get("/user") do
       raise_config_error_with_message(:no_github_user_access)
     end
@@ -92,16 +80,11 @@ class Service::HerokuBeta < Service::HttpPost
     response = ensure_github_get("/repos/#{full_name}") do
       raise_config_error_with_message(:no_github_repo_access)
     end
-
-    scopes = response.headers['X-OAuth-Scopes'].split(",").map(&:strip)
-    unless scopes.include?("gist")
-      raise_config_error_with_message(:no_gist_scope)
-    end
   end
 
   def repo_archive_link
     response = ensure_github_get("/repos/#{full_name}/tarball/#{sha}") do
-      raise_config_error_with_message(:no_archive_link)
+      raise_config_error_with_message(:no_github_archive_link)
     end
     response.headers['Location']
   end
@@ -127,9 +110,7 @@ class Service::HerokuBeta < Service::HttpPost
 
   def error_messages
     @default_error_messages ||= {
-      :no_gist_scope =>
-        "No gist scope for your GitHub token, check the scopes of your personal access token.",
-      :no_archive_link =>
+      :no_github_archive_link =>
         "Unable to generate an archive link for #{full_name} on GitHub with the provided token.",
       :no_github_repo_access =>
         "Unable to access the #{full_name} repository on GitHub with the provided token.",
