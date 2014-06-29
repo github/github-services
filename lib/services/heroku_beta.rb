@@ -39,6 +39,8 @@ class Service::HerokuBeta < Service::HttpPost
   end
 
   def receive_event
+    http.url_prefix = "https:/"
+
     case event
     when :deployment
       heroku_app_access?
@@ -61,14 +63,6 @@ class Service::HerokuBeta < Service::HttpPost
     required_config_value('name')
   end
 
-  def deploy
-    response = http_post "https://api.heroku.com:443/apps/#{heroku_application_name}/builds" do |req|
-      req.headers.merge!(heroku_headers)
-      req.body = JSON.dump({:source_blob => {:url => repo_archive_link, :version => version_string}})
-    end
-    raise_config_error_with_message(:no_heroku_app_build_access) unless response.success?
-  end
-
   def heroku_headers
     {
       'Accept'        => 'application/vnd.heroku+json; version=3',
@@ -77,8 +71,16 @@ class Service::HerokuBeta < Service::HttpPost
     }
   end
 
+  def deploy
+    response = http_post "https://api.heroku.com/apps/#{heroku_application_name}/builds" do |req|
+      req.headers.merge!(heroku_headers)
+      req.body = JSON.dump({:source_blob => {:url => repo_archive_link, :version => version_string}})
+    end
+    raise_config_error_with_message(:no_heroku_app_build_access) unless response.success?
+  end
+
   def heroku_app_access?
-    response = http_get "https://api.heroku.com:443/apps/#{heroku_application_name}" do |req|
+    response = http_get "https://api.heroku.com/apps/#{heroku_application_name}" do |req|
       req.headers.merge!(heroku_headers)
     end
     unless response.success?
