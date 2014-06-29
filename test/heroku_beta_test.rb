@@ -44,7 +44,8 @@ class HerokuBetaTest < Service::TestCase
     post_body = {"source_blob" => {"url" => "https://git.io/a","version" => "master@9be5c2b9"}}
 
     @stubs.post "/apps/my-app/builds" do |env|
-      assert_equal env[:url].host, 'api.heroku.com'
+      assert_equal 'api.heroku.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
       assert_equal post_body, JSON.parse(env[:body])
       [200, {}, '']
     end
@@ -97,7 +98,8 @@ class HerokuBetaTest < Service::TestCase
 
   def stub_github_user(code = 200)
     @stubs.get "/user" do |env|
-      assert_equal env[:url].host, "api.github.com"
+      assert_equal 'api.github.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
       assert_equal "token #{github_token}", env[:request_headers]['Authorization']
       [code, {}, '']
     end
@@ -106,7 +108,8 @@ class HerokuBetaTest < Service::TestCase
   def stub_github_access(code = 200, scopes = "repo, gist, user")
     stub_github_user
     @stubs.get "/repos/atmos/my-robot" do |env|
-      assert_equal env[:url].host, "api.github.com"
+      assert_equal 'api.github.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
       assert_equal "token #{github_token}", env[:request_headers]['Authorization']
       headers = {"X-OAuth-Scopes" => scopes }
       [code, headers, '']
@@ -115,7 +118,8 @@ class HerokuBetaTest < Service::TestCase
 
   def stub_heroku_access(code = 200)
     @stubs.get "/apps/my-app" do |env|
-      assert_equal env[:url].host, "api.heroku.com"
+      assert_equal 'api.heroku.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
       assert_equal Base64.encode64(":#{heroku_token}"), env[:request_headers]['Authorization']
       [code, {}, '']
     end
