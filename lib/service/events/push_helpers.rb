@@ -178,7 +178,9 @@ module Service::PushHelpers
       "repository" => {
         "name"  => "grit",
         "url"   => "http://github.com/mojombo/grit",
-        "owner" => { "name" => "mojombo", "email" => "tom@mojombo.com" }
+        "owner" => { "name" => "mojombo", "email" => "tom@mojombo.com" },
+        "master_branch"  => "master",
+        "default_branch" => "master"
       },
 
       "pusher" => {

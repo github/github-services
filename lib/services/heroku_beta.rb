@@ -16,7 +16,7 @@ class Service::HerokuBeta < Service::HttpPost
     :email => 'support@github.com',
     :twitter => '@atmos'
 
-  def repo_path
+  def github_repo_path
     payload['repository']['full_name']
   end
 
@@ -92,14 +92,14 @@ class Service::HerokuBeta < Service::HttpPost
   end
 
   def github_repo_access?
-    response = github_get("/repos/#{repo_path}")
+    response = github_get("/repos/#{github_repo_path}")
     unless response.success?
       raise_config_error_with_message(:no_github_repo_access)
     end
   end
 
   def repo_archive_link
-    response = github_get("/repos/#{repo_path}/tarball/#{sha}")
+    response = github_get("/repos/#{github_repo_path}/tarball/#{sha}")
     unless response.success?
       raise_config_error_with_message(:no_github_archive_link)
     end
@@ -122,9 +122,9 @@ class Service::HerokuBeta < Service::HttpPost
       :no_event_handler =>
         "The #{event} event is currently unsupported.",
       :no_github_archive_link =>
-        "Unable to generate an archive link for #{repo_path} on GitHub with the provided token.",
+        "Unable to generate an archive link for #{github_repo_path} on GitHub with the provided token.",
       :no_github_repo_access =>
-        "Unable to access the #{repo_path} repository on GitHub with the provided token.",
+        "Unable to access the #{github_repo_path} repository on GitHub with the provided token.",
       :no_github_user_access =>
         "Unable to access GitHub with the provided token.",
       :no_heroku_app_access =>
