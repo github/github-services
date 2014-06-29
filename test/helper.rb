@@ -65,6 +65,10 @@ class Service::TestCase < Test::Unit::TestCase
   def basic_payload
     Service::HelpersWithMeta.sample_payload
   end
+
+  def deployment_payload
+    Service::DeploymentHelpers.sample_deployment_payload
+  end
 end
 
 module Service::HttpTestMethods
