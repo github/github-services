@@ -1,3 +1,5 @@
+require 'base64'
+
 class Service::HerokuBeta < Service::HttpPost
   string :name
   # boolean  :basic_auto_deploy, :status_driven_auto_deploy
