@@ -10,7 +10,27 @@ class HerokuBetaTest < Service::TestCase
       'github_token' => github_token
     }
 
-    service(data, deployment_payload)
+    service(:deployment, data, deployment_payload)
+  end
+
+  def test_unsupported_push_events
+    data = { 'name' => 'my-app' }
+    exception = assert_raise(Service::ConfigurationError) do
+      service(:push, data, push_payload).receive_event
+    end
+
+    message = "The push event is currently unsupported."
+    assert_equal message, exception.message
+  end
+
+  def test_unsupported_status_events
+    data = { 'name' => 'my-app' }
+    exception = assert_raise(Service::ConfigurationError) do
+      service(:status, data, push_payload).receive_event
+    end
+
+    message = "The status event is currently unsupported."
+    assert_equal message, exception.message
   end
 
   def test_deployment_configured_properly

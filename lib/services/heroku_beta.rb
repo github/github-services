@@ -16,7 +16,7 @@ class Service::HerokuBeta < Service::HttpPost
     :email => 'support@github.com',
     :twitter => '@atmos'
 
-  def full_name
+  def repo_path
     payload['repository']['full_name']
   end
 
@@ -37,9 +37,22 @@ class Service::HerokuBeta < Service::HttpPost
   end
 
   def receive_event
-    verify_heroku_app_access
-    verify_github_user_and_repo_access
-    deploy
+    case event
+    when :deployment
+      heroku_app_access?
+      github_user_access?
+      github_repo_access?
+      deploy
+    when :status
+      # create a deployment if the default branch is pushed to and commit
+      # status is green
+      raise_config_error_with_message(:no_event_handler)
+    when :push
+      # create a deployment if the default branch is pushed to(basic-auto-deploy)
+      raise_config_error_with_message(:no_event_handler)
+    else
+      raise_config_error_with_message(:no_event_handler)
+    end
   end
 
   def heroku_application_name
@@ -62,23 +75,34 @@ class Service::HerokuBeta < Service::HttpPost
     }
   end
 
-  def verify_heroku_app_access
+  def heroku_app_access?
     response = http_get "https://api.heroku.com/apps/#{heroku_application_name}" do |req|
       req.headers.merge!(heroku_headers)
     end
-    raise_config_error_with_message(:no_heroku_app_access) unless response.success?
+    unless response.success?
+      raise_config_error_with_message(:no_heroku_app_access)
+    end
   end
 
-  def verify_github_user_and_repo_access
+  def github_user_access?
     response = github_get("/user")
-    raise_config_error_with_message(:no_github_user_access) unless response.success?
-    response = github_get("/repos/#{full_name}")
-    raise_config_error_with_message(:no_github_repo_access) unless response.success?
+    unless response.success?
+      raise_config_error_with_message(:no_github_user_access)
+    end
+  end
+
+  def github_repo_access?
+    response = github_get("/repos/#{repo_path}")
+    unless response.success?
+      raise_config_error_with_message(:no_github_repo_access)
+    end
   end
 
   def repo_archive_link
-    response = github_get("/repos/#{full_name}/tarball/#{sha}")
-    raise_config_error_with_message(:no_github_archive_link) unless response.success?
+    response = github_get("/repos/#{repo_path}/tarball/#{sha}")
+    unless response.success?
+      raise_config_error_with_message(:no_github_archive_link)
+    end
     response.headers['Location']
   end
 
@@ -95,10 +119,12 @@ class Service::HerokuBeta < Service::HttpPost
 
   def error_messages
     @default_error_messages ||= {
+      :no_event_handler =>
+        "The #{event} event is currently unsupported.",
       :no_github_archive_link =>
-        "Unable to generate an archive link for #{full_name} on GitHub with the provided token.",
+        "Unable to generate an archive link for #{repo_path} on GitHub with the provided token.",
       :no_github_repo_access =>
-        "Unable to access the #{full_name} repository on GitHub with the provided token.",
+        "Unable to access the #{repo_path} repository on GitHub with the provided token.",
       :no_github_user_access =>
         "Unable to access GitHub with the provided token.",
       :no_heroku_app_access =>
