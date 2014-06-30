@@ -39,7 +39,7 @@ class Service::HerokuBeta < Service::HttpPost
   end
 
   def receive_event
-    http.url_prefix = "https:/"
+    http.ssl[:verify] = true
 
     case event
     when :deployment
