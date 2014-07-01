@@ -112,6 +112,7 @@ class Service::HerokuBeta < Service::HttpPost
 
   def github_get(path)
     http_get "https://api.github.com#{path}" do |req|
+      req.headers['User-Agent']    = "Operation: California",
       req.headers['Content-Type']  = "application/json",
       req.headers["Authorization"] = "token #{required_config_value('github_token')}"
     end
