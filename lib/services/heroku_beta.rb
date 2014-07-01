@@ -67,7 +67,7 @@ class Service::HerokuBeta < Service::HttpPost
     {
       'Accept'        => 'application/vnd.heroku+json; version=3',
       'Content-Type'  => "application/json",
-      "Authorization" => Base64.encode64(":#{required_config_value('heroku_token')}")
+      "Authorization" => Base64.encode64(":#{required_config_value('heroku_token')}").strip
     }
   end
 

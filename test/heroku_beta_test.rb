@@ -120,7 +120,7 @@ class HerokuBetaTest < Service::TestCase
     @stubs.get "/apps/my-app" do |env|
       assert_equal 'api.heroku.com', env[:url].host
       assert_equal 'https', env[:url].scheme
-      assert_equal Base64.encode64(":#{heroku_token}"), env[:request_headers]['Authorization']
+      assert_equal Base64.encode64(":#{heroku_token}").strip, env[:request_headers]['Authorization']
       [code, {}, '']
     end
   end
