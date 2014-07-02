@@ -1,4 +1,4 @@
-This service starts a preview of your book on Leanpub whenever a push is made to your repository.
+This service starts a preview of your book on Leanpub whenever a push is made to the master branch of your repository.
 
 Required values are:
 
