@@ -104,7 +104,7 @@ class Service::HerokuBeta < Service::HttpPost
 
   def repo_archive_link
     response = github_get("/repos/#{github_repo_path}/tarball/#{sha}")
-    unless response.success?
+    unless response.status == 302
       raise_config_error_with_message(:no_github_archive_link)
     end
     response.headers['Location']

@@ -38,7 +38,7 @@ class HerokuBetaTest < Service::TestCase
     stub_github_access
 
     @stubs.get "/repos/atmos/my-robot/tarball/9be5c2b9" do |env|
-      [200, {'Location' => 'https://git.io/a'}, '']
+      [302, {'Location' => 'https://git.io/a'}, '']
     end
 
     post_body = {"source_blob" => {"url" => "https://git.io/a","version" => "master@9be5c2b9"}}
