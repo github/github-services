@@ -15,6 +15,12 @@ class PushbulletTest < Service::TestCase
     service(:push, @options, payload).receive_event
   end
 
+  def test_push_no_device_iden
+    @options["device_iden"] = ""
+    stub_request "push"
+    service(:push, @options, payload).receive_event
+  end
+
   def test_issue
     stub_request "issues"
     service(:issues, @options, issues_payload).receive_event
