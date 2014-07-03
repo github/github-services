@@ -78,9 +78,10 @@ class Service::HerokuBeta < Service::HttpPost
     end
     raise_config_error_with_message(:no_heroku_app_build_access) unless response.success?
 
+    build_id = JSON.parse(response.body)['id']
     deployment_status_options = {
       "state"       => "pending",
-      "target_url"  => response.headers["Location"],
+      "target_url"  => heroku_build_output_url(build_id),
       "description" => "Created by GitHub Services@#{Service.current_sha[0..7]}"
     }
 
@@ -90,6 +91,10 @@ class Service::HerokuBeta < Service::HttpPost
       req.body = JSON.dump(deployment_status_options)
     end
     raise_config_error_with_message(:no_github_deployment_access) unless response.success?
+  end
+
+  def heroku_build_output_url(id)
+    "https://api.heroku.com/apps/#{heroku_application_name}/builds/#{id}/result"
   end
 
   def heroku_app_access?

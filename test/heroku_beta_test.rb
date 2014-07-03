@@ -48,14 +48,15 @@ class HerokuBetaTest < Service::TestCase
       }
     }
 
-    heroku_build_path = "/apps/my-app/builds/#{SecureRandom.uuid}/output"
-    heroku_build_url  = "https://api.heroku.com/#{heroku_build_path}"
+    heroku_build_id = SecureRandom.uuid
+    heroku_build_path = "/apps/my-app/builds/#{heroku_build_id}/result"
+    heroku_build_url  = "https://api.heroku.com#{heroku_build_path}"
 
     @stubs.post "/apps/my-app/builds" do |env|
       assert_equal 'api.heroku.com', env[:url].host
       assert_equal 'https', env[:url].scheme
       assert_equal heroku_post_body, JSON.parse(env[:body])
-      [200, {"Location" => heroku_build_url }, '']
+      [200, {}, JSON.dump({'id' => heroku_build_id}) ]
     end
 
     github_post_body = {
@@ -76,7 +77,7 @@ class HerokuBetaTest < Service::TestCase
     @stubs.verify_stubbed_calls
   end
 
-  def test_deployment_configured_misconfigured
+  def test_deployment_misconfigured
     stub_heroku_access
     stub_github_access
 
@@ -91,14 +92,15 @@ class HerokuBetaTest < Service::TestCase
       }
     }
 
-    heroku_build_path = "/apps/my-app/builds/#{SecureRandom.uuid}/output"
-    heroku_build_url  = "https://api.heroku.com/#{heroku_build_path}"
+    heroku_build_id   = SecureRandom.uuid
+    heroku_build_path = "/apps/my-app/builds/#{heroku_build_id}/result"
+    heroku_build_url  = "https://api.heroku.com#{heroku_build_path}"
 
     @stubs.post "/apps/my-app/builds" do |env|
       assert_equal 'api.heroku.com', env[:url].host
       assert_equal 'https', env[:url].scheme
       assert_equal heroku_post_body, JSON.parse(env[:body])
-      [200, {"Location" => heroku_build_url }, '']
+      [200, {}, JSON.dump({'id' => heroku_build_id}) ]
     end
 
     github_post_body = {
