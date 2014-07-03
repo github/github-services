@@ -61,7 +61,7 @@ class HerokuBetaTest < Service::TestCase
     github_post_body = {
       "state"       => "pending",
       "target_url"  => heroku_build_url,
-      "description" => "Created by GitHub Services@9e62d390"
+      "description" => "Created by GitHub Services@#{Service.current_sha[0..7]}"
     }
 
     github_deployment_path = "/repos/atmos/my-robot/deployments/721"
@@ -104,7 +104,7 @@ class HerokuBetaTest < Service::TestCase
     github_post_body = {
       "state"       => "pending",
       "target_url"  => heroku_build_url,
-      "description" => "Created by GitHub Services@9e62d390"
+      "description" => "Created by GitHub Services@#{Service.current_sha[0..7]}"
     }
 
     github_deployment_path = "/repos/atmos/my-robot/deployments/721"
