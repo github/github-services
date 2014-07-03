@@ -77,6 +77,19 @@ class Service::HerokuBeta < Service::HttpPost
       req.body = JSON.dump({:source_blob => {:url => repo_archive_link, :version => version_string}})
     end
     raise_config_error_with_message(:no_heroku_app_build_access) unless response.success?
+
+    deployment_status_options = {
+      "state"       => "pending",
+      "target_url"  => response.headers["Location"],
+      "description" => "Created by GitHub Services@#{Service.current_sha[0..7]}"
+    }
+
+    deployment_path = "/repos/#{github_repo_path}/deployments/#{payload['id']}"
+    response = http_post "https://api.github.com#{deployment_path}" do |req|
+      req.headers.merge!(default_github_headers)
+      req.body = JSON.dump(deployment_status_options)
+    end
+    raise_config_error_with_message(:no_github_deployment_access) unless response.success?
   end
 
   def heroku_app_access?
@@ -112,10 +125,17 @@ class Service::HerokuBeta < Service::HttpPost
 
   def github_get(path)
     http_get "https://api.github.com#{path}" do |req|
-      req.headers['User-Agent']    = "Operation: California",
-      req.headers['Content-Type']  = "application/json",
-      req.headers["Authorization"] = "token #{required_config_value('github_token')}"
+      req.headers.merge!(default_github_headers)
     end
+  end
+
+  def default_github_headers
+    {
+      'Accept'        => "application/vnd.github.cannonball-preview+json",
+      'User-Agent'    => "Operation: California",
+      'Content-Type'  => "application/json",
+      'Authorization' => "token #{required_config_value('github_token')}"
+    }
   end
 
   def raise_config_error_with_message(sym)
@@ -132,6 +152,8 @@ class Service::HerokuBeta < Service::HttpPost
         "Unable to access the #{github_repo_path} repository on GitHub with the provided token.",
       :no_github_user_access =>
         "Unable to access GitHub with the provided token.",
+      :no_github_deployment_access =>
+        "Unable to update the deployment status on GitHub with the provided token.",
       :no_heroku_app_access =>
         "Unable to access #{heroku_application_name} on heroku with the provided token.",
       :no_heroku_app_build_access =>

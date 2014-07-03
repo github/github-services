@@ -41,17 +41,87 @@ class HerokuBetaTest < Service::TestCase
       [302, {'Location' => 'https://git.io/a'}, '']
     end
 
-    post_body = {"source_blob" => {"url" => "https://git.io/a","version" => "master@9be5c2b9"}}
+    heroku_post_body = {
+      "source_blob" => {
+        "url" => "https://git.io/a",
+        "version" => "master@9be5c2b9"
+      }
+    }
+
+    heroku_build_path = "/apps/my-app/builds/#{SecureRandom.uuid}/output"
+    heroku_build_url  = "https://api.heroku.com/#{heroku_build_path}"
 
     @stubs.post "/apps/my-app/builds" do |env|
       assert_equal 'api.heroku.com', env[:url].host
       assert_equal 'https', env[:url].scheme
-      assert_equal post_body, JSON.parse(env[:body])
+      assert_equal heroku_post_body, JSON.parse(env[:body])
+      [200, {"Location" => heroku_build_url }, '']
+    end
+
+    github_post_body = {
+      "state"       => "pending",
+      "target_url"  => heroku_build_url,
+      "description" => "Created by GitHub Services@9e62d390"
+    }
+
+    github_deployment_path = "/repos/atmos/my-robot/deployments/721"
+    @stubs.post github_deployment_path do |env|
+      assert_equal 'api.github.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
+      assert_equal github_post_body, JSON.parse(env[:body])
       [200, {}, '']
     end
 
     heroku_service.receive_event
     @stubs.verify_stubbed_calls
+  end
+
+  def test_deployment_configured_misconfigured
+    stub_heroku_access
+    stub_github_access
+
+    @stubs.get "/repos/atmos/my-robot/tarball/9be5c2b9" do |env|
+      [302, {'Location' => 'https://git.io/a'}, '']
+    end
+
+    heroku_post_body = {
+      "source_blob" => {
+        "url" => "https://git.io/a",
+        "version" => "master@9be5c2b9"
+      }
+    }
+
+    heroku_build_path = "/apps/my-app/builds/#{SecureRandom.uuid}/output"
+    heroku_build_url  = "https://api.heroku.com/#{heroku_build_path}"
+
+    @stubs.post "/apps/my-app/builds" do |env|
+      assert_equal 'api.heroku.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
+      assert_equal heroku_post_body, JSON.parse(env[:body])
+      [200, {"Location" => heroku_build_url }, '']
+    end
+
+    github_post_body = {
+      "state"       => "pending",
+      "target_url"  => heroku_build_url,
+      "description" => "Created by GitHub Services@9e62d390"
+    }
+
+    github_deployment_path = "/repos/atmos/my-robot/deployments/721"
+    @stubs.post github_deployment_path do |env|
+      assert_equal 'api.github.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
+      assert_equal github_post_body, JSON.parse(env[:body])
+      [404, {}, '']
+    end
+
+    exception = assert_raise(Service::ConfigurationError) do
+      heroku_service.receive_event
+    end
+    @stubs.verify_stubbed_calls
+
+    message = "Unable to update the deployment status on GitHub with the provided token."
+    assert_equal message, exception.message
   end
 
   def test_deployment_heroku_misconfigured
