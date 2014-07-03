@@ -6,18 +6,14 @@ class Service::XmppMuc < Service::HttpPost
   string :JID, :room, :server, :nickname
   password :password, :room_password
   boolean :active, :notify_fork, :notify_wiki, :notify_comments,
-    :notify_issue 
-  #, :notify_watch, :notify_deployment, :notify_team */
+    :notify_issue, :notify_watch, :notify_pull
 
   white_list :room, :filter_branch, :JID, :room, :server, :nickname
 
-  default_events :commit_comment, :create, :delete, :download, 
-    :follow, :fork, :fork_apply, 
-    :gist, :gollum, :issue_comment,
-    :issues, :member, :public, :pull_request, :push, :team_add, 
-    :watch, :pull_request_review_comment,
-    :status, :release, :deployment, :deployment_status
-
+  default_events :push, :commit_comment, :issue_comment,
+    :issues, :pull_request, :pull_request_review_comment,
+    :gollum
+    
   def receive_event
     check_config data
       
@@ -35,9 +31,6 @@ class Service::XmppMuc < Service::HttpPost
     return false if event.to_s =~ /gollum/ && !data['notify_wiki']
     return false if event.to_s =~ /issue/ && !data['notify_issue']
     return false if event.to_s =~ /pull_/ && !data['notify_pull']
-    return false if event.to_s =~ /deployment/ && !data['notify_deployment']
-    return false if event.to_s =~ /team/ && !data['notify_team']
-    return false if event.to_s =~ /release/ && !data['notify_release']
 
     build_message(event, payload)
   end
@@ -68,23 +61,6 @@ class Service::XmppMuc < Service::HttpPost
             | page | messages << self.format_wiki_page_message(page)
         }
         send_messages messages
-      # The following events are not currently supported, but 
-      # included ready for implementation
-      when :create
-      when :delete
-      when :download
-      when :follow
-      when :fork
-      when :fork_apply
-      when :gist
-      when :member
-      when :public
-      when :team_add
-      when :watch
-      when :status
-      when :release
-      when :deployment
-      when :deployment_status
     end
     
   end

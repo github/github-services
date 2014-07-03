@@ -19,6 +19,7 @@ This service will connect to an XMPP MUC room with the provided details and then
 3. **Notify comments**  - Get notifications of comments
 4. **Notify watch** - Get notifictions of watch events
 5. **Notify issues** - Get notifications on issues
+6. **Notify pull requests** - Get notifications of pull requests
 
 == Notes ==
 

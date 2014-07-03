@@ -32,10 +32,7 @@ class XmppMucTest < Service::TestCase
       'notify_comments' => true,
       'notify_watch' => true,
       'notify_issue' => true,
-      'notify_deployment' => true,
-      'notify_team' => true,
       'notify_pull' => true,
-      'notify_release' => true,
       'is_test' => true
     }
     @mock = MockXmpp4r.new()
@@ -146,36 +143,6 @@ class XmppMucTest < Service::TestCase
       false,
       service(:pull_request_review_comment, config, payload).receive_event,
       'Should not reported pull event'
-    )
-  end
-    
-  def test_returns_false_if_deployment_event_and_not_notifiying
-    config = @config
-    config['notify_deployment'] = false
-    assert_equal(
-      false,
-      service(:deployment_status, config, payload).receive_event,
-      'Should not reported deployment event'
-    )
-  end
-    
-  def test_returns_false_if_team_event_and_not_notifiying
-    config = @config
-    config['notify_team'] = false
-    assert_equal(
-      false,
-      service(:team_add, config, payload).receive_event,
-      'Should not reported team event'
-    )
-  end
-    
-  def test_returns_false_if_team_event_and_not_notifiying
-    config = @config
-    config['notify_release'] = false
-    assert_equal(
-      false,
-      service(:release, config, payload).receive_event,
-      'Should not reported release event'
     )
   end
 
