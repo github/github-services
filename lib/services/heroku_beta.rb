@@ -84,7 +84,7 @@ class Service::HerokuBeta < Service::HttpPost
       "description" => "Created by GitHub Services@#{Service.current_sha[0..7]}"
     }
 
-    deployment_path = "/repos/#{github_repo_path}/deployments/#{payload['id']}"
+    deployment_path = "/repos/#{github_repo_path}/deployments/#{payload['id']}/statuses"
     response = http_post "https://api.github.com#{deployment_path}" do |req|
       req.headers.merge!(default_github_headers)
       req.body = JSON.dump(deployment_status_options)

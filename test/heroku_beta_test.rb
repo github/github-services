@@ -64,7 +64,7 @@ class HerokuBetaTest < Service::TestCase
       "description" => "Created by GitHub Services@#{Service.current_sha[0..7]}"
     }
 
-    github_deployment_path = "/repos/atmos/my-robot/deployments/721"
+    github_deployment_path = "/repos/atmos/my-robot/deployments/721/statuses"
     @stubs.post github_deployment_path do |env|
       assert_equal 'api.github.com', env[:url].host
       assert_equal 'https', env[:url].scheme
@@ -107,7 +107,7 @@ class HerokuBetaTest < Service::TestCase
       "description" => "Created by GitHub Services@#{Service.current_sha[0..7]}"
     }
 
-    github_deployment_path = "/repos/atmos/my-robot/deployments/721"
+    github_deployment_path = "/repos/atmos/my-robot/deployments/721/statuses"
     @stubs.post github_deployment_path do |env|
       assert_equal 'api.github.com', env[:url].host
       assert_equal 'https', env[:url].scheme
