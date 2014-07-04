@@ -3,4 +3,4 @@ rvm:
   - 1.9.3
   - 2.0.0
 script: script/cibuild
-install: script/bootstrap
+install: bundle exec rake test
