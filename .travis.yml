@@ -2,5 +2,5 @@ langauge: ruby
 rvm:
   - 1.9.3
   - 2.0.0
-script: script/cibuild
-install: bundle exec rake test
+install: script/bootstrap
+script: bundle exec rake test
