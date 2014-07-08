@@ -1,4 +1,5 @@
 require 'index'
+require 'index'
 require 'rubygems'
 require 'bundler/setup'
 require 'rake/testtask'
