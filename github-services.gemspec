@@ -1,4 +1,5 @@
 lib = "github-services"
+lib = "github-services"
 lib_file = File.expand_path("../lib/#{lib}.rb", __FILE__)
 File.read(lib_file) =~ /\bVERSION\s*=\s*["'](.+?)["']/
 version = $1
