@@ -5,7 +5,8 @@ class Service::Campfire < Service
 
   self.campfire_class = Tinder::Campfire
 
-  string :subdomain, :room, :token, :sound
+  string :subdomain, :room, :sound
+  password :token
   boolean :master_only, :play_sound, :long_url
   white_list :subdomain, :room
 

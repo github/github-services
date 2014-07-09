@@ -1,5 +1,6 @@
 class Service::Sqwiggle < Service::HttpPost
-  string :token, :room
+  password :token
+  string :room
 
   # only include 'room' in the debug logs, skip the api token.
   white_list :room
@@ -24,7 +25,7 @@ class Service::Sqwiggle < Service::HttpPost
 
     #dev url
     # url = "http://localhost:3001/integrations/github/#{data['room']}"
-    
+
     #production url
     url = "https://api.sqwiggle.com:443/integrations/github/#{data['room']}"
 

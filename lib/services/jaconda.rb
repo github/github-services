@@ -1,5 +1,6 @@
 class Service::Jaconda < Service
-  string  :subdomain, :room_id, :room_token
+  string  :subdomain, :room_id
+  password :room_token
   boolean :digest
   white_list :subdomain, :room_id
 

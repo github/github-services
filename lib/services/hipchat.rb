@@ -1,5 +1,6 @@
 class Service::HipChat < Service
-  string :auth_token, :room, :restrict_to_branch, :color, :server
+  password :auth_token
+  string :room, :restrict_to_branch, :color, :server
   boolean :notify, :quiet_fork, :quiet_watch, :quiet_comments, :quiet_wiki
   white_list :room, :restrict_to_branch, :color
 

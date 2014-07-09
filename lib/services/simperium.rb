@@ -1,5 +1,6 @@
 class Service::Simperium < Service::HttpPost
-  string :app_id, :token, :bucket
+  string :app_id, :bucket
+  password :token
 
   white_list :app_id, :bucket
 

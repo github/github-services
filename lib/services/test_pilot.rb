@@ -1,5 +1,5 @@
 class Service::TestPilot < Service
-  string :token
+  password :token
 
   def receive_push
     http.ssl[:verify] = false

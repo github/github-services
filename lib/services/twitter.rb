@@ -1,5 +1,5 @@
 class Service::Twitter < Service
-  string  :token, :secret
+  password  :token, :secret
   boolean :digest, :short_format
   TWITTER_SHORT_URL_LENGTH_HTTPS = 23
 

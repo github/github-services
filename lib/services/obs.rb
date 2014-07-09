@@ -1,5 +1,6 @@
 class Service::Obs < Service::HttpPost
-  string :url, :token, :project, :package
+  string :url, :project, :package
+  password :token
 
   white_list :url, :project, :package
 

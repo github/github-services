@@ -1,5 +1,6 @@
 class Service::ShiningPanda < Service
-  string :workspace, :job, :token, :branches, :parameters
+  string :workspace, :job, :branches, :parameters
+  password :token
   white_list :workspace, :job, :branches, :parameters
 
   def receive_push

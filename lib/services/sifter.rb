@@ -1,6 +1,6 @@
 class Service::Sifter < Service
   string :subdomain
-  string :token
+  password :token
 
   def receive_push
     http.ssl[:verify] = false

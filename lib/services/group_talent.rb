@@ -1,5 +1,5 @@
 class Service::GroupTalent < Service
-  string :token
+  password :token
 
   def receive_push
     res = http_post "https://grouptalent.com/github/receive_push/#{data[:token]}",
