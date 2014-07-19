@@ -76,7 +76,7 @@ class Service::YouTrack < Service
       author ||= find_user_by_email(commit['author']['email'])
       return if author.nil?
 
-      command = 'Fixed' if command.nil?
+      command = 'comment' if command.nil?
       comment_string = "Commit made by '''" + commit['author']['name'] + "''' on ''" + commit['timestamp'] + "''\n" + commit['url'] + "\n\n{quote}" + commit['message'].to_s + '{quote}'
       execute_command(author, issue_id, command, comment_string)
     }
