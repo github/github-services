@@ -57,13 +57,33 @@ class YouTrackTest < Service::TestCase
     @stubs.verify_stubbed_calls
   end
 
+  def test_push_no_command
+    valid_process_stubs
+
+    @stubs.post "/abc/rest/issue/case-2/execute" do |env|
+      assert_equal 'yt.com', env[:url].host
+      assert_equal 'sc', env[:request_headers]['Cookie']
+      assert_equal 'comment', env[:params]['command']
+      assert_equal 'mojombo', env[:params]['runAs']
+      [200, {}, '']
+    end
+
+    hash = payload
+    hash['commits'].first['message'].sub! /Case#1/, '#case-2'
+
+    svc = service(@data, hash)
+    svc.receive_push
+
+    @stubs.verify_stubbed_calls
+  end
+
   def test_branch_match
     valid_process_stubs
 
     @stubs.post "/abc/rest/issue/case-2/execute" do |env|
       assert_equal 'yt.com', env[:url].host
       assert_equal 'sc', env[:request_headers]['Cookie']
-      assert_equal 'Fixed', env[:params]['command']
+      assert_equal 'comment', env[:params]['command']
       assert_equal 'mojombo', env[:params]['runAs']
       [200, {}, '']
     end
