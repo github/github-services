@@ -69,6 +69,10 @@ class Service::TestCase < Test::Unit::TestCase
   def deployment_payload
     Service::DeploymentHelpers.sample_deployment_payload
   end
+
+  def status_payload
+    Service::StatusHelpers.sample_status_payload
+  end
 end
 
 module Service::HttpTestMethods
