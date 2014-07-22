@@ -22,7 +22,7 @@ class Service::AutoDeploy < Service::HttpPost
   end
 
   def environment_names
-    @environment_names ||= required_config_value("environments").split(',')
+    @environment_names ||= required_config_value("environments").split(',').map { |e| e.strip }
   end
 
   def payload_ref
