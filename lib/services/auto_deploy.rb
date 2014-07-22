@@ -1,5 +1,6 @@
 class Service::AutoDeploy < Service::HttpPost
   password :github_token
+  string   :environments
   boolean  :deploy_on_push, :deploy_on_status
 
   white_list :deploy_on_push, :deploy_on_status
@@ -41,13 +42,9 @@ class Service::AutoDeploy < Service::HttpPost
   end
 
   def deploy_on_push?
-    !deploy_on_status?
+    true
   end
   
-  def deploy_on_status?
-    data['deploy_on_status'].to_s == '1'
-  end
-
   def version_string
     payload_ref == sha ? sha : "#{payload_ref}@#{sha}"
   end
@@ -58,12 +55,6 @@ class Service::AutoDeploy < Service::HttpPost
     http.ssl[:verify] = true
 
     case event
-    when :status
-      # create a deployment if the default branch is pushed to and commit
-      # status is green
-      github_user_access?
-      github_repo_deployment_access?
-      deploy_from_status_payload if deploy_on_status?
     when :push
       github_user_access?
       github_repo_deployment_access?
@@ -87,10 +78,6 @@ class Service::AutoDeploy < Service::HttpPost
       }
       create_deployment_for_options(deployment_options)
     end
-  end
-
-  def deploy_from_status_payload
-    return
   end
 
   def create_deployment_for_options(options)
