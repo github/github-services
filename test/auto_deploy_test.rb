@@ -33,11 +33,12 @@ class AutoDeployTest < Service::TestCase
 
   def test_push_deployment_configured_properly
     stub_github_repo_deployment_access
+    services_sha = Service.current_sha[0..7]
 
     github_post_body = {
       "ref"               => "a47fd41f",
       "environment"       => "production",
-      "description"       => "Auto-Deployed by GitHub Services@7fc10c20 for rtomayko - master@a47fd41f",
+      "description"       => "Auto-Deployed by GitHub Services@#{services_sha} for rtomayko - master@a47fd41f",
       "required_contexts" => [ ],
     }
 
