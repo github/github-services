@@ -1,0 +1,9 @@
+This service automatically creates [GitHub Deployments]() based on certain criteria.
+
+By enabling this hook, GitHub will request a [GitHub Deployment]() on either push or commit statuses.
+
+Install Notes
+-------------
+
+1. `github_token` A [personal access token](https://github.com/settings/applications) from GitHub with `repo:deployment` scope.
+2. 
