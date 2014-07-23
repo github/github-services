@@ -3,10 +3,11 @@ class Service::AutoDeploy < Service::HttpPost
   string   :environments
   boolean  :deploy_on_push, :deploy_on_status
 
-  white_list :deploy_on_push, :deploy_on_status
+  white_list :environments, :deploy_on_push, :deploy_on_status
 
   default_events :push, :status
 
+  self.title = "GitHub Auto-Deployment"
   url 'https://github.com/atmos'
   logo_url 'https://camo.githubusercontent.com/edbc46e94fd4e9724da99bdd8da5d18e82f7b737/687474703a2f2f7777772e746f756368696e737069726174696f6e2e636f6d2f6173736574732f6865726f6b752d6c6f676f2d61663863386230333462346261343433613632376232393035666337316138362e706e67'
 
