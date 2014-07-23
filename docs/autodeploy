@@ -1,0 +1,11 @@
+This service automatically deploys pushes to your default branch.
+
+By enabling this hook, GitHub will request a [GitHub Deployment][1] when the default branch is pushed to. e.g. your master branch.
+
+Install Notes
+-------------
+
+1. `github_token` A [personal access token](https://github.com/settings/applications) from GitHub with `repo:deployment` scope.
+2. `environments` A commit delimited set of environment names to auto-deploy. e.g. production,staging.
+
+[1]: https://developer.github.com/v3/repos/deployments
