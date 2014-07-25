@@ -1,14 +1,15 @@
 class Service::AutoDeploy < Service::HttpPost
   password :github_token
   string   :environments
-  boolean  :deploy_on_push, :deploy_on_status
+  boolean  :deploy_on_status
+  string   :contexts
 
-  white_list :environments, :deploy_on_push, :deploy_on_status
+  white_list :environments, :deploy_on_status, :contexts
 
   default_events :push, :status
 
   self.title = "GitHub Auto-Deployment"
-  url 'https://github.com/atmos'
+  url 'https://www.atmos.org/auto-deployment/'
   logo_url 'https://camo.githubusercontent.com/edbc46e94fd4e9724da99bdd8da5d18e82f7b737/687474703a2f2f7777772e746f756368696e737069726174696f6e2e636f6d2f6173736574732f6865726f6b752d6c6f676f2d61663863386230333462346261343433613632376232393035666337316138362e706e67'
 
   maintained_by :github => 'atmos', :twitter => '@atmos'
@@ -18,8 +19,12 @@ class Service::AutoDeploy < Service::HttpPost
     :twitter => '@atmos'
 
   def github_repo_path
-    [ payload['repository']['owner']['name'], 
-      payload['repository']['name'] ].join('/')
+    if payload['repository'] && payload['repository']['full_name']
+      payload['repository']['full_name']
+    else
+      [ payload['repository']['owner']['name'],
+        payload['repository']['name'] ].join('/')
+    end
   end
 
   def environment_names
@@ -31,28 +36,42 @@ class Service::AutoDeploy < Service::HttpPost
   end
 
   def sha
-    payload['after'][0..7]
+    if payload['after']
+      payload['after'][0..7]
+    else
+      payload['sha'][0..7]
+    end
   end
 
   def pusher_name
-    payload['pusher']['name']
+    if payload['pusher']
+      payload['pusher']['name']
+    else
+      payload['commit']['committer']['login']
+    end
+  end
+
+  def default_branch
+    payload['repository']['default_branch']
   end
 
   def default_branch?
-    payload_ref == payload['repository']['default_branch']
+    payload_ref == default_branch
   end
 
   def deploy_on_push?
-    true
+    !deploy_on_status?
   end
-  
+
+  def deploy_on_status?
+    data['deploy_on_status'] == '1'
+  end
+
   def version_string
     payload_ref == sha ? sha : "#{payload_ref}@#{sha}"
   end
 
   def receive_event
-    return unless default_branch?
-
     http.ssl[:verify] = true
 
     case event
@@ -60,16 +79,26 @@ class Service::AutoDeploy < Service::HttpPost
       github_user_access?
       github_repo_deployment_access?
       deploy_from_push_payload if deploy_on_push?
+    when :status
+      github_user_access?
+      github_repo_deployment_access?
+      deploy_from_status_payload if deploy_on_status?
     else
       raise_config_error_with_message(:no_event_handler)
     end
   end
 
   def push_deployment_description
-    "Auto-Deployed by GitHub Services@#{Service.current_sha[0..7]} for #{pusher_name} - #{version_string}"
+    "Auto-Deployed on push by GitHub Services@#{Service.current_sha[0..7]} for #{pusher_name} - #{version_string}"
+  end
+
+  def status_deployment_description
+    "Auto-Deployed on status by GitHub Services@#{Service.current_sha[0..7]} for #{pusher_name} - #{default_branch}@#{sha}"
   end
 
   def deploy_from_push_payload
+    return unless default_branch?
+
     environment_names.each do |environment_name|
       deployment_options = {
         "ref"               => sha,
@@ -78,6 +107,21 @@ class Service::AutoDeploy < Service::HttpPost
         "required_contexts" => [ ]
       }
       create_deployment_for_options(deployment_options)
+    end
+  end
+
+  def deploy_from_status_payload
+    return unless payload['state'] == 'success'
+    if payload['branches'].any? { |branch| branch['name'] == default_branch }
+      environment_names.each do |environment_name|
+        deployment_options = {
+          "ref"               => sha,
+          "environment"       => environment_name,
+          "description"       => status_deployment_description,
+          "required_contexts" => [ ]
+        }
+        create_deployment_for_options(deployment_options)
+      end
     end
   end
 
