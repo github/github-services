@@ -94,7 +94,7 @@ class Service::HerokuBeta < Service::HttpPost
   end
 
   def heroku_build_output_url(id)
-    "https://api.heroku.com/apps/#{heroku_application_name}/builds/#{id}/result"
+    "https://dashboard-next.heroku.com/apps/#{heroku_application_name}/activity/builds/#{id}"
   end
 
   def heroku_app_access?

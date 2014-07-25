@@ -49,8 +49,8 @@ class HerokuBetaTest < Service::TestCase
     }
 
     heroku_build_id = SecureRandom.uuid
-    heroku_build_path = "/apps/my-app/builds/#{heroku_build_id}/result"
-    heroku_build_url  = "https://api.heroku.com#{heroku_build_path}"
+    heroku_build_path = "/apps/my-app/activity/builds/#{heroku_build_id}"
+    heroku_build_url  = "https://dashboard-next.heroku.com#{heroku_build_path}"
 
     @stubs.post "/apps/my-app/builds" do |env|
       assert_equal 'api.heroku.com', env[:url].host
@@ -93,8 +93,8 @@ class HerokuBetaTest < Service::TestCase
     }
 
     heroku_build_id   = SecureRandom.uuid
-    heroku_build_path = "/apps/my-app/builds/#{heroku_build_id}/result"
-    heroku_build_url  = "https://api.heroku.com#{heroku_build_path}"
+    heroku_build_path = "/apps/my-app/activity/builds/#{heroku_build_id}"
+    heroku_build_url  = "https://dashboard-next.heroku.com#{heroku_build_path}"
 
     @stubs.post "/apps/my-app/builds" do |env|
       assert_equal 'api.heroku.com', env[:url].host
