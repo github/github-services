@@ -5,15 +5,24 @@ class AutoDeployTest < Service::TestCase
 
   def auto_deploy_on_push_service_data
     {
-      'github_token' => github_token,
-      'environments' => 'production'
+      'github_token'     => github_token,
+      'environments'     => 'production',
+      'deploy_on_status' => '0'
     }
+  end
+
+  def auto_deploy_on_status_service_data
+    auto_deploy_on_push_service_data.merge 'deploy_on_status' => '1'
   end
 
   def auto_deploy_on_push_service
     service(:push, auto_deploy_on_push_service_data, push_payload)
   end
   
+  def auto_deploy_on_status_service
+    service(:status, auto_deploy_on_status_service_data, status_payload)
+  end
+
   def test_unsupported_deployment_events
     exception = assert_raise(Service::ConfigurationError) do
       service(:deployment, auto_deploy_on_push_service_data, deployment_payload).receive_event
@@ -30,7 +39,7 @@ class AutoDeployTest < Service::TestCase
     github_post_body = {
       "ref"               => "a47fd41f",
       "environment"       => "production",
-      "description"       => "Auto-Deployed by GitHub Services@#{services_sha} for rtomayko - master@a47fd41f",
+      "description"       => "Auto-Deployed on push by GitHub Services@#{services_sha} for rtomayko - master@a47fd41f",
       "required_contexts" => [ ],
     }
 
@@ -45,7 +54,55 @@ class AutoDeployTest < Service::TestCase
     auto_deploy_on_push_service.receive_event
     @stubs.verify_stubbed_calls
   end
-  
+
+  def test_push_deployment_configured_for_status
+    stub_github_repo_deployment_access
+
+    # successful push to default branch but configured for status deployments
+    service(:push, auto_deploy_on_status_service_data, status_payload).receive_event
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_status_deployment_configured_properly
+    stub_github_repo_deployment_access
+    services_sha = Service.current_sha[0..7]
+
+    github_post_body = {
+      "ref"               => "7b80eb10",
+      "environment"       => "production",
+      "description"       => "Auto-Deployed on status by GitHub Services@#{services_sha} for rtomayko - master@7b80eb10",
+      "required_contexts" => [ ],
+    }
+
+    github_deployment_path = "/repos/mojombo/grit/deployments"
+    @stubs.post github_deployment_path do |env|
+      assert_equal 'api.github.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
+      assert_equal github_post_body, JSON.parse(env[:body])
+      [200, {}, '']
+    end
+
+    auto_deploy_on_status_service.receive_event
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_status_deployment_configured_with_failure_status
+    stub_github_repo_deployment_access
+
+    # don't do anything on failed states
+    failed_status_payload = status_payload.merge('state' => 'failure')
+    service(:status, auto_deploy_on_status_service_data, failed_status_payload).receive_event
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_status_deployment_configured_for_push
+    stub_github_repo_deployment_access
+
+    # successful commit status but configured for push
+    service(:status, auto_deploy_on_push_service_data, status_payload).receive_event
+    @stubs.verify_stubbed_calls
+  end
+
   def test_deployment_with_bad_github_user_credentials
     stub_github_user(404)
 
