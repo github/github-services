@@ -2,7 +2,7 @@ class Service::AutoDeploy < Service::HttpPost
   password :github_token
   string   :environments
   boolean  :deploy_on_status
-  string   :contexts
+  string   :status_contexts
 
   white_list :environments, :deploy_on_status, :contexts
 
