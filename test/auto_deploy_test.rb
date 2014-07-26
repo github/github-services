@@ -18,7 +18,7 @@ class AutoDeployTest < Service::TestCase
   def auto_deploy_on_push_service
     service(:push, auto_deploy_on_push_service_data, push_payload)
   end
-  
+
   def auto_deploy_on_status_service
     service(:status, auto_deploy_on_status_service_data, status_payload)
   end
@@ -38,12 +38,14 @@ class AutoDeployTest < Service::TestCase
 
     github_post_body = {
       "ref"               => "a47fd41f",
+      "payload"           => {"hi"=>"haters"},
       "environment"       => "production",
       "description"       => "Auto-Deployed on push by GitHub Services@#{services_sha} for rtomayko - master@a47fd41f",
       "required_contexts" => [ ],
     }
 
     github_deployment_path = "/repos/mojombo/grit/deployments"
+
     @stubs.post github_deployment_path do |env|
       assert_equal 'api.github.com', env[:url].host
       assert_equal 'https', env[:url].scheme
@@ -69,6 +71,7 @@ class AutoDeployTest < Service::TestCase
 
     github_post_body = {
       "ref"               => "7b80eb10",
+      "payload"           => {"hi"=>"haters"},
       "environment"       => "production",
       "description"       => "Auto-Deployed on status by GitHub Services@#{services_sha} for rtomayko - master@7b80eb10",
       "required_contexts" => [ ],
@@ -142,12 +145,15 @@ class AutoDeployTest < Service::TestCase
 
   def stub_github_repo_deployment_access(code = 200, scopes = "repo:deployment, user")
     stub_github_user
+    deployment_history = [{'environment' => 'staging',    'id' => 42},
+                          {'environment' => 'production', 'id' => 43, 'payload' => {'hi' => 'haters'}}].to_json
+
     @stubs.get "/repos/mojombo/grit/deployments" do |env|
       assert_equal 'api.github.com', env[:url].host
       assert_equal 'https', env[:url].scheme
       assert_equal "token #{github_token}", env[:request_headers]['Authorization']
       headers = {"X-OAuth-Scopes" => scopes }
-      [code, headers, '']
+      [code, headers, deployment_history]
     end
   end
 
