@@ -102,6 +102,7 @@ class Service::AutoDeploy < Service::HttpPost
     environment_names.each do |environment_name|
       deployment_options = {
         "ref"               => sha,
+        "payload"           => last_deployment_payload_for(environment_name),
         "environment"       => environment_name,
         "description"       => push_deployment_description,
         "required_contexts" => [ ]
@@ -110,12 +111,17 @@ class Service::AutoDeploy < Service::HttpPost
     end
   end
 
+  def status_payload_contains_default_branch?
+    payload['branches'].any? { |branch| branch['name'] == default_branch }
+  end
+
   def deploy_from_status_payload
     return unless payload['state'] == 'success'
-    if payload['branches'].any? { |branch| branch['name'] == default_branch }
+    if status_payload_contains_default_branch?
       environment_names.each do |environment_name|
         deployment_options = {
           "ref"               => sha,
+          "payload"           => last_deployment_payload_for(environment_name),
           "environment"       => environment_name,
           "description"       => status_deployment_description,
           "required_contexts" => [ ]
@@ -132,6 +138,17 @@ class Service::AutoDeploy < Service::HttpPost
       req.body = JSON.dump(options)
     end
     raise_config_error_with_message(:no_github_deployment_access) unless response.success?
+  end
+
+  def last_deployment_payload_for(environment)
+    response = github_get("/repos/#{github_repo_path}/deployments")
+    unless response.success?
+      raise_config_error_with_message(:no_github_repo_deployment_access)
+    end
+    deployment = JSON.parse(response.body).find do |element|
+      element['environment'] == environment
+    end
+    deployment ? deployment['payload'] : { }
   end
 
   def github_user_access?
