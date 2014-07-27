@@ -1,6 +1,7 @@
 class Service::GoCD < Service
   string   :base_url, :repository_url, :username
   password :password
+  boolean :verify_ssl
   white_list :base_url, :repository_url, :username
 
   url "http://www.go.cd/"
@@ -11,7 +12,7 @@ class Service::GoCD < Service
     return if payload['deleted']
     validate_config
 
-    http.ssl[:verify] = false
+    http.ssl[:verify] = verify_ssl
     http.url_prefix = base_url
 
     http.basic_auth username, password if username.present? and password.present?
@@ -48,5 +49,9 @@ class Service::GoCD < Service
 
   def password
     @password ||= data['password']
+  end
+
+  def verify_ssl
+    @verify_ssl ||= data['verify_ssl'] || true
   end
 end
