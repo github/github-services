@@ -16,3 +16,6 @@ Install Notes
 
 4. "username" and "password" - username and password of a Go admin user that can
    trigger the Materials API endpoint. Can be left empty if the Go server has no authentication configured (not recommended.)
+
+5. "verfiy_ssl" is used to enable (recommended) or disable certificate checking when using ssl. 
+   Disabling this can make the ssl connection insecure.
