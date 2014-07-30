@@ -1,0 +1,26 @@
+Choir is the **Notification Center for Teams**. Choir lets you stay in touch
+with what's happening to your repositories without breaking your flow.
+After integrating it with GitHub, you will hear a distinctive sound for each GitHub event
+type as well as a searchable records of all events. 
+
+Supported Events
+----------------
+
+'commit_comment', 'create', 'delete', 'download', 'follow', 'fork', 'fork_apply', 'gollum', 
+issue_comment', 'issues', 'member', 'public', 'pull_request', 'push', 'team_add', 'watch', 
+'pull_request_review_comment', 'status'
+
+
+Choir API Key
+---------------
+
+Each API key uniquely identifies an integration in Choir. A key has 16
+characters. Use keys liberally to manage your data feed security. 
+
+
+Install Notes
+-------------
+
+1. API Key - Add a new GitHub integration to your stream, copy and paste the API Key. 
+2. Don't forget to check "Active"
+
