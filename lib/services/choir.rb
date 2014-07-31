@@ -12,8 +12,7 @@ class Service::Choir < Service::HttpPost
   maintained_by :github => 'alexdong',
     :twitter => '@alexdong'
 
-  supported_by :web => 'https://uservoice.choir.io/',
-    :email => 'help@beachmonks.com',
+  supported_by :email => 'info@beachmonks.com',
     :twitter => '@beachmonks'
 
   def receive_event
@@ -23,7 +22,7 @@ class Service::Choir < Service::HttpPost
       raise_config_error "Invalid api key"
     end
 
-    url = "https://hooks.choir.io:443/#{apikey}/github"
+    url = "https://hooks.choir.io/#{apikey}/github"
     deliver url
   end
 end
