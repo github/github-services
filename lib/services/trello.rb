@@ -7,11 +7,17 @@ class Service::Trello < Service
 
   def receive_pull_request
     return unless opened?
-
-    assert_required_credentials :pull_request
-    
+    assert_required_credentials :pull_request    
     create_card :pull_request, name_for_pull(pull), desc_for_pull(pull)
   end
+
+  def receive_push
+    return unless process_commits?
+    assert_required_credentials :push
+    process_commits :push
+  end
+
+  private
 
   def name_for_pull(pull)
     pull.title
@@ -25,22 +31,13 @@ class Service::Trello < Service
     ]
   end
 
-  def receive_push
-    return unless create_cards?
-
-    # Confirm all required config is present
-    assert_required_credentials :push
-
-    # Create the card
-    create_cards :push
+  def http_post(*args)
+    http.url_prefix = "https://api.trello.com/1"
+    super
   end
 
-  private
-
-  def create_cards?
-    return false if payload['commits'].size == 0
-    return false if data['master_only'].to_i == 1 && branch_name != 'master'
-    true
+  def process_commits?
+    payload['commits'].size > 0 && (data['master_only'].to_i != 1 || branch_name == 'master')
   end
 
   def assert_required_credentials(event)
@@ -53,7 +50,6 @@ class Service::Trello < Service
   end
 
   def create_card(event, name, description)
-    http.url_prefix = "https://api.trello.com/1"
     http_post "cards",
       :name => name,
       :desc => description,
@@ -61,13 +57,30 @@ class Service::Trello < Service
       :key => application_key,
       :token => consumer_token
   end
-    
 
-  def create_cards(event)
+  def process_commits(event)
     payload['commits'].each do |commit|
       next if ignore_commit? commit
       create_card event, name_for_commit(commit), desc_for_commit(commit)
+      find_card_ids(commit['message'] || '').each do |card_id|
+        comment_on_card card_id, card_comment(commit)
+      end
     end
+  end
+
+  def card_comment(commit)
+    "#{commit_author(commit)} added commit #{commit['url']}"
+  end
+
+  def comment_on_card(card_id, message)
+    http_post "cards/#{card_id}/actions/comments",
+      :text => message,
+      :key => application_key,
+      :token => consumer_token
+  end
+
+  def find_card_ids(message)
+    message.scan(%r{https://trello.com/c/([a-z0-9]+)}i).flatten
   end
 
   def ignore_commit? commit
@@ -78,15 +91,20 @@ class Service::Trello < Service
     message.length > message_max_length ? message[0...message_max_length] + "..." : message
   end
 
-  def name_for_commit commit
+  def name_for_commit(commit)
     truncate_message commit['message']
   end
 
-  def desc_for_commit commit
+  def commit_author(commit)
     author = commit['author'] || {}
+    author['name'] || '[unknown]'
+  end
+
+  def desc_for_commit(commit)
+    
 
     "Author: %s\n\n%s\n\nRepo: %s\n\nBranch: %s\n\nCommit Message: %s" % [
-      author['name'] || '[unknown]',
+      commit_author(commit),
       commit['url'],
       repository,
       branch_name,

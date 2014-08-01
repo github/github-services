@@ -67,6 +67,20 @@ class TrelloTest < Service::TestCase
     assert_no_cards_created svc, :pull_request
   end
 
+  def test_comment_on_card
+    payload = { 'commits' => [{ 'message' => commit_message,
+                                'author' => { 'name' => 'John Doe' },
+                                'url' => 'http://github.com/commit' }],
+                'repository' => { 'name' => 'whatever' },
+                'ref' => 'refs/heads/master' }
+    svc = service :push, @data, payload
+    assert_commented('abc123')
+    assert_commented('abc456')
+    @stubs.post("/1/cards") { [200, {}, ''] }
+    svc.receive_push
+    @stubs.verify_stubbed_calls
+  end
+
   private
   
   def call_hook_on_service svc, method
@@ -75,6 +89,14 @@ class TrelloTest < Service::TestCase
         svc.receive_push
       when :pull_request
         svc.receive_pull_request
+    end
+  end
+
+  def assert_commented(card_id)
+    @stubs.post "/1/cards/#{card_id}/actions/comments" do |env|
+      assert_equal 'api.trello.com', env[:url].host
+      assert_match 'text=' + CGI.escape('John Doe added commit http://github.com/commit'), env[:body]
+      [200, {}, '']
     end
   end
 
@@ -107,5 +129,14 @@ Commit Message: stub git call for Grit#heads test f:15 Case#1'
 
   def service(*args)
     super Service::Trello, *args
+  end
+
+  def commit_message
+    <<-EOT
+Example message
+
+Fixes https://trello.com/c/abc123
+Closes https://trello.com/c/abc456/longer-url
+EOT
   end
 end
