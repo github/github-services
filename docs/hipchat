@@ -1,4 +1,4 @@
-Note: HipChat has a new and improved integration with GitHub. While this 
+Note: HipChat has a new and improved integration with GitHub. While this
 service will continue to work, you really should check out the new integration.
 Read more here: http://help.hipchat.com/knowledgebase/articles/64389-github-integration
 
@@ -21,5 +21,7 @@ Options
 2. **Quiet Fork** - Suppress the room notice if a project has been forked.
 3. **Quiet Watch** - Suppress the room notice that someone has started to watch the project.
 4. **Quiet Comments** - Suppress the room notice if a comment has been made on repo.
-5. **Quiet Wiki** - Suppress the room notice if a wiki item has been updated.
-6. **Active** - Turn On or Off the service hook.
+5. **Quiet Labels** - Suppress the room notice if an issue has had any label changes.
+6. **Quiet Assigning** - Suppress the room notice if an issue has been assigned or unassigned.
+7. **Quiet Wiki** - Suppress the room notice if a wiki item has been updated.
+8. **Active** - Turn On or Off the service hook.
