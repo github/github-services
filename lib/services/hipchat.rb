@@ -6,7 +6,7 @@ class Service::HipChat < Service
 
   default_events :commit_comment, :download, :fork, :fork_apply, :gollum,
     :issues, :issue_comment, :member, :public, :pull_request, :pull_request_review_comment,
-    :push, :watch, :issue_label, :issue_unlabel, :issue_assign, :issue_unassign
+    :push, :watch
 
   def receive_event
     # make sure we have what we need
@@ -31,8 +31,8 @@ class Service::HipChat < Service
     return if event.to_s =~ /watch/ && data['quiet_watch']
     return if event.to_s =~ /comment/ && data['quiet_comments']
     return if event.to_s =~ /gollum/ && data['quiet_wiki']
-    return if event.to_s =~ /label/ && data['quiet_labels']
-    return if event.to_s =~ /assign/ && data['quiet_assigning']
+    return if payload['action'].to_s =~ /label/ && data['quiet_labels']
+    return if payload['action'].to_s =~ /assign/ && data['quiet_assigning']
 
     http.headers['X-GitHub-Event'] = event.to_s
 
