@@ -1,12 +1,12 @@
 class Service::HipChat < Service
   password :auth_token
   string :room, :restrict_to_branch, :color, :server
-  boolean :notify, :quiet_fork, :quiet_watch, :quiet_comments, :quiet_wiki
+  boolean :notify, :quiet_fork, :quiet_watch, :quiet_comments, :quiet_labels, :quiet_assigning, :quiet_wiki
   white_list :room, :restrict_to_branch, :color
 
   default_events :commit_comment, :download, :fork, :fork_apply, :gollum,
     :issues, :issue_comment, :member, :public, :pull_request, :pull_request_review_comment,
-    :push, :watch
+    :push, :watch, :issue_label, :issue_unlabel, :issue_assign, :issue_unassign
 
   def receive_event
     # make sure we have what we need
@@ -31,6 +31,8 @@ class Service::HipChat < Service
     return if event.to_s =~ /watch/ && data['quiet_watch']
     return if event.to_s =~ /comment/ && data['quiet_comments']
     return if event.to_s =~ /gollum/ && data['quiet_wiki']
+    return if event.to_s =~ /label/ && data['quiet_labels']
+    return if event.to_s =~ /assign/ && data['quiet_assigning']
 
     http.headers['X-GitHub-Event'] = event.to_s
 

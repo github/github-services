@@ -74,6 +74,36 @@ class HipChatTest < Service::TestCase
     @stubs.verify_stubbed_calls
   end
 
+  def test_quiet_labels_silences_comment_events
+    [:issue_labeled, :issue_unlabeled].each do |label_event|
+      svc = service(label_event,
+        default_data_plus('quiet_labels' => '1'), simple_payload )
+      assert_nothing_raised { svc.receive_event }
+    end
+  end
+
+  def test_quiet_labels_will_not_silence_other_events
+    stub_simple_post
+    svc = service(default_data_plus('quiet_labels' => '1'), simple_payload)
+    svc.receive_event
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_quiet_assigned_silences_comment_events
+    [:issue_assigned, :issue_unassigned].each do |assigned_event|
+      svc = service(assigned_event,
+        default_data_plus('quiet_assigning' => '1'), simple_payload )
+      assert_nothing_raised { svc.receive_event }
+    end
+  end
+
+  def test_quiet_assigned_will_not_silence_other_events
+    stub_simple_post
+    svc = service(default_data_plus('quiet_assigning' => '1'), simple_payload)
+    svc.receive_event
+    @stubs.verify_stubbed_calls
+  end
+
   def test_quiet_wiki_silences_wiki_events
     svc = service(:gollum,
       default_data_plus('quiet_wiki' => '1'), simple_payload )
