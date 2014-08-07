@@ -31,8 +31,8 @@ class Service::HipChat < Service
     return if event.to_s =~ /watch/ && data['quiet_watch']
     return if event.to_s =~ /comment/ && data['quiet_comments']
     return if event.to_s =~ /gollum/ && data['quiet_wiki']
-    return if payload['action'].to_s =~ /label/ && data['quiet_labels']
-    return if payload['action'].to_s =~ /assign/ && data['quiet_assigning']
+    return if event.to_s =~ /issue|pull_request/ && payload['action'].to_s =~ /label/ && data['quiet_labels']
+    return if event.to_s =~ /issue|pull_request/ && payload['action'].to_s =~ /assign/ && data['quiet_assigning']
 
     http.headers['X-GitHub-Event'] = event.to_s
 
