@@ -74,7 +74,7 @@ class Service::AutoDeploy < Service::HttpPost
   def receive_event
     http.ssl[:verify] = true
 
-    case event
+    case event.to_sym
     when :push
       github_user_access?
       github_repo_deployment_access?
