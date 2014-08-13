@@ -90,9 +90,9 @@ class Service::XmppMuc < Service::HttpPost
         rescue ::Jabber::ClientAuthenticationFailure
           raise_config_error 'Authentication error'
         rescue ::Jabber::JabberError
-          raise_config_error 'XMPP Error'
+          raise_config_error 'XMPP Error: #{$!.to_s}'
         else
-          raise_config_error 'Unknown error'
+          raise_config_error 'Unknown error: #{$!.to_s}'
         end
       end
       @muc
