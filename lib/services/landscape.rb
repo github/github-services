@@ -1,5 +1,5 @@
 class Service::Landscape < Service::HttpPost
-  default_events :push
+  default_events :push, :pull_request, :create, :delete
 
   url "https://landscape.io"
   logo_url "https://landscape-io.s3.amazonaws.com/img/landscape_logo.png"
