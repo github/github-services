@@ -14,6 +14,11 @@ class ServiceTest < Service::TestCase
   end
 
   def setup
+    TestService.current_sha = "abcdefghijkl"
+    # Force service to be build rebuild default http options
+    # with the new current sha above.
+    Service.remove_class_variable(:@@default_http_options)
+
     @stubs = Faraday::Adapter::Test::Stubs.new
     @service = service(:push, 'data', 'payload')
   end
@@ -77,6 +82,16 @@ class ServiceTest < Service::TestCase
     assert_raises Service::ConfigurationError do
       @service.http_post 'http://abc'
     end
+  end
+
+  def test_exposes_current_version
+    @stubs.post '/' do |env|
+      assert_equal "abcdefgh", env[:request_headers]["X-GitHub-Services-Version"]
+
+      [200, {}, 'ok']
+    end
+
+    @service.http.post '/'
   end
 
   def test_json_encoding
