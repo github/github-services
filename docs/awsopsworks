@@ -9,6 +9,11 @@ You need to provide an AWS access key id and the corresponding secret access key
       "Effect": "Allow",
       "Action": "opsworks:CreateDeployment",
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "opsworks:UpdateApp",
+      "Resource": "*"
     }
   ]
 }
