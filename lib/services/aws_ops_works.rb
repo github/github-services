@@ -20,7 +20,7 @@ class Service::AwsOpsWorks < Service::HttpPost
   def receive_event
     case event.to_s
     when 'deployment'
-      update_app_revision(sha)
+      update_app_revision(ref_name)
       create_deployment
     when 'push'
       if branch_name == configured_branch_name
@@ -35,8 +35,8 @@ class Service::AwsOpsWorks < Service::HttpPost
     required_config_value('branch_name')
   end
 
-  def sha
-    payload['sha'][0..7]
+  def ref_name
+    payload['ref']
   end
 
   def update_app_revision(revision_name)
