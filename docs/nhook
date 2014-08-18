@@ -1,0 +1,12 @@
+Use this service to automatically trigger build and deploy of your package into NuGet when you push to GitHub.
+
+Install Notes
+-------------
+
+1. Login to https://www.nuget.org.
+2. Navigate to your account page. For now https://www.nuget.org/account
+3. Copy your API Key into GitHub service setting. This API Key will use for publishing you packages.
+
+For more details about nHook, go to http://www.nhook.net
+
+PS: Now it works just with public repositories.
