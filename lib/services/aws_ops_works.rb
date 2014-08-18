@@ -24,7 +24,6 @@ class Service::AwsOpsWorks < Service::HttpPost
       create_deployment
     when 'push'
       if branch_name == configured_branch_name
-        update_app_revision(configured_branch_name)
         create_deployment
       end
     else
