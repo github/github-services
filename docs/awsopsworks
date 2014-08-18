@@ -1,4 +1,4 @@
-This service lets you deploy apps in AWS OpsWorks after pushing to the configured branch.
+This service lets you deploy apps in AWS OpsWorks after pushing to the configured branch. It will also pick up on deployment events and update the app to deploy to the requested sha.
 
 You need to provide an AWS access key id and the corresponding secret access key having at least the permission for the `opsworks:CreateDeployment` action. That's the minimal required policy file:
 
