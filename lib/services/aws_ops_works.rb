@@ -20,7 +20,7 @@ class Service::AwsOpsWorks < Service::HttpPost
   def receive_event
     case event.to_s
     when 'deployment'
-      update_app(sha)
+      update_app_revision(sha)
       create_deployment
     when 'push'
       if branch_name == configured_branch_name
