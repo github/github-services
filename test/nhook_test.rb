@@ -17,14 +17,13 @@ class NHookTest < Service::TestCase
     @stubs.post "/github/#{test_apiKey}" do |env|
       body = JSON.parse(env[:body])
 
-      assert_equal env[:url].host, 'api.nhook.net'
-      assert_equal 'test', body['payload']['commits'][0]['id']
-      assert_equal data, body['config']
-      assert_equal 'push', body['event']
+      assert_equal env[:url].host, 'nhapis.azurewebsites.net'
+      assert_equal 'test', body['commits'][0]['id']
+      assert_equal 'application/json', env[:request_headers]['Content-type']
       [200, {}, '']
     end
 
-    svc.receive_event
+    svc.receive_push
     @stubs.verify_stubbed_calls
   end
 
