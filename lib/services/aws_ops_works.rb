@@ -42,7 +42,7 @@ class Service::AwsOpsWorks < Service::HttpPost
   end
 
   def opsworks_payload
-    payload['payload'] && payload['payload']['opsworks']
+    payload['payload'] && payload['payload']['config'] && payload['payload']['config']['opsworks']
   end
 
   def environment

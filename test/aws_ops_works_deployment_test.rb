@@ -105,7 +105,9 @@ class AwsOpsWorksTest < Service::TestCase
     custom_payload = {
       'environment' => 'staging',
       'payload' => {
-        'opsworks' => opsworks_deployment_environments
+        'config' => {
+          'opsworks' => opsworks_deployment_environments
+        }
       }
     }
     Service::DeploymentHelpers.sample_deployment_payload.merge(custom_payload)
