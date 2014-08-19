@@ -1,5 +1,4 @@
 require File.expand_path('../helper', __FILE__)
-require 'debugger'
 
 class AwsOpsWorksTest < Service::TestCase
 
