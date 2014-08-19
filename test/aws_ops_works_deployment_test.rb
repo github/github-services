@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class AwsOpsWorksTest < Service::TestCase
+class AwsOpsWorksDeploymentTest < Service::TestCase
 
   def setup
     AWS.stub!
