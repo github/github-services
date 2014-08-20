@@ -1,9 +1,9 @@
 require File.expand_path('../helper', __FILE__)
 
 class AwsOpsWorksDeploymentTest < Service::TestCase
-
   def setup
     AWS.stub!
+    @stubs = Faraday::Adapter::Test::Stubs.new
   end
 
   def test_stack_id_sent
@@ -67,6 +67,30 @@ class AwsOpsWorksDeploymentTest < Service::TestCase
     assert_raise Service::ConfigurationError do
       svc.receive_event
     end
+  end
+
+  def test_github_deployment_status_callbacks
+    github_post_body = {
+      "state"       => "success",
+      "target_url"  => "foo",
+      "description" => "Created by GitHub Services@#{Service.current_sha[0..7]}"
+    }
+
+    github_deployment_path = "/repos/atmos/my-robot/deployments/721/statuses"
+    @stubs.post github_deployment_path do |env|
+      assert_equal 'api.github.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
+      assert_equal github_post_body, JSON.parse(env[:body])
+      [200, {}, '']
+    end
+
+    custom_sample_data = sample_data.merge('github_token' => 'secret')
+    svc = Service::AwsOpsWorks.new(:deployment, custom_sample_data, environmental_payload)
+    response = svc.receive_event
+    app_id = opsworks_deployment_environments['staging']['app_id']
+    assert_equal app_id, response.request_options[:app_id]
+
+    @stubs.verify_stubbed_calls
   end
 
   def service(data = sample_data, payload = sample_payload)

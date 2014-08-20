@@ -50,10 +50,14 @@ class Service::AwsOpsWorks < Service::HttpPost
   end
 
   def receive_event
+    http.ssl[:verify] = true
+
     case event.to_s
     when 'deployment'
       update_app_revision(ref_name)
-      create_deployment
+      app_deployment = create_deployment
+      update_deployment_statuses(app_deployment)
+      app_deployment
     when 'push'
       if branch_name == required_config_value('branch_name')
         create_deployment
@@ -61,6 +65,42 @@ class Service::AwsOpsWorks < Service::HttpPost
     else
       raise_config_error("The #{event} event is currently unsupported.")
     end
+  end
+
+  def update_deployment_statuses(app_deployment)
+    return unless config_value('github_token') && !config_value('github_token').empty?
+
+    deployment_id = app_deployment['deployment_id']
+
+    deployment_status_options = {
+      "state"       => "success",
+      "target_url"  => aws_opsworks_output_url,
+      "description" => "Deployment #{deployment_id} Accepted by Amazon. (github-services@#{Service.current_sha[0..7]})"
+    }
+
+    deployment_path = "/repos/#{github_repo_path}/deployments/#{payload['id']}/statuses"
+    response = http_post "https://api.github.com#{deployment_path}" do |req|
+      req.headers.merge!(default_github_headers)
+      req.body = JSON.dump(deployment_status_options)
+    end
+    raise_config_error("Unable to post deployment statuses back to the GitHub API.") unless response.success?
+  end
+
+  def aws_opsworks_output_url
+    "https://console.aws.amazon.com/opsworks/home?#/stack/%s/apps/%s/" % [ stack_id, app_id ]
+  end
+
+  def default_github_headers
+    {
+      'Accept'        => "application/vnd.github.cannonball-preview+json",
+      'User-Agent'    => "Operation: California",
+      'Content-Type'  => "application/json",
+      'Authorization' => "token #{required_config_value('github_token')}"
+    }
+  end
+
+  def github_repo_path
+    payload['repository']['full_name']
   end
 
   def configured_branch_name
