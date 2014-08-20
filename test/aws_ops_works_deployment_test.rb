@@ -4,6 +4,7 @@ class AwsOpsWorksDeploymentTest < Service::TestCase
   include Service::HttpTestMethods
 
   def setup
+    super
     AWS.stub!
   end
 
