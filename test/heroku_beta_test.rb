@@ -60,7 +60,7 @@ class HerokuBetaTest < Service::TestCase
     end
 
     github_post_body = {
-      "state"       => "pending",
+      "state"       => "success",
       "target_url"  => heroku_build_url,
       "description" => "Created by GitHub Services@#{Service.current_sha[0..7]}"
     }
@@ -104,7 +104,7 @@ class HerokuBetaTest < Service::TestCase
     end
 
     github_post_body = {
-      "state"       => "pending",
+      "state"       => "success",
       "target_url"  => heroku_build_url,
       "description" => "Created by GitHub Services@#{Service.current_sha[0..7]}"
     }

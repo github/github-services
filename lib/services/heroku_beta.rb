@@ -80,7 +80,7 @@ class Service::HerokuBeta < Service::HttpPost
 
     build_id = JSON.parse(response.body)['id']
     deployment_status_options = {
-      "state"       => "pending",
+      "state"       => "success",
       "target_url"  => heroku_build_output_url(build_id),
       "description" => "Created by GitHub Services@#{Service.current_sha[0..7]}"
     }

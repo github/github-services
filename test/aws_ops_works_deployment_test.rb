@@ -1,13 +1,15 @@
 require File.expand_path('../helper', __FILE__)
 
 class AwsOpsWorksDeploymentTest < Service::TestCase
+  include Service::HttpTestMethods
 
   def setup
+    super
     AWS.stub!
   end
 
   def test_stack_id_sent
-    response = service.receive_event
+    response = aws_service.receive_event
     assert_equal sample_data['stack_id'], response.request_options[:stack_id]
   end
 
@@ -20,14 +22,14 @@ class AwsOpsWorksDeploymentTest < Service::TestCase
   end
 
   def test_stack_id_missing
-    svc = service(sample_data.except('stack_id'))
+    svc = aws_service(sample_data.except('stack_id'))
     assert_raise Service::ConfigurationError do
       svc.receive_event
     end
   end
 
   def test_app_id_sent
-    response = service.receive_event
+    response = aws_service.receive_event
     assert_equal sample_data['app_id'], response.request_options[:app_id]
   end
 
@@ -39,38 +41,66 @@ class AwsOpsWorksDeploymentTest < Service::TestCase
   end
 
   def test_app_id_missing
-    svc = service(sample_data.except('app_id'))
+    svc = aws_service(sample_data.except('app_id'))
     assert_raise Service::ConfigurationError do
       svc.receive_event
     end
   end
 
   def test_aws_access_key_id_configured
-    config = service.ops_works_client.config
+    config = aws_service.ops_works_client.config
     assert_equal sample_data['aws_access_key_id'], config.access_key_id
   end
 
   def test_aws_access_key_id_missing
-    svc = service(sample_data.except('aws_access_key_id'))
+    svc = aws_service(sample_data.except('aws_access_key_id'))
     assert_raise Service::ConfigurationError do
       svc.receive_event
     end
   end
 
   def test_aws_secret_access_key_configured
-    config = service.ops_works_client.config
+    config = aws_service.ops_works_client.config
     assert_equal sample_data['aws_secret_access_key'], config.secret_access_key
   end
 
   def test_aws_secret_access_key_missing
-    svc = service(sample_data.except('aws_secret_access_key'))
+    svc = aws_service(sample_data.except('aws_secret_access_key'))
     assert_raise Service::ConfigurationError do
       svc.receive_event
     end
   end
 
-  def service(data = sample_data, payload = sample_payload)
+  def test_github_deployment_status_callbacks
+    github_post_body = {
+      "state"       => "success",
+      "target_url"  => "https://console.aws.amazon.com/opsworks/home?#/stack/12345678-1234-1234-1234-123456789012/apps/01234567-0123-0123-0123-012345678901/",
+      "description" => "Deployment 721 Accepted by Amazon. (github-services@#{Service.current_sha[0..7]})"
+    }
+
+    github_deployment_path = "/repos/atmos/my-robot/deployments/721/statuses"
+    @stubs.post github_deployment_path do |env|
+      assert_equal 'api.github.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
+      assert_equal github_post_body, JSON.parse(env[:body])
+      [200, {}, '']
+    end
+
+    custom_sample_data = sample_data.merge('github_token' => 'secret')
+    svc = service(:deployment, custom_sample_data, environmental_payload)
+    response = svc.receive_event
+    app_id = opsworks_deployment_environments['staging']['app_id']
+    assert_equal app_id, response.request_options[:app_id]
+
+    @stubs.verify_stubbed_calls
+  end
+
+  def aws_service(data = sample_data, payload = sample_payload)
     Service::AwsOpsWorks.new(:deployment, data, payload)
+  end
+
+  def service_class
+    Service::AwsOpsWorks
   end
 
   def sample_data
