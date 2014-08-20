@@ -7,7 +7,7 @@ class Service::AwsOpsWorks < Service::HttpPost
              :stack_id,             # see StackId at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_Stack.html
              :branch_name,          # see Revision at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_Source.html
              :aws_access_key_id     # see AWSAccessKeyID at http://docs.aws.amazon.com/opsworks/latest/APIReference/CommonParameters.html
-  password   :aws_secret_access_key
+  password   :aws_secret_access_key, :github_token
 
   white_list :app_id,
              :stack_id,
