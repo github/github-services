@@ -75,7 +75,7 @@ class Service::AwsOpsWorks < Service::HttpPost
     deployment_status_options = {
       "state"       => "success",
       "target_url"  => aws_opsworks_output_url,
-      "description" => "Deployment #{deployment_id} Accepted by Amazon. (github-services@#{Service.current_sha[0..7]})"
+      "description" => "Deployment #{payload['id']} Accepted by Amazon. (github-services@#{Service.current_sha[0..7]})"
     }
 
     deployment_path = "/repos/#{github_repo_path}/deployments/#{payload['id']}/statuses"
