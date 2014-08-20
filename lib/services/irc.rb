@@ -1,5 +1,5 @@
 class Service::IRC < Service
-  string   :server, :port, :room, :nick, :branch_regexes, :nickserv_password
+  string   :server, :port, :room, :nick, :branches, :nickserv_password
   password :password
   boolean  :ssl, :message_without_join, :no_colors, :long_url, :notice
   white_list :server, :port, :room, :nick
@@ -317,12 +317,8 @@ class Service::IRC < Service
   end
 
   def branch_name_matches?
-    return true if data['branch_regexes'].nil?
-    return true if data['branch_regexes'].strip == ""
-    branch_regexes = data['branch_regexes'].split(',')
-    branch_regexes.each do |regex|
-      return true if Regexp.new(regex) =~ branch_name
-    end
-    false
+    return true if data['branches'].nil?
+    return true if data['branches'].strip == ""
+    data['branches'].split(',').include?(branch_name)
   end
 end
