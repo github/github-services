@@ -74,7 +74,7 @@ class AwsOpsWorksDeploymentTest < Service::TestCase
   def test_github_deployment_status_callbacks
     github_post_body = {
       "state"       => "success",
-      "target_url"  => "https://console.aws.amazon.com/opsworks/home?#/stack/12345678-1234-1234-1234-123456789012/apps/01234567-0123-0123-0123-012345678901/",
+      "target_url"  => "https://console.aws.amazon.com/opsworks/home?#/stack/12345678-1234-1234-1234-123456789012/deployments",
       "description" => "Deployment 721 Accepted by Amazon. (github-services@#{Service.current_sha[0..7]})"
     }
 

@@ -87,7 +87,7 @@ class Service::AwsOpsWorks < Service::HttpPost
   end
 
   def aws_opsworks_output_url
-    "https://console.aws.amazon.com/opsworks/home?#/stack/%s/apps/%s/" % [ stack_id, app_id ]
+    "https://console.aws.amazon.com/opsworks/home?#/stack/#{stack_id}/deployments"
   end
 
   def default_github_headers
