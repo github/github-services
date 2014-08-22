@@ -62,6 +62,11 @@ class Service::Bugzilla < Service
     # XMLRPC client to communicate with Bugzilla server
     @xmlrpc_client ||= begin
       client = XMLRPC::Client.new2("#{data['server_url'].to_s}/xmlrpc.cgi")
+
+      # Workaround for XMLRPC bug - https://bugs.ruby-lang.org/issues/8182
+      # Should no longer be needed when we start running Ruby 2.2
+      client.http_header_extra = {"accept-encoding" => "identity"}
+
       result = client.call('User.login', {'login' => data['username'].to_s, 'password' => data['password'].to_s})
       @token = result['token']
       client
