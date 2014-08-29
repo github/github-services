@@ -52,6 +52,32 @@ class TwitterTest < Service::TestCase
     end
   end
 
+  # Make sure that github @mentions are injected with a zero-width space
+  # so that they don't turn into (potentially unmatching) twitter @mentionds
+  def test_mentions
+    p = payload
+    p['commits'][0]['message']="This commit was done by @sgolemon"
+    p['commits'][1]['message']="@sgolemon committed this"
+    p['commits'][2]['message']="@sgolemon made a test for @kdaigle"
+    svc = service({'token' => 't', 'secret' => 's'}, p)
+
+    def svc.statuses
+      @statuses ||= []
+    end
+
+    def svc.post(status)
+      statuses << status
+    end
+
+    svc.receive_push
+    assert_equal 3, svc.statuses.size
+    svc.statuses.each do |st|
+      # Any @ which is not followed by U+200B ZERO WIDTH SPACE
+      # is an error
+      assert !st.match('@(?!\u200b)')
+    end
+  end
+
   def service(*args)
     super Service::Twitter, *args
   end

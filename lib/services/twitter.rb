@@ -29,11 +29,15 @@ class Service::Twitter < Service
       payload['commits'].each do |commit|
         author = commit['author'] || {}
         url = commit['url']
-        status = "[#{repository}] #{url} #{author['name']} - #{commit['message']}"
+        # Strip out leading @s so that github @ mentions don't become twitter @ mentions
+        # since there's zero reason to believe IDs on one side match IDs on the other
+        message = commit['message'].split(' ').map do |word|
+          (word.length > 1 && word[0] == '@') ? "@\u200b#{word[1..word.length]}" : word
+        end.join(' ')
         status = if data['short_format'] == '1'
-          "#{url} #{commit['message']}"
+          "#{url} #{message}"
         else
-          "[#{repository}] #{url} #{author['name']} - #{commit['message']}"
+          "[#{repository}] #{url} #{author['name']} - #{message}"
         end
         length = status.length - url.length + TWITTER_SHORT_URL_LENGTH_HTTPS # The URL is going to be shortened by twitter. It's length will be at most 23 chars (HTTPS).
         # How many chars of the status can we actually use?
