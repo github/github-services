@@ -71,7 +71,9 @@ class Service::Trello < Service
   end
 
   def ignore_commit? commit
-    ignore_regex && ignore_regex.match(commit['message'])
+    Service::Timeout.timeout(0.500, TimeoutError) do
+      ignore_regex && ignore_regex.match(commit['message'])
+    end
   end
 
   def truncate_message(message)
