@@ -1,8 +1,8 @@
-= XMPP MUC =
+# XMPP MUC
 
 This service will connect to an XMPP MUC room with the provided details and then post a status update. It then immediately disconnects from the room.
 
-== Configuration ==
+## Configuration
 
 1. **JID** - The JID (Jabber ID) with which to connect to the XMPP server
 2. **Password** - Password
@@ -12,7 +12,7 @@ This service will connect to an XMPP MUC room with the provided details and then
 6. **Room password** - The password (if required) to join the MUC room
 7. **Restrict to Branch** - List of branches which will be inspected.
 
-=== Options ===
+### Options
 
 1. **Active** - Master on/off switch
 2. **Notify wiki** - Get notifications of wiki events
@@ -21,7 +21,7 @@ This service will connect to an XMPP MUC room with the provided details and then
 5. **Notify issues** - Get notifications on issues
 6. **Notify pull requests** - Get notifications of pull requests
 
-== Notes ==
+## Notes
 
 You may wish to reserve the nickname for the user in question so that it will 
 always be able to connect to the room.
