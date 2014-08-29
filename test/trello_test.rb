@@ -50,6 +50,16 @@ class TrelloTest < Service::TestCase
     assert_no_cards_created svc
   end
 
+  def test_ignore_regex_timeout
+    push_payload = Service::PushHelpers.sample_payload
+    push_payload["commits"].first.merge!("message" => "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaZ")
+    svc = service @data.merge!("ignore_regex" => "(a+)+$"), push_payload
+
+    assert_raises(Service::TimeoutError) do
+      call_hook_on_service svc, :push
+    end
+  end
+
   def test_no_ignore_regex
     svc = service :push, @data.merge!("ignore_regex" => "")
     assert_cards_created svc
