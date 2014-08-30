@@ -416,6 +416,20 @@ class Service
     # Returns nothing.
     attr_writer :email_config
 
+    # Check whether the service is deployed inside a GitHub Enterprise installation.
+    #
+    # Returns true for GitHub Enterprise installations.
+    def enterprise?
+      !!ENV["ENTERPRISE"]
+    end
+
+    # Configuration that only applies within a GitHub Enterprise installation.
+    #
+    # Returns nothing.
+    def within_enterprise
+      yield if enterprise?
+    end
+
     # Binds the current Service to the Sinatra App.
     #
     # Returns nothing.
@@ -827,6 +841,20 @@ class Service
       },
       :adapter => env[:adapter]
     }
+  end
+
+  # Public: GitHub Enterprise installation url.
+  #
+  # Returns a url as a string when the service is deployed inside a GitHub Enterprise installation.
+  def github_enterprise_url
+    ENV["ENTERPRISE_HOOKSHOT_URL"]
+  end
+
+  # Public: Check whether the service is deployed inside a GitHub Enterprise installation.
+  #
+  # Returns true for GitHub Enterprise installations.
+  def enterprise?
+    self.class.enterprise?
   end
 
   # Raised when an unexpected error occurs during service hook execution.
