@@ -84,15 +84,15 @@ class Service::XmppMuc < Service::HttpPost
           @client.auth(@data['password'])
           ::Jabber::debug = true
           @muc = ::Jabber::MUC::MUCClient.new(@client)
-          @muc.join(::Jabber::JID.new(@data['muc_room']), @data['password'])
+          @muc.join(::Jabber::JID.new(@data['muc_room']), @data['room_password'])
         rescue ::Jabber::ErrorResponse
           raise_config_error 'Error response'
         rescue ::Jabber::ClientAuthenticationFailure
           raise_config_error 'Authentication error'
         rescue ::Jabber::JabberError
-          raise_config_error 'XMPP Error: #{$!.to_s}'
-        else
-          raise_config_error 'Unknown error: #{$!.to_s}'
+          raise_config_error "XMPP Error: #{$!.to_s}"
+        rescue StandardError => e
+          raise_config_error "Unknown error: #{$!.to_s}"
         end
       end
       @muc
