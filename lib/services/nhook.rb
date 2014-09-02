@@ -1,5 +1,5 @@
 class Service::NHook < Service
-  string :apiKey
+  string :api_key
 
   url 'http://www.nhook.net'
   logo_url 'http://nhook.net/content/images/logo.png'
@@ -14,10 +14,10 @@ class Service::NHook < Service
     :twitter => '@aquiladev'
 
   def receive_push
-    apiKey = data['api_key']
-    raise_config_error 'Missing ApiKey' if apiKey.to_s.empty?
+    api_key = data['api_key']
+    raise_config_error 'Missing ApiKey' if api_key.to_s.empty?
 
-    url = "http://nhapis.azurewebsites.net/github/#{apiKey}"
+    url = "http://nhapis.azurewebsites.net/github/#{api_key}"
     http.headers['Content-Type'] = 'application/json'
     http_post url, generate_json(payload)
   end
