@@ -3,8 +3,9 @@ class Service::AutoDeploy < Service::HttpPost
   string   :environments
   boolean  :deploy_on_status
   string   :status_contexts
+  string   :github_api_url
 
-  white_list :environments, :deploy_on_status, :contexts
+  white_list :environments, :deploy_on_status, :contexts, :github_api_url
 
   default_events :push, :status
 
@@ -131,9 +132,17 @@ class Service::AutoDeploy < Service::HttpPost
     end
   end
 
+  def api_url
+    if config_value("github_api_url").empty?
+      "https://api.github.com"
+    else
+      config_value("github_api_url")
+    end
+  end
+
   def create_deployment_for_options(options)
     deployment_path = "/repos/#{github_repo_path}/deployments"
-    response = http_post "https://api.github.com#{deployment_path}" do |req|
+    response = http_post "#{api_url}#{deployment_path}" do |req|
       req.headers.merge!(default_github_headers)
       req.body = JSON.dump(options)
     end
@@ -166,7 +175,7 @@ class Service::AutoDeploy < Service::HttpPost
   end
 
   def github_get(path)
-    http_get "https://api.github.com#{path}" do |req|
+    http_get "#{api_url}#{path}" do |req|
       req.headers.merge!(default_github_headers)
     end
   end
