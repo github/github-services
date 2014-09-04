@@ -11,16 +11,16 @@ class AutoDeployTest < Service::TestCase
     }
   end
 
-  def auto_deploy_on_status_service_data
-    auto_deploy_on_push_service_data.merge 'deploy_on_status' => '1'
+  def auto_deploy_on_status_service_data(options = { })
+    auto_deploy_on_push_service_data.merge options.merge('deploy_on_status' => '1')
   end
 
   def auto_deploy_on_push_service
     service(:push, auto_deploy_on_push_service_data, push_payload)
   end
 
-  def auto_deploy_on_status_service
-    service(:status, auto_deploy_on_status_service_data, status_payload)
+  def auto_deploy_on_status_service(options = { })
+    service(:status, auto_deploy_on_status_service_data(options), status_payload)
   end
 
   def test_unsupported_deployment_events
@@ -86,6 +86,47 @@ class AutoDeployTest < Service::TestCase
     end
 
     auto_deploy_on_status_service.receive_event
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_status_deployment_configured_properly_on_enterprise
+    services_sha = Service.current_sha[0..7]
+
+    github_post_body = {
+      "ref"               => "7b80eb10",
+      "payload"           => {"hi"=>"haters"},
+      "environment"       => "production",
+      "description"       => "Auto-Deployed on status by GitHub Services@#{services_sha} for rtomayko - master@7b80eb10",
+      "required_contexts" => [ ],
+    }
+
+    github_deployment_path = "/repos/mojombo/grit/deployments"
+    @stubs.post github_deployment_path do |env|
+      assert_equal 'enterprise.myorg.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
+      assert_equal github_post_body, JSON.parse(env[:body])
+      [200, {}, '']
+    end
+
+    @stubs.get "/user" do |env|
+      assert_equal 'enterprise.myorg.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
+      assert_equal "token #{github_token}", env[:request_headers]['Authorization']
+      [200, {}, '']
+    end
+
+    deployment_history = [{'environment' => 'staging',    'id' => 42},
+                          {'environment' => 'production', 'id' => 43, 'payload' => {'hi' => 'haters'}}].to_json
+
+    @stubs.get "/repos/mojombo/grit/deployments" do |env|
+      assert_equal 'enterprise.myorg.com', env[:url].host
+      assert_equal 'https', env[:url].scheme
+      assert_equal "token #{github_token}", env[:request_headers]['Authorization']
+      headers = {"X-OAuth-Scopes" => "repo,deployment" }
+      [200, headers, deployment_history]
+    end
+
+    auto_deploy_on_status_service('github_api_url' => 'https://enterprise.myorg.com').receive_event
     @stubs.verify_stubbed_calls
   end
 
