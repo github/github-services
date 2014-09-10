@@ -5,7 +5,10 @@ Install Notes
   2. You're going to be redirected to Twitter to allow GitHub to tweet on your behalf.
   3. Be sure that you're logged in as the Twitter user you would like to tweet from.
 
-Check "short format" to omit the repository and commiter's names from the tweet to get more
+Check "Digest" to send only the number of recent commits to a branch along with a link to that branches
+commit list, instead of tweeting all commits individually with their message and direct link to each commit.
+
+Check "Short format" to omit the repository and commiter's names from the tweet to get more
 space for the commit message.
 
 [authorize_url]: <%= twitter_oauth_path(current_repository.user, current_repository) %>
