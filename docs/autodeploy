@@ -1,4 +1,4 @@
-This service automatically creates deployments based on your [workflow](http://www.atmos.org/auto-deployment).
+This service automatically creates deployments based on your [workflow](http://www.atmos.org/github-services/auto-deployment/).
 
 By enabling this hook, GitHub will request a [GitHub Deployment][1] when the default branch is pushed to or your tests suite passes certain criteria.
 
