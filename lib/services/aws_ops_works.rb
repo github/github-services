@@ -6,12 +6,14 @@ class Service::AwsOpsWorks < Service::HttpPost
   string     :app_id,               # see AppId at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_App.html
              :stack_id,             # see StackId at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_Stack.html
              :branch_name,          # see Revision at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_Source.html
+             :github_api_url,       # The github API endpoint to post DeploymentStatus callbacks to
              :aws_access_key_id     # see AWSAccessKeyID at http://docs.aws.amazon.com/opsworks/latest/APIReference/CommonParameters.html
   password   :aws_secret_access_key, :github_token
 
   white_list :app_id,
              :stack_id,
              :branch_name,
+             :github_api_url,
              :aws_access_key_id
 
   default_events :push, :deployment
@@ -79,7 +81,7 @@ class Service::AwsOpsWorks < Service::HttpPost
     }
 
     deployment_path = "/repos/#{github_repo_path}/deployments/#{payload['id']}/statuses"
-    response = http_post "https://api.github.com#{deployment_path}" do |req|
+    response = http_post "#{github_api_url}#{deployment_path}" do |req|
       req.headers.merge!(default_github_headers)
       req.body = JSON.dump(deployment_status_options)
     end
@@ -123,5 +125,13 @@ class Service::AwsOpsWorks < Service::HttpPost
   def ops_works_client
     AWS::OpsWorks::Client.new access_key_id:     required_config_value('aws_access_key_id'),
                               secret_access_key: required_config_value('aws_secret_access_key')
+  end
+
+  def github_api_url
+    if config_value("github_api_url").empty?
+      "https://api.github.com"
+    else
+      config_value("github_api_url")
+    end
   end
 end

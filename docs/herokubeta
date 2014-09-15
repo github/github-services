@@ -14,3 +14,4 @@ Install Notes
 1. `name` The application name on heroku to deploy to.
 2. `heroku_token` A user or [direct authorization](https://devcenter.heroku.com/articles/oauth#direct-authorization) token from heroku.
 3. `github_token` A [personal access token](https://github.com/settings/applications) from GitHub with the `repo` scope. We generate an [archive link](https://developer.github.com/v3/repos/contents/#get-archive-link) for the heroku API with it.
+4. `github_api_url` The URL for the GitHub API. Override this for enterprise. **Optional** e.g. `https://enterprise.myorg.com`.
