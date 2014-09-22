@@ -37,7 +37,7 @@ class AutoDeployTest < Service::TestCase
     services_sha = Service.current_sha[0..7]
 
     github_post_body = {
-      "ref"               => "a47fd41f",
+      "ref"               => "master",
       "payload"           => {"hi"=>"haters"},
       "environment"       => "production",
       "description"       => "Auto-Deployed on push by GitHub Services@#{services_sha} for rtomayko - master@a47fd41f",
@@ -70,7 +70,7 @@ class AutoDeployTest < Service::TestCase
     services_sha = Service.current_sha[0..7]
 
     github_post_body = {
-      "ref"               => "7b80eb10",
+      "ref"               => "master",
       "payload"           => {"hi"=>"haters"},
       "environment"       => "production",
       "description"       => "Auto-Deployed on status by GitHub Services@#{services_sha} for rtomayko - master@7b80eb10",
@@ -93,7 +93,7 @@ class AutoDeployTest < Service::TestCase
     services_sha = Service.current_sha[0..7]
 
     github_post_body = {
-      "ref"               => "7b80eb10",
+      "ref"               => "master",
       "payload"           => {"hi"=>"haters"},
       "environment"       => "production",
       "description"       => "Auto-Deployed on status by GitHub Services@#{services_sha} for rtomayko - master@7b80eb10",
