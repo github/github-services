@@ -56,7 +56,7 @@ class Service::AwsOpsWorks < Service::HttpPost
 
     case event.to_s
     when 'deployment'
-      update_app_revision(payload_ref_name)
+      update_app_revision(deployment_ref_name)
       app_deployment = create_deployment
       update_deployment_statuses(app_deployment)
       app_deployment
@@ -109,7 +109,7 @@ class Service::AwsOpsWorks < Service::HttpPost
     required_config_value('branch_name')
   end
 
-  def payload_ref_name
+  def deployment_ref_name
     payload['ref']
   end
 
