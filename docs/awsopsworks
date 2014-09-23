@@ -27,5 +27,5 @@ Install Notes
 3. **Branch Name** (required) - "Branch/Revision" configured for that app in the AWS OpsWorks Console or see `Revision` at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_Source.html
 4. **Aws Access Key Id** (required) - Access key id of an AWS IAM user having the permission for the `opsworks:CreateDeployment` action.
 5. **Aws Secret Access Key** (required) - Corresponding secret access key of the AWS IAM user.
-6. **GitHub Token** (Optional) - A GitHub personal access token with `repo_deployment` scope to post deployment statuses back via the API.
+6. **GitHub Token** (Optional) - A GitHub personal access token with `repo` scope to for OAuth cloning and deployment statuses for the GitHub API.
 7. **GitHub API Url** (Optional) - The URL for the GitHub API. Override this for enterprise. e.g. `https://enterprise.myorg.com`.
