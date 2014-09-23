@@ -102,7 +102,7 @@ class Service::AutoDeploy < Service::HttpPost
 
     environment_names.each do |environment_name|
       deployment_options = {
-        "ref"               => default_branch,
+        "ref"               => sha,
         "payload"           => last_deployment_payload_for(environment_name),
         "environment"       => environment_name,
         "description"       => push_deployment_description,
@@ -121,7 +121,7 @@ class Service::AutoDeploy < Service::HttpPost
     if status_payload_contains_default_branch?
       environment_names.each do |environment_name|
         deployment_options = {
-          "ref"               => default_branch,
+          "ref"               => sha,
           "payload"           => last_deployment_payload_for(environment_name),
           "environment"       => environment_name,
           "description"       => status_deployment_description,
