@@ -56,7 +56,7 @@ class Service::AwsOpsWorks < Service::HttpPost
 
     case event.to_s
     when 'deployment'
-      update_app_revision(ref_name)
+      update_app_revision(payload_ref_name)
       app_deployment = create_deployment
       update_deployment_statuses(app_deployment)
       app_deployment
@@ -109,12 +109,22 @@ class Service::AwsOpsWorks < Service::HttpPost
     required_config_value('branch_name')
   end
 
-  def ref_name
+  def payload_ref_name
     payload['ref']
   end
 
   def update_app_revision(revision_name)
-    ops_works_client.update_app app_id: app_id, app_source: { revision: revision_name }
+    app_source = { revision: revision_name }
+    if config_value('github_token') && !config_value('github_token').empty?
+      app_source = {
+        url: "#{github_api_url}/repos/#{github_repo_path}/zipball/#{revision_name}",
+        type: "archive",
+        username: required_config_value("github_token"),
+        password: "x-oauth-basic",
+        revision: revision_name
+      }
+    end
+    ops_works_client.update_app app_id: app_id, app_source: app_source
   end
 
   def create_deployment
