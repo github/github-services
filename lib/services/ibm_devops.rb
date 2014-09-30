@@ -12,7 +12,6 @@ class Service::IBMDevOpsServices < Service::HttpPost
   supported_by :web => "https://hub.jazz.net/support", :email => "hub@jazz.net", :twitter => "@JazzHub"
   
   def receive_push
-    http.ssl[:verify] = false
     username = required_config_value('ibm_id')
     password = required_config_value('ibm_password')
     override_server_url = data['override_server_url']
