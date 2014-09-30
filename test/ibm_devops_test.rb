@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class RationalJazzhubTest < Service::TestCase
+class IBMDevOpsServicesTest < Service::TestCase
   def setup
     @stubs= Faraday::Adapter::Test::Stubs.new
     @Pushes= 0
@@ -8,8 +8,8 @@ class RationalJazzhubTest < Service::TestCase
 
   def test_push
     svc = service(
-      {'username' => username,
-       'password' => password},
+      {'ibm_id' => username,
+       'ibm_password' => password},
         payload)
 
     @stubs.post "/manage/processGitHubPayload" do |env|
@@ -68,6 +68,6 @@ class RationalJazzhubTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::RationalJazzHub, *args
+    super Service::IBMDevOpsServices, *args
   end
 end
