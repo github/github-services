@@ -12,6 +12,6 @@ Install Notes
 
 The IBM DevOps Services' hook needs to be configured with your IBM login info:
 
-1. IBM ID - This is the ibm.com ID of the user used to access JazzHub.
-2. IBM Password - This is the password of the user used to access JazzHub.
-3. Project Membership - The configured user needs to be a member of the JazzHub project.
+1. IBM ID - This is the ibm.com ID of the user used to access IBM DevOps.
+2. IBM Password - This is the password of the user used to access IBM DevOps.
+3. Project Membership - The configured user needs to be a member of the IBM DevOps project.
