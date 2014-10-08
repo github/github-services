@@ -17,6 +17,7 @@ namespace :services do
 
   desc "Writes a JSON config to FILE || config/services.json"
   task :config => :load do
+    sha = `git rev-parse HEAD`[0..7]
     file = ENV["FILE"] || default_services_config
     services = []
     Service.load_services
@@ -26,7 +27,7 @@ namespace :services do
     end
     services.sort! { |x, y| x[:name] <=> y[:name] }
     data = {
-      :metadata => { :generated_at => Time.now.utc },
+      :metadata => { :generated_at => Time.now.utc, :sha => sha },
       :services => services
     }
     puts "Writing config to #{file}"
