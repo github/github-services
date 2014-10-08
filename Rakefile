@@ -17,7 +17,7 @@ namespace :services do
 
   desc "Writes a JSON config to FILE || config/services.json"
   task :config => :load do
-    sha = `git rev-parse HEAD`[0..7]
+    sha = `git rev-parse HEAD`
     file = ENV["FILE"] || default_services_config
     services = []
     Service.load_services
