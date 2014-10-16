@@ -19,10 +19,12 @@ class Service::RationalJazzHub < Service::HttpPost
     case @response.status
       when 200, 201, 304
         # OK
-      when 401, 403 then 
+      when 401 then 
         raise_config_error("Authentication failed for #{@request[:username]}: Status=#{@response.status}, Message=#{@response.body}")
+      when 403 then 
+      	  raise_config_error("Authorization failure: Status=#{@response.status}, Message=#{@response.body}")
       when 404 then 
-        raise_config_error("Invalid server URL provided #{@request[:server_url]}")
+      	  raise_config_error("Invalid git repo URL provided: Status=#{@response.status}, Message=#{@response.body}")
       else
         raise_config_error("HTTP Error: Status=#{@response.status}, Message=#{@response.body}")
     end
