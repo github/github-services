@@ -6,7 +6,7 @@ class Service::Pushover < Service
   default_events :push, :issues, :issue_comment, :commit_comment,
     :pull_request, :pull_request_review_comment
 
-  url = URI.parse('https://pushover.net/')
+  url = URI.parse('https://api.pushover.net/1/messages.json')
   logo_url 'https://pushover.net/images/icon-96.png'
 
   def receive_event
