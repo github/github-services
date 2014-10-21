@@ -1,0 +1,23 @@
+Foxytask allow to manage your GitHub issues.
+You can :
+ - order issues
+ - change issue milestone by drag & drop
+ - estimate issues
+ - add milestone capacity
+ - have an overview of your project advancement
+
+This service hook will inform Foxytask every time you create or modify an issue in GitHub.
+
+Install Notes
+-------------
+
+Foxytask will install this hook automatically on sign up. However, if creating the service didn't succeed or you accidentally deleted it, you can also install it manually.
+
+1.  Sign in at https://www.foxytask.com/ (you can sign in with GitHub)
+2.  If the service wasn't set: Go to your project's settings and copy the project uuid.
+3.  Paste the  project uuid into the text field above.
+4.  Make sure the "Active" checkbox is ticked, and click "Update Settings".
+5.  Click on the "Foxytask" service name and then click the "Test Hook" link.
+6.  Now there's a running build on your Foxytask dashboard.
+
+Check out more details on Foxytask at https://www.foxytask.com 
