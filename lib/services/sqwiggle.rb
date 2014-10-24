@@ -6,7 +6,7 @@ class Service::Sqwiggle < Service::HttpPost
   white_list :room
 
   #accept all events and filter on sqwiggle servers so we can add events as
-  #requested without the need to wait on Github PR's
+  #requested without the need to wait on GitHub PR's
   default_events Service::ALL_EVENTS
 
   url "https://www.sqwiggle.com"

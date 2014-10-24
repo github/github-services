@@ -1,4 +1,4 @@
-This service posts an event object for Github events to a Simperium app.
+This service posts an event object for GitHub events to a Simperium app.
 A Simperium object is created for each hook event in a bucket you choose.
 
 Supported events are currently:
@@ -13,7 +13,7 @@ Data:
 'event' - The github event type, eg. 'push' for commits
 'payload' - The data for the event, varies by event type.
 
-More details on Github events: http://developer.github.com/v3/repos/hooks/
+More details on GitHub events: http://developer.github.com/v3/repos/hooks/
 
 Install Notes
 ------------

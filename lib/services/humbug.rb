@@ -61,7 +61,7 @@ class Service::Humbug < Service
 
           :event => event,
           :payload => generate_json(payload),
-          # The Github payload version. Unspecified means an implicit version 1
+          # The GitHub payload version. Unspecified means an implicit version 1
           :version => '2',
           :client => 'ZulipGitHubWebhook'
 
