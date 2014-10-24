@@ -10,7 +10,7 @@ Simperium IDs:
 Each object ID will be a guid, eg. 'guid-0.3939192'
 
 Data:
-'event' - The github event type, eg. 'push' for commits
+'event' - The GitHub event type, eg. 'push' for commits
 'payload' - The data for the event, varies by event type.
 
 More details on GitHub events: http://developer.github.com/v3/repos/hooks/
