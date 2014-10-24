@@ -1,4 +1,4 @@
-This service posts an event object for Github events to [tinyPM][tinyPM_link] application.
+This service posts an event object for GitHub events to [tinyPM][tinyPM_link] application.
 
 [tinyPM][tinyPM_link] is an agile collaboration tool with product management, backlog, taskboard, user stories and wiki. Web-based and internationalized.
 

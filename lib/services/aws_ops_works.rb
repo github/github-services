@@ -6,7 +6,7 @@ class Service::AwsOpsWorks < Service::HttpPost
   string     :app_id,               # see AppId at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_App.html
              :stack_id,             # see StackId at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_Stack.html
              :branch_name,          # see Revision at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_Source.html
-             :github_api_url,       # The github API endpoint to post DeploymentStatus callbacks to
+             :github_api_url,       # The GitHub API endpoint to post DeploymentStatus callbacks to
              :aws_access_key_id     # see AWSAccessKeyID at http://docs.aws.amazon.com/opsworks/latest/APIReference/CommonParameters.html
   password   :aws_secret_access_key, :github_token
 
