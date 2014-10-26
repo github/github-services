@@ -33,9 +33,22 @@ Commands are applied to issues, associated with commit or pull request.
   
   - Password: a password of YouTrack Username. Username should have Admin role.
 
-* Walkthrough video: http://www.youtube.com/watch?v=0iK1J_fWhns
- 
+
+* Additional Information
+
+  - [Introduction to invoke YouTrack commands by GitHub comments](http://blog.jetbrains.com/youtrack/2011/04/integrate-youtrack-with-github/)
+  
+  - [Official integration documentation](http://confluence.jetbrains.com/display/YTD5/GitHub+Integration)
+  
+  - [Setup walkthrough video](http://www.youtube.com/watch?v=0iK1J_fWhns)
+  
+  - [YouTrack commands grammar](http://confluence.jetbrains.com/display/YTD5/Command+Grammar)
+
+
 * Troubleshooting
+
   - GitHub hook errors
-    - Authentication problem: You may have to regenerate token in `GibHub > Applications > Personal access tokens` menu and enter it at YouTrack project settings > GitHub > Edit menu.
-    - 400: Failed to parse YouTrack commands from GitHub commit comments.
+  
+    - Authentication problem: You may have to regenerate token in `GibHub > Applications > Personal access tokens` menu and enter it at YouTrack project `settings > GitHub > Edit` menu.
+    
+    - 400: Failed to parse YouTrack commands from GitHub commit comments. [Related answer](http://stackoverflow.com/a/26540723/361100)
