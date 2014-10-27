@@ -2,10 +2,19 @@ class Service::Twitter < Service
   password  :token, :secret
   boolean :digest, :short_format
   TWITTER_SHORT_URL_LENGTH_HTTPS = 23
+  
+  white_list: :filter_branch
 
   def receive_push
     return unless payload['commits']
 
+    filter_branch = data['filter_branch'].to_s
+
+    # If filtering by branch then don't make a post
+    if (filter_branch.length > 0) && (filter_branch.index(commit_branch) == nil)
+      return false
+    end
+    
     statuses   = []
     repository = payload['repository']['name']
 
