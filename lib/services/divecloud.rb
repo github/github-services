@@ -1,6 +1,5 @@
 class Service::DiveCloud < Service::HttpPost
   title 'DiveCloud - Application Performance Testing'
-  hook_name 'Github Plugin Service' #Internal reference
   url "https://divecloud.nouvola.com"
   logo_url "http://www.nouvola.com/wp-content/uploads/2014/01/nouvola_logo_reg1.png"
   
