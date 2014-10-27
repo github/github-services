@@ -6,7 +6,7 @@ class Service::RDocInfo < Service::HttpPost
 
   maintained_by :github => 'zapnap'
 
-  self.title = 'Rdocinfo'
+  supported_by :web => 'http://www.rubydoc.info', :github => 'zapnap'
 
   def receive_event
     deliver 'http://www.rubydoc.info/checkout'
