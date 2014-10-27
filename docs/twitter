@@ -8,4 +8,7 @@ Install Notes
 Check "short format" to omit the repository and commiter's names from the tweet to get more
 space for the commit message.
 
+If you would like to restrict to a branch then add the name, otherwise blank means 'all'.
+
+
 [authorize_url]: <%= twitter_oauth_path(current_repository.user, current_repository) %>
