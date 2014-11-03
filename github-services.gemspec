@@ -25,19 +25,19 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mash",                   "~> 0.1.1"
   spec.add_dependency "mime-types",             "~> 1.15"
   spec.add_dependency "ruby-hmac",              "0.4.0"
-  spec.add_dependency "faraday",                "0.8.7"
+  spec.add_dependency "faraday",                "0.9.0"
 
   # Basecamp Classic
-  spec.add_dependency "activeresource",         "~> 3.0.0"
+  spec.add_dependency "activeresource",         "~> 4.0.0"
 
   # Twitter
   spec.add_dependency "oauth",                  "0.4.4"
 
   # MaxCDN
-  spec.add_dependency "maxcdn",                  "~> 0.1.6"
+  spec.add_dependency "maxcdn",                  "~> 0.2.0"
 
   # Campfire
-  spec.add_dependency "tinder",                 "1.8.0.github"
+  spec.add_dependency "tinder",                 "1.10.0"
 
   # Bamboo, Buddycloud
   spec.add_dependency "xml-simple",             "1.0.11"
