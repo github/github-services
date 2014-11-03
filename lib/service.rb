@@ -649,9 +649,10 @@ class Service
       end
       options[:ssl][:ca_file] ||= ca_file
 
+      adapter = Array(options.delete(:adapter) || config[:adapter])
       Faraday.new(options) do |b|
         b.request(:url_encoded)
-        b.adapter(*Array(options[:adapter] || config[:adapter]))
+        b.adapter *adapter
         b.use(HttpReporter, self)
       end
     end
@@ -659,7 +660,6 @@ class Service
 
   def self.default_http_options
     @@default_http_options ||= {
-      :adapter => :net_http,
       :request => {:timeout => 10, :open_timeout => 5},
       :ssl => {:verify_depth => 5},
       :headers => {}
