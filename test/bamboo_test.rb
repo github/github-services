@@ -49,7 +49,7 @@ class BambooTest < Service::TestCase
     end
 
     svc = service :push, data, payload
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
 
@@ -60,7 +60,7 @@ class BambooTest < Service::TestCase
     data = self.data.update('base_url' => '')
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -69,7 +69,7 @@ class BambooTest < Service::TestCase
     data = self.data.update('build_key' => '')
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -78,7 +78,7 @@ class BambooTest < Service::TestCase
     data = self.data.update('username' => '')
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -87,7 +87,7 @@ class BambooTest < Service::TestCase
     data = self.data.update('password' => '')
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -98,7 +98,7 @@ class BambooTest < Service::TestCase
       raise SocketError, "getaddrinfo: Name or service not known"
     end
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -110,7 +110,7 @@ class BambooTest < Service::TestCase
 
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end

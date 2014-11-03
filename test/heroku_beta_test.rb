@@ -15,7 +15,7 @@ class HerokuBetaTest < Service::TestCase
 
   def test_unsupported_push_events
     data = { 'name' => 'my-app' }
-    exception = assert_raise(Service::ConfigurationError) do
+    exception = assert_raises(Service::ConfigurationError) do
       service(:push, data, push_payload).receive_event
     end
 
@@ -25,7 +25,7 @@ class HerokuBetaTest < Service::TestCase
 
   def test_unsupported_status_events
     data = { 'name' => 'my-app' }
-    exception = assert_raise(Service::ConfigurationError) do
+    exception = assert_raises(Service::ConfigurationError) do
       service(:status, data, push_payload).receive_event
     end
 
@@ -117,7 +117,7 @@ class HerokuBetaTest < Service::TestCase
       [404, {}, '']
     end
 
-    exception = assert_raise(Service::ConfigurationError) do
+    exception = assert_raises(Service::ConfigurationError) do
       heroku_service.receive_event
     end
     @stubs.verify_stubbed_calls
@@ -129,7 +129,7 @@ class HerokuBetaTest < Service::TestCase
   def test_deployment_heroku_misconfigured
     stub_heroku_access(404)
 
-    exception = assert_raise(Service::ConfigurationError) do
+    exception = assert_raises(Service::ConfigurationError) do
       heroku_service.receive_event
     end
     @stubs.verify_stubbed_calls
@@ -142,7 +142,7 @@ class HerokuBetaTest < Service::TestCase
     stub_heroku_access
     stub_github_user(404)
 
-    exception = assert_raise(Service::ConfigurationError) do
+    exception = assert_raises(Service::ConfigurationError) do
       heroku_service.receive_event
     end
     @stubs.verify_stubbed_calls
@@ -155,7 +155,7 @@ class HerokuBetaTest < Service::TestCase
     stub_heroku_access
     stub_github_access(404)
 
-    exception = assert_raise(Service::ConfigurationError) do
+    exception = assert_raises(Service::ConfigurationError) do
       heroku_service.receive_event
     end
     @stubs.verify_stubbed_calls

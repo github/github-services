@@ -1,6 +1,4 @@
 class XmppMucTest < Service::TestCase
-  include ::Test::Unit::Assertions
-
   class MockXmpp4r
 
     def send(message)
@@ -45,7 +43,7 @@ class XmppMucTest < Service::TestCase
   end
 
   def test_no_jid_provided
-    assert_raise(Service::ConfigurationError, 'JID is required') do
+    assert_raises(Service::ConfigurationError, 'JID is required') do
       config = @config
       config['JID'] = ''
       service(config, payload).receive_event
@@ -53,7 +51,7 @@ class XmppMucTest < Service::TestCase
   end
 
   def test_no_password_provided
-    assert_raise(Service::ConfigurationError, 'Password is required') do
+    assert_raises(Service::ConfigurationError, 'Password is required') do
       config = @config
       config['password'] = ''
       service(config, payload).receive_event
@@ -61,7 +59,7 @@ class XmppMucTest < Service::TestCase
   end
 
   def test_no_room_provided
-    assert_raise(Service::ConfigurationError, 'Room is required') do
+    assert_raises(Service::ConfigurationError, 'Room is required') do
       config = @config
       config['room'] = ''
       service(config, payload).receive_event
@@ -69,7 +67,7 @@ class XmppMucTest < Service::TestCase
   end
 
   def test_no_server_provided
-    assert_raise(Service::ConfigurationError, 'Server is required') do
+    assert_raises(Service::ConfigurationError, 'Server is required') do
       config = @config
       config['server'] = ''
       service(config, payload).receive_event
@@ -178,7 +176,7 @@ class XmppMucTest < Service::TestCase
   end
 
   def test_generates_error_if_push_message_cant_be_generated 
-    assert_raise(Service::ConfigurationError, /Unable to build message/) do
+    assert_raises(Service::ConfigurationError, /Unable to build message/) do
       service(:commit_comment, @config, {}).receive_event
     end
   end
@@ -199,7 +197,7 @@ class XmppMucTest < Service::TestCase
   end
     
   def test_generates_error_if_commit_comment_message_cant_be_generated 
-    assert_raise(Service::ConfigurationError, /Unable to build message/) do
+    assert_raises(Service::ConfigurationError, /Unable to build message/) do
       service(:commit_comment, @config, {}).receive_event
     end
   end
@@ -220,7 +218,7 @@ class XmppMucTest < Service::TestCase
   end
 
   def test_generates_error_if_issue_comment_message_cant_be_generated 
-    assert_raise(Service::ConfigurationError, /Unable to build message/) do
+    assert_raises(Service::ConfigurationError, /Unable to build message/) do
       service(:issue_comment, @config, {}).receive_event
     end
   end
@@ -241,7 +239,7 @@ class XmppMucTest < Service::TestCase
   end
 
   def test_generates_error_if_issues_message_cant_be_generated 
-    assert_raise(Service::ConfigurationError, /Unable to build message/) do
+    assert_raises(Service::ConfigurationError, /Unable to build message/) do
       service(:issues, @config, {}).receive_event
     end
   end
@@ -262,7 +260,7 @@ class XmppMucTest < Service::TestCase
   end
 
   def test_generates_error_if_pull_request_message_cant_be_generated 
-    assert_raise(Service::ConfigurationError, /Unable to build message/) do
+    assert_raises(Service::ConfigurationError, /Unable to build message/) do
       payload = pull_request_payload
       payload['pull_request']['base'] = {}
       service(:pull_request, @config, payload).receive_event
@@ -285,7 +283,7 @@ class XmppMucTest < Service::TestCase
   end
 
   def test_generates_error_if_pull_request_review_comment_message_cant_be_generated 
-    assert_raise(Service::ConfigurationError, /Unable to build message/) do
+    assert_raises(Service::ConfigurationError, /Unable to build message/) do
       service(:pull_request_review_comment, @config, {}).receive_event
     end
   end
@@ -311,7 +309,7 @@ class XmppMucTest < Service::TestCase
   end
 
   def test_generates_error_if_gollum_cant_be_generated 
-    assert_raise(Service::ConfigurationError, /Unable to build message/) do
+    assert_raises(Service::ConfigurationError, /Unable to build message/) do
       service(:gollum, @config, {}).receive_event
     end
   end

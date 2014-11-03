@@ -21,7 +21,7 @@ class GoCDTest < Service::TestCase
     data = self.data.update("base_url" => "")
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -30,7 +30,7 @@ class GoCDTest < Service::TestCase
     data = self.data.update("repository_url" => "")
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -41,7 +41,7 @@ class GoCDTest < Service::TestCase
       raise SocketError, "getaddrinfo: Name or service not known"
     end
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -53,7 +53,7 @@ class GoCDTest < Service::TestCase
 
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end

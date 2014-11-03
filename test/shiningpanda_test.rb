@@ -72,63 +72,63 @@ class ShiningPandaTest < Service::TestCase
 
   def test_workspace_missing
     svc = service({ 'job' => 'pygments', 'token' => 'PWFm8c2T' }, payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
 
   def test_workspace_nil
     svc = service(data.merge({'workspace' => nil}), payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
 
   def test_workspace_blank
     svc = service(data.merge({'workspace' => ''}), payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
 
   def test_job_missing
     svc = service({ 'workspace' => 'shiningpanda.org', 'token' => 'PWFm8c2T' }, payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
 
   def test_job_nil
     svc = service(data.merge({'job' => nil}), payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
 
   def test_job_blank
     svc = service(data.merge({'job' => ''}), payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
 
   def test_token_missing
     svc = service({ 'workspace' => 'shiningpanda.org', 'job' => 'pygments' }, payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
 
   def test_token_nil
     svc = service(data.merge({'token' => nil}), payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
 
   def test_token_blank
     svc = service(data.merge({'token' => ''}), payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
@@ -173,7 +173,7 @@ class ShiningPandaTest < Service::TestCase
 
   def test_multi_valued_parameter
     svc = service(data.merge({'parameters' => 'foo=bar&foo=toto'}), payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end

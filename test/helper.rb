@@ -1,9 +1,10 @@
-require 'test/unit'
+require 'minitest/autorun'
+require 'minitest/unit'
 require 'pp'
 require File.expand_path('../../config/load', __FILE__)
 Service.load_services
 
-class Service::TestCase < Test::Unit::TestCase
+class Service::TestCase < Minitest::Test
   ALL_SERVICES = Service.services.dup
 
   def test_default

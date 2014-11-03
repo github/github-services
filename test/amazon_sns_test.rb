@@ -36,7 +36,7 @@ class AmazonSNSTest < Service::TestCase
   end
 
   def verify_requires(svc)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_event
     end
   end
