@@ -12,7 +12,7 @@ class SqwiggleTest < Service::TestCase
     payload = {'commits'=>[{'id'=>'test'}]}
     svc = service(data, payload)
 
-    @stubs.post "integrations/github" do |env|
+    @stubs.post "integrations/github/" do |env|
       body = JSON.parse(env[:body])
 
       assert_equal env[:url].host, "api.sqwiggle.com"
