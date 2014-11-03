@@ -13,7 +13,7 @@ class AwsOpsWorksTest < Service::TestCase
 
   def test_stack_id_missing
     svc = service(sample_data.except('stack_id'))
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_event
     end
   end
@@ -25,14 +25,14 @@ class AwsOpsWorksTest < Service::TestCase
 
   def test_app_id_missing
     svc = service(sample_data.except('app_id'))
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_event
     end
   end
 
   def test_expected_branch_name_received
     response = service.receive_event
-    assert_not_nil response
+    refute_nil response
   end
 
   def test_unexpected_branch_name_received
@@ -42,7 +42,7 @@ class AwsOpsWorksTest < Service::TestCase
 
   def test_branch_name_missing
     svc = service(sample_data.except('branch_name'))
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_event
     end
   end
@@ -54,7 +54,7 @@ class AwsOpsWorksTest < Service::TestCase
 
   def test_aws_access_key_id_missing
     svc = service(sample_data.except('aws_access_key_id'))
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_event
     end
   end
@@ -66,7 +66,7 @@ class AwsOpsWorksTest < Service::TestCase
 
   def test_aws_secret_access_key_missing
     svc = service(sample_data.except('aws_secret_access_key'))
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_event
     end
   end

@@ -660,6 +660,7 @@ class Service
 
   def self.default_http_options
     @@default_http_options ||= {
+      :adapter => :net_http,
       :request => {:timeout => 10, :open_timeout => 5},
       :ssl => {:verify_depth => 5},
       :headers => {}

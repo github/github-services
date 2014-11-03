@@ -23,7 +23,7 @@ class AwsOpsWorksDeploymentTest < Service::TestCase
 
   def test_stack_id_missing
     svc = aws_service(sample_data.except('stack_id'))
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_event
     end
   end
@@ -42,7 +42,7 @@ class AwsOpsWorksDeploymentTest < Service::TestCase
 
   def test_app_id_missing
     svc = aws_service(sample_data.except('app_id'))
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_event
     end
   end
@@ -54,7 +54,7 @@ class AwsOpsWorksDeploymentTest < Service::TestCase
 
   def test_aws_access_key_id_missing
     svc = aws_service(sample_data.except('aws_access_key_id'))
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_event
     end
   end
@@ -66,7 +66,7 @@ class AwsOpsWorksDeploymentTest < Service::TestCase
 
   def test_aws_secret_access_key_missing
     svc = aws_service(sample_data.except('aws_secret_access_key'))
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_event
     end
   end
