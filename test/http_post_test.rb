@@ -13,7 +13,7 @@ class HttpPostTest < Service::TestCase
       assert_equal 'Basic bW9ua2V5OnNlY3JldA==', env[:request_headers]['authorization']
       assert_match /json/, env[:request_headers]['content-type']
       assert_equal 'abc.com', env[:url].host
-      assert_nil env[:url].port
+      assert_equal 80, env[:url].port
       params = Faraday::Utils.parse_nested_query(env[:url].query)
       assert_equal({'a' => '1'}, params)
 
