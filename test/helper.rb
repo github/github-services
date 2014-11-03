@@ -10,6 +10,10 @@ class Service::TestCase < Minitest::Test
   def test_default
   end
 
+  def assert_nothing_raised(*)
+    yield
+  end
+
   def service(klass, event_or_data, data, payload=nil)
     event = nil
     if event_or_data.is_a?(Symbol)
