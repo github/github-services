@@ -42,17 +42,11 @@ class Addressable::URI
   attr_accessor :validation_deferred
 end
 
-module Faraday::Utils
-  def URI(url)
-    uri = if url.respond_to?(:host)
-      url
-    elsif url =~ /^https?\:\/\/?$/
-      ::Addressable::URI.new
-    elsif url.respond_to?(:to_str)
-      ::Addressable::URI.parse(url)
-    else
-      raise ArgumentError, "bad argument (expected URI object or URI string)"
-    end
+Faraday::Utils.default_uri_parser = lambda do |url|
+  if url =~ /^https?\:\/\/?$/
+    ::Addressable::URI.new
+  else
+    ::Addressable::URI.parse(url)
   end
 end
 
