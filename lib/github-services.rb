@@ -43,11 +43,15 @@ class Addressable::URI
 end
 
 Faraday::Utils.default_uri_parser = lambda do |url|
-  if url =~ /^https?\:\/\/?$/
+  uri = if url =~ /^https?\:\/\/?$/
     ::Addressable::URI.new
   else
     ::Addressable::URI.parse(url)
   end
+
+  uri.validation_deferred = true
+  uri.port ||= uri.inferred_port
+  uri
 end
 
 XMLRPC::Config::send(:remove_const, :ENABLE_MARSHALLING)
