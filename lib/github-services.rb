@@ -32,7 +32,6 @@ require 'basecamp'
 require 'rubyforge'
 require 'softlayer/messaging'
 
-require 'addressable/uri'
 require 'faraday'
 require 'faraday_middleware'
 require 'ostruct'
@@ -43,8 +42,8 @@ class Addressable::URI
   attr_accessor :validation_deferred
 end
 
-module Faraday
-  def Connection.URI(url)
+module Faraday::Utils
+  def URI(url)
     uri = if url.respond_to?(:host)
       url
     elsif url =~ /^https?\:\/\/?$/
@@ -53,11 +52,6 @@ module Faraday
       ::Addressable::URI.parse(url)
     else
       raise ArgumentError, "bad argument (expected URI object or URI string)"
-    end
-  ensure
-    if uri.respond_to?(:validation_deferred)
-      uri.validation_deferred = true
-      uri.port ||= uri.inferred_port
     end
   end
 end
