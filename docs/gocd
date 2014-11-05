@@ -1,6 +1,6 @@
 [Go](http://go.cd) (also GoCD) is a Continuous Integration (CI) and Continuous Delivery (CD) server.
 
-The Github GoCD service can be used to trigger builds when changes are pushed to the corresponding Github repository.
+The GitHub GoCD service can be used to trigger builds when changes are pushed to the corresponding GitHub repository.
 This is a replacement for the polling method, where the Go server periodically polls the repositories for changes.
 
 Install Notes
@@ -17,5 +17,5 @@ Install Notes
 4. "username" and "password" - username and password of a Go admin user that can
    trigger the Materials API endpoint. Can be left empty if the Go server has no authentication configured (not recommended.)
 
-5. "verfiy_ssl" is used to enable (recommended) or disable certificate checking when using ssl. 
+5. "verfiy_ssl" is used to enable (recommended) or disable certificate checking when using ssl.
    Disabling this can make the ssl connection insecure.

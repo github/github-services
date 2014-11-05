@@ -6,7 +6,7 @@ To trigger deployment events you'll need to [create a deployment](https://develo
 
 There's a [hubot-deploy](https://github.com/atmos/hubot-deploy) script that allows you to deploy from chat. Heroku has various options for [deploy hooks](https://devcenter.heroku.com/articles/deploy-hooks) to give you feedback.
 
-The [auto-deployment](https://www.atmos.org/auto-deployment) service exists for creating deployments automatically on push and successful CI runs.
+The [auto-deployment](http://www.atmos.org/github-services/auto-deployment/) service exists for creating deployments automatically on push and successful CI runs.
 
 Install Notes
 -------------

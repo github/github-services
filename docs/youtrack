@@ -8,7 +8,7 @@ Commands are applied to issues, associated with commit or pull request.
 
   - Your YouTrack server should be accessible from the internet.
 
-  - REST API must be enabled in your YouTrack server.
+  - REST API must be enabled in your YouTrack server. It can be set in YouTrack Settings menu.
 
   - Committer's email addresses in GitHub and YouTrack should be the same.
     YouTrack looks for user account of a committer by an email address, which the
@@ -19,14 +19,23 @@ Commands are applied to issues, associated with commit or pull request.
 
   In the GitHub integration config, the following settings should be provided:
 
-  - YouTrack Server URL
+  - Base url: YouTrack Server URL
 
-  - Administrator's account (e.g. 'root' user) credentials to access your YouTrack server.
+  - Committers: Name of a user group in YouTrack, in which YouTrack will search for committer's account.
 
-  - Name of a user group in YouTrack, in which YouTrack will search for committer's account.
+  - Username: Administrator's account (e.g. 'root' user or Admin role) credentials to access your YouTrack server.
 
-  - Branch names to track separated by space. If branches are provided, only commits to those branches will trigger
+  - Branch: Branch names to track separated by space. If branches are provided, only commits to those branches will trigger
     YouTrack commands and commits to others will be ignored. If the branch field is left empty, commits on any branch will trigger commands.
 
-  - If only distinct commits should be processed. If this setting is false, same commit may be processed several times
+  - Process distinct: If only distinct commits should be processed. If this setting is false, same commit may be processed several times
     (for example, when branches are merged)
+  
+  - Password: a password of YouTrack Username. Username should have Admin role.
+
+* Walkthrough video: http://www.youtube.com/watch?v=0iK1J_fWhns
+ 
+* Troubleshooting
+  - GitHub hook errors
+    - Authentication problem: You may have to regenerate token in `GibHub > Applications > Personal access tokens` menu and enter it at YouTrack project settings > GitHub > Edit menu.
+    - 400: Failed to parse YouTrack commands from GitHub commit comments.

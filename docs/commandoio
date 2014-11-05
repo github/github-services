@@ -1,0 +1,14 @@
+[Commando.io](https://commando.io) is a simpler way to manage servers online.
+
+Commando.io makes it simple to execute commands on groups of servers from a beautiful web interface.
+
+Install Notes
+-------------
+
+  * **Account alias** - Your account alias is simply the subdomain that you access Commando.io with. For example the account alias of `https://foo.commando.io` is `foo`.
+  * **API token secret key** - A valid API token secret key. You may create API tokens on the settings page in the Commando.io web interface.
+  * **Recipe** - The recipe you wish to execute. You may find recipe ids in the in the Commando.io web interface.
+  * **Server** - A single server id. You may find server ids in the modal popup when clicking a server in the Commando.io web interface.
+  * **Groups** - A list of group ids seperated by commas. You may find group ids in the modal popup when clicking a group in the Commando.io web interface.
+  * **Halt on stderr** _(Optional)_ -  If a server returns stderr during execution, halt and prevent the remaining servers from executing the recipe.
+  * **Notes** _(Optional)_ - Notes and comments you wish to attach to this execution. Markdown is supported.

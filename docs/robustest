@@ -14,11 +14,6 @@ Commits which are related to RobusTest issues are detected by matching '#IssueNo
 Install Notes
 -------------
 
-1. Create a project with RobusTest (It will create a Unique Project ID for newly created project). 
-2. Set your github repository as git repository for your project.
+1. Create a project with RobusTest (It will create a Unique Project ID for newly created project).
+2. Set your GitHub repository as git repository for your project.
 3. Enter the Unique Project ID to  project_key's identifier.
-
-
-
-
-

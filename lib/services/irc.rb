@@ -30,7 +30,7 @@ class Service::IRC < Service
   end
 
   def receive_issues
-    send_messages "#{irc_issue_summary_message} #{fmt_url url}"
+    send_messages "#{irc_issue_summary_message} #{fmt_url url}" if action =~ /(open)|(close)/
   end
 
   def receive_issue_comment

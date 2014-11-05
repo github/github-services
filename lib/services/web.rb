@@ -4,26 +4,19 @@ class Service::Web < Service
   string :url,
     # old hooks send form params ?payload=JSON(...)
     # new hooks should set content_type == 'json'
-    :content_type,
-
-    # 2 or 3
-    :ssl_version
+    :content_type
 
   # adds a X-Hub-Signature of the body content
   # X-Hub-Signature: sha1=....
   password :secret
 
-  white_list :url, :content_type, :ssl_version
+  white_list :url, :content_type
 
   boolean :insecure_ssl # :(
 
   def receive_event
     http.headers['X-GitHub-Event'] = event.to_s
     http.headers['X-GitHub-Delivery'] = delivery_guid.to_s
-
-    if data['ssl_version'].to_i == 3
-      http.ssl[:version] = :sslv3
-    end
 
     res = deliver data['url'], :content_type => data['content_type'],
       :insecure_ssl => data['insecure_ssl'].to_i == 1, :secret => data['secret']
