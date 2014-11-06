@@ -6,7 +6,7 @@ class CrocagileTest < Service::TestCase
   end
  
   def test_push
-    @stubs.post "/api/integration/github/" do |env|
+    @stubs.post "api/integration/github" do |env|
       assert_equal 'www.crocagile.com', env[:url].host
       assert_equal 'application/json', env[:request_headers]['content-type']
       [200, {}, '{"status":1,"message":"GitHub Webook processed successfully."}']

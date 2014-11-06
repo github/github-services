@@ -274,7 +274,7 @@ class IRCTest < Service::TestCase
     msgs = svc.writable_irc.string.split("\n")
     privmsg = msgs[3]  # skip NICK, USER, JOIN
     assert_match /PRIVMSG #r.*grit/, privmsg
-    assert_no_match /\003/, privmsg
+    refute_match /\003/, privmsg
   end
 
   def service(*args)

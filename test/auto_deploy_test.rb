@@ -24,7 +24,7 @@ class AutoDeployTest < Service::TestCase
   end
 
   def test_unsupported_deployment_events
-    exception = assert_raise(Service::ConfigurationError) do
+    exception = assert_raises(Service::ConfigurationError) do
       service(:deployment, auto_deploy_on_push_service_data, deployment_payload).receive_event
     end
 
@@ -150,7 +150,7 @@ class AutoDeployTest < Service::TestCase
   def test_deployment_with_bad_github_user_credentials
     stub_github_user(404)
 
-    exception = assert_raise(Service::ConfigurationError) do
+    exception = assert_raises(Service::ConfigurationError) do
       auto_deploy_on_push_service.receive_event
     end
     @stubs.verify_stubbed_calls
@@ -162,7 +162,7 @@ class AutoDeployTest < Service::TestCase
   def test_deployment_without_access_to_github_repo_deployments
     stub_github_repo_deployment_access(404)
 
-    exception = assert_raise(Service::ConfigurationError) do
+    exception = assert_raises(Service::ConfigurationError) do
       auto_deploy_on_push_service.receive_event
     end
     @stubs.verify_stubbed_calls

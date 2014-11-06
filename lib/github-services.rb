@@ -32,8 +32,8 @@ require 'basecamp'
 require 'rubyforge'
 require 'softlayer/messaging'
 
-require 'addressable/uri'
 require 'faraday'
+require 'faraday_middleware'
 require 'ostruct'
 require File.expand_path("../service/structs", __FILE__)
 require File.expand_path("../service/http_helper", __FILE__)
@@ -42,23 +42,16 @@ class Addressable::URI
   attr_accessor :validation_deferred
 end
 
-module Faraday
-  def Connection.URI(url)
-    uri = if url.respond_to?(:host)
-      url
-    elsif url =~ /^https?\:\/\/?$/
-      ::Addressable::URI.new
-    elsif url.respond_to?(:to_str)
-      ::Addressable::URI.parse(url)
-    else
-      raise ArgumentError, "bad argument (expected URI object or URI string)"
-    end
-  ensure
-    if uri.respond_to?(:validation_deferred)
-      uri.validation_deferred = true
-      uri.port ||= uri.inferred_port
-    end
+Faraday::Utils.default_uri_parser = lambda do |url|
+  uri = if url =~ /^https?\:\/\/?$/
+    ::Addressable::URI.new
+  else
+    ::Addressable::URI.parse(url)
   end
+
+  uri.validation_deferred = true
+  uri.port ||= uri.inferred_port
+  uri
 end
 
 XMLRPC::Config::send(:remove_const, :ENABLE_MARSHALLING)

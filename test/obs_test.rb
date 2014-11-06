@@ -34,7 +34,7 @@ class ObsTest < Service::TestCase
       params = Faraday::Utils.parse_query env[:body]
       assert_equal 'Token github/test/token/string', env[:request_headers]["Authorization"]
       assert_equal '/trigger/runservice', env[:url].path
-      assert_equal 'project=home%3AadrianSuSE&package=4github', env[:url].query
+      assert_equal 'package=4github&project=home%3AadrianSuSE', env[:url].query
       [200, {}, '']
     end
 
@@ -50,7 +50,7 @@ class ObsTest < Service::TestCase
       params = Faraday::Utils.parse_query env[:body]
       match=match+1 if ['Token github/test/token/one', 'Token github/test/token/two'].include? env[:request_headers]["Authorization"]
       assert_equal '/trigger/runservice', env[:url].path
-      assert_equal 'project=home%3AadrianSuSE&package=4github', env[:url].query
+      assert_equal 'package=4github&project=home%3AadrianSuSE', env[:url].query
       [200, {}, '']
     end
 
