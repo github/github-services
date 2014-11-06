@@ -1,39 +1,125 @@
-1.  `server` - IRC server (e.g. chat.freenode.net)
-2.  `port` - The port to connect to the server (optional). Default values: 6667 (No SSL) when `Ssl` not checked, 9999 (SSL) when `Ssl` is checked.
-     freenode servers listen on ports 6665, 6666, 6667, 6697 (SSL only), 7000 (SSL only), 7070 (SSL only), 8000, 8001 and 8002.
-3.  `room` - Supports single or multiple rooms (comma separated).
-     Also supports room passwords (room_name::password). Prefixing '#' to the room is optional.
-4.  `password` - Server password (optional)
-5.  `nick` - Nickname for the bot (optional)
-6.  `nickserv_password` - Password for the server's [NickServ](http://en.wikipedia.org/wiki/Internet_Relay_Chat_services) (optional)
-7.  `long_url` - Displays full compare/commit url's. Uses git.io if disabled.
-8.  `message_without_join` - Prevents join/part spam by the bot. See step 13.
-9.  `no_colors` - Disables color support for messages.
-10. `notice` - Sends as a notice rather than a channel message.
-11. `branch_regexes` - Regular expressions for branch name matching (optional, comma separated).
-     For example, only master => `^master$`, master & starts with bug => `master,^bug`.
-12. `active` - Activates the bot.
-13. Configure your IRC channel to allow external messages, necessary for the `message_without_join` option.
-    `/mode #channelname -n` or `/msg chanserv set #channelname mlock -n`
+Example
+-------
 
-Here's an example for freenode:
+For [freenode](https://freenode.net/):
 
-    # server: chat.freenode.net
-    # port: 6667
-    # room: #channelname
-    # message_without_join: checked
-    # long_url: checked
-    # notice: checked
-    # active: checked
-    # NOTE: Ensure you enable notice support (see above)
+- Server: `chat.freenode.net`
+- Room: `#CHANNELNAME`
+- Message without join: _yes_
+- Notice: _yes_
+- Active: _yes_
 
-For troubleshooting, run the following curl command to get diagnostic information from GitHub.
+Remember to allow [external messages](#message-without-join) and [colors](#no-colors) in the channel:
 
-    # Replace
-    # USERNAME:PASSWORD with your GitHub username and password. Username is
-    # your full username as used when signing in.
-    #
-    # USERNAME/REPONAME with your repo name as it shows in GitHub.
+```
+/msg ChanServ set #CHANNELNAME mlock -nc
+```
 
-    $ curl -u "USERNAME:PASSWORD" -in \
-      https://api.github.com/repos/USERNAME/REPONAME/hooks
+
+Usage
+-----
+
+### Server
+
+IRC server address.
+
+> For freenode, use `chat.freenode.net`
+
+
+### Port
+
+Port to use when connecting to the IRC server (optional).
+
+Default ports are `6667` (no SSL), and `6697` (SSL).
+
+> [freenode servers](https://freenode.net/irc_servers.shtml) listen on `6665`, `6666`, `6667`, `8000`, `8001`, and `8002` (no SSL and SSL), and `6697`, `7000`, and `7070` (SSL only).
+
+
+### Room
+
+IRC channel (or channels) to which messages will be sent.
+
+Supports single or multiple channels (comma separated).  Also supports channel passwords (`CHANNELNAME::PASSWORD`).  Prefixing the channel name with `#` is optional.
+
+
+### Nick
+
+Nickname to use when sending messages (optional).
+
+
+### Branches
+
+Names of the git branches to monitor for events (comma-separated).
+
+
+### Nickserv password
+
+Password for the IRC server’s [NickServ](http://en.wikipedia.org/wiki/Internet_Relay_Chat_services) (optional).
+
+> For freenode, see the [nickname setup instructions](https://freenode.net/faq.shtml#nicksetup).
+
+
+### Password
+
+Password for the IRC server (optional).
+
+
+### Ssl
+
+Enables connecting to the IRC server via SSL.
+
+
+### Message without join
+
+Enables sending messages to the channel without joining the channel first.
+
+_Recommended_, as it decreases channel noise.  Requires the IRC channel to allow external messages.
+
+> On freenode, allow external messages to the channel by messaging [ChanServ](https://freenode.net/services.shtml):
+>
+> ```
+> /msg ChanServ set #CHANNELNAME mlock -n`
+> ```
+>
+> On most other IRC networks, set the channel mode directly:
+>
+> ```
+> /mode #CHANNELNAME -n
+> ```
+
+
+### No colors
+
+Disables colors in messages.
+
+_Enabling_ colors in messages may require the IRC channel to allow colors.
+
+> On freenode, allow colors in the channel by messaging ChanServ:
+>
+> ```
+> /msg ChanServ set #CHANNELNAME mlock -c
+> ```
+
+
+### Long url
+
+Enables including full URLs in messages.  When disabled, [git.io](http://git.io/) URLs will be used.
+
+
+### Notice
+
+Enables sending IRC notices instead of regular messages.
+
+_Recommended_, as it decreases channel noise.
+
+
+Troubleshooting
+---------------
+
+Diagnostic information can be retrieved from GitHub with an HTTP request.
+
+Use your GitHub `USERNAME` and `PASSWORD` to authenticate, and specify the appropriate repository with `REPOUSER` and `REPONAME`.
+
+```
+curl -i -u 'USERNAME:PASSWORD' https://api.github.com/repos/REPOUSER/REPONAME/hooks
+```
