@@ -170,7 +170,7 @@ class Basecamp
       end
 
       def element_name
-        name.split(/::/).last.underscore
+        @element_name || name.split(/::/).last.underscore
       end
 
       def prefix_source
@@ -233,8 +233,8 @@ class Basecamp
   end
 
   class Message < Resource
-    parent_resources :project
-    set_element_name 'post'
+    self.prefix = "/projects/:project_id/"
+    self.element_name = "post"
 
     # Returns the most recent 25 messages in the given project (and category,
     # if specified). If you need to retrieve older messages, use the archive
