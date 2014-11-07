@@ -8,7 +8,7 @@ class Service::Twitter < Service
   def receive_push
     return unless payload['commits']
 
-    commit_branch = (payload['ref'] || '').split('/').last
+    commit_branch = (payload['ref'] || '').split('/').last || ''
     filter_branch = data['filter_branch'].to_s
 
     # If filtering by branch then don't make a post
