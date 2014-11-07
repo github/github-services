@@ -84,6 +84,16 @@ class XmppMucTest < Service::TestCase
     )  
   end
     
+  def test_returns_true_if_part_matched_filtered_branch
+    config = @config
+    config['filter_branch'] = 'ast'
+    assert_equal(
+      true,
+      service(config, payload).receive_event,
+      'Should not have filtered this branch'
+    )  
+  end
+    
   def test_returns_false_if_fork_event_and_not_notifiying
     config = @config
     config['notify_fork'] = false

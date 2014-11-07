@@ -17,11 +17,11 @@ class Service::XmppMuc < Service::HttpPost
   def receive_event
     check_config data
       
-    commit_branch = (payload['ref'] || '').split('/').last
+    commit_branch = (payload['ref'] || '').split('/').last || ''
     filter_branch = data['filter_branch'].to_s
 
     # If filtering by branch then don't make a post
-    if (filter_branch.length > 0) && (filter_branch.index(commit_branch) == nil)
+    if (filter_branch.length > 0) && (commit_branch.index(filter_branch) == nil)
       return false
     end
     
@@ -33,6 +33,7 @@ class Service::XmppMuc < Service::HttpPost
     return false if event.to_s =~ /pull_/ && !data['notify_pull']
 
     build_message(event, payload)
+    return true
   end
     
   def build_message(event, payload)
