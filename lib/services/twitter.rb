@@ -3,15 +3,16 @@ class Service::Twitter < Service
   boolean :digest, :short_format
   TWITTER_SHORT_URL_LENGTH_HTTPS = 23
   
-  white_list: :filter_branch
+  white_list :filter_branch
 
   def receive_push
     return unless payload['commits']
 
+    commit_branch = (payload['ref'] || '').split('/').last
     filter_branch = data['filter_branch'].to_s
 
     # If filtering by branch then don't make a post
-    if (filter_branch.length > 0) && (filter_branch.index(commit_branch) == nil)
+    if (filter_branch.length > 0) && (commit_branch.index(filter_branch) == nil)
       return false
     end
     
