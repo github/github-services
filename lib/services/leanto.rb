@@ -1,5 +1,5 @@
 class Service::Leanto < Service
-  string :token
+  password :token
 
   self.title = 'Lean-To'
 

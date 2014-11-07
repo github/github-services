@@ -68,7 +68,7 @@ class DucksboardTest < Service::TestCase
 
   def test_missing_webhook_key
     svc = service({}, payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -77,7 +77,7 @@ class DucksboardTest < Service::TestCase
     svc = service({
       'webhook_key' => 'foobar' # non-hex values
     }, payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -86,7 +86,7 @@ class DucksboardTest < Service::TestCase
     svc = service({
       'webhook_key' => 'abc123 foobar' # non-hex values
     }, payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end

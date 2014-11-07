@@ -1,9 +1,10 @@
 class Service::Toggl < Service
-  string :project, :api_token
+  string :project
+  password :api_token
   white_list :project
 
   def receive_push
-    http.url_prefix = "https://www.toggl.com/api/v6"
+    http.url_prefix = "https://www.toggl.com/api/v8"
     http.basic_auth data['api_token'], 'api_token'
     http.headers['Content-Type'] = 'application/json'
 

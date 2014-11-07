@@ -1,7 +1,7 @@
 class Service::Hall < Service
 
   default_events :commit_comment, :gollum, :issues, :issue_comment, :pull_request, :push
-  string :room_token
+  password :room_token
 
   # Contributing Assets
   url "https://hall.com"

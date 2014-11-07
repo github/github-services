@@ -1,5 +1,6 @@
 class Service::Trac < Service
-  string :url, :token
+  string :url
+  password :token
   white_list :url
 
   def receive_push

@@ -105,7 +105,7 @@ class FishEyeTest < Service::TestCase
 
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -119,7 +119,7 @@ class FishEyeTest < Service::TestCase
 
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -129,7 +129,7 @@ class FishEyeTest < Service::TestCase
   def test_triggers_scanning_missing_data
     svc = service :push, {}, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -139,7 +139,7 @@ class FishEyeTest < Service::TestCase
   def test_triggers_scanning_missing_data_and_payload
     svc = service :push, {}, {}
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -165,7 +165,7 @@ class FishEyeTest < Service::TestCase
 
     svc = service :push, data_my_repo, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -179,7 +179,7 @@ class FishEyeTest < Service::TestCase
 
     svc = service :push, data_my_repo, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -193,7 +193,7 @@ class FishEyeTest < Service::TestCase
 
     svc = service :push, data_my_repo, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 

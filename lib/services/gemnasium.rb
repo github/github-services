@@ -1,5 +1,6 @@
 class Service::Gemnasium < Service
-  string :user, :token
+  string :user
+  password :token
   white_list :user
 
   def receive_push

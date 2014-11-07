@@ -5,13 +5,12 @@ Purge your MaxCDN Pull Zone
 
   1. Get your "Company Alias", "Consumer Key" and "Consumer Secret" from your [MaxCDN Account API Page][account_api_url].
   2. Get your "Zone ID" from your [MaxCDN Account Pull Zones Overview page][account_pull_zone].
-  3. "Static Only" will only purge your zone if modified files include static files &mdash `css`, `js`, `jpg`, `jpeg`, `gif`, `ico`, `png`, `bmp`, `pict`, `csv`, `doc`, `pdf`, `pls`, `ppt`, `tif`, `tiff`, `eps`, `ejs`, `swf`, `midi`, `mid`, `txt`, `ttf`, `eot`, `woff`, `otf`, `svg`, `svgz`, `webp`, `docx`, `xlsx`, `xls`, `pptx`, `ps`, `rss`, `class`, `jar`.
-  4. Whitelist the Github web hook IP block with MaxCDN. For instructions, see MaxCDN's support page on [How To Whitelsit Your Server IP To Use The API][whitelist_article].
+  3. "Static Only" will only purge your zone if modified files include static files &mdash; `css`, `js`, `jpg`, `jpeg`, `gif`, `ico`, `png`, `bmp`, `pict`, `csv`, `doc`, `pdf`, `pls`, `ppt`, `tif`, `tiff`, `eps`, `ejs`, `swf`, `midi`, `mid`, `txt`, `ttf`, `eot`, `woff`, `otf`, `svg`, `svgz`, `webp`, `docx`, `xlsx`, `xls`, `pptx`, `ps`, `rss`, `class`, `jar`.
+  4. Whitelist the GitHub web hook IP block with MaxCDN. For instructions, see MaxCDN's support page on [How To Whitelsit Your Server IP To Use The API][whitelist_article].
 
-> Github's IPs may change from time to time, if you're having issues, verify that the IP you've whitelisted is still current, by checking the "hook" key at [Github's "meta" API endpoint][meta_endpoint].
+> GitHub's IPs may change from time to time, if you're having issues, verify that the IP you've whitelisted is still current, by checking the "hook" key at [GitHub's "meta" API endpoint][meta_endpoint].
 
 [account_api_url]: https://cp.maxcdn.com/account/api
 [account_pull_zone]: https://cp.maxcdn.com/zones/pull
 [whitelist_article]: http://support.maxcdn.com/tutorials/how-to-whitelist-your-server-ip-to-use-the-api/
 [meta_endpoint]: https://api.github.com/meta
-

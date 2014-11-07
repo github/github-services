@@ -1,5 +1,6 @@
 class Service::ShiningPanda < Service
-  string :workspace, :job, :token, :branches, :parameters
+  string :workspace, :job, :branches, :parameters
+  password :token
   white_list :workspace, :job, :branches, :parameters
 
   def receive_push
@@ -21,7 +22,8 @@ class Service::ShiningPanda < Service
     end
     branch = payload['ref'].to_s.split('/').last
     if branches.empty? || branches.include?(branch)
-      Faraday::Utils.parse_query(data['parameters']).each do |key, values|
+      parsed_parameters = Faraday::Utils.parse_query(data['parameters']) || [ ]
+      parsed_parameters.each do |key, values|
         if !values.is_a?(String) and values.length > 1
           raise_config_error "Only one parameter value allowed for " + key
         end

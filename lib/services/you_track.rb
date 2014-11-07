@@ -4,6 +4,8 @@ class Service::YouTrack < Service
   password :password
   white_list :base_url, :username, :committers, :branch
 
+  default_events :push, :pull_request
+
   url 'http://http://www.jetbrains.com/youtrack'
   logo_url 'http://www.jetbrains.com/img/logos/YouTrack_logo_press_materials.gif'
 
@@ -21,6 +23,15 @@ class Service::YouTrack < Service
     http.ssl[:verify] = false
     http.url_prefix = data['base_url']
     payload['commits'].each { |c| process_commit(c) }
+  end
+
+  def receive_pull_request
+    return unless payload['action'] == 'closed'
+
+    http.ssl[:verify] = false
+    http.url_prefix = data['base_url']
+
+    process_pull_request
   end
 
   def active_branch?
@@ -57,7 +68,7 @@ class Service::YouTrack < Service
     return unless commit['distinct'] or !(data['process_distinct'])
 
     commit['message'].split("\n").each { |commit_line|
-      issue_id = commit_line[/( |^)#(\w+-\d+)\b/, 2]
+      issue_id, command = parse_message(commit_line)
       next if issue_id.nil?
 
       login
@@ -65,12 +76,27 @@ class Service::YouTrack < Service
       author ||= find_user_by_email(commit['author']['email'])
       return if author.nil?
 
-      command = commit_line[/( |^)#\w+-\d+ (.+)/, 2]
-      command = 'Fixed' if command.nil?
-      command.strip!
+      command = 'comment' if command.nil?
       comment_string = "Commit made by '''" + commit['author']['name'] + "''' on ''" + commit['timestamp'] + "''\n" + commit['url'] + "\n\n{quote}" + commit['message'].to_s + '{quote}'
       execute_command(author, issue_id, command, comment_string)
     }
+  end
+
+  def process_pull_request
+    login
+    sender = payload['sender']
+    author = find_user_by_email(sender['email'])
+    return if author.nil?
+
+    request = payload['pull_request']
+    request['body'].split("\n").each { |line|
+      issue_id, command = parse_message(line)
+      next if issue_id.nil?
+
+      comment = "Pull request accepted by '''" + sender['login'] + "'''\n" + request['html_url']  + "\n\n{quote}" + request['body'].to_s + '{quote}'
+      execute_command(author, issue_id, command, comment)
+    }
+
   end
 
   def find_user_by_email(email)
@@ -97,7 +123,7 @@ class Service::YouTrack < Service
 
   def execute_command(author, issue_id, command, comment_string)
     res = http_post "rest/issue/#{issue_id}/execute" do |req|
-      req.params[:command] = command
+      req.params[:command] = command unless command.nil?
       req.params[:comment] = comment_string
       req.params[:runAs] = author
     end
@@ -115,4 +141,15 @@ class Service::YouTrack < Service
         raise_config_error("HTTP: #{res.status}")
     end
   end
+
+  def parse_message(message)
+    issue_id = message[/( |^)#(\w+-\d+)\b/, 2]
+    return nil, nil if issue_id.nil?
+
+    command = message[/( |^)#\w+-\d+ (.+)/, 2]
+    command.strip! unless command.nil?
+
+    return issue_id, command
+  end
+
 end

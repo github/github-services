@@ -1,4 +1,4 @@
-This service posts an event object for Github pushed to Hakiri.
+This service posts an event object for GitHub pushed to Hakiri.
 Hakiri checks if your repo was updated with a new commit and then runs security tests on it.
 
 Supported events are currently:
@@ -8,7 +8,7 @@ Data:
 'event' - The GitHub event type, eg. 'push' for commits.
 'payload' - The data for the push.
 
-More details on Github events: http://developer.github.com/v3/repos/hooks/
+More details on GitHub events: http://developer.github.com/v3/repos/hooks/
 
 Install Notes
 ------------

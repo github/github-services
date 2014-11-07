@@ -1,5 +1,5 @@
 class Service::NodeCI < Service
-  string :token
+  password :token
 
   # backwards compatible change until we can migrate configured hooks on
   # github.com

@@ -15,7 +15,7 @@ class RationalJazzhubTest < Service::TestCase
     @stubs.post "/manage/processGitHubPayload" do |env|
        assert_equal 'hub.jazz.net', env[:url].host
        params = Faraday::Utils.parse_nested_query(env[:url].query)
-       assert_equal({'jazzhubUsername' => username,'jazzhubPassword' => password}, params)
+       refute params
        @Pushes += 1
        [200, {}, '']
     end
@@ -33,7 +33,7 @@ class RationalJazzhubTest < Service::TestCase
     @stubs.post "/manage/processGitHubPayload" do |env|
        assert_equal 'hub.jazz.net', env[:url].host
        params = Faraday::Utils.parse_nested_query(env[:url].query)
-       assert_equal({'jazzhubUsername' => username,'jazzhubPassword' => password}, params)
+       refute params
        @Pushes += 1
        [200, {}, '']
     end
@@ -41,7 +41,7 @@ class RationalJazzhubTest < Service::TestCase
     assert_equal 1, @Pushes
   end
 
-  def test_push_override
+  def test_push_server_override
     svc = service(
       {'username' => username,
        'password' => password,
@@ -51,7 +51,7 @@ class RationalJazzhubTest < Service::TestCase
     @stubs.post "/foo/processGitHubPayload" do |env|
        assert_equal 'test.example.org', env[:url].host
        params = Faraday::Utils.parse_nested_query(env[:url].query)
-       assert_equal({'jazzhubUsername' => username,'jazzhubPassword' => password}, params)
+       refute params
        @Pushes += 1
        [200, {}, '']
     end

@@ -1,5 +1,6 @@
 class Service::Railsbp < Service
-  string :railsbp_url, :token
+  string :railsbp_url
+  password :token
   white_list :railsbp_url
 
   def receive_push

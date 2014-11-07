@@ -69,7 +69,7 @@ class Service::AmazonSNS < Service
       raise_config_error "You need to provide an AWS Key and Secret Access Key"
     end
 
-    if data['sns_topic'].to_s.empty? || !data['sns_topic'].downcase.starts_with?('arn')
+    if data['sns_topic'].to_s.empty? || !data['sns_topic'].downcase[0..3] == 'arn'
       raise_config_error "You need to provide a full SNS Topic ARN"
     end
 

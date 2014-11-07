@@ -2,7 +2,7 @@ require 'uri'
 
 class Service::Flowdock < Service::HttpPost
   default_events :commit_comment, :gollum, :issues, :issue_comment, :pull_request, :push, :pull_request_review_comment
-  string :token
+  password :token
 
   url "https://www.flowdock.com"
   logo_url "https://d2ph5hv9wbwvla.cloudfront.net/github/icon_220x140.png"

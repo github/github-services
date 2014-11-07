@@ -1,5 +1,5 @@
 class Service::Jeapie < Service::HttpPost
-  string :token
+  password :token
 
   default_events :push, :pull_request, :commit_comment
 

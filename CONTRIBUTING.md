@@ -37,7 +37,8 @@ You can annotate this directly in the hook like so:
 
 ```ruby
 class Service::MyService < Service::HttpPost
-  string :project, :api_token
+  string :project
+  password :api_token
 
   # only include 'project' in the debug logs, skip the api token.
   white_list :project

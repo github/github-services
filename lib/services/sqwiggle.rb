@@ -1,11 +1,12 @@
 class Service::Sqwiggle < Service::HttpPost
-  string :token, :room
+  password :token
+  string :room
 
   # only include 'room' in the debug logs, skip the api token.
   white_list :room
 
   #accept all events and filter on sqwiggle servers so we can add events as
-  #requested without the need to wait on Github PR's
+  #requested without the need to wait on GitHub PR's
   default_events Service::ALL_EVENTS
 
   url "https://www.sqwiggle.com"
@@ -24,7 +25,7 @@ class Service::Sqwiggle < Service::HttpPost
 
     #dev url
     # url = "http://localhost:3001/integrations/github/#{data['room']}"
-    
+
     #production url
     url = "https://api.sqwiggle.com:443/integrations/github/#{data['room']}"
 

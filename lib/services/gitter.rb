@@ -1,5 +1,5 @@
 class Service::Gitter < Service::HttpPost
-  string :token
+  password :token
   boolean :mute_fork, :mute_watch, :mute_comments, :mute_wiki
 
   default_events ALL_EVENTS
@@ -22,7 +22,7 @@ class Service::Gitter < Service::HttpPost
     return if data['mute_watch']    && event.to_s =~ /watch/
     return if data['mute_comments'] && event.to_s =~ /comment/
     return if data['mute_wiki']     && event.to_s =~ /gollum/
-      
+
     http.headers['X-GitHub-Event'] = event.to_s
 
     deliver "https://webhooks.gitter.im/e/#{token}"

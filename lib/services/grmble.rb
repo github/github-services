@@ -1,5 +1,6 @@
 class Service::Grmble < Service
-  string :room_api_url, :token
+  string :room_api_url
+  password :token
   white_list :room_api_url
 
   def receive_push

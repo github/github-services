@@ -1,5 +1,5 @@
 class Service::IronWorker < Service::HttpPost
-  string :token
+  password :token
   string :project_id
   string :code_name
   white_list :project_id, :code_name
