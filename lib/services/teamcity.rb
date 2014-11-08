@@ -1,14 +1,21 @@
 class Service::TeamCity < Service
-  string   :base_url, :build_type_id, :branches, :username
+  string :base_url, :build_type_id, :branches
+  boolean :full_branch_ref
+  string :username
   password :password
-  white_list :base_url, :build_type_id, :branches, :username
+  white_list :base_url, :build_type_id, :branches, :username, :full_branch_ref
+
+  maintained_by :github => 'JetBrains'
+
+  supported_by :web => 'http://confluence.jetbrains.com/display/TW/Feedback',
+               :email => 'teamcity-support@jetbrains.com'
 
   def receive_push
     return if payload['deleted']
 
     branches = data['branches'].to_s.split(/\s+/)
     ref = payload["ref"].to_s
-    branch = ref.split("/", 3).last
+    branch = data['full_branch_ref'] ? ref : ref.split("/", 3).last
     return unless branches.empty? || branches.include?(branch)
 
     # :(
