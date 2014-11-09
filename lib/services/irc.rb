@@ -37,6 +37,10 @@ class Service::IRC < Service
     send_messages "#{irc_issue_comment_summary_message} #{fmt_url url}"
   end
 
+  def receive_gollum
+    send_messages "#{irc_gollum_summary_message} #{fmt_url summary_url}"
+  end
+
   def send_messages(messages)
     messages = Array(messages)
 
@@ -314,6 +318,10 @@ class Service::IRC < Service
     "\##{pull_request_number} #{fmt_hash sha1[0..6]}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def irc_gollum_summary_message
+    summary_message
   end
 
   def branch_name_matches?
