@@ -111,7 +111,7 @@ class Service::Email < Service
   end
 
   def send_from_author?
-    data['send_from_author']
+    data['send_from_author'].to_i == 1
   end
 
   def smtp_address
