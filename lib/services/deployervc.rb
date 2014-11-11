@@ -1,8 +1,12 @@
+require 'uri'
+
 class Service::Deployervc < Service::HttpPost
   string :deployment_address
   password  :api_token
 
   white_list :deployment_address
+  
+  default_events :push
 
   url "https://deployer.vc"
 
@@ -12,11 +16,9 @@ class Service::Deployervc < Service::HttpPost
                :email => 'support@deployer.vc'
 
 
-  def receive_push
+  def receive_event
     deploymentaddress = required_config_value('deployment_address')
     apitoken = required_config_value('api_token')
-
-    require 'uri'
 
     begin
       URI.parse(deploymentaddress)

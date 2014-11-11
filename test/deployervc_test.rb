@@ -24,7 +24,7 @@ class DeployervcTest < Service::TestCase
       [200, {}, '']
     end
 
-    svc.receive_push
+    svc.receive_event
     @stubs.verify_stubbed_calls
   end
 
