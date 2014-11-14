@@ -26,7 +26,7 @@ class Service::Bugzilla < Service
     bug_commits = sort_commits(commits)
     bugs_to_close = []
     bug_commits.each_pair do | bug, commits |
-      if data['central_repository']
+      if central_repository?
         # Only include first line of message if commit already mentioned
         commit_messages = commits.collect{|c| c.comment(bug_mentions_commit?(bug, c))}
       else
@@ -40,9 +40,13 @@ class Service::Bugzilla < Service
     end
 
     # Close bugs
-    if data['central_repository']
+    if central_repository?
       close_bugs(bugs_to_close)
     end
+  end
+
+  def central_repository?
+    config_boolean_true?('central_repository')
   end
 
   # Name of the branch for this payload; nil if it isn't branch-related.
