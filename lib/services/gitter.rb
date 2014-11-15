@@ -18,10 +18,10 @@ class Service::Gitter < Service::HttpPost
     token = required_config_value('token')
     raise_config_error 'Invalid token' unless token.match(/^\w+$/)
 
-    return if data['mute_fork']     && event.to_s =~ /fork/
-    return if data['mute_watch']    && event.to_s =~ /watch/
-    return if data['mute_comments'] && event.to_s =~ /comment/
-    return if data['mute_wiki']     && event.to_s =~ /gollum/
+    return if config_boolean_true?('mute_fork')     && event.to_s =~ /fork/
+    return if config_boolean_true?('mute_watch')    && event.to_s =~ /watch/
+    return if config_boolean_true?('mute_comments') && event.to_s =~ /comment/
+    return if config_boolean_true?('mute_wiki')     && event.to_s =~ /gollum/
 
     http.headers['X-GitHub-Event'] = event.to_s
 
