@@ -52,6 +52,7 @@ class Service::GoCD < Service
   end
 
   def verify_ssl
-    @verify_ssl ||= data['verify_ssl'] || true
+    # If verify SSL has never been set, let's default to true
+    @verify_ssl ||= data['verify_ssl'].nil? || config_boolean_true?('verify_ssl')
   end
 end
