@@ -65,7 +65,7 @@ class Service::YouTrack < Service
     author = nil
 
     #If only distinct commits should be processed, check this
-    return unless commit['distinct'] or !(data['process_distinct'])
+    return unless commit['distinct'] or config_boolean_false?('process_distinct')
 
     commit['message'].split("\n").each { |commit_line|
       issue_id, command = parse_message(commit_line)
