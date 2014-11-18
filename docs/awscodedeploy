@@ -19,7 +19,7 @@ Install Notes
 
 1. **Application Name** (required) - "CodeDeploy Application Name" on the **applications page** in the AWS CodeDeploy Console.
 2. **Deployment Group** (Optional) - "Deployment Group" on the **app setting page** in the AWS CodeDeploy Console. Defaults to production.
-3. **Aws Access Key Id** (required) - Access key id of an AWS IAM user having the permission for the `opsworks:CreateDeployment` action.
+3. **Aws Access Key Id** (required) - Access key id of an AWS IAM user having the permission for the `codedeploy:CreateDeployment` action.
 4. **Aws Secret Access Key** (required) - Corresponding secret access key of the AWS IAM user.
 5. **Aws Region** (Optional) - The region to your servers are in.
 6. **GitHub Token** (Optional) - A GitHub personal access token with `repo` scope to for OAuth cloning and deployment statuses for the GitHub API.
