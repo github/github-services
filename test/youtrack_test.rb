@@ -117,7 +117,7 @@ class YouTrackTest < Service::TestCase
     }
     hash['commits'].first['message'].sub! /Case#1/, '#case-1 zomg omg'
 
-    svc = service(@data.merge({'process_distinct' => false}), hash)
+    svc = service(@data.merge({'process_distinct' => '0'}), hash)
 
     svc.receive_push
 
@@ -130,7 +130,7 @@ class YouTrackTest < Service::TestCase
     hash = payload
     hash['commits'].first['message'].sub! /Case#1/, '#case-1 zomg omg'
 
-    svc = service(@data.merge({'process_distinct' => true}), hash)
+    svc = service(@data.merge({'process_distinct' => '1'}), hash)
 
     svc.receive_push
 
@@ -145,7 +145,7 @@ class YouTrackTest < Service::TestCase
     }
     hash['commits'].first['message'].sub! /Case#1/, '#case-1 zomg omg'
 
-    svc = service(@data.merge({'process_distinct' => true}), hash)
+    svc = service(@data.merge({'process_distinct' => '1'}), hash)
 
     svc.receive_push
 

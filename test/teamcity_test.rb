@@ -81,7 +81,7 @@ class TeamCityTest < Service::TestCase
     svc = service({
       'base_url' => 'http://teamcity.com/abc',
       'build_type_id' => 'btid',
-      'full_branch_ref' => true
+      'full_branch_ref' => '1'
     }, {
       'ref' => 'refs/heads/branch/name'
     })
