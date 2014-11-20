@@ -61,6 +61,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "aws-sdk", "~> 1.27"
   spec.add_dependency "httparty", "0.7.4"
 
+  # AWS CodeDeploy
+  spec.add_dependency "aws-sdk-core", "~>2.0.8"
+
   spec.files = %w(Gemfile LICENSE README.mkdn CONTRIBUTING.md Rakefile)
   spec.files << "#{lib}.gemspec"
   spec.files += Dir.glob("lib/**/*.rb")

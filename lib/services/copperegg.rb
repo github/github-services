@@ -7,7 +7,7 @@ class Service::CopperEgg < Service
 
     raise_config_error 'API Key must be set' if data['api_key'].blank?
 
-    if data['master_only'].to_i == 1 && branch_name != 'master'
+    if config_boolean_true?('master_only') && branch_name != 'master'
       return
     end
 

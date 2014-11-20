@@ -71,7 +71,7 @@ class RationalTeamConcertTest < Service::TestCase
        'username' => username, 
        'password' => password,
        'project_area_uuid' => '_UIID',
-       'basic_authentication' => 1},
+       'basic_authentication' => '1'},
         modified_payload)
     svc.receive_push
 
@@ -92,7 +92,7 @@ class RationalTeamConcertTest < Service::TestCase
        'username' => username, 
        'password' => password,
        'project_area_uuid' => '_UIID',
-       'basic_authentication' => 1},
+       'basic_authentication' => '1'},
         modified_payload)
     svc.receive_push
 
@@ -113,7 +113,7 @@ class RationalTeamConcertTest < Service::TestCase
        'username' => username, 
        'password' => password,
        'project_area_uuid' => '_UIID',
-       'basic_authentication' => 0},
+       'basic_authentication' => '0'},
         modified_payload)
     svc.receive_push
 
@@ -134,7 +134,7 @@ class RationalTeamConcertTest < Service::TestCase
        'username' => username, 
        'password' => password,
        'project_area_uuid' => '_UIID',
-       'basic_authentication' => 0},
+       'basic_authentication' => '0'},
         modified_payload)
     svc.receive_push
 

@@ -9,12 +9,12 @@ class Service::Twitter < Service
     statuses   = []
     repository = payload['repository']['name']
 
-    if data['digest'] == '1'
+    if config_boolean_true?('digest')
       commit = payload['commits'][-1]
       author = commit['author'] || {}
       url = "#{payload['repository']['url']}/commits/#{ref_name}"
       status = "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
-      status = if data['short_format'] == '1'
+      status = if short_format?
         "#{url} - #{payload['commits'].length} commits"
       else
         "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
@@ -34,7 +34,7 @@ class Service::Twitter < Service
         message = commit['message'].split(' ').map do |word|
           (word.length > 1 && word[0] == '@') ? "@\u200b#{word[1..word.length]}" : word
         end.join(' ')
-        status = if data['short_format'] == '1'
+        status = if short_format?
           "#{url} #{message}"
         else
           "[#{repository}] #{url} #{author['name']} - #{message}"
@@ -90,5 +90,9 @@ class Service::Twitter < Service
   def consumer
     @consumer ||= ::OAuth::Consumer.new(consumer_key, consumer_secret,
                                         {:site => "https://api.twitter.com"})
+  end
+
+  def short_format?
+    config_boolean_true?('short_format')
   end
 end

@@ -65,7 +65,7 @@ class Service::AutoDeploy < Service::HttpPost
   end
 
   def deploy_on_status?
-    data['deploy_on_status'] == '1'
+    config_boolean_true?('deploy_on_status')
   end
 
   def version_string

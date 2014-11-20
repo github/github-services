@@ -85,6 +85,23 @@ class ServiceTest < Service::TestCase
     assert_equal payload, JSON.parse(json)
   end
 
+  def test_config_boolean_true_helper
+    svc = service(:push, "is_checked" => nil)
+    refute svc.config_boolean_true?("is_checked")
+
+    svc = service(:push, "is_checked" => 0)
+    refute svc.config_boolean_true?("is_checked")
+
+    svc = service(:push, "is_checked" => "0")
+    refute svc.config_boolean_true?("is_checked")
+
+    svc = service(:push, "is_checked" => 1)
+    assert svc.config_boolean_true?("is_checked")
+
+    svc = service(:push, "is_checked" => "1")
+    assert svc.config_boolean_true?("is_checked")
+  end
+
   def service(*args)
     super TestService, *args
   end

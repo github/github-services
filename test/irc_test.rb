@@ -237,6 +237,20 @@ class IRCTest < Service::TestCase
     assert_nil msgs.shift
   end
 
+  def test_gollum
+    svc = service(:gollum, {'room' => 'r', 'nick' => 'n'}, gollum_payload)
+
+    svc.receive_gollum
+    msgs = svc.writable_irc.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match "USER n", msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*\[grit\] defunkt created wiki page Foo/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+
   def test_default_port_with_ssl
     svc = service({'ssl' => '1'}, payload)
     assert_equal 6697, svc.port
