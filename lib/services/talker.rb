@@ -13,7 +13,7 @@ class Service::Talker < Service
     prepare_http
 
     say "#{summary_message} – #{summary_url}"
-    if data['digest'].to_i == 0
+    if config_boolean_false?('digest')
       if distinct_commits.size == 1
         commit = distinct_commits.first
         say format_commit_message(commit)

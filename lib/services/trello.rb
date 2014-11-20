@@ -37,7 +37,7 @@ class Service::Trello < Service
   end
 
   def process_commits?
-    payload['commits'].size > 0 && (data['master_only'].to_i != 1 || branch_name == 'master')
+    payload['commits'].size > 0 && (config_boolean_false?('master_only') || branch_name == 'master')
   end
 
   def assert_required_credentials(event)

@@ -27,12 +27,12 @@ class Service::HipChat < Service
     end
 
     # ignore forks and watches if boolean is set
-    return if event.to_s =~ /fork/ && data['quiet_fork']
-    return if event.to_s =~ /watch/ && data['quiet_watch']
-    return if event.to_s =~ /comment/ && data['quiet_comments']
-    return if event.to_s =~ /gollum/ && data['quiet_wiki']
-    return if event.to_s =~ /issue|pull_request/ && payload['action'].to_s =~ /label/ && data['quiet_labels']
-    return if event.to_s =~ /issue|pull_request/ && payload['action'].to_s =~ /assign/ && data['quiet_assigning']
+    return if event.to_s =~ /fork/ && config_boolean_true?('quiet_fork')
+    return if event.to_s =~ /watch/ && config_boolean_true?('quiet_watch')
+    return if event.to_s =~ /comment/ && config_boolean_true?('quiet_comments')
+    return if event.to_s =~ /gollum/ && config_boolean_true?('quiet_wiki')
+    return if event.to_s =~ /issue|pull_request/ && payload['action'].to_s =~ /label/ && config_boolean_true?('quiet_labels')
+    return if event.to_s =~ /issue|pull_request/ && payload['action'].to_s =~ /assign/ && config_boolean_true?('quiet_assigning')
 
     http.headers['X-GitHub-Event'] = event.to_s
 
@@ -48,7 +48,7 @@ class Service::HipChat < Service
         :auth_token => data['auth_token'],
         :room_id => room_id,
         :payload => generate_json(payload),
-        :notify => data['notify'] ? 1 : 0
+        :notify => config_boolean_true?('notify') ? 1 : 0
       }
       if data['color'].present?
         params.merge!(:color => data['color'])

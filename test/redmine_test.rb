@@ -30,7 +30,7 @@ class RedmineTest < Service::TestCase
     configurations = {
       'address' => "http://redmine.org", 
       'api_key' => "API_KEY-654321",
-      'update_redmine_issues_about_commits' => true
+      'update_redmine_issues_about_commits' => '1'
     }
     payloads = {
       'commits' => [ 
@@ -58,7 +58,7 @@ class RedmineTest < Service::TestCase
     configurations = {
         'address' => "http://redmine.org/a",
         'api_key' => "API_KEY-654321",
-        'update_redmine_issues_about_commits' => true
+        'update_redmine_issues_about_commits' => '1'
     }
     payloads = {
         'commits' => [

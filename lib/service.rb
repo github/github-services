@@ -502,6 +502,15 @@ class Service
     @remote_calls = []
   end
 
+  # Boolean fields as either nil, "0", or "1".
+  def config_boolean_true?(boolean_field)
+    data[boolean_field].to_i == 1
+  end
+
+  def config_boolean_false?(boolean_field)
+    !config_boolean_true?(boolean_field)
+  end
+
   def respond_to_event?
     !@event_method.nil?
   end

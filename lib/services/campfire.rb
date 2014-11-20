@@ -42,9 +42,9 @@ class Service::Campfire < Service
   def send_messages(messages)
     raise_config_error 'Missing campfire token' if data['token'].to_s.empty?
 
-    return if data['master_only'].to_i == 1 && respond_to?(:branch_name) && branch_name != 'master'
+    return if config_boolean_true?('master_only') && respond_to?(:branch_name) && branch_name != 'master'
 
-    play_sound = data['play_sound'].to_i == 1
+    play_sound = config_boolean_true?('play_sound')
     sound = data['sound'].blank? ? 'rimshot' : data['sound']
 
     unless room = find_room
@@ -71,7 +71,7 @@ class Service::Campfire < Service
   end
 
   def configured_summary_url
-    data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
+    config_boolean_true?('long_url') ? summary_url : shorten_url(summary_url)
   end
 
   def find_room

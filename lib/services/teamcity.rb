@@ -15,7 +15,7 @@ class Service::TeamCity < Service
 
     branches = data['branches'].to_s.split(/\s+/)
     ref = payload["ref"].to_s
-    branch = data['full_branch_ref'] ? ref : ref.split("/", 3).last
+    branch = config_boolean_true?('full_branch_ref') ? ref : ref.split("/", 3).last
     return unless branches.empty? || branches.include?(branch)
 
     # :(
