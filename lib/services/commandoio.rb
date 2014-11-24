@@ -52,7 +52,7 @@ class Service::Commandoio < Service::HttpPost
 
     params.merge!(:server          => data['server'])             if data['server']
     params.merge!(:groups          => groups)                     unless groups.nil?
-    params.merge!(:halt_on_stderr  => data['halt_on_stderr'])     if data['halt_on_stderr']
+    params.merge!(:halt_on_stderr  => data['halt_on_stderr'])     if config_boolean_true?('halt_on_stderr')
     params.merge!(:notes           => CGI.escape(data['notes']))  if data['notes']
 
     http_post url, params
