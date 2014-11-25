@@ -1,17 +1,20 @@
 module Service::DeploymentHelpers
   def self.sample_deployment_payload
     {
-      "id"=>721,
-      "ref"=>"master",
-      "sha"=>"9be5c2b9c34c1f8beb0cec30bb0c875d098f45ef",
-      "name"=>"atmos/my-robot",
-      "environment"=>"production",
-      "payload"=>{
-        "config"=>{
-          "heroku_production_name"=>"my-app"
-        }
+      "deployment" => {
+        "id"=>721,
+        "ref"=>"master",
+        "sha"=>"9be5c2b9c34c1f8beb0cec30bb0c875d098f45ef",
+        "name"=>"atmos/my-robot",
+        "task"=>"deploy",
+        "environment"=>"production",
+        "payload"=>{
+          "config"=>{
+            "heroku_production_name"=>"my-app"
+          }
+        },
+        "description"=>nil,
       },
-      "description"=>nil,
       "repository"=>
       {
         "id"=>16650088,
