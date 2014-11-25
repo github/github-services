@@ -27,8 +27,12 @@ class Service::AwsOpsWorks < Service::HttpPost
     environment_stack_id || required_config_value('stack_id')
   end
 
+  def deployment_payload
+    payload['deployment']
+  end
+
   def deployment_command
-    payload['task'] || 'deploy'
+    (deployment_payload && deployment_payload['task']) || 'deploy'
   end
 
   def environment_stack_id
@@ -44,11 +48,13 @@ class Service::AwsOpsWorks < Service::HttpPost
   end
 
   def opsworks_payload
-    payload['payload'] && payload['payload']['config'] && payload['payload']['config']['opsworks']
+    deployment_payload && deployment_payload['payload'] &&
+      deployment_payload['payload']['config'] &&
+      deployment_payload['payload']['config']['opsworks']
   end
 
   def environment
-    payload['environment']
+    deployment_payload['environment']
   end
 
   def receive_event
@@ -77,10 +83,10 @@ class Service::AwsOpsWorks < Service::HttpPost
     deployment_status_options = {
       "state"       => "success",
       "target_url"  => aws_opsworks_output_url,
-      "description" => "Deployment #{payload['id']} Accepted by Amazon. (github-services@#{Service.current_sha[0..7]})"
+      "description" => "Deployment #{payload['deployment']['id']} Accepted by Amazon. (github-services@#{Service.current_sha[0..7]})"
     }
 
-    deployment_path = "/repos/#{github_repo_path}/deployments/#{payload['id']}/statuses"
+    deployment_path = "/repos/#{github_repo_path}/deployments/#{payload['deployment']['id']}/statuses"
     response = http_post "#{github_api_url}#{deployment_path}" do |req|
       req.headers.merge!(default_github_headers)
       req.body = JSON.dump(deployment_status_options)
@@ -110,7 +116,7 @@ class Service::AwsOpsWorks < Service::HttpPost
   end
 
   def deployment_ref_name
-    payload['ref']
+    payload['deployment']['ref']
   end
 
   def update_app_revision(revision_name)

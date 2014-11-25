@@ -18,7 +18,7 @@ class Service::AwsCodeDeploy < Service::HttpPost
   url "http://docs.aws.amazon.com/codedeploy/latest/APIReference/"
 
   def environment
-    payload['environment']
+    payload['deployment']['environment']
   end
 
   def application_name
@@ -36,9 +36,9 @@ class Service::AwsCodeDeploy < Service::HttpPost
   end
 
   def codedeploy_payload
-    payload['payload'] &&
-      payload['payload']['config'] &&
-      payload['payload']['config']['codedeploy']
+    payload['deployment']['payload'] &&
+      payload['deployment']['payload']['config'] &&
+      payload['deployment']['payload']['config']['codedeploy']
   end
 
   def receive_event
@@ -58,7 +58,7 @@ class Service::AwsCodeDeploy < Service::HttpPost
     options = {
       :revision => {
         :git_hub_location => {
-          :commit_id  => payload["sha"],
+          :commit_id  => payload['deployment']["sha"],
           :repository => github_repo_path,
         },
         :revision_type => "GitHub"
@@ -78,10 +78,10 @@ class Service::AwsCodeDeploy < Service::HttpPost
     deployment_status_options = {
       "state"       => "success",
       "target_url"  => aws_code_deploy_client_url,
-      "description" => "Deployment #{payload['id']} Accepted by Amazon. (github-services@#{Service.current_sha[0..7]})"
+      "description" => "Deployment #{payload['deployment']['id']} Accepted by Amazon. (github-services@#{Service.current_sha[0..7]})"
     }
 
-    deployment_path = "/repos/#{github_repo_path}/deployments/#{payload['id']}/statuses"
+    deployment_path = "/repos/#{github_repo_path}/deployments/#{payload['deployment']['id']}/statuses"
     response = http_post "#{github_api_url}#{deployment_path}" do |req|
       req.headers.merge!(default_github_headers)
       req.body = JSON.dump(deployment_status_options)

@@ -22,15 +22,15 @@ class Service::HerokuBeta < Service::HttpPost
   end
 
   def environment
-    payload['environment']
+    payload['deployment']['environment']
   end
 
   def ref
-    payload['ref']
+    payload['deployment']['ref']
   end
 
   def sha
-    payload['sha'][0..7]
+    payload['deployment']['sha'][0..7]
   end
 
   def version_string
@@ -84,7 +84,7 @@ class Service::HerokuBeta < Service::HttpPost
       "description" => "Created by GitHub Services@#{Service.current_sha[0..7]}"
     }
 
-    deployment_path = "/repos/#{github_repo_path}/deployments/#{payload['id']}/statuses"
+    deployment_path = "/repos/#{github_repo_path}/deployments/#{payload['deployment']['id']}/statuses"
     response = http_post "#{github_api_url}#{deployment_path}" do |req|
       req.headers.merge!(default_github_headers)
       req.body = JSON.dump(deployment_status_options)
