@@ -10,7 +10,7 @@ class Service::Lighthouse < Service
 
     payload['commits'].each do |commit|
       next if commit['message'] =~ /^x /
-      next if data['send_only_ticket_commits'] == '1' \
+      next if config_boolean_true?('send_only_ticket_commits') \
         && (commit['message'] =~ check_for_lighthouse_flags).nil?
 
       commit_id = commit['id']
@@ -19,7 +19,7 @@ class Service::Lighthouse < Service
       modified  = commit['modified'].map { |f| ['M', f] }
       diff      = YAML.dump(added + removed + modified)
 
-      diff = YAML.dump([]) if data['private']
+      diff = YAML.dump([]) if config_boolean_true?('private')
 
       title = "Changeset [%s] by %s" % [commit_id, commit['author']['name']]
       body  = "#{commit['message']}\n#{commit['url']}"

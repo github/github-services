@@ -25,12 +25,12 @@ class Service::XmppMuc < Service::HttpPost
       return false
     end
     
-    return false if event.to_s =~ /fork/ && !data['notify_fork']
-    return false if event.to_s =~ /watch/ && !data['notify_watch']
-    return false if event.to_s =~ /_comment/ && !data['notify_comments']
-    return false if event.to_s =~ /gollum/ && !data['notify_wiki']
-    return false if event.to_s =~ /issue/ && !data['notify_issue']
-    return false if event.to_s =~ /pull_/ && !data['notify_pull']
+    return false if event.to_s =~ /fork/ && config_boolean_false?('notify_fork')
+    return false if event.to_s =~ /watch/ && config_boolean_false?('notify_watch')
+    return false if event.to_s =~ /_comment/ && config_boolean_false?('notify_comments')
+    return false if event.to_s =~ /gollum/ && config_boolean_false?('notify_wiki')
+    return false if event.to_s =~ /issue/ && config_boolean_false?('notify_issue')
+    return false if event.to_s =~ /pull_/ && config_boolean_false?('notify_pull')
 
     build_message(event, payload)
     return true

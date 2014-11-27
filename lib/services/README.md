@@ -51,7 +51,7 @@ class Service::MyService < Service
 end
 ```
 
-## Tip: Test your service like a bossk.
+## Tip: Test your service like a boss.
 
 ```ruby
 class MyServiceTest < Service::TestCase

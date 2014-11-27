@@ -25,12 +25,12 @@ class XmppMucTest < Service::TestCase
       'room' => 'status',
       'server' => 'muc.example.com',
       'nickname' => 'github',
-      'notify_fork' => true,
-      'notify_wiki' => true,
-      'notify_comments' => true,
-      'notify_watch' => true,
-      'notify_issue' => true,
-      'notify_pull' => true,
+      'notify_fork' => '1',
+      'notify_wiki' => '1',
+      'notify_comments' => '1',
+      'notify_watch' => '1',
+      'notify_issue' => '1',
+      'notify_pull' => '1',
       'is_test' => true
     }
     @mock = MockXmpp4r.new()
@@ -96,7 +96,7 @@ class XmppMucTest < Service::TestCase
     
   def test_returns_false_if_fork_event_and_not_notifiying
     config = @config
-    config['notify_fork'] = false
+    config['notify_fork'] = '0'
     assert_equal(
       false,
       service(:fork, config, payload).receive_event,
@@ -106,7 +106,7 @@ class XmppMucTest < Service::TestCase
     
   def test_returns_false_if_watch_event_and_not_notifiying
     config = @config
-    config['notify_watch'] = false
+    config['notify_watch'] = '0'
     assert_equal(
       false,
       service(:watch, config, payload).receive_event,
@@ -116,7 +116,7 @@ class XmppMucTest < Service::TestCase
     
   def test_returns_false_if_comment_event_and_not_notifiying
     config = @config
-    config['notify_comments'] = false
+    config['notify_comments'] = '0'
     assert_equal(
       false,
       service(:issue_comment, config, payload).receive_event,
@@ -126,7 +126,7 @@ class XmppMucTest < Service::TestCase
     
   def test_returns_false_if_wiki_event_and_not_notifiying
     config = @config
-    config['notify_wiki'] = false
+    config['notify_wiki'] = '0'
     assert_equal(
       false,
       service(:gollum, config, payload).receive_event,
@@ -136,7 +136,7 @@ class XmppMucTest < Service::TestCase
     
   def test_returns_false_if_issue_event_and_not_notifiying
     config = @config
-    config['notify_issue'] = false
+    config['notify_issue'] = '0'
     assert_equal(
       false,
       service(:issues, config, payload).receive_event,
@@ -146,7 +146,7 @@ class XmppMucTest < Service::TestCase
     
   def test_returns_false_if_pull_event_and_not_notifiying
     config = @config
-    config['notify_pull'] = false
+    config['notify_pull'] = '0'
     assert_equal(
       false,
       service(:pull_request_review_comment, config, payload).receive_event,

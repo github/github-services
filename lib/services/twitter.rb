@@ -2,19 +2,29 @@ class Service::Twitter < Service
   password  :token, :secret
   boolean :digest, :short_format
   TWITTER_SHORT_URL_LENGTH_HTTPS = 23
+  
+  white_list :filter_branch
 
   def receive_push
     return unless payload['commits']
 
+    commit_branch = (payload['ref'] || '').split('/').last || ''
+    filter_branch = data['filter_branch'].to_s
+
+    # If filtering by branch then don't make a post
+    if (filter_branch.length > 0) && (commit_branch.index(filter_branch) == nil)
+      return false
+    end
+    
     statuses   = []
     repository = payload['repository']['name']
 
-    if data['digest'] == '1'
+    if config_boolean_true?('digest')
       commit = payload['commits'][-1]
       author = commit['author'] || {}
       url = "#{payload['repository']['url']}/commits/#{ref_name}"
       status = "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
-      status = if data['short_format'] == '1'
+      status = if short_format?
         "#{url} - #{payload['commits'].length} commits"
       else
         "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
@@ -34,7 +44,7 @@ class Service::Twitter < Service
         message = commit['message'].split(' ').map do |word|
           (word.length > 1 && word[0] == '@') ? "@\u200b#{word[1..word.length]}" : word
         end.join(' ')
-        status = if data['short_format'] == '1'
+        status = if short_format?
           "#{url} #{message}"
         else
           "[#{repository}] #{url} #{author['name']} - #{message}"
@@ -90,5 +100,9 @@ class Service::Twitter < Service
   def consumer
     @consumer ||= ::OAuth::Consumer.new(consumer_key, consumer_secret,
                                         {:site => "https://api.twitter.com"})
+  end
+
+  def short_format?
+    config_boolean_true?('short_format')
   end
 end

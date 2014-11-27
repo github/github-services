@@ -56,11 +56,11 @@ class Service::Redmine < Service
   end
 
   def fetch_github_commits_enabled?
-    data['fetch_commits']
+    config_boolean_true?('fetch_commits')
   end
 
   def update_issues_enabled?
-    data['update_redmine_issues_about_commits']
+    config_boolean_true?('update_redmine_issues_about_commits')
   end
 
   #Extract and buffer the needed commit information into one string

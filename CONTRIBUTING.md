@@ -110,4 +110,4 @@ To make use of these additional types, your service will either need to define
 `receive_<type>` (like `receive_pull_request_review_comment`) or a generic
 `receive_event`.
 
-You can read more about the Hooks in the [API Documentation](http://developer.github.com/v3/repos/hooks/).
+You can read more about Hooks in the [API Documentation](http://developer.github.com/v3/repos/hooks/).

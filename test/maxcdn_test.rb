@@ -29,7 +29,7 @@ class MaxCDNTest < Service::TestCase
       "key"         => "foobar_key",
       "secret"      => "foobar_secret",
       "zone_id"     => 123456,
-      "static_only" => false
+      "static_only" => '0'
     }
 
     @svc = service(@arguments, dynamic_payload)
@@ -62,13 +62,13 @@ class MaxCDNTest < Service::TestCase
     assert_match /test error/, error.message
 
     arguments = @arguments.clone
-    arguments["static_only"] = true
+    arguments["static_only"] = '1'
     svc = service(arguments, payload)
 
     refute svc.receive_push
 
     arguments = @arguments.clone
-    arguments["static_only"] = true
+    arguments["static_only"] = '1'
     svc = service(arguments, static_payload)
 
     assert svc.receive_push

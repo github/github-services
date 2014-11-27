@@ -81,4 +81,37 @@ class TwitterTest < Service::TestCase
   def service(*args)
     super Service::Twitter, *args
   end
+    
+  def test_filter_branch
+    svc = service({'token' => 't', 'secret' => 's', 'filter_branch' => 'tweet' }, payload)
+
+    def svc.shorten_url(*args) 'short' end
+    def svc.statuses
+      @statuses ||= []
+    end
+
+    def svc.post(status)
+      statuses << status
+    end
+
+    svc.receive_push
+    assert_equal 0, svc.statuses.size
+  end
+    
+  def test_filter_branch_partial
+    svc = service({'token' => 't', 'secret' => 's', 'filter_branch' => 'ast' }, payload)
+
+    def svc.shorten_url(*args) 'short' end
+    def svc.statuses
+      @statuses ||= []
+    end
+
+    def svc.post(status)
+      statuses << status
+    end
+
+    svc.receive_push
+    assert_equal 3, svc.statuses.size
+  end
+    
 end

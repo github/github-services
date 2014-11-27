@@ -11,7 +11,7 @@ commit list, instead of tweeting all commits individually with their message and
 Check "Short format" to omit the repository and commiter's names from the tweet to get more
 space for the commit message.
 
-If you would like to restrict to a branch then add the name, otherwise blank means 'all'.
-
+If you would like to only receive messages for a specific branch, add the name (or partial name) to 
+the "Filter branch" option. Otherwise, leave the field blank to receive messages for all branches.
 
 [authorize_url]: <%= twitter_oauth_path(current_repository.user, current_repository) %>

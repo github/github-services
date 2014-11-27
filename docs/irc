@@ -78,7 +78,7 @@ _Recommended_, as it decreases channel noise.  Requires the IRC channel to allow
 > On freenode, allow external messages to the channel by messaging [ChanServ](https://freenode.net/services.shtml):
 >
 > ```
-> /msg ChanServ set #CHANNELNAME mlock -n`
+> /msg ChanServ set #CHANNELNAME mlock -n
 > ```
 >
 > On most other IRC networks, set the channel mode directly:

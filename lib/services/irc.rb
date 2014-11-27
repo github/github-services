@@ -37,10 +37,14 @@ class Service::IRC < Service
     send_messages "#{irc_issue_comment_summary_message} #{fmt_url url}"
   end
 
+  def receive_gollum
+    send_messages "#{irc_gollum_summary_message} #{fmt_url summary_url}"
+  end
+
   def send_messages(messages)
     messages = Array(messages)
 
-    if data['no_colors'].to_i == 1
+    if config_boolean_true?('no_colors')
       messages.each{|message|
         message.gsub!(/\002|\017|\026|\037|\003\d{0,2}(?:,\d{1,2})?/, '')}
     end
@@ -53,7 +57,7 @@ class Service::IRC < Service
 
     rooms   = rooms.gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
     botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick'][0..16]
-    command = data['notice'].to_i == 1 ? 'NOTICE' : 'PRIVMSG'
+    command = config_boolean_true?('notice') ? 'NOTICE' : 'PRIVMSG'
 
     irc_password("PASS", data['password']) if !data['password'].to_s.empty?
     irc_puts "NICK #{botname}"
@@ -82,7 +86,7 @@ class Service::IRC < Service
       end
     end
 
-    without_join = data['message_without_join'] == '1'
+    without_join = config_boolean_true?('message_without_join')
     rooms.each do |room|
       room, pass = room.split("::")
       irc_puts "JOIN #{room} #{pass}" unless without_join
@@ -171,7 +175,7 @@ class Service::IRC < Service
   end
 
   def use_ssl?
-    data['ssl'].to_i == 1
+    config_boolean_true?('ssl')
   end
 
   def default_port
@@ -183,7 +187,7 @@ class Service::IRC < Service
   end
 
   def url
-    data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
+    config_boolean_true?('long_url') ? summary_url : shorten_url(summary_url)
   end
 
   ### IRC message formatting.  For reference:
@@ -314,6 +318,10 @@ class Service::IRC < Service
     "\##{pull_request_number} #{fmt_hash sha1[0..6]}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def irc_gollum_summary_message
+    summary_message
   end
 
   def branch_name_matches?
