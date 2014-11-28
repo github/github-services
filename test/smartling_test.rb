@@ -9,7 +9,7 @@ class SmartlingTest < Service::TestCase
     data = self.data.update("service_url" => "")
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -18,7 +18,7 @@ class SmartlingTest < Service::TestCase
     data = self.data.update("project_id" => "")
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -27,7 +27,7 @@ class SmartlingTest < Service::TestCase
     data = self.data.update("api_key" => "")
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -36,7 +36,7 @@ class SmartlingTest < Service::TestCase
     data = self.data.update("config_path" => "")
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
