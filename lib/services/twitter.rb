@@ -1,5 +1,6 @@
 class Service::Twitter < Service
   password  :token, :secret
+  string :filter_branch
   boolean :digest, :short_format
   TWITTER_SHORT_URL_LENGTH_HTTPS = 23
   
