@@ -1,0 +1,10 @@
+The [Smartling](http://www.smartling.com/) platform simplifies and accelerates translation and localization of your websites, mobile apps, and documents.
+
+Install Notes
+-------------
+
+1. **Service url** - URL where your _Repository Connector service_ is run
+2. **Project ID** - Your Smartling Project identifier code.  You can find it and your **API key** in [Smartling dashboard -> Project Settings -> API](https://dashboard.smartling.com/settings/api.htm)
+3. **API key** - Your Smartling API key
+4. **Config path** - Relative path to the Smartling configuration file in your repository. By default the file name is expected to be `smartling-config.json`
+5. **Master only** - If this flag is checked only changes to the `master` branch will be uploaded to Smartling
