@@ -8,10 +8,10 @@ GitHub will accept service hooks for the following types of services:
 In order to provide quality service and support for our users, we require the
 following:
 
-* Implement endpoints that take [the new payload](https://github.com/github/github-services/blob/56baa4ce03e64ebf67105ee22f752bf7c2383274/lib/services/http_post.rb#L13-L16), completely unmodified.
-  * Good example: [Simperium](https://github.com/github/github-services/blob/master/lib/services/simperium.rb)
+* Implement endpoints that take [the new payload](https://github.com/github/github-services/blob/56baa4ce03e64ebf67105ee22f752bf7c2383274/lib/services/http_post.rb#L13-L16), completely unmodified. Here are some examples for your viewing pleasure.
+  * A Good example: [Simperium](https://github.com/github/github-services/blob/master/lib/services/simperium.rb)
     has minimal logic (just config parameters, an HTTP header, and a custom url).
-  * Bad Example: [Campfire](https://github.com/github/github-services/blob/master/lib/services/campfire.rb)
+  * A Bad Example: [Campfire](https://github.com/github/github-services/blob/master/lib/services/campfire.rb)
     modifies the payload to make multiple calls to the Campfire service.
 * Thorough documentation about what the hook does, and what the options do.
 * Tested code that works.  If we have to make changes to the Services infrastructure,
@@ -23,17 +23,17 @@ We'd also like the following information to help provide quality service and
 support to our users:
 
 * A URL for the service (if applicable).
-* A URL to a logo for the service (png or gif preferred).
-* A maintainer.  Someone that GitHub can contact in the event of bugs.  We prefer
-GitHub users, so that we can file issues directly to the github/github-services
-Repository.
-* A support contact for our users that have problems.  This can be a GitHub user,
-an email address, or link to a contact form.
+* A URL to a logo for the service (pngs or gifs are preferable).
+* A maintainer.  Someone that GitHub can contact in the event of bugs. (GitHub users are prefered. That way we can contact them via Issue rather then via email.)
+* A support contact for our users that have problems.  (This can be a GitHub user,
+an email address, or link to a contact form.)
 
 If we need support from any hooks without this data, we will look for the most
 active contributor to the hook file itself.
 
-You can annotate this directly in the hook like so:
+You can annotate this directly in the hook!
+
+Here is an A+ example:
 
 ```ruby
 class Service::MyService < Service::HttpPost
@@ -58,7 +58,7 @@ class Service::MyService < Service::HttpPost
 end
 ```
 
-You can annotate Supporters and Maintainers by the following methods:
+You can also annotate Supporters and Maintainers by the following methods:
 
 * `:github` - a GitHub login.
 * `:web` - A URL to a contact form.
@@ -68,12 +68,13 @@ You can annotate Supporters and Maintainers by the following methods:
 How to test your service
 ------------------------
 
-You can test your service in a ruby irb console:
+You can test your service(s) in a ruby IRB console:
 
-0. Cache gems and install them to `vendor/gems` by doing:
+Steps:
+1. Cache gems and install them to `vendor/gems` by doing:
    `script/bootstrap`
-1. Start a console: `script/console`
-2. Instantiate your Service:
+2. Start a console: `script/console`
+3. Instantiate your Service:
 
     ```ruby
     svc = Service::MyService.new(:push,
@@ -85,7 +86,7 @@ You can test your service in a ruby irb console:
     svc.receive_event
     ```
 
-3. The third argument is optional if you just want to use the sample
+4. The third argument is optional if you just want to use the sample
    payload.
 
     ```ruby
@@ -110,4 +111,5 @@ To make use of these additional types, your service will either need to define
 `receive_<type>` (like `receive_pull_request_review_comment`) or a generic
 `receive_event`.
 
-You can read more about Hooks in the [API Documentation](http://developer.github.com/v3/repos/hooks/).
+
+If you still have questions, you can read more about Hooks in the [API Documentation](http://developer.github.com/v3/repos/hooks/).
