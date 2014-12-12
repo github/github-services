@@ -21,6 +21,9 @@ This service will connect to an XMPP MUC room with the provided details and then
 5. **Notify issues** - Get notifications on issues
 6. **Notify pull requests** - Get notifications of pull requests
 
+If you would like to only receive messages for a specific branch, add the name (or partial name) to 
+the "Restrict to Branch" option. Otherwise, leave the field blank to receive messages for all branches.
+
 ## Notes
 
 You may wish to reserve the nickname for the user in question so that it will 
