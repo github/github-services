@@ -6,7 +6,7 @@ For more details about Travis, go to http://docs.travis-ci.com.
 
 ## Automatic configuration from Travis CI
 We recommend using the Travis profile page at https://travis-ci.org/profile to manage your hooks.
-For private repositories, use https://travis-ci.com/profile.
+For private repositories, use https://magnum.travis-ci.com/profile.
 
 ## Travis CI Status
 Travis CI status page: http://status.travis-ci.com
