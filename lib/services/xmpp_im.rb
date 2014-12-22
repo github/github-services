@@ -1,4 +1,4 @@
-class Service::XmppIm < Service::XmppHelper
+class Service::XmppIm < XmppHelper
     
   self.title = 'XMPP IM'
   self.hook_name = 'xmpp_im'
@@ -64,6 +64,9 @@ class Service::XmppIm < Service::XmppHelper
     end
     @data = data
   end
+
+  url 'http://xmpp.org/rfcs/rfc6121.html'
+  logo_url 'http://xmpp.org/images/xmpp-small.png'
 
   # lloydwatkin on GitHub is <del>pinged</del> contacted for any bugs with the Hook code.
   maintained_by :github => 'lloydwatkin'
