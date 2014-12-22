@@ -1,3 +1,5 @@
+require_relative 'xmpp_base'
+
 class Service::XmppMuc < XmppHelper
     
   self.title = 'XMPP MUC'

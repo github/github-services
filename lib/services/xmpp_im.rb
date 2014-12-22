@@ -1,3 +1,5 @@
+require_relative 'xmpp_base'
+
 class Service::XmppIm < XmppHelper
     
   self.title = 'XMPP IM'
