@@ -9,6 +9,9 @@ class Service::Circleci < Service
 
   default_events Service::ALL_EVENTS
 
+  string :domain
+  white_list :domain
+
   def receive_event
     http.headers['content-type'] = 'application/x-www-form-urlencoded'
     http_post circleci_url,
@@ -19,6 +22,14 @@ class Service::Circleci < Service
   private
 
   def circleci_url
-    "https://circleci.com/hooks/github"
+    "#{domain}/hooks/github"
+  end
+
+  def domain
+      if data['domain'].present?
+          data['domain'].sub(%r{/+$}, '')
+      else
+          'https://circleci.com'
+      end
   end
 end
