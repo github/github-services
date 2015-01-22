@@ -1,4 +1,4 @@
-This service hook allows you to transition JIRA tickets using the REST API available in
+This service hook allows you to transition JIRA tickets and post comments using the REST API available in
 version 4.2+ of JIRA. To interact with tickets in JIRA you will need to place markup
 similar to Lighthouse's in your commit message.
 
@@ -6,6 +6,9 @@ similar to Lighthouse's in your commit message.
 
 This will perform transition 31 with a resolution code of 1 on the issue WEB-210. You can specify
 any key value pair with the `key:value` notation, but at the very least transition must be present.
+
+Additionally, the author, commit msg, and files-changed will be placed in a comment in the jira issue 
+if the "Post comments" checkbox is selected.  A transition is not required for this.
 
 NOTE: As of 2.0.alpha1, the REST API will not automatically interpret strings into integers and vice
 versa.
