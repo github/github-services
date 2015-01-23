@@ -4,6 +4,11 @@ class Service::JIRA < Service
   boolean :post_comments
   white_list :api_version, :server_url, :username, :post_comments
 
+  logo_url "https://www.atlassian.com/wac/software/jira/productLogo/imageBinary/jira_logo_landing.png"
+
+  # i'd like to help improve this service
+  maintained_by :github => 'elordahl'
+
   def receive_push
     payload['commits'].each do |commit|
       next if commit['message'] =~ /^x /
