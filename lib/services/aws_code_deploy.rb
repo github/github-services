@@ -113,7 +113,12 @@ class Service::AwsCodeDeploy < Service::HttpPost
   end
 
   def custom_aws_region
-    code_deploy_aws_region || 'us-east-1'
+    return code_deploy_aws_region if code_deploy_aws_region
+    if config_value('aws_region').empty?
+      'us-east-1'
+    else
+      config_value('aws_region')
+    end
   end
 
   def stubbed_responses?
