@@ -115,6 +115,19 @@ class BambooTest < Service::TestCase
     end
   end
 
+  def test_branch_with_slash
+    data = self.data.update('build_key' => 'test/test:ABC')
+    payload = self.payload.update('ref' => 'test/test')
+    @stubs.post "/rest/api/latest/queue/ABC" do |env|
+      valid_response("ABC")
+    end
+
+    svc = service :push, data, payload
+    svc.receive
+
+    @stubs.verify_stubbed_calls
+  end
+
   def data
     {
       "build_key" => "ABC",

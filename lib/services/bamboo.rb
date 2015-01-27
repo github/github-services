@@ -19,7 +19,7 @@ class Service::Bamboo < Service
     # Post body is empty but Bamboo REST expects this to be set (in 3.x)
     http.headers['Content-Type'] = 'application/xml'
 
-    commit_branch = ref.split('/').last
+    commit_branch = ref.sub(/\Arefs\/(heads|tags)\//, '')
 
     build_key.split(',').each do |branch_key|
       #See if the split result is just a key or a branch:key
