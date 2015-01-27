@@ -14,3 +14,5 @@ docs/payload_data
 .buildpath
 log
 tmp
+pkg
+Gemfile.lock

@@ -1,12 +1,7 @@
 require File.expand_path('../helper', __FILE__)
-Service::App.set :environment, :test
 
 class BambooTest < Service::TestCase
   EXAMPLE_BASE_URL = "http://bamboo.example.com".freeze
-
-  def app
-    Service::App
-  end
 
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
