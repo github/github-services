@@ -29,9 +29,11 @@ class Service::Kanbanize < Service
     issues_board_id = data['project_issues_board_id'].to_s
 	
     # check the branch restriction is poplulated and branch is not included
-    branch = payload['ref'].split('/').last
-    if branch_restriction.length > 0 && branch_restriction.index(branch) == nil
-      return
+    if event.to_s == 'push'
+    	branch = payload['ref'].split('/').last
+    	if branch_restriction.length > 0 && branch_restriction.index(branch) == nil
+	    return
+    	end
     end
 
     http_post "http://#{domain_name}/index.php/api/kanbanize/git_hub_event",
