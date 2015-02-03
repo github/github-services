@@ -1,5 +1,7 @@
 [TeamCity](https://www.jetbrains.com/teamcity/) is a continuous integration server that automates the building and testing of your software.
-The GitHub TeamCity service can be used to trigger builds after code has been pushed to your git repository.
+The GitHub TeamCity service can be used in two ways:
+* to trigger builds after code has been pushed to your git repository; (Default)
+* to enforce checking for changes after code has been pushed to your git repository. (see 7)
 
 Install Notes
 -------------
@@ -24,7 +26,10 @@ Install Notes
 6. "Full branch ref" if enabled full branch reference (e.g. 'refs/heads/master')
    will be send to TeamCity server. Otherwise 'refs/heads' will be omitted.
 
-7. Since TeamCity uses BASIC authentication, it is highly recommended that the
+7. "Check for pending changes" if enabled, service will force TeamCity server
+   to check for pending changes. Service will not trigger new build.
+
+8. Since TeamCity uses BASIC authentication, it is highly recommended that the
    TeamCity server use HTTPS/SSL to protect the password that is passed
    unencrypted over the internet.
 
