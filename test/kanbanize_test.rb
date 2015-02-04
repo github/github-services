@@ -46,7 +46,7 @@ class KanbanizeTest < Service::TestCase
     @stubs.post url do |env|
       assert_equal 'testdomain.kanbanize.com', env[:url].host
       assert_equal '/index.php/api/kanbanize/git_hub_event', env[:url].request_uri
-      assert_equal %({"ref":"refs/heads/mybranch2"}), env[:body]
+      assert_equal %({"action":"created"}), env[:body]
       assert_equal 'a1b2c3==', env[:request_headers]['apikey']
       assert_equal '', env[:request_headers]['branch-filter']
       assert_equal false, env[:request_headers]['last-commit']
@@ -55,7 +55,7 @@ class KanbanizeTest < Service::TestCase
       [200, {}, '']
     end
 	
-    svc = service({'kanbanize_domain_name' => 'testdomain.kanbanize.com', 'kanbanize_api_key' => 'a1b2c3==', 'track_project_issues_in_kanbanize' => '1', 'project_issues_board_id' => '131'}, {'ref' => 'refs/heads/mybranch2'})
+    svc = service(:issues, {'kanbanize_domain_name' => 'testdomain.kanbanize.com', 'kanbanize_api_key' => 'a1b2c3==', 'track_project_issues_in_kanbanize' => '1', 'project_issues_board_id' => '131'}, {'action' => 'created'})
     svc.receive_event
   end
 
