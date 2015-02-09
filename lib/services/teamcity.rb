@@ -14,7 +14,7 @@ class Service::TeamCity < Service
   def receive_push
     return if payload['deleted']
 
-    check_for_changes_only = data['check_for_changes_only']
+    check_for_changes_only = config_boolean_true?('check_for_changes_only')
 
     branches = data['branches'].to_s.split(/\s+/)
     ref = payload["ref"].to_s
@@ -35,6 +35,7 @@ class Service::TeamCity < Service
     build_type_ids.split(",").each do |build_type_id|
 
       if check_for_changes_only
+        # This is undocumented call. TODO: migrate to REST API (TC at least 8.0)
         res = http_get "httpAuth/action.html", :checkForChangesBuildType => build_type_id
       else
         res = http_get "httpAuth/action.html", :add2Queue => build_type_id, :branchName => branch
