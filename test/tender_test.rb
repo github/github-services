@@ -30,7 +30,31 @@ class TenderTest < Service::TestCase
     service(:issues, @options, issues_payload).receive_issues
   end
 
+  def test_pull
+    @stubs.post "/tickets/github/Aewi5ui1" do |env|
+      puts env[:body]
+      body = JSON.parse(env[:body])
+
+      assert_equal 'https', env[:url].scheme
+      assert !env[:ssl][:verify]
+      assert_equal 'some.tenderapp.com', env[:url].host
+      assert_equal 'application/json', env[:request_headers]['Content-Type']
+
+      assert_equal body["pull_request"]["state"], "open"
+      assert_equal body["pull_request"]["number"], 5
+      assert_equal body["repository"]["name"], "grit"
+      assert_equal body["repository"]["owner"]["login"], "mojombo"
+
+      [200, {}, '']
+    end
+
+    service(:pull_request, @options, pull_payload).receive_pull_request
+  end
+
+  private
+
   def service(*args)
     super Service::Tender, *args
   end
+
 end

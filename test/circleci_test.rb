@@ -88,6 +88,39 @@ class CircleciTest < Service::TestCase
     assert_equal Service::Circleci.default_events.sort , Service::ALL_EVENTS.sort
   end
 
+  def test_custom_domains
+    svc = service(:push, {'domain' => 'https://e.circleci.com'}, payload)
+
+    @stubs.post "/hooks/github" do |env|
+      body = Faraday::Utils.parse_query env[:body]
+      assert_match "https://e.circleci.com/hooks/github", env[:url].to_s
+    end
+
+    svc.receive_event
+  end
+
+  def test_custom_domains_trailing_slash
+    svc = service(:push, {'domain' => 'https://e.circleci.com/'}, payload)
+
+    @stubs.post "/hooks/github" do |env|
+      body = Faraday::Utils.parse_query env[:body]
+      assert_match "https://e.circleci.com/hooks/github", env[:url].to_s
+    end
+
+    svc.receive_event
+  end
+
+  def test_empty_domain_uses_circleci
+    svc = service(:push, {'domain' => ''}, payload)
+
+    @stubs.post "/hooks/github" do |env|
+      body = Faraday::Utils.parse_query env[:body]
+      assert_match "https://circleci.com/hooks/github", env[:url].to_s
+    end
+
+    svc.receive_event
+  end
+
   private
 
   def service(*args)
@@ -96,7 +129,7 @@ class CircleciTest < Service::TestCase
 
   def post_to_service(event_name)
     assert Service::ALL_EVENTS.include? event_name.to_s
-    svc = service(event_name, {'token' => 'abc'}, payload)
+    svc = service(event_name, {}, payload)
 
     @stubs.post "/hooks/github" do |env|
       body = Faraday::Utils.parse_query env[:body]

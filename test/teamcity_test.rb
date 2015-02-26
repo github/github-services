@@ -18,7 +18,8 @@ class TeamCityTest < Service::TestCase
       'base_url' => 'http://teamcity.com/abc',
       'build_type_id' => 'btid',
       'username' => 'u',
-      'password' => 'p'
+      'password' => 'p',
+      'check_for_changes_only' => '0'
     }, 'payload')
     svc.receive_push
   end
@@ -87,6 +88,24 @@ class TeamCityTest < Service::TestCase
     })
     svc.receive_push
   end
+
+  def test_push_when_check_for_changes_is_true
+    url = "/abc/httpAuth/action.html"
+    @stubs.get url do |env|
+      assert_equal 'teamcity.com', env[:url].host
+      assert_equal 'btid', env[:params]['checkForChangesBuildType']
+      [200, {}, '']
+    end
+
+    svc = service({
+                      'base_url' => 'http://teamcity.com/abc',
+                      'build_type_id' => 'btid',
+                      'check_for_changes_only' => '1'
+                  }, 'payload')
+    svc.receive_push
+  end
+
+
 
   def service(*args)
     super Service::TeamCity, *args

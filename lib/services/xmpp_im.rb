@@ -1,41 +1,40 @@
 require_relative 'xmpp_base'
 
-class Service::XmppMuc < XmppHelper
+class Service::XmppIm < XmppHelper
     
-  self.title = 'XMPP MUC'
-  self.hook_name = 'xmpp_muc'
+  self.title = 'XMPP IM'
+  self.hook_name = 'xmpp_im'
     
-  string :JID, :room, :server, :nickname
-  password :password, :room_password
+  string :JID, :receivers
+  password :password
   boolean :active, :notify_fork, :notify_wiki, :notify_comments,
     :notify_issue, :notify_watch, :notify_pull
 
-  white_list :room, :filter_branch, :JID, :room, :server, :nickname
+  white_list :filter_branch, :JID, :receivers
 
   default_events :push, :commit_comment, :issue_comment,
     :issues, :pull_request, :pull_request_review_comment,
     :gollum
-    
+ 
   def send_messages(messages)
     messages = Array(messages)
-    setup_muc_connection()
-    messages.each do |message|
-        @muc.send ::Jabber::Message::new(::Jabber::JID.new(@data['muc_room']), message)
+    setup_connection()
+    @receivers.each do |receiver|
+      messages.each do |message|
+        @client.send ::Jabber::Message::new(receiver, message)
+      end
     end
-    @muc.exit
     ensure
       @client.close if @client
   end
     
-  def setup_muc_connection
-      if (@muc.nil?)
+  def setup_connection
+      if (@client.nil?)
         begin
           @client = ::Jabber::Client.new(::Jabber::JID::new(@data['JID']))
           @client.connect
           @client.auth(@data['password'])
           ::Jabber::debug = true
-          @muc = ::Jabber::MUC::MUCClient.new(@client)
-          @muc.join(::Jabber::JID.new(@data['muc_room']), @data['room_password'])
         rescue ::Jabber::ErrorResponse
           raise_config_error 'Error response'
         rescue ::Jabber::ClientAuthenticationFailure
@@ -46,25 +45,29 @@ class Service::XmppMuc < XmppHelper
           raise_config_error "Unknown error: #{$!.to_s}"
         end
       end
-      @muc
+      @client
   end
     
-  def set_muc_connection(muc)
-      @muc = muc
+  def set_connection(client)
+      @client = client
   end
           
   def check_config(data)
     raise_config_error 'JID is required' if data['JID'].to_s.empty?
     raise_config_error 'Password is required' if data['password'].to_s.empty?
-    raise_config_error 'Room is required' if data['room'].to_s.empty?
-    raise_config_error 'Server is required' if data['server'].to_s.empty?
-    data['nickname'] = 'github' if data['nickname'].to_s.empty?
-    data.delete(:room_password) if data['room_password'].to_s.empty?
-    data['muc_room'] = "#{data['room']}@#{data['server']}/#{data['nickname']}"
+    raise_config_error 'Receivers list is required' if data['receivers'].to_s.empty?
+    @receivers = Array.new
+    data['receivers'].split().each do |jid|
+      begin
+        @receivers.push(::Jabber::JID.new(jid))
+      rescue Exception => e
+        raise_config_error 'Illegal receiver JID'
+      end
+    end
     @data = data
   end
 
-  url 'http://xmpp.org/extensions/xep-0045.html'
+  url 'http://xmpp.org/rfcs/rfc6121.html'
   logo_url 'http://xmpp.org/images/xmpp-small.png'
 
   # lloydwatkin on GitHub is <del>pinged</del> contacted for any bugs with the Hook code.

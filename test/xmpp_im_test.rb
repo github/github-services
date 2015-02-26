@@ -1,4 +1,4 @@
-class XmppMucTest < Service::TestCase
+class XmppImTest < Service::TestCase
   class MockXmpp4r
 
     def send(message)
@@ -9,8 +9,8 @@ class XmppMucTest < Service::TestCase
     def get_messages
         @messages
     end
-      
-    def exit
+
+    def close
         
     end
 
@@ -22,9 +22,7 @@ class XmppMucTest < Service::TestCase
     @config = {
       'JID' => 'me@example.com',
       'password' => 'password',
-      'room' => 'status',
-      'server' => 'muc.example.com',
-      'nickname' => 'github',
+      'receivers' => 'bare@server full@server/resource',
       'notify_fork' => '1',
       'notify_wiki' => '1',
       'notify_comments' => '1',
@@ -37,9 +35,9 @@ class XmppMucTest < Service::TestCase
   end
     
   def service(*args)
-    xmppMuc = super Service::XmppMuc, *args
-    xmppMuc.set_muc_connection @mock
-    xmppMuc
+    xmppIm = super Service::XmppIm, *args
+    xmppIm.set_connection @mock
+    xmppIm
   end
 
   def test_no_jid_provided
@@ -58,18 +56,10 @@ class XmppMucTest < Service::TestCase
     end
   end
 
-  def test_no_room_provided
-    assert_raises(Service::ConfigurationError, 'Room is required') do
+  def illegal_jid_throws_error
+    assert_raises(Service::ConfigurationError, 'Illegal receiver JID') do
       config = @config
-      config['room'] = ''
-      service(config, payload).receive_event
-    end
-  end
-
-  def test_no_server_provided
-    assert_raises(Service::ConfigurationError, 'Server is required') do
-      config = @config
-      config['server'] = ''
+      config['receivers'] = 'bare@server illegal@server@what?'
       service(config, payload).receive_event
     end
   end
@@ -159,9 +149,9 @@ class XmppMucTest < Service::TestCase
       message = ''
       service(:push, config, payload).receive_event
       assert_equal(
-          4,
+          8,
           @mock.get_messages().length,
-          'Expected 4 messages'
+          'Expected 8 messages'
       )
       assert_equal(
           "[grit] @rtomayko pushed 3 new commits to master: http://github.com/mojombo/grit/compare/4c8124f...a47fd41",
@@ -190,14 +180,31 @@ class XmppMucTest < Service::TestCase
       service(:commit_comment, @config, {}).receive_event
     end
   end
+
+  def test_sends_messages_to_expected_jids
+    service(:commit_comment, @config, commit_comment_payload).receive_event
+      assert_equal(
+          2,
+          @mock.get_messages().length,
+          'Expected 2 messages'
+      )
+      assert_equal(
+          ::Jabber::JID.new('full@server/resource'),
+          @mock.get_messages()[1].to
+      )
+      assert_equal(
+          ::Jabber::JID.new('bare@server'),
+          @mock.get_messages()[0].to
+      )
+  end
     
   def test_generates_expected_commit_comment_message
       message = '[grit] @defunkt commented on commit 441e568: this... https://github.com/mojombo/magik/commit/441e5686a726b79bcdace639e2591a60718c9719#commitcomment-3332777'
       service(:commit_comment, @config, commit_comment_payload).receive_event
       assert_equal(
-          1,
+          2,
           @mock.get_messages().length,
-          'Expected 1 message'
+          'Expected 2 messages'
       )
       assert_equal(
           message,
@@ -216,9 +223,9 @@ class XmppMucTest < Service::TestCase
       message = '[grit] @defunkt commented on issue #5: this... '
       service(:issue_comment, @config, issue_comment_payload).receive_event
       assert_equal(
-          1,
+          2,
           @mock.get_messages().length,
-          'Expected 1 message'
+          'Expected 2 messages'
       )
       assert_equal(
           message,
@@ -237,9 +244,9 @@ class XmppMucTest < Service::TestCase
       message = '[grit] @defunkt opened issue #5: booya '
       service(:issues, @config, issues_payload).receive_event
       assert_equal(
-          1,
+          2,
           @mock.get_messages().length,
-          'Expected 1 message'
+          'Expected 2 messages'
       )
       assert_equal(
           message,
@@ -258,9 +265,9 @@ class XmppMucTest < Service::TestCase
       message = '[grit] @defunkt opened pull request #5: booya (master...feature) https://github.com/mojombo/magik/pulls/5'
       service(:pull_request, @config, pull_request_payload).receive_event
       assert_equal(
-          1,
+          2,
           @mock.get_messages().length,
-          'Expected 1 message'
+          'Expected 2 messages'
       )
       assert_equal(
           message,
@@ -281,9 +288,9 @@ class XmppMucTest < Service::TestCase
       message = '[grit] @defunkt commented on pull request #5 03af7b9: very... https://github.com/mojombo/magik/pull/5#discussion_r18785396'
       service(:pull_request_review_comment, @config, pull_request_review_comment_payload).receive_event
       assert_equal(
-          1,
+          2,
           @mock.get_messages().length,
-          'Expected 1 message'
+          'Expected 2 messages'
       )
       assert_equal(
           message,
@@ -302,9 +309,9 @@ class XmppMucTest < Service::TestCase
       message = '[grit] @defunkt modified 1 page https://github.com/mojombo/magik/wiki/Foo'
       service(:gollum, @config, gollum_payload).receive_event
       assert_equal(
-          2,
+          4,
           @mock.get_messages().length,
-          'Expected 2 message'
+          'Expected 4 messages'
       )
       assert_equal(
           message,
