@@ -11,6 +11,8 @@ This service will connect to an XMPP MUC room with the provided details and then
 5. **Nickname** - The nickname that should be used (defaults to __github__)
 6. **Room password** - The password (if required) to join the MUC room
 7. **Restrict to Branch** - List of branches which will be inspected.
+8. **Host** - If you need to set a custom host enter here, otherwise leave blank for DNS lookup.
+9. **Port** - If ou need to use a custom port (default: 5222) enter value here.
 
 ### Options
 
