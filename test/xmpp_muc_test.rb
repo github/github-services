@@ -10,6 +10,19 @@ class XmppMucTest < Service::TestCase
         @messages
     end
       
+    def connect(host, port)
+      @host = host
+      @port = port
+    end
+      
+    def get_host
+      @host
+    end
+      
+    def get_port
+      @port
+    end
+      
     def exit
         
     end
@@ -72,6 +85,43 @@ class XmppMucTest < Service::TestCase
       config['server'] = ''
       service(config, payload).receive_event
     end
+  end
+    
+  def test_errors_on_bad_port
+    assert_raises(Service::ConfigurationError, 'XMPP port must be numeric') do
+      config = @config
+      config['port'] = 'PORT NUMBER'
+      service(config, payload).receive_event
+    end
+  end
+    
+    
+  def sets_custom_port
+    config = @config
+    port = '1234'
+    config['port'] = port
+    service(config, payload).receive_event
+    assert_equal(Integer(port), @mock.get_port)
+  end
+    
+  def sets_custom_host
+    config = @config
+    host = 'github.com'
+    config['host'] = host
+    service(config, payload).receive_event
+    assert_equal(host, @mock.get_host)
+  end
+    
+  def uses_default_host
+    config = @config
+    service(config, payload).receive_event
+    assert_true(@mock.get_host.nil?) 
+  end
+    
+  def uses_default_port
+    config = @config
+    service(config, payload).receive_event
+    assert_equal(5222, @mock.get_port)
   end
     
   def test_returns_false_if_not_on_filtered_branch

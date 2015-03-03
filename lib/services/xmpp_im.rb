@@ -5,9 +5,9 @@ class Service::XmppIm < XmppHelper
   self.title = 'XMPP IM'
   self.hook_name = 'xmpp_im'
     
-  string :JID, :receivers
+  string :JID, :receivers, :host, :port
   password :password
-  boolean :active, :notify_fork, :notify_wiki, :notify_comments,
+  boolean :notify_fork, :notify_wiki, :notify_comments,
     :notify_issue, :notify_watch, :notify_pull
 
   white_list :filter_branch, :JID, :receivers
@@ -32,7 +32,7 @@ class Service::XmppIm < XmppHelper
       if (@client.nil?)
         begin
           @client = ::Jabber::Client.new(::Jabber::JID::new(@data['JID']))
-          @client.connect
+          @client.connect(@data['host'], @data['port'])
           @client.auth(@data['password'])
           ::Jabber::debug = true
         rescue ::Jabber::ErrorResponse
@@ -64,6 +64,8 @@ class Service::XmppIm < XmppHelper
         raise_config_error 'Illegal receiver JID'
       end
     end
+    data['port'] = check_port(data)
+    data['host'] = check_host(data)
     @data = data
   end
 

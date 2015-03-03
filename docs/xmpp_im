@@ -8,6 +8,8 @@ This service will connect to an XMPP account with the provided details and then 
 2. **Password** - Password
 3. **Receivers** - The JIDs (bare or full) that you'd like to send updates to. JIDS are whitespace separated 
 4. **Restrict to Branch** - List of branches which will be inspected.
+5. **Host** - If you need to set a custom host enter here, otherwise leave blank for DNS lookup.
+6. **Port** - If ou need to use a custom port (default: 5222) enter value here.
 
 ### Options
 
