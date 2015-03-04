@@ -12,7 +12,7 @@ Install Notes
 
 The IBM Bluemix DevOps Services hook needs to be configured with your IBM login info:
 
-1. IBM login - This is the ibm.com ID of the user used to access DevOps Services.
+1. IBM login - This is the IBM id of the user used to access DevOps Services.
 2. IBM password - This is the password of the user used to access DevOps Services.
 3. Project membership - The configured user needs to be a member of the DevOps Services project.
-4. Override server url - The IBM Bluemix DevOps Services server url (for testing purposes only).
+4. Override server url - The IBM Bluemix DevOps Services server url (for IBM internal testing only).
