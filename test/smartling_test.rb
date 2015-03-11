@@ -62,6 +62,29 @@ class SmartlingTest < Service::TestCase
     @stubs.verify_stubbed_calls
   end
 
+  def test_requires_master_only_nil_master
+    data = self.data.update("master_only" => nil)
+    @stubs.post "/github" do |env|
+      assert_equal "capi.smatling.com", env[:url].host
+      [200, {}, '']
+    end
+    svc = service :push, data, payload
+    svc.receive
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_requires_master_only_nil_branch
+    data = self.data.update("master_only" => nil)
+    payload = self.payload.update("ref" => "refs/heads/branch_name")
+    @stubs.post "/github" do |env|
+      assert_equal "capi.smatling.com", env[:url].host
+      [200, {}, '']
+    end
+    svc = service :push, data, payload
+    svc.receive
+    @stubs.verify_stubbed_calls
+  end
+
   def test_requires_master_only_yes_master
     data = self.data.update("master_only" => true)
     @stubs.post "/github" do |env|
