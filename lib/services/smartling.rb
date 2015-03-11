@@ -15,7 +15,7 @@ class Service::Smartling < Service
 
   def receive_push
     check_config
-    if data["master_only"] == nil || data["master_only"] == false || payload["ref"] == "refs/heads/master"
+    if config_boolean_false?("master_only") || payload["ref"] == "refs/heads/master"
         payload["projectId"] = data["project_id"]
         payload["apiKey"] = data["api_key"]
         payload["resourceFile"] = data["config_path"]
