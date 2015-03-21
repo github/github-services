@@ -8,4 +8,4 @@ for instructions on contributing a service.
 
 Current Status
 ==============
-![Build Status](https://travis-ci.org/github/github-services.svg)
+[![Build Status](https://travis-ci.org/github/github-services.svg?branch=master)](https://travis-ci.org/github/github-services)
