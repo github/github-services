@@ -18,3 +18,4 @@ tmp
 pkg
 .ruby-version
 .iml
+.envrc
