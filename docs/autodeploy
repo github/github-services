@@ -2,7 +2,7 @@ This service automatically creates deployments based on your [workflow](http://w
 
 By enabling this hook, GitHub will request a [GitHub Deployment][1] when the default branch is pushed to or your tests suite passes certain criteria.
 
-If you use Continous Integration and GitHub you can select to "Deploy on Status" which will only create deployments when the default branch receives a "success" status for a commit.
+If you use Continuous Integration and GitHub you can select to "Deploy on Status" which will only create deployments when the default branch receives a "success" status for a commit.
 
 Install Notes
 -------------
