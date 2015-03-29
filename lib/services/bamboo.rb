@@ -46,7 +46,10 @@ class Service::Bamboo < Service
       when 404, 301 then raise_config_error("Invalid Bamboo project URL")
       else
         maybe_xml = response.body
-        msg = (XmlSimple.xml_in(maybe_xml) if maybe_xml =~ /<?xml/) || {}
+        msg = if maybe_xml =~ /<?xml/
+          XmlSimple.collapse(XmlSimple.xml_in(maybe_xml))
+        end
+        msg ||= {}
         raise_config_error msg["message"] if msg["message"]
       end
   end
