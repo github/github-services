@@ -6,7 +6,8 @@ Install Notes
   1.  Create an account on packagist.org
   2.  Enter your credentials
       - The token which you can find on the Packagist profile page
-      Optional steps:
+
+    Optional steps:
       - Enter the username who the API token belongs to (defaults to the repository owner)
       - Enter the host of your Packagist installation (defaults to http://packagist.org), the protocol-prefix is optional and defaults to "http://".
 
