@@ -1,0 +1,17 @@
+Datadog is a monitoring service for IT, Operations and Development teams who
+write and run applications at scale, and want to turn the massive amounts of
+data produced by their apps, tools and services into actionable insight.
+
+This service hook will inform Datadog every time you push to GitHub.
+On every push Datadog will create an event in your account's timeline, enabling
+visual overlay of commits and pushes over time, and correlating these to other
+events.
+
+Install Notes
+-------------
+To add this repository to report to Datadog, follow these steps:
+
+1. Log into Datadog, and copy API Key from https://app.datadoghq.com/account/settings#api
+2. Paste your API Key in the text field above.
+3. (Optional) Set any tags as a comma-delimited list - each tag will be applied to every event.
+4. Make sure the "Active" checkbox is ticked, and click "Update Settings".
