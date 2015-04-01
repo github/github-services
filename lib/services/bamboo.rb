@@ -47,10 +47,13 @@ class Service::Bamboo < Service
       else
         maybe_xml = response.body
         msg = if maybe_xml =~ /<?xml/
-          XmlSimple.collapse(XmlSimple.parse(maybe_xml))
+          xml_simple = XmlSimple.new
+          xml_simple.send(:collapse, xml_simple.send(:parse, maybe_xml))
         end
         msg ||= {}
-        raise_config_error msg["message"] if msg["message"]
+        if msg["status"] && msg["status"]["message"]
+          raise_config_error msg["status"]["message"]
+        end
       end
   end
 
