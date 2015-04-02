@@ -70,7 +70,7 @@ class Service::Commandoio < Service::HttpPost
     filter_branch = data['filter_branch'].to_s
 
     # If filtering by branch then don't make a post
-    (filter_branch.length > 0) && (commit_branch.index(filter_branch) == nil)
+    ((filter_branch.length > 0) && (commit_branch.index(filter_branch) == nil)) ? false : true
   end
 
   # Validates the required config values
