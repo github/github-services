@@ -24,10 +24,12 @@ class Service::Commandoio < Service::HttpPost
                 :recipe,
                 :server,
                 :groups,
-                :notes,
-                :filter_branch
+                :notes
 
   boolean       :halt_on_stderr
+
+  # filter_branch field at the end of the form
+  string        :filter_branch
 
   # Only include these in the debug logs
   white_list    :account_alias,
