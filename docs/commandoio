@@ -10,4 +10,4 @@ Install Notes
   * **Groups** - A list of group ids seperated by commas. You may find group ids in the modal popup when clicking a group in the Commando.io web interface.
   * **Notes** _(Optional)_ - Notes and comments you wish to attach to this execution. Markdown is supported.
   * **Halt on stderr** _(Optional)_ -  If a server returns stderr during execution, halt and prevent the remaining servers from executing the recipe.
-  * **Filter branch** _(Optional)_ -  If you would like to only receive messages for a specific branch, add the name (or partial name). Otherwise, leave the field blank to receive messages for all branches.
+  * **Filter branch** _(Optional)_ -  If you would like to only execute based on a specific branch, add the name (or partial name). Otherwise, leave the field blank to execute based off all branches.
