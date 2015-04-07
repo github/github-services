@@ -1,0 +1,12 @@
+[Netlify](https://www.netlify.com) builds, deploys and hosts your static site or app.
+
+This hook gets added automatically when you link a site to a Github repository.
+
+Install Notes
+-------------
+
+1.  Sign up at https://www.netlify.com and start a new project
+2.  Authorize with Github and select the repository with your site
+3.  You're done!
+
+For more details about Netlify go to https://www.netlify.com
