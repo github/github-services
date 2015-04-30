@@ -59,7 +59,6 @@ Gem::Specification.new do |spec|
 
   # Amazon SNS, Amazon SQS, AWS OpsWorks
   spec.add_dependency "aws-sdk", "~> 1.27"
-  spec.add_dependency "httparty", "0.7.4"
 
   # AWS CodeDeploy
   spec.add_dependency "aws-sdk-core", "~>2.0.8"

@@ -1,13 +1,12 @@
 PATH
   remote: .
   specs:
-    github-services (1.0.0.f39cad6)
+    github-services (1.0.0.e6759b3)
       activeresource (~> 4.0.0)
       addressable (~> 2.2.7)
       aws-sdk (~> 1.27)
       aws-sdk-core (~> 2.0.8)
       faraday (= 0.9.0)
-      httparty (= 0.7.4)
       mail (~> 2.3)
       mash (~> 0.1.1)
       maxcdn (~> 0.2.0)
@@ -50,7 +49,6 @@ GEM
       json (~> 1.4)
       nokogiri (>= 1.4.4)
     builder (3.2.2)
-    crack (0.1.8)
     curb (0.8.6)
     curb-fu (0.6.2)
       curb (>= 0.5.4.0)
@@ -62,8 +60,6 @@ GEM
       faraday (>= 0.7.4, < 0.10)
     hashie (2.1.2)
     http_parser.rb (0.5.3)
-    httparty (0.7.4)
-      crack (= 0.1.8)
     i18n (0.6.11)
     jmespath (1.0.1)
       multi_json (~> 1.0)
