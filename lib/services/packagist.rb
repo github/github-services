@@ -37,14 +37,13 @@ class Service::Packagist < Service
 
   def full_domain
     if data['domain'].to_s == ''
-      'http://packagist.org'
+      'https://packagist.org'
     else
       data['domain']
-    end.lstrip.sub(/[\/\s]+$/,'')
+    end.lstrip.sub(/[\/\s]+$/,'').sub(/^http:\/\/packagist.org/, 'https://packagist.org')
   end
 
   def domain_parts
     @domain_parts ||= full_domain.split('://')
   end
 end
-
