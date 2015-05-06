@@ -5,7 +5,6 @@ class Service::Packagist < Service
   white_list :domain, :user
 
   def receive_push
-    http.ssl[:verify] = false
     http_post packagist_url, :payload => generate_json(payload), :username => user, :apiToken => token
   end
 
