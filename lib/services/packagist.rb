@@ -39,7 +39,7 @@ class Service::Packagist < Service
       'https://packagist.org'
     else
       data['domain']
-    end.lstrip.sub(/[\/\s]+$/,'').sub(/^http:\/\/packagist.org/, 'https://packagist.org')
+    end.lstrip.sub(/[\/\s]+\z/,'').sub(/\Ahttp:\/\/packagist.org/, 'https://packagist.org')
   end
 
   def domain_parts
