@@ -5,7 +5,6 @@ class Service::Packagist < Service
   white_list :domain, :user
 
   def receive_push
-    http.ssl[:verify] = false
     http_post packagist_url, :payload => generate_json(payload), :username => user, :apiToken => token
   end
 
@@ -37,14 +36,13 @@ class Service::Packagist < Service
 
   def full_domain
     if data['domain'].to_s == ''
-      'http://packagist.org'
+      'https://packagist.org'
     else
-      data['domain']
-    end.lstrip.sub(/[\/\s]+$/,'')
+      data['domain'].lstrip.sub(/[\/\s]+\z/,'').sub(/\Ahttp:\/\/packagist.org/, 'https://packagist.org')
+    end
   end
 
   def domain_parts
     @domain_parts ||= full_domain.split('://')
   end
 end
-

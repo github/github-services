@@ -1,8 +1,20 @@
 Install Notes
 -------------
 
-1. Create an account at https://codeclimate.com
-2. Enter your Token (see instructions below)
+To set up this service hook, follow these steps:
 
-To get your Token: Log into your Code Climate account, click the gear icon at the top-right, then click the Integration tab.
+1. Browse to your Code Climate [Dashboard](https://codeclimate.com/dashboard).
+2. Click **Organization** in the top-right corner of the page. If this link isn't visible, see below.
+3. Select the **Integrations** tab.
+4. Copy the **GitHub Service Token** to your clipboard. Note that you do not want to copy the **API Token**.
+5. Back in GitHub, paste the token into the text box below.
 
+### Why don't I see the Organization link in Code Climate?
+
+Few possible reasons:
+
+* You're trying to set up a service hook for a repository that lives in the **Open Source** section of your **Dashboard**. Unfortunately we don't yet support service hooks for these repositories.
+* Your Code Climate user is not a member of any organizations.
+* You're in an organization but not in its **Owners** group. In this case, you unfortunately won't have administrative-rights to view this token.
+
+For more detailed info, see our [help article](http://docs.codeclimate.com/article/222-how-do-i-install-code-climates-github-service-hook). 

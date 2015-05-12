@@ -18,7 +18,8 @@ class TeamCityTest < Service::TestCase
       'base_url' => 'http://teamcity.com/abc',
       'build_type_id' => 'btid',
       'username' => 'u',
-      'password' => 'p'
+      'password' => 'p',
+      'check_for_changes_only' => '0'
     }, 'payload')
     svc.receive_push
   end
@@ -99,7 +100,7 @@ class TeamCityTest < Service::TestCase
     svc = service({
                       'base_url' => 'http://teamcity.com/abc',
                       'build_type_id' => 'btid',
-                      'check_for_changes_only' => true
+                      'check_for_changes_only' => '1'
                   }, 'payload')
     svc.receive_push
   end
