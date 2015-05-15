@@ -2,6 +2,7 @@ class Service::IBMDevOpsServices < Service::HttpPost
   string :ibm_id
   password :ibm_password
   string :override_server_url
+  title 'IBM Bluemix DevOps Services'
   white_list :ibm_id
   
   default_events :push
