@@ -45,6 +45,19 @@ class BambooTest < Service::TestCase
 
   def test_passes_build_error
     @stubs.post "/rest/api/latest/queue/ABC" do |env|
+      error_response(500, "Configuration Error")
+    end
+
+    svc = service :push, data, payload
+    assert_raises Service::ConfigurationError do
+      svc.receive
+    end
+
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_passes_error_with_xml_parsing
+    @stubs.post "/rest/api/latest/queue/ABC" do |env|
       error_response(404, "Plan ABC not found")
     end
 

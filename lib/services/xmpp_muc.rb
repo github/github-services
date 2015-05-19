@@ -5,9 +5,9 @@ class Service::XmppMuc < XmppHelper
   self.title = 'XMPP MUC'
   self.hook_name = 'xmpp_muc'
     
-  string :JID, :room, :server, :nickname
+  string :JID, :room, :server, :nickname, :host, :port
   password :password, :room_password
-  boolean :active, :notify_fork, :notify_wiki, :notify_comments,
+  boolean :notify_fork, :notify_wiki, :notify_comments,
     :notify_issue, :notify_watch, :notify_pull
 
   white_list :room, :filter_branch, :JID, :room, :server, :nickname
@@ -31,7 +31,7 @@ class Service::XmppMuc < XmppHelper
       if (@muc.nil?)
         begin
           @client = ::Jabber::Client.new(::Jabber::JID::new(@data['JID']))
-          @client.connect
+          @client.connect(@data['host'], @data['port'])
           @client.auth(@data['password'])
           ::Jabber::debug = true
           @muc = ::Jabber::MUC::MUCClient.new(@client)
@@ -61,6 +61,10 @@ class Service::XmppMuc < XmppHelper
     data['nickname'] = 'github' if data['nickname'].to_s.empty?
     data.delete(:room_password) if data['room_password'].to_s.empty?
     data['muc_room'] = "#{data['room']}@#{data['server']}/#{data['nickname']}"
+
+    data['port'] = check_port(data)
+    data['host'] = check_host(data)
+
     @data = data
   end
 
