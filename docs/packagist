@@ -8,7 +8,7 @@ Install Notes
       - The token which you can find on the Packagist profile page
 
     Optional steps:
-      - Enter the username who the API token belongs to (defaults to the repository owner)
+      - Enter the username (**not** email) who the API token belongs to (defaults to the repository owner)
       - Enter the host of your Packagist installation (defaults to https://packagist.org), the protocol-prefix is optional and defaults to "http://".
 
   3.  Check the "Active" checkbox and click "Update Service".
