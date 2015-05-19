@@ -62,8 +62,31 @@ class SmartlingTest < Service::TestCase
     @stubs.verify_stubbed_calls
   end
 
+  def test_requires_master_only_nil_master
+    data = self.data.update("master_only" => nil)
+    @stubs.post "/github" do |env|
+      assert_equal "capi.smatling.com", env[:url].host
+      [200, {}, '']
+    end
+    svc = service :push, data, payload
+    svc.receive
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_requires_master_only_nil_branch
+    data = self.data.update("master_only" => nil)
+    payload = self.payload.update("ref" => "refs/heads/branch_name")
+    @stubs.post "/github" do |env|
+      assert_equal "capi.smatling.com", env[:url].host
+      [200, {}, '']
+    end
+    svc = service :push, data, payload
+    svc.receive
+    @stubs.verify_stubbed_calls
+  end
+
   def test_requires_master_only_yes_master
-    data = self.data.update("master_only" => true)
+    data = self.data.update("master_only" => "1")
     @stubs.post "/github" do |env|
       assert_equal "capi.smatling.com", env[:url].host
       [200, {}, '']
@@ -75,7 +98,7 @@ class SmartlingTest < Service::TestCase
 
   def test_requires_master_only_yes_branch
     payload = self.payload.update("ref" => "refs/heads/branch_name")
-    data = self.data.update("master_only" => true)
+    data = self.data.update("master_only" => "1")
     @stubs.post "/github" do |env|
       assert_equal "capi.smatling.com", env[:url].host
       [200, {}, '']
@@ -126,7 +149,7 @@ class SmartlingTest < Service::TestCase
       "project_id" => "d86077368",
       "api_key" => "2c1ad0bb-e9b6-4c20-b536-1006502644a2",
       "config_path" => "smartling-config.json",
-      "master_only" => false
+      "master_only" => "0"
     }
   end
 

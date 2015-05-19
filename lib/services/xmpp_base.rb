@@ -22,6 +22,20 @@ class XmppHelper < Service
     return true
   end
     
+  def check_port(data) 
+    return 5222 if data['port'].to_s.empty?
+    begin
+      return Integer(data['port'])
+    rescue Exception => e
+      raise_config_error 'XMPP port must be numeric'
+    end
+  end
+    
+  def check_host(data)
+    return nil if data['host'].to_s.empty?
+    return data['host'].to_s
+  end
+    
   def build_message(event, payload)
     case event
       when :push
