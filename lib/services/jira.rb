@@ -1,7 +1,7 @@
 class Service::JIRA < Service
   string   :server_url, :api_version, :username
   password :password
-  boolean :post_comments
+  boolean :post_comments, :verify_ssl
   white_list :api_version, :server_url, :username, :post_comments
 
   logo_url "https://www.atlassian.com/wac/software/jira/productLogo/imageBinary/jira_logo_landing.png"
@@ -57,8 +57,7 @@ class Service::JIRA < Service
         next unless (changeset.has_key?(:transition) or config_boolean_true?('post_comments'))
 
         begin
-          # :(
-          http.ssl[:verify] = false
+          http.ssl[:verify] = verify_ssl
 
           http.basic_auth data['username'], data['password']
           http.headers['Content-Type'] = 'application/json'
