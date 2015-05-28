@@ -11,6 +11,8 @@ class Service::JIRA < Service
 
   def receive_push
     payload['commits'].each do |commit|
+      # skip of not distinct
+      next if !commit['distinct']
       next if commit['message'] =~ /^x /
 
       author_display = "#{commit['author']['name']} <#{commit['author']['email']}>"
@@ -29,48 +31,50 @@ class Service::JIRA < Service
         end
       end #if
 
-      commit['message'].match(/\[#(.+)\]/)
+      issue_list = commit['message'].scan(/\[#(.+?)\]/).uniq
       # Don't need to continue if we don't have a commit message containing JIRA markup
-      next unless $1
+      next unless !issue_list.empty?
+      
+      issue_list.each do |issue|
+        jira_markup = issue[0].split
+        issue_id = jira_markup.shift
+      
+        changeset = { :comment => { :body => comment_body } }
 
-      jira_markup = $1.split
-      issue_id = jira_markup.shift
+        jira_markup.each do |entry|
+          key, value = entry.split(':')
 
-      changeset = { :comment => { :body => comment_body } }
-
-      jira_markup.each do |entry|
-        key, value = entry.split(':')
-
-        if key =~ /(?i)status|(?i)transition/
-          changeset.merge!(:transition => value.to_s)
-        elsif key =~ /(?i)resolution/
-          changeset.merge!(:fields => { :resolution => { :id => value.to_s } })
-        else
-          changeset.merge!(:fields => { key.to_sym => "Resolved" })
-        end
-      end
-
-      # Don't need to continue if we don't have a transition to perform
-      next unless (changeset.has_key?(:transition) or config_boolean_true?('post_comments'))
-
-      begin
-        # :(
-        http.ssl[:verify] = false
-
-        http.basic_auth data['username'], data['password']
-        http.headers['Content-Type'] = 'application/json'
-        if changeset.has_key?(:transition)
-            res = http_post '%s/rest/api/%s/issue/%s/transitions' % [data['server_url'], data['api_version'], issue_id],
-              generate_json(changeset)
+          if key =~ /(?i)status|(?i)transition/
+            changeset.merge!(:transition => value.to_s)
+          elsif key =~ /(?i)resolution/
+            changeset.merge!(:fields => { :resolution => { :id => value.to_s } })
+          else
+            changeset.merge!(:fields => { key.to_sym => "Resolved" })
+          end #if
         end
 
-        # add a comment containing the author, msg, and files changed
-        if config_boolean_true?('post_comments')
-              res = http_post '%s/rest/api/%s/issue/%s/comment' % [data['server_url'], data['api_version'], issue_id],
-              generate_json({ :body => "#{author_display}\n\n#{comment_body}\n\n#{files_changed}"})
+        # Don't need to continue if we have nothing to do
+        next unless (changeset.has_key?(:transition) or config_boolean_true?('post_comments'))
+
+        begin
+          # :(
+          http.ssl[:verify] = false
+
+          http.basic_auth data['username'], data['password']
+          http.headers['Content-Type'] = 'application/json'
+          if changeset.has_key?(:transition)
+              res = http_post '%s/rest/api/%s/issue/%s/transitions' % [data['server_url'], data['api_version'], issue_id],
+                generate_json(changeset)
+          end
+
+          # add a comment containing the author, msg, and files changed
+          if config_boolean_true?('post_comments')
+            res = http_post '%s/rest/api/%s/issue/%s/comment' % [data['server_url'], data['api_version'], issue_id],
+            generate_json({ :body => "#{author_display}\n\n#{comment_body}\n\n#{files_changed}"})
+          end
+        rescue URI::InvalidURIError
+          raise_config_error "Invalid server_hostname: #{data['server_url']}"
         end
-      rescue URI::InvalidURIError
-        raise_config_error "Invalid server_hostname: #{data['server_url']}"
       end
     end
   end
