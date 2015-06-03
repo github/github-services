@@ -8,7 +8,7 @@ class IBMDevOpsServicesTest < Service::TestCase
 
   def test_push
     svc = service(
-      {'ibm_id' => username,
+      {'ibm_login' => username,
        'ibm_password' => password},
         payload)
 
@@ -25,7 +25,7 @@ class IBMDevOpsServicesTest < Service::TestCase
 
   def test_push_empty_server_override
     svc = service(
-      {'ibm_id' => username,
+      {'ibm_login' => username,
        'ibm_password' => password,
         'override_server_url' => ""},
         payload)
@@ -43,7 +43,7 @@ class IBMDevOpsServicesTest < Service::TestCase
 
   def test_push_server_override
     svc = service(
-      {'ibm_id' => username,
+      {'ibm_login' => username,
        'ibm_password' => password,
        'override_server_url' => "https://test.example.org/foo"},
         payload)
