@@ -178,9 +178,9 @@ class Service::Email < Service
     # Public
     def mail_subject
       if first_commit
-        "[#{name_with_owner}] #{first_commit_sha.slice(0, 6)}: #{first_commit_title}"
+        "[#{repository_name}] [#{branch_ref}] #{first_commit_sha.slice(0, 6)}: #{first_commit_title}"
       else
-        "[#{name_with_owner}]"
+        "[#{repository_name}] [#{branch_ref}]"
       end
     end
 
@@ -202,7 +202,6 @@ class Service::Email < Service
 
     def repository_text
       align(<<-EOH)
-        Branch: #{branch_ref}
         Home:   #{repo_url}
       EOH
     end
