@@ -15,7 +15,7 @@ will review your proposal and let you know if it meets requirements described ab
 ## Updating an existing service
 
 GitHub will only accept pull requests to existing services that implement bug fixes or security
-improvements. We no longer accept substantial feature changes to existing services.
+improvements. We no longer accept feature changes to existing services.
 
 We strongly encourage existing services to move to an [OAuth based webhook integration][webhooks]
 if possible. You will better be able to control the complete integration including installation
