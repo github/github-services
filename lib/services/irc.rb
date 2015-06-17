@@ -285,7 +285,7 @@ class Service::IRC < Service
   def irc_issue_comment_summary_message
     short  = comment.body.split("\r\n", 2).first.to_s
     short += '...' if short != comment.body
-    "[#{fmt_repo repo.name}] #{fmt_name sender.login} comment on issue \##{issue.number}: #{short}"
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} commented on issue \##{issue.number}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
@@ -294,7 +294,7 @@ class Service::IRC < Service
     short  = comment.body.split("\r\n", 2).first.to_s
     short += '...' if short != comment.body
     sha1   = comment.commit_id
-    "[#{fmt_repo repo.name}] #{fmt_name sender.login} comment on commit #{fmt_hash sha1[0..6]}: #{short}"
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} commented on commit #{fmt_hash sha1[0..6]}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
@@ -314,7 +314,7 @@ class Service::IRC < Service
     short  = comment.body.split("\r\n", 2).first.to_s
     short += '...' if short != comment.body
     sha1   = comment.commit_id
-    "[#{fmt_repo repo.name}] #{fmt_name sender.login} comment on pull request " +
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} commented on pull request " +
     "\##{pull_request_number} #{fmt_hash sha1[0..6]}: #{short}"
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
