@@ -104,7 +104,7 @@ class Service::Email < Service
     text.slice(0, limit) << '...'
   end
 
-  def align(text, indent = '  ')
+  def align(text, indent = '')
     margin = text[/\A\s+/].size
 
     text.gsub(/^\s{#{margin}}/, indent)
