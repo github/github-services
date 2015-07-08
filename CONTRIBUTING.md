@@ -1,5 +1,8 @@
 # Contributing
 
+This project adheres to the [Open Code of Conduct][code-of-conduct]. By participating, you are expected to uphold this code.
+[code-of-conduct]: http://todogroup.org/opencodeofconduct/#GitHub%20Services/opensource@github.com
+
 **NOTE**: GitHub no longer accepts new services that are based on HTTP. If you'd like to integrate
 your application or service with GitHub, you should use [webhooks][webhooks] which will `POST` a
 payload to your server for each event.
