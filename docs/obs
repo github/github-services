@@ -1,33 +1,45 @@
-Open Build Service(OBS) is a distribution build system.
+# Open Build Service
 
-By enabling this hook, any Open Build Service instance (running version 2.5 or higher) will list
-to push events. OBS Source Service will get execute for a defined package which will update
-the sources in OBS and therefore rebuild automatically.
+[Open Build Service (OBS)][obs] is a Web service for building packages for various Linux distributions. It's run by OpenSUSE project but available for any open-source community.
 
-Install Notes
--------------
+This hook enables you to trigger your OBS build once new commits are pushed into the repository. It is configured to use *api.opensuse.org* host by default, but you may use it for your own OBS instance as well. It must be version 2.5 or higher, though. 
 
-0. Prequire
-   You need to have a package using a source service to update the sources.
-   Check the OBS manual how to set this up.
+[obs]: http://build.opensuse.org
 
-1.  Create an authentification token for your account using "osc" commandline tool:
-    # osc token --create
+## Prerequisites
 
-    You may already specify the package here
-    # osc token --create _PROJECT_ _PACKAGE_
+1.  Configure your OBS project to fetch sources from Git. You would have to add a *Source Service* for this to work, check OBS manual for more information.
 
-    That means the token can only be used for this package. It also means you do not have
-    to specify it in github.com. Just using the token is enough.
+2.  Create an authentification token for your account using `osc` command line tool.
+    For a generic token not tied to the specific package:
 
-    You can also use a comma separated list of tokens to trigger several obs builds.
+         # osc token --create
 
-2.  Enter your credentials at github.com
-    - The token which got created (use "osc token" if you lost it)
-    - optional: Modify the api url, if you do not use the openSUSE Build Service instance.
-    - optional: Enter the project and package name in case you have a generic token.
+    For a token which can be used only for specific package
 
-3.  Make sure the "Active" checkbox is ticked, and click "Update Settings".
+         # osc token --create PROJECT PACKAGE
 
-For more details about OBS, go to http://www.openbuildservice.org
+    In the former case you may use single token in multiple Web hooks, to trigger multiple projects, but you would have to specify those OBS project and repository names. If the latter case you have to use different tokens for different projects, but you may leave "Project" and "Package" fields blank here, simply using the token only is enough.
 
+    To see all your already-created tokens, run
+
+        # osc token
+
+    You may also use a comma-separated list of tokens to trigger several OBS builds in order.
+
+## Parameters
+
+  - `Url`
+    This is the URL where OBS instance resides. You should alter this parameter only if you're using a dedicated OBS instance, leave it empty if you just use OpenSUSE's server. 
+
+  - `Project`
+    The package fully-qualified name on the instance. This should be something like `devel:languages:haskell`, where `devel:languages` is a namespace part of name. You may leave this field blank if your token is project-specific.
+
+  - `Package`
+    The package name within the project. This should be something like `ghc` for the example above. You may also leave this field blank if your token is project-specific.
+
+  - `Token`
+    The comma-separated list of tokens to be used for triggering builds. This is the only required field here. See the "Prerequisites" section for more information on token creation.
+
+  - `Refs`
+    The filter expression for pushed referenced. This field lists colon-separated patterns, build is triggered only if at least one of them satisfies. You may leave it blank, then no filtering is done by default. But you should consider setting this field to something like `refs/heads/master` or `refs/tags/version-*` in order not to rebuild your packages on each commit.
