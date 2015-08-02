@@ -58,10 +58,11 @@ class Service::IRC < Service
     rooms   = rooms.gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
     botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick'][0..16]
     command = config_boolean_true?('notice') ? 'NOTICE' : 'PRIVMSG'
+    geckos  = (defined?(sender) && defined?(repo)) ? "GitHub IRCBot - #{sender.login}/#{repo.name}" : "Github IRCBot"
 
     irc_password("PASS", data['password']) if !data['password'].to_s.empty?
     irc_puts "NICK #{botname}"
-    irc_puts "USER #{botname} 8 * :GitHub IRCBot"
+    irc_puts "USER #{botname} 8 * :#{geckos}"
 
     loop do
       case irc_gets
