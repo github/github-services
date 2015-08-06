@@ -138,7 +138,7 @@ class Service::IRC < Service
   end
 
   def irc_realname
-    (defined?(sender) && defined?(repo)) ? "GitHub IRCBot - #{repo.owner.login}/#{repo.name}" : "Github IRCBot"
+    defined?(repo) ? "GitHub IRCBot - #{repo.owner.login}/#{repo.name}" : "Github IRCBot"
   end
 
   def debug_outgoing(command)
