@@ -138,7 +138,10 @@ class Service::IRC < Service
   end
 
   def irc_realname
-    defined?(repo) ? "GitHub IRCBot - #{repo.owner.login}/#{repo.name}" : "Github IRCBot"
+    repo_owner = payload["repository"]["owner"]["name"]
+    repo_name = payload["repository"]["name"]
+
+    "GitHub IRCBot - #{repo_owner}/#{repo_name}"
   end
 
   def debug_outgoing(command)
