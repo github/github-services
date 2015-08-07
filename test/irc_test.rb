@@ -292,11 +292,11 @@ class IRCTest < Service::TestCase
   end
 
   def test_include_repo_name_and_owner_in_irc_realname
-    svc = service(:pull_request, {'room' => 'r', 'nick' => 'n'}, pull_payload)
+    svc = service({'room' => 'r', 'nick' => 'n'}, payload)
 
-    svc.receive_pull_request
+    svc.receive_push
     msgs = svc.writable_irc.string.split("\n")
-    assert_includes msgs, "USER n 8 * :GitHub IRCBot - defunkt/grit"
+    assert_includes msgs, "USER n 8 * :GitHub IRCBot - mojombo/grit"
   end
 
   def service(*args)
