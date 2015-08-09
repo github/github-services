@@ -4,9 +4,9 @@ require 'stringio'
 class IRCTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new do |stub|
-      stub.get('/repos/mojombo/grit') { |env| [200, {}, {id: 1}] }
-      stub.get('/repos/mojombo/public') { |env| [200, {}, {id: 1}] }
-      stub.get('/repos/mojombo/private') { |env| [404, {}, {message: "Not Found"}] }
+      stub.get('/repos/mojombo/grit') { |env| [200, {}, '{"id": 1}'] }
+      stub.get('/repos/mojombo/public') { |env| [200, {}, '{"id": 1}'] }
+      stub.get('/repos/mojombo/private') { |env| [404, {}, '{"message": "Not Found"}'] }
     end
   end
 
@@ -321,15 +321,17 @@ class IRCTest < Service::TestCase
 
   def test_is_public_repo_on_public_repo
     @stubs.get "/repos/mojombo/public" do |env|
+      json = JSON.parse(env.body)
       assert_equal env.status, 200
-      assert_equal env.body[:id], 1
+      assert_equal json["id"], 1
     end
   end
 
   def test_is_public_repo_on_private_repo
     @stubs.get "/repos/mojombo/private" do |env|
+      json = JSON.parse(env.body)
       assert_equal env.status, 404
-      assert defined?(env.body[:id]), false
+      assert defined?(json["id"]), false
     end
   end
 

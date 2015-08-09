@@ -154,7 +154,9 @@ class Service::IRC < Service
     http.url_prefix = "https://api.github.com"
     begin
       response = http_get("/repos/#{repo_owner}/#{repo_name}")
-      @repo_public = (defined?(response.body[:id]) && response.status == 200)
+      json = JSON.parse(response.body)
+
+      @repo_public = (defined?(json["id"]) && response.status == 200)
     rescue
       @repo_public = false
     end
