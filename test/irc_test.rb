@@ -2,14 +2,6 @@ require File.expand_path('../helper', __FILE__)
 require 'stringio'
 
 class IRCTest < Service::TestCase
-  def setup
-    @stubs = Faraday::Adapter::Test::Stubs.new do |stub|
-      stub.get('/repos/mojombo/grit') { |env| [200, {}, '{"id": 1}'] }
-      stub.get('/repos/mojombo/public') { |env| [200, {}, '{"id": 1}'] }
-      stub.get('/repos/mojombo/private') { |env| [404, {}, '{"message": "Not Found"}'] }
-    end
-  end
-
   class FakeIRC < Service::IRC
     def readable_irc
       nick = data['nick']
@@ -310,29 +302,13 @@ class IRCTest < Service::TestCase
 
   def test_private_repo_format_in_irc_realname
     payload_copy = payload.clone
-    payload_copy["repository"]["name"] = "private"
+    payload_copy["repository"]["private"] = true
     svc = service({'room' => 'r', 'nick' => 'n'}, payload_copy)
 
     svc.receive_push
     msgs = svc.writable_irc.string.split("\n")
 
     assert_includes msgs, "USER n 8 * :GitHub IRCBot - mojombo"
-  end
-
-  def test_is_public_repo_on_public_repo
-    @stubs.get "/repos/mojombo/public" do |env|
-      json = JSON.parse(env.body)
-      assert_equal env.status, 200
-      assert_equal json["id"], 1
-    end
-  end
-
-  def test_is_public_repo_on_private_repo
-    @stubs.get "/repos/mojombo/private" do |env|
-      json = JSON.parse(env.body)
-      assert_equal env.status, 404
-      assert defined?(json["id"]), false
-    end
   end
 
   def service(*args)

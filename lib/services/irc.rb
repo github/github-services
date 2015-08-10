@@ -140,26 +140,9 @@ class Service::IRC < Service
   def irc_realname
     repo_owner = payload["repository"]["owner"]["name"]
     repo_name = payload["repository"]["name"]
+    repo_private = payload["repository"]["private"]
 
-    "GitHub IRCBot - #{repo_owner}" + (repo_public? ? "/#{repo_name}" : "")
-  end
-
-  def repo_public?
-    return @repo_public if defined?(@repo_public)
-
-    repo_owner = payload["repository"]["owner"]["name"]
-    repo_name = payload["repository"]["name"]
-    return false if repo_owner.to_s.empty? || repo_name.to_s.empty?
-    
-    http.url_prefix = "https://api.github.com"
-    begin
-      response = http_get("/repos/#{repo_owner}/#{repo_name}")
-      json = JSON.parse(response.body)
-
-      @repo_public = (defined?(json["id"]) && response.status == 200)
-    rescue
-      @repo_public = false
-    end
+    "GitHub IRCBot - #{repo_owner}" + (repo_private ? "" : "/#{repo_name}")
   end
 
   def debug_outgoing(command)
