@@ -301,7 +301,7 @@ class IRCTest < Service::TestCase
   end
 
   def test_private_repo_format_in_irc_realname
-    payload_copy = payload.clone
+    payload_copy = payload
     payload_copy["repository"]["private"] = true
     svc = service({'room' => 'r', 'nick' => 'n'}, payload_copy)
 
@@ -312,7 +312,7 @@ class IRCTest < Service::TestCase
   end
 
   def test_nil_private_repo_format_in_irc_realname
-    payload_copy = payload.clone
+    payload_copy = payload
     payload_copy["repository"]["private"] = nil
     svc = service({'room' => 'r', 'nick' => 'n'}, payload_copy)
 
