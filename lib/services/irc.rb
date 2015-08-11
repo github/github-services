@@ -142,7 +142,7 @@ class Service::IRC < Service
     repo_name = payload["repository"]["name"]
     repo_private = payload["repository"]["private"]
 
-    "GitHub IRCBot - #{repo_owner}" + (repo_private != true ? "/#{repo_name}" : "")
+    "GitHub IRCBot - #{repo_owner}" + (repo_private == false ? "/#{repo_name}" : "")
   end
 
   def debug_outgoing(command)

@@ -311,6 +311,17 @@ class IRCTest < Service::TestCase
     assert_includes msgs, "USER n 8 * :GitHub IRCBot - mojombo"
   end
 
+  def test_nil_private_repo_format_in_irc_realname
+    payload_copy = payload.clone
+    payload_copy["repository"]["private"] = nil
+    svc = service({'room' => 'r', 'nick' => 'n'}, payload_copy)
+
+    svc.receive_push
+    msgs = svc.writable_irc.string.split("\n")
+
+    assert_includes msgs, "USER n 8 * :GitHub IRCBot - mojombo"
+  end
+
   def service(*args)
     super FakeIRC, *args
   end

@@ -180,7 +180,8 @@ module Service::PushHelpers
         "url"   => "http://github.com/mojombo/grit",
         "owner" => { "name" => "mojombo", "email" => "tom@mojombo.com" },
         "master_branch"  => "master",
-        "default_branch" => "master"
+        "default_branch" => "master",
+        "private" => false
       },
 
       "pusher" => {
