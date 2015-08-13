@@ -61,7 +61,7 @@ class Service::IRC < Service
 
     irc_password("PASS", data['password']) if !data['password'].to_s.empty?
     irc_puts "NICK #{botname}"
-    irc_puts "USER #{botname} 8 * :GitHub IRCBot"
+    irc_puts "USER #{botname} 8 * :#{irc_realname}"
 
     loop do
       case irc_gets
@@ -135,6 +135,14 @@ class Service::IRC < Service
   def irc_puts(command, debug_command=command)
     debug_outgoing(debug_command)
     writable_irc.puts command
+  end
+
+  def irc_realname
+    repo_owner = payload["repository"]["owner"]["name"]
+    repo_name = payload["repository"]["name"]
+    repo_private = payload["repository"]["private"]
+
+    "GitHub IRCBot - #{repo_owner}" + (repo_private == false ? "/#{repo_name}" : "")
   end
 
   def debug_outgoing(command)

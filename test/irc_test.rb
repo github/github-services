@@ -291,6 +291,37 @@ class IRCTest < Service::TestCase
     refute_match /\003/, privmsg
   end
 
+  def test_public_repo_format_in_irc_realname
+    svc = service({'room' => 'r', 'nick' => 'n'}, payload)
+
+    svc.receive_push
+    msgs = svc.writable_irc.string.split("\n")
+
+    assert_includes msgs, "USER n 8 * :GitHub IRCBot - mojombo/grit"
+  end
+
+  def test_private_repo_format_in_irc_realname
+    payload_copy = payload
+    payload_copy["repository"]["private"] = true
+    svc = service({'room' => 'r', 'nick' => 'n'}, payload_copy)
+
+    svc.receive_push
+    msgs = svc.writable_irc.string.split("\n")
+
+    assert_includes msgs, "USER n 8 * :GitHub IRCBot - mojombo"
+  end
+
+  def test_nil_private_repo_format_in_irc_realname
+    payload_copy = payload
+    payload_copy["repository"]["private"] = nil
+    svc = service({'room' => 'r', 'nick' => 'n'}, payload_copy)
+
+    svc.receive_push
+    msgs = svc.writable_irc.string.split("\n")
+
+    assert_includes msgs, "USER n 8 * :GitHub IRCBot - mojombo"
+  end
+
   def service(*args)
     super FakeIRC, *args
   end
