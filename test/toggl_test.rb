@@ -6,11 +6,11 @@ class TogglTest < Service::TestCase
   end
 
   def test_push
-    url = "/api/v8/tasks.json"
+    url = "/api/v8/time_entries"
     @stubs.post url do |env|
       assert_equal 'www.toggl.com', env[:url].host
       assert_equal basic_auth(:a, :api_token), env[:request_headers]['authorization']
-      assert_equal 900, JSON.parse(env[:body])['task']['duration']
+      assert_equal 900, JSON.parse(env[:body])['time_entry']['duration']
       [200, {}, '']
     end
 
