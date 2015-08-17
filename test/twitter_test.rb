@@ -52,6 +52,24 @@ class TwitterTest < Service::TestCase
     end
   end
 
+  # Make sure that whitespace in the original commit message is preserved
+  def test_whitespace
+    p = payload
+    p['commits'][0]['message']="message  \nwith\n\n  weird whitespace  "
+    svc = service({'token' => 't', 'secret' => 's'}, p)
+
+    def svc.statuses
+      @statuses ||= []
+    end
+
+    def svc.post(status)
+      statuses << status
+    end
+
+    svc.receive_push
+    assert svc.statuses[0].match(p['commits'][0]['message'])
+  end
+
   # Make sure that GitHub @mentions are injected with a zero-width space
   # so that they don't turn into (potentially unmatching) twitter @mentionds
   def test_mentions
