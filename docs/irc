@@ -49,7 +49,7 @@ Nickname to use when sending messages (optional).
 
 ### Branches
 
-Names of the git branches to monitor for events (comma-separated).
+Names of the git branches (or refs) to monitor for events (comma-separated).
 
 
 ### Nickserv password
