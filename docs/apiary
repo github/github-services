@@ -7,4 +7,4 @@ Apiary needs your OAuth token in order to download your `apiary.apib` (that desc
 
 1. Go to [Apiary Settings](http://apiary.io/settings)
 2. Click the **Connect to GitHub** button
-3. _(optional)_ After completing the steps above you can always edit `Branch` field right here. Commits to this GitHub branch will trigger an update at Apiary; other branches will be ignored
+3. _(optional)_ After completing the steps above you can always edit `Branch` field right here. Commits to this GitHub branch will trigger an update at Apiary
