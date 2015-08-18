@@ -57,10 +57,10 @@ Gem::Specification.new do |spec|
   # Softlayer Messaging
   spec.add_dependency "softlayer_messaging", "~> 1.0.2"
 
-  # Amazon SNS, Amazon SQS, AWS OpsWorks
+  # Amazon SQS, AWS OpsWorks
   spec.add_dependency "aws-sdk", "~> 1.27"
 
-  # AWS CodeDeploy
+  # AWS CodeDeploy, Amazon SNS
   spec.add_dependency "aws-sdk-core", "~>2.0.8"
 
   spec.files = %w(Gemfile LICENSE README.mkdn CONTRIBUTING.md Rakefile)
