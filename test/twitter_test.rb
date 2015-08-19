@@ -76,7 +76,7 @@ class TwitterTest < Service::TestCase
     p = payload
     p['commits'][0]['message']="This commit was done by @sgolemon"
     p['commits'][1]['message']="@sgolemon committed this"
-    p['commits'][2]['message']="@sgolemon made a test for @kdaigle"
+    p['commits'][2]['message']="@sgolemon made a @ @\ttest for @kdaigle"
     svc = service({'token' => 't', 'secret' => 's'}, p)
 
     def svc.statuses
@@ -90,9 +90,11 @@ class TwitterTest < Service::TestCase
     svc.receive_push
     assert_equal 3, svc.statuses.size
     svc.statuses.each do |st|
-      # Any @ which is not followed by U+200B ZERO WIDTH SPACE
-      # is an error
-      assert !st.match('@(?!\u200b)')
+      # Any @ which is followed by a word character is an error
+      assert !st.match('@(?=[[:word:]])')
+      # Any @ which is followed by a U+200b ZERO WIDTH SPACE but not a word
+      # character is an error
+      assert !st.match('@(?=\u200b[^[:word:]])')
     end
   end
 
