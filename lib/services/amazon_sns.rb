@@ -28,21 +28,17 @@ class Service::AmazonSNS < Service
   # Returns the instantiated Amazon SNS Object
   def publish_to_sns(cfg, json)
     begin
-      # older version of AWS SDK does not support region configuration
-      # http://ruby.awsblog.com/post/TxVOTODBPHAEP9/Working-with-Regions
-      sns = Aws::SNS::Client.new(:region => cfg['sns_region'],
-                                :access_key_id => cfg['aws_key'],
-                                :secret_access_key => cfg['aws_secret'])
-      attrs = {
-        "X-Github-Event" => {data_type: "String",
-                             string_value: event.to_s
-                            }
-      }
+      sns = Aws::SNS::Client.new({
+        :region            => cfg['sns_region'],
+        :access_key_id     => cfg['aws_key'],
+        :secret_access_key => cfg['aws_secret']
+      })
+
       sns.publish({
-                    message: json,
-                    topic_arn: cfg['sns_topic'],
-                    message_attributes: attrs
-                  })
+        :message            => json,
+        :topic_arn          => cfg['sns_topic'],
+        :message_attributes => message_attributes
+      })
     rescue Aws::SNS::Errors::AuthorizationErrorException => e
       raise_config_error e.message
     rescue Aws::SNS::Errors::NotFoundException => e
@@ -60,6 +56,18 @@ class Service::AmazonSNS < Service
     {
       access_key_id: key,
       secret_access_key: secret,
+    }
+  end
+
+  # Build a valid set of message attributes for this message.
+  #
+  # Returns a valid Hash of message attributes.
+  def message_attributes
+    {
+      "X-Github-Event" => {
+        :data_type    => "String",
+        :string_value => event.to_s
+      }
     }
   end
 
