@@ -1,5 +1,4 @@
-require 'aws/sns'
-require 'aws/sqs'
+require 'aws-sdk-core'
 
 class Service::AmazonSNS < Service
 
@@ -31,17 +30,22 @@ class Service::AmazonSNS < Service
     begin
       # older version of AWS SDK does not support region configuration
       # http://ruby.awsblog.com/post/TxVOTODBPHAEP9/Working-with-Regions
-      AWS.config(sns_endpoint: "sns.#{cfg['sns_region']}.amazonaws.com")
-      sns = AWS::SNS.new(config(cfg['aws_key'], cfg['aws_secret']))
-      topic = sns.topics[cfg['sns_topic']]
-      topic.publish(json)
-      return sns
-
-    rescue AWS::SNS::Errors::AuthorizationError,
-           AWS::SNS::Errors::InvalidClientTokenId,
-           AWS::SNS::Errors::SignatureDoesNotMatch => e
+      sns = Aws::SNS::Client.new(:region => cfg['sns_region'],
+                                :access_key_id => cfg['aws_key'],
+                                :secret_access_key => cfg['aws_secret'])
+      attrs = {
+        "X-Github-Event" => {data_type: "String",
+                             string_value: event.to_s
+                            }
+      }
+      sns.publish({
+                    message: json,
+                    topic_arn: cfg['sns_topic'],
+                    message_attributes: attrs
+                  })
+    rescue Aws::SNS::Errors::AuthorizationErrorException => e
       raise_config_error e.message
-    rescue AWS::SNS::Errors::NotFound => e
+    rescue Aws::SNS::Errors::NotFoundException => e
       raise_missing_error e.message
     rescue SocketError
       raise_missing_error
@@ -59,7 +63,7 @@ class Service::AmazonSNS < Service
     }
   end
 
-  # Validate the data that has been passed to the event. 
+  # Validate the data that has been passed to the event.
   # An AWS Key & Secret are required. As well as the ARN of an SNS topic.
   # Defaults region to us-east-1 if not set.
   #
