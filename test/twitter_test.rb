@@ -52,13 +52,31 @@ class TwitterTest < Service::TestCase
     end
   end
 
+  # Make sure that whitespace in the original commit message is preserved
+  def test_whitespace
+    p = payload
+    p['commits'][0]['message']="message  \nwith\n\n  weird whitespace  "
+    svc = service({'token' => 't', 'secret' => 's'}, p)
+
+    def svc.statuses
+      @statuses ||= []
+    end
+
+    def svc.post(status)
+      statuses << status
+    end
+
+    svc.receive_push
+    assert svc.statuses[0].match(p['commits'][0]['message'])
+  end
+
   # Make sure that GitHub @mentions are injected with a zero-width space
   # so that they don't turn into (potentially unmatching) twitter @mentionds
   def test_mentions
     p = payload
     p['commits'][0]['message']="This commit was done by @sgolemon"
     p['commits'][1]['message']="@sgolemon committed this"
-    p['commits'][2]['message']="@sgolemon made a test for @kdaigle"
+    p['commits'][2]['message']="@sgolemon made a @ @\ttest for @kdaigle"
     svc = service({'token' => 't', 'secret' => 's'}, p)
 
     def svc.statuses
@@ -72,9 +90,11 @@ class TwitterTest < Service::TestCase
     svc.receive_push
     assert_equal 3, svc.statuses.size
     svc.statuses.each do |st|
-      # Any @ which is not followed by U+200B ZERO WIDTH SPACE
-      # is an error
-      assert !st.match('@(?!\u200b)')
+      # Any @ which is followed by a word character is an error
+      assert !st.match('@(?=[[:word:]])')
+      # Any @ which is followed by a U+200b ZERO WIDTH SPACE but not a word
+      # character is an error
+      assert !st.match('@(?=\u200b[^[:word:]])')
     end
   end
 

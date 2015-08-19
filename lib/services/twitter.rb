@@ -42,9 +42,9 @@ class Service::Twitter < Service
         url = commit['url']
         # Strip out leading @s so that github @ mentions don't become twitter @ mentions
         # since there's zero reason to believe IDs on one side match IDs on the other
-        message = commit['message'].split(' ').map do |word|
-          (word.length > 1 && word[0] == '@') ? "@\u200b#{word[1..word.length]}" : word
-        end.join(' ')
+        message = commit['message'].gsub(/\B[@＠][[:word:]]/) do |word|
+          "@\u200b#{word[1..word.length]}"
+        end
         status = if short_format?
           "#{url} #{message}"
         else
