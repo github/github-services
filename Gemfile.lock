@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    github-services (1.0.0.e6759b3)
+    github-services (1.0.0.ad54999)
       activeresource (~> 4.0.0)
-      addressable (~> 2.2.7)
+      addressable (~> 2.3)
       aws-sdk (~> 1.27)
       aws-sdk-core (~> 2.0.8)
       faraday (= 0.9.0)
@@ -37,7 +37,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
-    addressable (2.2.8)
+    addressable (2.3.8)
     aws-sdk (1.57.0)
       aws-sdk-v1 (= 1.57.0)
     aws-sdk-core (2.0.8)
