@@ -1,4 +1,6 @@
 class Service::SqsQueue < Service::HttpPost
+  self.title = "Amazon SQS"
+
   string :aws_access_key, :aws_sqs_arn
   password :aws_secret_key
   # NOTE: at some point, sqs_queue_name needs to be deprecated and removed
