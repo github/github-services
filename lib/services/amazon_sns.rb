@@ -1,6 +1,7 @@
 require 'aws-sdk-core'
 
 class Service::AmazonSNS < Service
+  self.title = "Amazon SNS"
 
   string :aws_key, :sns_topic, :sns_region
 
