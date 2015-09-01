@@ -1,6 +1,6 @@
 This service lets you publish event messages to Amazon's Simple Notification Service. Please note that SNS Topics are region specific.
 
-The AWS Key and Secret you proide can either be from your master account (not recommended) or from an IAM Resource. 
+The AWS Key and Secret you provide can either be from your master account (not recommended) or from an IAM Resource. 
 
 If using IAM, be sure to check that the user has the correct policies for publishing to the specified SNS Topic. A policy similar to the one below will provide your IAM Resource with the correct permission level.
 
