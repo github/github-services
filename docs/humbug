@@ -21,3 +21,4 @@ Checkboxes
 1. **Exclude Pull Requests** - Don't send GitHub pull request notifications to Zulip.
 2. **Exclude Issues** - Don't send GitHub issues notifications to Zulip.
 3. **Exclude Commits** - Don't send Git commit notifcations to Zulip.
+4. **Emphasize branch in topic** - Highlight branch instead of repo name in message topics.
