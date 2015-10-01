@@ -14,7 +14,7 @@ Configuration Fields
 4. **Commit Stream** - Overrides **Stream** for Git commit notifications. The stream must exist in Zulip.
 5. **Issue Stream** - Overrides **Stream** for GitHub issues notifications. The stream must exist in Zulip.
 6. **Branches** - A comma-delimited whitelist of branches to receive event notifications about. If empty, event notifications will be sent about all branches. Example: "master,staging,prod"
-7. **Alternative Endpoint** -- Specify the full URL for the Zulip server's GitHub endpoint, e.g. https://zulip.example.com/api/v1/external/github (if left blank the integration will talk to zulip.com).
+7. **Alternative Endpoint** - Specify the full URL for the Zulip server's GitHub endpoint, e.g. https://zulip.example.com/api/v1/external/github (if left blank the integration will talk to zulip.com).
 
 Checkboxes
 ----------
