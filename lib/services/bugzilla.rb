@@ -152,7 +152,7 @@ class Service::Bugzilla < Service
       @closes = false
 
       # Get the list of bugs mentioned in this commit message
-      message_re = /((close|fix|address)e?(s|d)? )?(ticket|bug|tracker item|issue)s?:? *([\d ,\+&#and]+)/i
+      message_re = /((close|fix|address)e?(s|d)? )?(ticket|bug|bz|rhbz|tracker item|issue)s?:? *([\d ,\+&#and]+)/i
       if (@message =~ message_re) != nil
         if $1
           @closes = true
