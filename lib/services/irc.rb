@@ -138,11 +138,19 @@ class Service::IRC < Service
   end
 
   def irc_realname
-    repo_owner = payload["repository"]["owner"]["name"]
     repo_name = payload["repository"]["name"]
     repo_private = payload["repository"]["private"]
 
     "GitHub IRCBot - #{repo_owner}" + (repo_private == false ? "/#{repo_name}" : "")
+  end
+
+  def repo_owner
+    # for (what I presume to be) legacy reasonings, some events send owner login,
+    # others send owner name. this method accounts for both cases.
+    # sample: push event returns owner name, pull request event returns owner login
+    payload["repository"]["owner"]["name"] ?
+      payload["repository"]["owner"]["name"] :
+      payload["repository"]["owner"]["login"]
   end
 
   def debug_outgoing(command)

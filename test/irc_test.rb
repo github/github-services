@@ -122,7 +122,7 @@ class IRCTest < Service::TestCase
     svc.receive_push
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
@@ -139,7 +139,7 @@ class IRCTest < Service::TestCase
     svc.receive_push
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
@@ -156,7 +156,7 @@ class IRCTest < Service::TestCase
     svc.receive_push
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
@@ -173,7 +173,7 @@ class IRCTest < Service::TestCase
     svc.receive_commit_comment
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
@@ -187,7 +187,7 @@ class IRCTest < Service::TestCase
     svc.receive_pull_request
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
@@ -201,7 +201,7 @@ class IRCTest < Service::TestCase
     svc.receive_issues
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
@@ -215,7 +215,7 @@ class IRCTest < Service::TestCase
     svc.receive_issue_comment
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
@@ -229,7 +229,7 @@ class IRCTest < Service::TestCase
     svc.receive_pull_request_review_comment
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit.*pull request #5 /, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
@@ -243,7 +243,7 @@ class IRCTest < Service::TestCase
     svc.receive_gollum
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*\[grit\] defunkt created wiki page Foo/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
