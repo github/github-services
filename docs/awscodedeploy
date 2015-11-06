@@ -2,13 +2,29 @@ This service lets you deploy apps in [AWS CodeDeploy][1] when Deployments are cr
 
 You need to provide an AWS access key id and the corresponding secret access key having at least the permission for the `codedeploy:CreateDeployment` action. This is the minimal required policy file:
 
+Note: You will need to replace “us-east-1” if you are using a different region, and replace “123ACCOUNTID” with your AWS account ID that is found on your Account Settings page.
 ```
 {
   "Statement": [
     {
       "Effect": "Allow",
+      "Action": "codedeploy:GetDeploymentConfig",
+      "Resource": "arn:aws:codedeploy:us-east-1:123ACCOUNTID:deploymentconfig:*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "codedeploy:RegisterApplicationRevision",
+      "Resource": "arn:aws:codedeploy:us-east-1:123ACCOUNTID:application:DemoApplication"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "codedeploy:GetApplicationRevision",
+      "Resource": "arn:aws:codedeploy:us-east-1:123ACCOUNTID:application:DemoApplication"
+    },
+    {
+      "Effect": "Allow",
       "Action": "codedeploy:CreateDeployment",
-      "Resource": "*"
+      "Resource": "arn:aws:codedeploy:us-east-1:123ACCOUNTID:deploymentgroup:DemoApplication/DemoFleet"
     }
   ]
 }
