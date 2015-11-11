@@ -45,6 +45,23 @@ class WebTest < Service::TestCase
     svc.receive_event
   end
 
+  def test_push_with_query_param_and_form_encoding
+    svc = service({
+      'url' => "http://abc.com/foo?token=abc123&other_query_param=xyz789"
+    }, payload)
+
+    @stubs.post "/foo" do |env|
+      assert_match /form/, env[:request_headers]['content-type']
+      body = Faraday::Utils.parse_nested_query(env[:body])
+      assert body["payload"].present?
+      assert body["token"].present?
+      assert body["other_query_param"].present?
+      [200, {}, '']
+    end
+
+    svc.receive_event
+  end
+
   def test_push_with_secret
     svc = service({
       'url'    => 'http://abc.com/foo',
