@@ -1,4 +1,5 @@
 require 'aws-sdk-core'
+require 'digest'
 
 class Service::AmazonSNS < Service
   self.title = "Amazon SNS"
@@ -22,6 +23,12 @@ class Service::AmazonSNS < Service
     publish_to_sns(data, generate_json(payload))
   end
 
+  # Maximum SNS message size is 256 kilobytes.
+  MAX_MESSAGE_SIZE = 256 * 1024
+
+  # Size in bytes of each partial message.
+  PARTIAL_MESSAGE_SIZE = 128 * 1024
+
   # Create a new SNS object using the AWS Ruby SDK and publish to it.
   # cfg - Configuration hash of key, secret, etc.
   # json - THe valid JSON payload to send.
@@ -35,17 +42,43 @@ class Service::AmazonSNS < Service
         :secret_access_key => cfg['aws_secret']
       })
 
-      sns.publish({
-        :message            => json,
-        :topic_arn          => cfg['sns_topic'],
-        :message_attributes => message_attributes
-      })
-    rescue Aws::SNS::Errors::AuthorizationErrorException => e
-      raise_config_error e.message
-    rescue Aws::SNS::Errors::NotFoundException => e
-      raise_missing_error e.message
-    rescue SocketError
-      raise_missing_error
+      if json.bytesize <= MAX_MESSAGE_SIZE
+        sns.publish({
+          :message            => json,
+          :topic_arn          => cfg['sns_topic'],
+          :message_attributes => message_attributes
+        })
+      end
+
+      md5_digest = Digest::MD5.hexdigest(json)
+
+      payloads = split_bytes(json, PARTIAL_MESSAGE_SIZE)
+
+      messages = []
+      payloads.each_with_index do |payload, i|
+        messages << generate_json({
+          :error       => "Message exceeds the maximum SNS size limit of 256k",
+          :page_total  => payloads.length,
+          :page_number => i + 1,
+          :md5_digest  => md5_digest,
+          :message     => payload
+        })
+      end
+
+      messages.each do |message|
+        sns.publish({
+          :message            => message,
+          :topic_arn          => cfg['sns_topic'],
+          :message_attributes => message_attributes
+        })
+      end
+
+      rescue Aws::SNS::Errors::AuthorizationErrorException => e
+        raise_config_error e.message
+      rescue Aws::SNS::Errors::NotFoundException => e
+        raise_missing_error e.message
+      rescue SocketError
+        raise_missing_error
     end
   end
 
@@ -87,6 +120,15 @@ class Service::AmazonSNS < Service
     end
 
     data['sns_region'] = "us-east-1" if data['sns_region'].to_s.empty?
+  end
+
+  private
+
+  # Split the string into chunks of n bytes.
+  #
+  # Returns an array of strings.
+  def split_bytes(string, n)
+    string.bytes.each_slice(n).collect { |bytes| bytes.pack("C*") }
   end
 
 end
