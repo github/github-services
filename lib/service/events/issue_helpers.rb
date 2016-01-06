@@ -11,13 +11,12 @@ module Service::IssueHelpers
   end
 
   def summary_message
-    "[%s] %s %s issue #%d: %s. %s" % [
+    "[%s] %s %s issue #%d: %s" % [
       repo.name,
       sender.login,
       action,
       issue.number,
-      issue.title,
-      issue.html_url]
+      issue.title]
   rescue
     raise_config_error "Unable to build message: #{$!.to_s}"
   end

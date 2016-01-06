@@ -9,7 +9,7 @@ class IceScrumTest < Service::TestCase
     @stubs.post "/a/ws/p/TESTPROJ/commit" do |env|
       assert_equal 'www.kagilum.com', env[:url].host
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
-      body = Rack::Utils.parse_nested_query(env[:body])
+      body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
       assert_equal payload, recv
       [200, {}, '']
@@ -29,7 +29,7 @@ class IceScrumTest < Service::TestCase
     @stubs.post "/icescrum/ws/p/TESTPROJ/commit" do |env|
       assert_equal 'www.example.com', env[:url].host
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
-      body = Rack::Utils.parse_nested_query(env[:body])
+      body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
       assert_equal payload, recv      
       [200, {}, '']
@@ -49,7 +49,7 @@ class IceScrumTest < Service::TestCase
   def test_push_lowcase_project_key
     @stubs.post "/a/ws/p/TESTPROJ/commit" do |env|
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
-      body = Rack::Utils.parse_nested_query(env[:body])
+      body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
       assert_equal payload, recv      
       [200, {}, '']
@@ -68,7 +68,7 @@ class IceScrumTest < Service::TestCase
 def test_push_whitespace_project_key
     @stubs.post "/a/ws/p/TESTPROJ/commit" do |env|
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
-      body = Rack::Utils.parse_nested_query(env[:body])
+      body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
       assert_equal payload, recv
       [200, {}, '']

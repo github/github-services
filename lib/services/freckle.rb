@@ -1,26 +1,26 @@
-class Service::Freckle < Service
-  string :subdomain, :project, :token
+class Service::Freckle < Service::HttpPost
+  string :subdomain, :project
+  password :token
   white_list :subdomain, :project
 
-  def receive_push
-    entries, subdomain, token, project =
-      [], data['subdomain'].strip, data['token'].strip, data['project'].strip
+  default_events :push
 
-    payload['commits'].each do |commit|
-      minutes = (commit["message"].split(/\s/).find { |item| /^f:/ =~ item } || '')[2,100]
-      next unless minutes
-      entries << {
-        :date => commit["timestamp"],
-        :minutes => minutes,
-        :description => commit["message"].gsub(/(\s|^)f:.*(\s|$)/, '').strip,
-        :url => commit['url'],
-        :project_name => project,
-        :user => commit['author']['email']
-      }
-    end
+  url "https://letsfreckle.com"
 
-    http.headers['Content-Type'] = 'application/json'
-    http_post "http://#{data['subdomain']}.letsfreckle.com/api/entries/import",
-      {:entries => entries, :token => data['token']}.to_json
+  maintained_by :github => 'LockeCole117', :twitter => '@LockeCole117'
+
+  supported_by :web => 'https://letsfreckle.com',
+  	:email => 'support@letsfreckle.com',
+  	:twitter => '@letsfreckle'
+
+  def receive_event
+    subdomain = required_config_value('subdomain').strip
+    token = required_config_value('token').strip
+    project = required_config_value('project').strip
+
+    http.headers['X-FreckleToken'] 	 = token
+    http.headers['X-FreckleProject'] = project
+    url = "https://#{data['subdomain']}.letsfreckle.com/api/github/commits"
+    deliver url
   end
 end

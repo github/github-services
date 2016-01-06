@@ -29,7 +29,9 @@ class Service::Redmine < Service
             issue_no = id.gsub('#','')
 
             # Send the commit information to the related issue on redmine
-            res = http_method :put, "#{data['address']}/issues/#{issue_no}.json" do |req|
+            http.url_prefix = data['address']
+            
+            http_method :put, "issues/#{issue_no}.json" do |req|
               req.headers['Content-Type'] = 'application/json'
               req.headers['X-Redmine-API-Key'] = data['api_key']
               req.params['issue[notes]'] = commit_text(commit)
@@ -54,11 +56,11 @@ class Service::Redmine < Service
   end
 
   def fetch_github_commits_enabled?
-    data['fetch_commits']
+    config_boolean_true?('fetch_commits')
   end
 
   def update_issues_enabled?
-    data['update_redmine_issues_about_commits']
+    config_boolean_true?('update_redmine_issues_about_commits')
   end
 
   #Extract and buffer the needed commit information into one string

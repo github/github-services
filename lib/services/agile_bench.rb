@@ -1,5 +1,6 @@
 class Service::AgileBench < Service
-  string :token, :project_id
+  password :token
+  string :project_id
   white_list :project_id
 
   def receive_push
@@ -17,7 +18,7 @@ class Service::AgileBench < Service
   def post_to_agile_bench
     @response = http_post "http://agilebench.com/services/v1/github" do |req|
       req.headers['Content-Type'] = 'application/json'
-      req.body = JSON.generate({
+      req.body = generate_json({
         :payload => payload,
         :data => {
           :project_id => project_id,

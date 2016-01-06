@@ -1,0 +1,9 @@
+Instant project management for you GitHub repositories
+
+See: https://huboard.com
+
+HuBoard is built from the ground up using the GitHub public API. HuBoard issues **are** GitHub issues, you will never
+have to deal with syncronization problems. Keep you issues where they belong, in the repository with you code.
+
+By enabling GitHub's Service Hook integration, HuBoard keeps your agile boards up to date by sending events that occur
+on GitHub directly to HuBoard. 

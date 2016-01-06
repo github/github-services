@@ -1,6 +1,22 @@
 class Service::Tender < Service
-  string :domain, :token
-  default_events :issues
+  # mysite.tenderapp.com
+  string :domain
+
+  # tracker token. can be found here:
+  # http://mysite.tenderapp.com/settings/trackers
+  password :token
+
+  default_events :issues, :pull_request
+
+  url 'https://tenderapp.com'
+  logo_url 'https://tenderapp.com/images/logo.jpg'
+
+  # julien on http://help.tenderapp.com/home
+  maintained_by :github => 'calexicoz'
+
+  # Support channels for user-level Hook problems (service failure, misconfigured)
+  supported_by :web => 'http://help.tenderapp.com/home',
+               :email => 'support@tenderapp.com'
 
   def receive_issues
     raise_config_error 'Missing token' if data['token'].to_s.empty?
@@ -9,7 +25,8 @@ class Service::Tender < Service
     begin
       # Nothing to see here really, just reposting the payload as-is
       http.headers['content-type'] = 'application/json'
-      body = JSON.generate(payload)
+      http.ssl[:verify] = false
+      body = generate_json(payload)
       url = "https://#{data['domain']}/tickets/github/#{data['token']}"
       http_post url, body
 

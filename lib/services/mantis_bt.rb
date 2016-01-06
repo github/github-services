@@ -5,7 +5,7 @@ class Service::MantisBT < Service
   def receive_push
     http.ssl[:verify] = false
     http.url_prefix = data['url']
-    res = http_post 'plugin.php', :payload => payload.to_json do |req|
+    res = http_post 'plugin.php', :payload => generate_json(payload) do |req|
       req.params.update \
         :page => "Source/checkin",
         :api_key => data['api_key']

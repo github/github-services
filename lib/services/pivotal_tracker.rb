@@ -1,5 +1,6 @@
 class Service::PivotalTracker < Service
-  string :token, :branch, :endpoint
+  password :token
+  string :branch, :endpoint
   white_list :endpoint, :branch
 
   def receive_push
@@ -15,7 +16,7 @@ class Service::PivotalTracker < Service
     endpoint = 'https://www.pivotaltracker.com/services/v3/github_commits' if endpoint.empty?
     res = http_post endpoint do |req|
       req.params[:token] = data['token']
-      req.body = {:payload => payload.to_json}
+      req.body = {:payload => generate_json(payload)}
     end
 
     if res.status < 200 || res.status > 299

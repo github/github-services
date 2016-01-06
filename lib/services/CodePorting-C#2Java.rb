@@ -1,7 +1,6 @@
 class Service::CodePortingCSharp2Java < Service
   string   :project_name, :repo_key, :target_repo_key, :codeporting_username
-  password :codeporting_password
-  string   :github_access_token
+  password :codeporting_password, :github_access_token
 
   self.title = 'CodePorting-C#2Java'
 
