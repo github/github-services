@@ -12,7 +12,7 @@ class JenkinsGitTest < Service::TestCase
 
       assert_equal 'Basic bW9ua2V5OnNlY3JldA==', env[:request_headers]['authorization']
 
-      params = Rack::Utils.parse_nested_query(env[:url].query)
+      params = Faraday::Utils.parse_nested_query(env[:url].query)
       expected_params = {
         'url' => 'http://github.com/mojombo/grit',
         'branches' => 'master',

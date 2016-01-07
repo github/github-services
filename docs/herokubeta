@@ -1,0 +1,17 @@
+[heroku](https://heroku.com) is a hosting platform with support for a large number of languages.
+
+By enabling this hook, GitHub will request a [heroku build](https://devcenter.heroku.com/articles/platform-api-reference#build-create) that pushes your code to a named heroku application when a [deployment event](https://developer.github.com/webhooks/#events) is received.
+
+To trigger deployment events you'll need to [create a deployment](https://developer.github.com/v3/repos/deployments/#create-a-deployment) with the API.
+
+There's a [hubot-deploy](https://github.com/atmos/hubot-deploy) script that allows you to deploy from chat. Heroku has various options for [deploy hooks](https://devcenter.heroku.com/articles/deploy-hooks) to give you feedback.
+
+The [auto-deployment](http://www.atmos.org/github-services/auto-deployment/) service exists for creating deployments automatically on push and successful CI runs.
+
+Install Notes
+-------------
+
+1. `name` The application name on heroku to deploy to.
+2. `heroku_token` A user or [direct authorization](https://devcenter.heroku.com/articles/oauth#direct-authorization) token from heroku.
+3. `github_token` A [personal access token](https://github.com/settings/applications) from GitHub with the `repo` scope. We generate an [archive link](https://developer.github.com/v3/repos/contents/#get-archive-link) for the heroku API with it.
+4. `github_api_url` The URL for the GitHub API. Override this for enterprise. **Optional** e.g. `https://enterprise.myorg.com`.

@@ -1,6 +1,0 @@
-Install Notes
--------------
-
-  1. **Subdomain** (for a Present.ly account)
-  2. **Group Name** (OPTIONAL; will broadcast as a group or as the system if group is 'system')
-  3. **Username** (user must be a manager of the specified group or admin for 'system')

@@ -1,0 +1,44 @@
+This service lets you deploy apps in [AWS CodeDeploy][1] when Deployments are created via the API.
+
+You need to provide an AWS access key id and the corresponding secret access key having at least the permission for the `codedeploy:CreateDeployment` action. This is the minimal required policy file:
+
+Note: You will need to replace “us-east-1” if you are using a different region, and replace “123ACCOUNTID” with your AWS account ID that is found on your Account Settings page.
+```
+{
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "codedeploy:GetDeploymentConfig",
+      "Resource": "arn:aws:codedeploy:us-east-1:123ACCOUNTID:deploymentconfig:*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "codedeploy:RegisterApplicationRevision",
+      "Resource": "arn:aws:codedeploy:us-east-1:123ACCOUNTID:application:DemoApplication"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "codedeploy:GetApplicationRevision",
+      "Resource": "arn:aws:codedeploy:us-east-1:123ACCOUNTID:application:DemoApplication"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "codedeploy:CreateDeployment",
+      "Resource": "arn:aws:codedeploy:us-east-1:123ACCOUNTID:deploymentgroup:DemoApplication/DemoFleet"
+    }
+  ]
+}
+```
+
+Install Notes
+-------------
+
+1. **Application Name** (required) - "CodeDeploy Application Name" on the **applications page** in the AWS CodeDeploy Console.
+2. **Deployment Group** (Optional) - "Deployment Group" on the **app setting page** in the AWS CodeDeploy Console. Defaults to production.
+3. **Aws Access Key Id** (required) - Access key id of an AWS IAM user having the permission for the `codedeploy:CreateDeployment` action.
+4. **Aws Secret Access Key** (required) - Corresponding secret access key of the AWS IAM user.
+5. **Aws Region** (Optional) - The region your servers are in.
+6. **GitHub Token** (Optional) - A GitHub personal access token with `repo` scope to for OAuth cloning and deployment statuses for the GitHub API.
+7. **GitHub API Url** (Optional) - The URL for the GitHub API. Override this for enterprise. e.g. `https://enterprise.myorg.com`.
+
+[1]: https://console.aws.amazon.com/codedeploy/home

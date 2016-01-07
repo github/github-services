@@ -15,3 +15,5 @@ In the above, the data you need for configuration is:
 
 * subdomain: example
 * repo_id: 28573
+
+If your URL begins with http:// rather than https:// check the Httponly box when setting up the service hook.

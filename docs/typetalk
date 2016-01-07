@@ -1,0 +1,10 @@
+Posts a message to [Typetalk](https://typetalk.in) topics when you push to GitHub.
+
+Install Notes
+-------------
+
+1. Need to [register new application](https://typetalk.in/my/develop/applications) that authorises GitHub to access to the Typetalk API. (Grant type must be "Client Credentials")
+2. Enter your credentials.
+   - client_id
+   - client_secret
+3. Enter topic id to post messages.

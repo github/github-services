@@ -22,7 +22,7 @@ class AgileBenchTest < Service::TestCase
     @stubs.post "/services/v1/github"
     svc = service({'token' => '', 'project_id' => '123'},
                   payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end
@@ -31,7 +31,7 @@ class AgileBenchTest < Service::TestCase
     @stubs.post "/services/v1/github"
     svc = service({'token' => 'test_token', 'project_id' => ''},
                   payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
   end

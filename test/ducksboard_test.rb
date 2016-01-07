@@ -10,7 +10,7 @@ class DucksboardTest < Service::TestCase
     svc = service(event, {'webhook_key' => '1234abcd'}, payload)
 
     @stubs.post '/1234abcd' do |env|
-      body = Rack::Utils.parse_nested_query(env[:body])
+      body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['content'])
       assert_equal recv['payload'], payload
       assert_equal recv['event'], event.to_s
@@ -33,7 +33,7 @@ class DucksboardTest < Service::TestCase
     }, payload)
 
     @stubs.post '/abcd1234' do |env|
-      body = Rack::Utils.parse_nested_query(env[:body])
+      body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['content'])
       assert_equal recv['payload'], payload
       [200, {}, '']
@@ -53,7 +53,7 @@ class DucksboardTest < Service::TestCase
     (1..6).each do |endpoint|
       @stubs.post "/#{endpoint}" do |env|
         posted << endpoint
-        body = Rack::Utils.parse_nested_query(env[:body])
+        body = Faraday::Utils.parse_nested_query(env[:body])
         recv = JSON.parse(body['content'])
         assert_equal recv['payload'], payload
         [200, {}, '']
@@ -68,7 +68,7 @@ class DucksboardTest < Service::TestCase
 
   def test_missing_webhook_key
     svc = service({}, payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -77,7 +77,7 @@ class DucksboardTest < Service::TestCase
     svc = service({
       'webhook_key' => 'foobar' # non-hex values
     }, payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -86,7 +86,7 @@ class DucksboardTest < Service::TestCase
     svc = service({
       'webhook_key' => 'abc123 foobar' # non-hex values
     }, payload)
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end

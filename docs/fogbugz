@@ -25,7 +25,7 @@ is given and ID that will be used by the cvsSubmit.asp page.
   2.  Click 'Create New Repository'.
 
   3.  An option pane will pop up.  Select 'Other (custom)'.  Enter a name for
-      the repository. The name does not have to be the same as the github repo
+      the repository. The name does not have to be the same as the GitHub repo
 	  name.  Click Next.
 
   4.  Set the 'Diff URL' field to be:
@@ -50,7 +50,7 @@ FogBugz 6.1 Configuration
 ---------------------
 
 If you want to use GitHub as your sole source control system, configuration
-within FogBugz is relatively easy. 
+within FogBugz is relatively easy.
 
 In your site configuration:
 
@@ -73,3 +73,14 @@ In the service hook here:
 
 <http://www.fogcreek.com/FogBugz/KB/howto/MultipleRepositories-Mult.html>
 
+
+Usage
+-----
+
+The commit message will be added as a note to the case. You cannot resolve a case via the commit message.
+The hook parses the commit messages for bug ids based on the below syntax.
+
+Examples:
+
+  * case(s): 12345, 67890, [additional]
+  * bug(s)ID: 12345, 67890, [additional]

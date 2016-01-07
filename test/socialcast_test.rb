@@ -9,7 +9,7 @@ class SocialcastTest < Service::TestCase
     @stubs.post "/api/messages.xml" do |env|
       assert_equal 'd', env[:url].host
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
-      data = Rack::Utils.parse_nested_query(env[:body])
+      data = Faraday::Utils.parse_nested_query(env[:body])
       msg  = data['message']
       assert_match 'Tom Preston-Werner', msg['body']
       assert_match '3 commits', msg['title']

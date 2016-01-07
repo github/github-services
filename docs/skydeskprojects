@@ -1,0 +1,19 @@
+SkyDesk Projects Requirements:
+
+Log into the SkyDesk portal first.
+SkyDesk Portal URL : https://www.skydesk.jp
+Then access SkyDesk projects using https://projects.skydesk.jp.
+
+Project ID and Token is required for configuration which will be available under "Dashboard" --> "Project Settings" --> "Service Hooks".
+
+This service hook allows you to associate changeset(s) with bug(s) in SkyDesk Projects.  To associate changeset(s) with bug(s) in SkyDeskProjects you will need to give the BUG ID in in your commit message.
+
+Syntax: `OPEN SQUARE BRACKET #BUGID CLOSE SQUARE BRACKET` followed by commit message
+
+Ex: `[#SDP-23] fixed the memory leak issue.`
+
+This will associate the changeset with bug with ID SDP-23.
+
+For more than one bugs, provide the BUG IDS separated by comma.
+
+Ex: `[#SDP-24,#SDP-25] UI alignment fix done.`
