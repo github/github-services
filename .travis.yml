@@ -1,5 +1,6 @@
 langauge: ruby
 rvm:
-  - 2.1.2
+  - 2.1.7
 install: script/bootstrap
 script: bundle exec rake test
+sudo: false
