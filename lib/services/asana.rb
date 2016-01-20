@@ -52,7 +52,7 @@ class Service::Asana < Service
     http.basic_auth(data['auth_token'], "")
     http.headers['X-GitHub-Event'] = event.to_s
 
-    res = http_post "https://app.asana.com/api/1.0/tasks/#{task_id}/stories", "text=#{text}"
+    res = http_post "https://app.asana.com/api/1.0/tasks/#{task_id}/stories", URI.encode_www_form("text" => text)
     case res.status
     when 200..299
       # Success
