@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    github-services (1.0.0.e38ed97)
+    github-services (1.0.0.bab7cf5)
       activeresource (~> 4.0.0)
       addressable (~> 2.3)
       aws-sdk (~> 1.27)
@@ -135,4 +135,4 @@ DEPENDENCIES
   rake (= 10.0.3)
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
