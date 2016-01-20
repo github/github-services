@@ -103,7 +103,7 @@ _Enabling_ colors in messages may require the IRC channel to allow colors.
 
 ### Long url
 
-Enables including full URLs in messages.  When disabled, [git.io](http://git.io/) URLs will be used.
+Enables including full URLs in messages.  When disabled, [git.io](https://git.io/) URLs will be used.
 
 
 ### Notice
