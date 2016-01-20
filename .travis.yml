@@ -3,3 +3,4 @@ rvm:
   - 2.1.2
 install: script/bootstrap
 script: bundle exec rake test
+sudo: false
