@@ -3,7 +3,7 @@ class Service::Twitter < Service
   string :filter_branch
   boolean :digest, :short_format
   TWITTER_SHORT_URL_LENGTH_HTTPS = 23
-  
+
   white_list :filter_branch
 
   def receive_push
@@ -16,7 +16,7 @@ class Service::Twitter < Service
     if (filter_branch.length > 0) && (commit_branch.index(filter_branch) == nil)
       return false
     end
-    
+
     statuses   = []
     repository = payload['repository']['name']
 
