@@ -101,7 +101,7 @@ class TwitterTest < Service::TestCase
   def service(*args)
     super Service::Twitter, *args
   end
-    
+
   def test_filter_branch
     svc = service({'token' => 't', 'secret' => 's', 'filter_branch' => 'tweet' }, payload)
 
@@ -117,7 +117,7 @@ class TwitterTest < Service::TestCase
     svc.receive_push
     assert_equal 0, svc.statuses.size
   end
-    
+
   def test_filter_branch_partial
     svc = service({'token' => 't', 'secret' => 's', 'filter_branch' => 'ast' }, payload)
 
@@ -133,5 +133,5 @@ class TwitterTest < Service::TestCase
     svc.receive_push
     assert_equal 3, svc.statuses.size
   end
-    
+
 end
