@@ -3,7 +3,7 @@ class Service::Twitter < Service
   string :filter_branch
   boolean :digest, :short_format
   TWITTER_SHORT_URL_LENGTH_HTTPS = 23
-  
+
   white_list :filter_branch
 
   def receive_push
@@ -16,7 +16,7 @@ class Service::Twitter < Service
     if (filter_branch.length > 0) && (commit_branch.index(filter_branch) == nil)
       return false
     end
-    
+
     statuses   = []
     repository = payload['repository']['name']
 
@@ -40,9 +40,11 @@ class Service::Twitter < Service
       payload['commits'].each do |commit|
         author = commit['author'] || {}
         url = commit['url']
+        message = commit['message']
+        message.gsub!("*", "%2A")
         # Strip out leading @s so that github @ mentions don't become twitter @ mentions
         # since there's zero reason to believe IDs on one side match IDs on the other
-        message = commit['message'].gsub(/\B[@＠][[:word:]]/) do |word|
+        message.gsub!(/\B[@＠][[:word:]]/) do |word|
           "@\u200b#{word[1..word.length]}"
         end
         status = if short_format?
@@ -50,7 +52,8 @@ class Service::Twitter < Service
         else
           "[#{repository}] #{url} #{author['name']} - #{message}"
         end
-        length = status.length - url.length + TWITTER_SHORT_URL_LENGTH_HTTPS # The URL is going to be shortened by twitter. It's length will be at most 23 chars (HTTPS).
+        # The URL is going to be shortened by twitter. It's length will be at most 23 chars (HTTPS).
+        length = status.length - url.length + TWITTER_SHORT_URL_LENGTH_HTTPS
         # How many chars of the status can we actually use?
         # We can use 140 chars, have to reserve 3 chars for the railing dots (-3)
         # also 23 chars for the t.co-URL (-23) but can fit the whole URL into the tweet (+url.length)

@@ -67,7 +67,25 @@ class TwitterTest < Service::TestCase
     end
 
     svc.receive_push
-    assert svc.statuses[0].match(p['commits'][0]['message'])
+    assert_match p['commits'][0]['message'], svc.statuses[0]
+  end
+
+  # Make sure that asterisks in the original commit message are escaped
+  def test_asterisk_escaped
+    p = payload
+    p['commits'][0]['message']="message * with * stars"
+    svc = service({'token' => 't', 'secret' => 's'}, p)
+
+    def svc.statuses
+      @statuses ||= []
+    end
+
+    def svc.post(status)
+      statuses << status
+    end
+
+    svc.receive_push
+    assert_match "message %2A with %2A stars", svc.statuses[0]
   end
 
   # Make sure that GitHub @mentions are injected with a zero-width space
@@ -101,7 +119,7 @@ class TwitterTest < Service::TestCase
   def service(*args)
     super Service::Twitter, *args
   end
-    
+
   def test_filter_branch
     svc = service({'token' => 't', 'secret' => 's', 'filter_branch' => 'tweet' }, payload)
 
@@ -117,7 +135,7 @@ class TwitterTest < Service::TestCase
     svc.receive_push
     assert_equal 0, svc.statuses.size
   end
-    
+
   def test_filter_branch_partial
     svc = service({'token' => 't', 'secret' => 's', 'filter_branch' => 'ast' }, payload)
 
@@ -133,5 +151,5 @@ class TwitterTest < Service::TestCase
     svc.receive_push
     assert_equal 3, svc.statuses.size
   end
-    
+
 end
