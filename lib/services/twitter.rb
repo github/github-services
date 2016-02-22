@@ -50,7 +50,8 @@ class Service::Twitter < Service
         else
           "[#{repository}] #{url} #{author['name']} - #{message}"
         end
-        length = status.length - url.length + TWITTER_SHORT_URL_LENGTH_HTTPS # The URL is going to be shortened by twitter. It's length will be at most 23 chars (HTTPS).
+        # The URL is going to be shortened by twitter. It's length will be at most 23 chars (HTTPS).
+        length = status.length - url.length + TWITTER_SHORT_URL_LENGTH_HTTPS
         # How many chars of the status can we actually use?
         # We can use 140 chars, have to reserve 3 chars for the railing dots (-3)
         # also 23 chars for the t.co-URL (-23) but can fit the whole URL into the tweet (+url.length)
