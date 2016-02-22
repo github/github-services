@@ -67,7 +67,7 @@ class TwitterTest < Service::TestCase
     end
 
     svc.receive_push
-    assert svc.statuses[0].match(p['commits'][0]['message'])
+    assert_match p['commits'][0]['message'], svc.statuses[0]
   end
 
   # Make sure that GitHub @mentions are injected with a zero-width space
