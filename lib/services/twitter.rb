@@ -41,7 +41,6 @@ class Service::Twitter < Service
         author = commit['author'] || {}
         url = commit['url']
         message = commit['message']
-        message.gsub!("*", "%2A")
         # Strip out leading @s so that github @ mentions don't become twitter @ mentions
         # since there's zero reason to believe IDs on one side match IDs on the other
         message.gsub!(/\B[@＠][[:word:]]/) do |word|
@@ -52,6 +51,8 @@ class Service::Twitter < Service
         else
           "[#{repository}] #{url} #{author['name']} - #{message}"
         end
+        # Twitter barfs on asterisks so replace them with a slightly different unicode one.
+        status.gsub!("*", "﹡")
         # The URL is going to be shortened by twitter. It's length will be at most 23 chars (HTTPS).
         length = status.length - url.length + TWITTER_SHORT_URL_LENGTH_HTTPS
         # How many chars of the status can we actually use?
