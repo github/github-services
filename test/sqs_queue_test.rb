@@ -1,4 +1,5 @@
 require File.expand_path('../helper', __FILE__)
+ENV['SQS_STUB_REQUESTS'] = 'true'
 
 class SqsQueueTest < Service::TestCase
   include Service::PushHelpers
@@ -50,6 +51,26 @@ class SqsQueueTest < Service::TestCase
   def test_sets_region_with_new_data
     svc = service(@data, payload)
     assert_equal 'us-west-2', svc.region
+  end
+  
+  def test_notify_sqs_sends_message_attributes
+    svc = service(@data, payload)
+    client = svc.sqs_client
+    client.client.new_stub_for(:send_message)
+    queue_url_resp = client.client.stub_for(:get_queue_url)
+    queue_url_resp.data[:queue_url] = 'https://sqs.us-west-2.amazonaws.com/1234567890/testQueue'
+
+    result = svc.notify_sqs(svc.access_key, svc.secret_key, '{type: ping}')
+
+    # make sure the original params are what is expected
+    original_params = result.request_options
+    assert_equal 'https://sqs.us-west-2.amazonaws.com/1234567890/testQueue', original_params[:queue_url]
+    assert_equal '{type: ping}', original_params[:message_body]
+    expected_hash = {
+      'X-GitHub-Event' => {:string_value => 'push', :data_type => 'String'}
+    }
+    assert_equal expected_hash, original_params[:message_attributes]
+
   end
 
 end

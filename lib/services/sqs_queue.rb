@@ -32,16 +32,20 @@ class Service::SqsQueue < Service::HttpPost
   end
 
   def notify_sqs(aws_access_key, aws_secret_key, payload)
-    sqs = AWS::SQS.new(
-        access_key_id: access_key,
-        secret_access_key: secret_key,
-        region: region)
+    sqs = sqs_client
+
     if data['aws_sqs_arn'] && data['aws_sqs_arn'].match(/^http/)
         queue = sqs.queues[data['aws_sqs_arn']]
     else
         queue = sqs.queues.named(queue_name)
     end
-    queue.send_message(clean_for_json(payload))
+    sqs.client.send_message(
+      queue_url: queue.url,
+      message_body: clean_for_json(payload),
+      message_attributes: {
+        'X-GitHub-Event' => { string_value: event.to_s, data_type: 'String'}
+      }  
+    )
   end
 
   def access_key
@@ -58,6 +62,24 @@ class Service::SqsQueue < Service::HttpPost
 
   def region
     arn[:region] || 'us-east-1'
+  end
+
+  def stubbed_requests?
+    !!ENV['SQS_STUB_REQUESTS']
+  end
+
+  def aws_config
+    {
+      :region            => region,
+      :logger            => stubbed_requests? ? nil : Logger.new(STDOUT),
+      :access_key_id     => access_key,
+      :secret_access_key => secret_key,
+      :stub_requests     => stubbed_requests?,
+    }
+  end
+
+  def sqs_client
+    @sqs_client ||= ::AWS::SQS.new(aws_config)
   end
 
   private
