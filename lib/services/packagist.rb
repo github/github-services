@@ -21,7 +21,11 @@ class Service::Packagist < Service
   end
 
   def token
-    data['token'].strip
+    if data['token'].to_s == ''
+      ''
+    else
+      data['token'].strip
+    end
   end
 
   def scheme
