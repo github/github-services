@@ -1,12 +1,23 @@
-This service will notify Weblate about pushes to your repository.
+This service will notify [Weblate][0] about pushes to your repository.
 Weblate will then refresh updated translations and merge them with your
 changes.
 
-More info: http://weblate.org/
+[Weblate][0] is a free web-based translation tool with tight version control
+integration. It features simple and clean user interface, propagation of
+translations across components, quality checks and automatic linking to source
+files.
 
 Install Notes
 -------------
 
 You need to have enabled hooks in your Weblate installation (this is default)
-see documentation for more information: 
-https://weblate.readthedocs.org/en/latest/api.html#notification-hooks
+see [GitHub hook documentation][2].
+
+Please set root URL of your Weblate instance see [Automatically receiving changes from GitHub in the Weblate docs][1].
+
+For [Hosted Weblate][3] just enter ``https://hosted.weblate.org/``.
+
+[0]: https://weblate.org/
+[1]: https://docs.weblate.org/en/latest/admin/continuous.html#github-setup
+[2]: https://docs.weblate.org/en/latest/api.html#post--hooks-github-
+[3]: https://weblate.org/hosting/
