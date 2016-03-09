@@ -54,13 +54,13 @@ class PackagistTest < Service::TestCase
   def test_handles_blank_strings_without_errors
     data = {
       'user' => '',
-      'token' => '5gieo7lwcd8gww800scs',
+      'token' => '',
       'domain' => ''
     }
 
     svc = service(data, payload)
     assert_equal 'mojombo', svc.user
-    assert_equal '5gieo7lwcd8gww800scs', svc.token
+    assert_equal '', svc.token
     assert_equal 'packagist.org', svc.domain
     assert_equal 'https', svc.scheme
   end
