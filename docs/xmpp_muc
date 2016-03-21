@@ -37,4 +37,4 @@ comments, member adds, pull requests, pushes, and watches. However, not all
 events are posted to the MUC room. If you would like these events supported 
 please raise an issue, or make a pull request!
 
-A full list of events with descriptions can be found here: http://developer.github.com/v3/repos/hooks/.
+A full list of events with descriptions can be found here: https://developer.github.com/v3/repos/hooks/.

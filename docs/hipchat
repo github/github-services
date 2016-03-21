@@ -5,7 +5,7 @@ Read more here: http://help.hipchat.com/knowledgebase/articles/64389-github-inte
 This service currently enables all of the available hook events including
 commit comments, downloads, forks, fork applies, wiki updates, issues, issue
 comments, member adds, pull requests, pushes, and watches. A full list with
-descriptions can be found here: http://developer.github.com/v3/repos/hooks/
+descriptions can be found here: https://developer.github.com/v3/repos/hooks/
 
 Install Notes
 -------------
