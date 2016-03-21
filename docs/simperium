@@ -13,7 +13,7 @@ Data:
 'event' - The GitHub event type, eg. 'push' for commits
 'payload' - The data for the event, varies by event type.
 
-More details on GitHub events: http://developer.github.com/v3/repos/hooks/
+More details on GitHub events: https://developer.github.com/v3/repos/hooks/
 
 Install Notes
 ------------

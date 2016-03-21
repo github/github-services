@@ -6,7 +6,7 @@ Supported events are currently:
 'watch', 'release', 'fork', 'member', 'public', 'team_add',
 'status', 'deployment', 'deployment_status'.
 
-As described at http://developer.github.com/webhooks/#service-hooks
+As described at https://developer.github.com/webhooks/#service-hooks
 
 
 Install Notes
