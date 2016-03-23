@@ -9,7 +9,7 @@ Fixes layout rendering bug. Reported in https://app.asana.com/0/12345678/9012345
 ```
 
 will show up as:
-```<commiter> pushed to branch <branch> of <user>/<repo>
+```<commiter> pushed to branch <branch> of <user>/<repo> 
 (https://github.com/<user>/<repo>/commit/<commit id>)
 -Fixes layout rendering bug. Reported in https://app.asana.com/0/12345678/9012345```
 
