@@ -17,3 +17,4 @@ log
 tmp
 pkg
 .iml
+Gemfile.lock
