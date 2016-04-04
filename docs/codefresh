@@ -1,0 +1,13 @@
+Codefresh offers continuous integration, environment launching and deployment for NodeJS, Ruby, PHP, Python, Go and Java applications.
+
+This service hook will inform Codefresh every time you push to GitHub. On every push Codefresh tests the current version of your application. If all tests succeed, you will be able to launch environments and image will be created, otherwise it informs you about the failures.
+
+Install Notes
+-------------
+
+Codefresh will install this hook automatically on sign up. However, if creating the service didn't succeed or you accidentally deleted it, you can also install it manually.
+
+1.  Sign up at https://codefresh.io/ (you can sign in with GitHub)
+2.  ....
+
+Check out more details on Codeship at https://codefresh.io/.
