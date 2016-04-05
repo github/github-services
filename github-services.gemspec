@@ -58,7 +58,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "softlayer_messaging", "~> 1.0.2"
 
   # Amazon SQS, AWS OpsWorks
-  spec.add_dependency "aws-sdk", "~> 1.50"
+  spec.add_dependency "aws-sdk", "~> 1.66"
 
   # AWS CodeDeploy, Amazon SNS
   spec.add_dependency "aws-sdk-core", "~>2.0.8"
