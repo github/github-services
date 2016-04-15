@@ -1,6 +1,6 @@
-Note: HipChat has a new and improved integration with GitHub. While this
-service will continue to work, you really should check out the new integration.
-Read more here: http://help.hipchat.com/knowledgebase/articles/64389-github-integration
+Note: Atlassian provides its own native integration for GitHub. We recommend 
+using the Atlassian integration, as opposed to this GitHub provided service.
+Read more here: https://hipchat.com/addons/github-for-hipchat
 
 This service currently enables all of the available hook events including
 commit comments, downloads, forks, fork applies, wiki updates, issues, issue
