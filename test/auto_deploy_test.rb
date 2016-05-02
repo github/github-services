@@ -171,6 +171,12 @@ class AutoDeployTest < Service::TestCase
     assert_equal message, exception.message
   end
 
+  def test_slashed_payload_ref
+    payload = { 'ref' => 'refs/heads/slash/test' }
+    service = Service::AutoDeploy.new(:push, {}, payload)
+    assert_equal 'slash/test', service.payload_ref
+  end
+
   def service_class
     Service::AutoDeploy
   end

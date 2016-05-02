@@ -2,7 +2,6 @@ class Service::AutoDeploy < Service::HttpPost
   password :github_token
   string   :environments
   boolean  :deploy_on_status
-  string   :status_contexts
   string   :github_api_url
 
   white_list :environments, :deploy_on_status, :contexts, :github_api_url
@@ -33,7 +32,7 @@ class Service::AutoDeploy < Service::HttpPost
   end
 
   def payload_ref
-    payload['ref'].split('/').last
+    payload['ref'].to_s[/refs\/heads\/(.*)/, 1]
   end
 
   def sha
