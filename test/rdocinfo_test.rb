@@ -1,24 +1,27 @@
 require File.expand_path('../helper', __FILE__)
 
 class RDocInfoTest < Service::TestCase
-  def setup
-    @stubs = Faraday::Adapter::Test::Stubs.new
-  end
+  include Service::HttpTestMethods
 
   def test_push
     @stubs.post "/checkout" do |env|
-      assert_equal 'rubydoc.info', env[:url].host
-      data = Rack::Utils.parse_query(env[:body])
-      assert_equal 1, JSON.parse(data['payload'])['a']
+      assert_equal 'www.rubydoc.info', env[:url].host
+      body = JSON.parse(env[:body])
+      assert_equal 'push', body['event']
+      assert_equal 'test', body['payload']['repository']['id']
       [200, {}, '']
     end
 
-    svc = service({}, :a => 1)
-    svc.receive_push
+    payload = { 'repository' => { 'id' => 'test' }}
+    svc = service({}, payload)
+    svc.receive_event
+    @stubs.verify_stubbed_calls
   end
 
-  def service(*args)
-    super Service::RDocInfo, *args
+  private
+
+  def service_class
+    Service::RDocInfo
   end
 end
 

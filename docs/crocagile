@@ -1,0 +1,35 @@
+Crocagile is an agile-inspired workspace that keeps your team together 
+throughout the entire product life-cycle. Learn more at https://www.crocagile.com
+
+GitHub integration supports progress updates and time logging for tasks via 
+commit message using  "Updates" and "Time" triggers. Samples below.
+
+
+INSTALLATION
+=============
+
+1. Obtain your Project Key from the settings area of your Crocagile project.
+2. Save your project key to the Crocagile Service in your repository.
+3. Use commit messages to update tasks. (See samples).
+4. Visit https://blog.crocagile.com for friendly documentation.
+
+
+SAMPLES
+=============
+
+Update a task to 60% complete.
+-m " Your commit message. Updates T2355=60" 
+
+Update two tasks at once. (No spaces between tasks)
+-m " Your commit message. Updates T2355=60,T2660=90"
+
+Mark a task complete and log time in hours (supports float).
+-m " Your commit message. Updates T2355=100 Time T2355=2.5"
+
+Update multiple progress+time (Spaces permitted between triggers, Not between tasks)
+-m "Your commit message. Updates T2355=100,T1039=75 Time T2355=2,T1039=1.5" 
+
+Notes:
+"Update T2355" is identical to "Update T2355=100"
+"Time T2355" is identical to "Time T2355=1"
+Don't forget the "T" !

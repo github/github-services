@@ -1,7 +1,4 @@
 require File.expand_path('../helper', __FILE__)
-require 'uri'
-
-Service::App.set :environment, :test
 
 ART_QUERY_RESULT = 
    { 'S1234'  => {'Results' => []},

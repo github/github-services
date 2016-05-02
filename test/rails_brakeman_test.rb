@@ -29,7 +29,7 @@ class RailsBrakemanTest < Service::TestCase
 
   def test_posts_payload
     @stubs.post "/" do |env|
-      assert_equal payload, JSON.parse(Rack::Utils.parse_query(env[:body])['payload'])
+      assert_equal payload, JSON.parse(Faraday::Utils.parse_query(env[:body])['payload'])
     end
     @svc.receive_push
   end

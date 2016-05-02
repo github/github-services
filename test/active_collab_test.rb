@@ -7,8 +7,8 @@ class ActiveCollabTest < Service::TestCase
 
   def test_push
     @stubs.post "/foo" do |env|
-      query = Rack::Utils.parse_nested_query(env[:url].query)
-      body  = Rack::Utils.parse_nested_query(env[:body])
+      query = Faraday::Utils.parse_nested_query(env[:url].query)
+      body  = Faraday::Utils.parse_nested_query(env[:body])
       assert_equal '2', body['discussion']['milestone_id']
       assert_equal '3', body['discussion']['parent_id']
       assert_equal 'activecollab.com', env[:url].host

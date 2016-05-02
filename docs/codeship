@@ -9,9 +9,9 @@ Codeship will install this hook automatically on sign up. However, if creating t
 
 1.  Sign up at https://www.codeship.io/ (you can sign in with GitHub)
 2.  If the service wasn't set: Go to your project's settings and copy the project uuid.
-3.  Paste the  project uuid into the text field above.
-4.  Make sure the "Active" checkbox is ticked, and click "Update Settings".
-5.  Click on the "Codeship" service name and then click the "Test Hook" link.
-6.  Now there's a running build on your Codeship dashboard.
+3.  Paste the  project uuid into the text field below.
+4.  Make sure the "Active" checkbox is ticked, and click "Update service".
+5.  Click on the "Codeship" service name and then click the "Test service" link.
+6.  Now there should be a running build on your Codeship dashboard.
 
 Check out more details on Codeship at https://www.codeship.io/.
