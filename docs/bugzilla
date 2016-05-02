@@ -21,9 +21,11 @@ branch: you probably want to set this to "master".
 If the central repository option is enabled and there is a "fix",
 "close", or "address" before the bug then that bug is closed.
 
-For using 'close bug feature' - you should disable `commentonchange_resolution` in Bugzilla's configuration.
-Without this option disabled - when someone set bugs to `RESOLVED FIXED` status this will fail with message 
-`You have to specify a comment when changing the Resolution of a bug from (empty) to FIXED`
+When using the close bug feature you should disable
+`commentonchange_resolution` in Bugzilla's configuration. Without this option
+disabled when someone set bugs to `RESOLVED FIXED` status it will fail with
+the message `You have to specify a comment when changing the Resolution of a
+bug from (empty) to FIXED`
 
 If a commit has already been mentioned in the bug comments when pushed
 by another user then a comment isn't made, unless the central repository
