@@ -1,6 +1,6 @@
 class Service::MqttPub < Service
   self.title = 'MQTT publish'
-  
+
   string   :broker, :port, :topic, :clientid, :user
   password :pass
   boolean  :retain
@@ -62,7 +62,7 @@ class Service::MqttPub < Service
         :username => user,
         :password => pass
       ) do |client|
-          client.publish(data['topic'].to_s, payload.to_json, retain=data['retain'])
+          client.publish(data['topic'].to_s, generate_json(payload), retain=data['retain'])
           # Disconnect (don't send last will and testament)
           client.disconnect(false)
         end

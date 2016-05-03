@@ -1,7 +1,8 @@
 require 'uri'
 class Service::Apoio < Service
   default_events :issues
-  string   :subdomain, :token
+  string   :subdomain
+  password :token
 
   def invalid_request?
    data['token'].to_s.empty? or
@@ -17,7 +18,7 @@ class Service::Apoio < Service
     http.headers['X-Api-Token'] = data['token']
 
     url = "https://api.apo.io/service/github"
-    res = http_post(url, { :payload  => payload }.to_json)
+    res = http_post(url, generate_json(:payload  => payload))
 
     if res.status != 200
       raise_config_error("Unexpected response code:#{res.status}")

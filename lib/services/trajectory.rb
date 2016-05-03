@@ -42,6 +42,6 @@ class Service::Trajectory < Service
   end
 
   def json_payload
-    JSON.generate(payload)
+    generate_json(payload)
   end
 end

@@ -1,5 +1,5 @@
 class Service::NodeCI < Service
-  string :token
+  password :token
 
   # backwards compatible change until we can migrate configured hooks on
   # github.com
@@ -8,7 +8,7 @@ class Service::NodeCI < Service
   def receive_push
     http.ssl[:verify] = false
     http.headers['Content-Type'] = 'application/json'
-    http_post hubci_url, {:commits => payload['commits']}.to_json
+    http_post hubci_url, generate_json(:commits => payload['commits'])
   end
 
   def hubci_url

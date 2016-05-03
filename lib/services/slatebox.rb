@@ -1,5 +1,6 @@
 class Service::Slatebox < Service
-  string :app_id, :token
+  string :app_id
+  password :token
   white_list :app_id
 
   def receive_push
@@ -31,6 +32,6 @@ private
       }
     }
 
-    http_post create_build_url, slatebox_message.to_json, 'Accept' => 'application/json'
+    http_post create_build_url, generate_json(slatebox_message), 'Accept' => 'application/json'
   end
 end

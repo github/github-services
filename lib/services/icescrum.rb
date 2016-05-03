@@ -19,7 +19,7 @@ class Service::IceScrum < Service
   	http.ssl[:verify] = false
 	http.basic_auth username, password
 
-	http_post url, { :payload => payload.to_json }
+	http_post url, { :payload => generate_json(payload) }
   end
 
 end

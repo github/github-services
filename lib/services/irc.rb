@@ -1,5 +1,5 @@
 class Service::IRC < Service
-  string   :server, :port, :room, :nick, :branch_regexes, :nickserv_password
+  string   :server, :port, :room, :nick, :branches, :nickserv_password
   password :password
   boolean  :ssl, :message_without_join, :no_colors, :long_url, :notice
   white_list :server, :port, :room, :nick
@@ -17,22 +17,34 @@ class Service::IRC < Service
     send_messages messages
   end
 
-  def receive_pull_request
-    return unless opened?
+  def receive_commit_comment
+    send_messages "#{irc_commit_comment_summary_message} #{fmt_url url}"
+  end
 
-    send_messages "#{irc_pull_request_summary_message}  #{fmt_url url}"
+  def receive_pull_request
+    send_messages "#{irc_pull_request_summary_message} #{fmt_url url}" if action =~ /(open)|(close)/
+  end
+
+  def receive_pull_request_review_comment
+    send_messages "#{irc_pull_request_review_comment_summary_message} #{fmt_url url}"
   end
 
   def receive_issues
-    return unless opened?
+    send_messages "#{irc_issue_summary_message} #{fmt_url url}" if action =~ /(open)|(close)/
+  end
 
-    send_messages "#{irc_issue_summary_message}  #{fmt_url url}"
+  def receive_issue_comment
+    send_messages "#{irc_issue_comment_summary_message} #{fmt_url url}"
+  end
+
+  def receive_gollum
+    send_messages "#{irc_gollum_summary_message} #{fmt_url summary_url}"
   end
 
   def send_messages(messages)
     messages = Array(messages)
 
-    if data['no_colors'].to_i == 1
+    if config_boolean_true?('no_colors')
       messages.each{|message|
         message.gsub!(/\002|\017|\026|\037|\003\d{0,2}(?:,\d{1,2})?/, '')}
     end
@@ -44,12 +56,12 @@ class Service::IRC < Service
     end
 
     rooms   = rooms.gsub(",", " ").split(" ").map{|room| room[0].chr == '#' ? room : "##{room}"}
-    botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick']
-    command = data['notice'].to_i == 1 ? 'NOTICE' : 'PRIVMSG'
+    botname = data['nick'].to_s.empty? ? "GitHub#{rand(200)}" : data['nick'][0..16]
+    command = config_boolean_true?('notice') ? 'NOTICE' : 'PRIVMSG'
 
-    irc_password(:PASS, data['password']) if !data['password'].to_s.empty?
+    irc_password("PASS", data['password']) if !data['password'].to_s.empty?
     irc_puts "NICK #{botname}"
-    irc_puts "USER #{botname} 8 * :GitHub IRCBot"
+    irc_puts "USER #{botname} 8 * :#{irc_realname}"
 
     loop do
       case irc_gets
@@ -74,7 +86,7 @@ class Service::IRC < Service
       end
     end
 
-    without_join = data['message_without_join'] == '1'
+    without_join = config_boolean_true?('message_without_join')
     rooms.each do |room|
       room, pass = room.split("::")
       irc_puts "JOIN #{room} #{pass}" unless without_join
@@ -106,7 +118,7 @@ class Service::IRC < Service
 
   def irc_gets
     response = readable_irc.gets
-    debug_incoming(response) unless !response || response.empty?
+    debug_incoming(clean_string_for_json(response)) unless !response || response.empty?
     response
   end
 
@@ -123,6 +135,22 @@ class Service::IRC < Service
   def irc_puts(command, debug_command=command)
     debug_outgoing(debug_command)
     writable_irc.puts command
+  end
+
+  def irc_realname
+    repo_name = payload["repository"]["name"]
+    repo_private = payload["repository"]["private"]
+
+    "GitHub IRCBot - #{repo_owner}" + (repo_private == false ? "/#{repo_name}" : "")
+  end
+
+  def repo_owner
+    # for (what I presume to be) legacy reasonings, some events send owner login,
+    # others send owner name. this method accounts for both cases.
+    # sample: push event returns owner name, pull request event returns owner login
+    payload["repository"]["owner"]["name"] ?
+      payload["repository"]["owner"]["name"] :
+      payload["repository"]["owner"]["login"]
   end
 
   def debug_outgoing(command)
@@ -163,19 +191,19 @@ class Service::IRC < Service
   end
 
   def use_ssl?
-    data['ssl'].to_i == 1
+    config_boolean_true?('ssl')
   end
 
   def default_port
-    use_ssl? ? 9999 : 6667
+    use_ssl? ? 6697 : 6667
   end
 
   def port
-    data['port'] ? data['port'].to_i : default_port
+    data['port'].to_i > 0 ? data['port'].to_i : default_port
   end
 
   def url
-    data['long_url'].to_i == 1 ? summary_url : shorten_url(summary_url)
+    config_boolean_true?('long_url') ? summary_url : shorten_url(summary_url)
   end
 
   ### IRC message formatting.  For reference:
@@ -211,7 +239,7 @@ class Service::IRC < Service
 
   def irc_push_summary_message
     message = []
-    message << "\00301[#{fmt_repo repo_name}\00301] #{fmt_name pusher_name}"
+    message << "[#{fmt_repo repo_name}] #{fmt_name pusher_name}"
 
     if created?
       if tag?
@@ -270,6 +298,23 @@ class Service::IRC < Service
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
 
+  def irc_issue_comment_summary_message
+    short  = comment.body.split("\r\n", 2).first.to_s
+    short += '...' if short != comment.body
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} commented on issue \##{issue.number}: #{short}"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def irc_commit_comment_summary_message
+    short  = comment.body.split("\r\n", 2).first.to_s
+    short += '...' if short != comment.body
+    sha1   = comment.commit_id
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} commented on commit #{fmt_hash sha1[0..6]}: #{short}"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
   def irc_pull_request_summary_message
     base_ref = pull.base.label.split(':').last
     head_ref = pull.head.label.split(':').last
@@ -281,13 +326,23 @@ class Service::IRC < Service
     raise_config_error "Unable to build message: #{$!.to_s}"
   end
 
+  def irc_pull_request_review_comment_summary_message
+    short  = comment.body.split("\r\n", 2).first.to_s
+    short += '...' if short != comment.body
+    sha1   = comment.commit_id
+    "[#{fmt_repo repo.name}] #{fmt_name sender.login} commented on pull request " +
+    "\##{pull_request_number} #{fmt_hash sha1[0..6]}: #{short}"
+  rescue
+    raise_config_error "Unable to build message: #{$!.to_s}"
+  end
+
+  def irc_gollum_summary_message
+    summary_message
+  end
+
   def branch_name_matches?
-    return true if data['branch_regexes'].nil?
-    return true if data['branch_regexes'].strip == ""
-    branch_regexes = data['branch_regexes'].split(',')
-    branch_regexes.each do |regex|
-      return true if Regexp.new(regex) =~ branch_name
-    end
-    false
+    return true if data['branches'].nil?
+    return true if data['branches'].strip == ""
+    data['branches'].split(',').include?(branch_name)
   end
 end

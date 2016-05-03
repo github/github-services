@@ -1,0 +1,16 @@
+This service automatically creates deployments based on your [workflow](http://www.atmos.org/github-services/auto-deployment/).
+
+By enabling this hook, GitHub will request a [GitHub Deployment][1] when the default branch is pushed to or your tests suite passes certain criteria.
+
+If you use Continuous Integration and GitHub you can select to "Deploy on Status" which will only create deployments when the default branch receives a "success" status for a commit.
+
+Install Notes
+-------------
+
+1. `github_token` A [personal access token](https://github.com/settings/applications) from GitHub with `repo_deployment` scope.
+2. `environments` A comma delimited set of environment names to auto-deploy. e.g. production,staging.
+3. `deploy_on_status`: If checked deployments will only be created when successful [commit statuses][2] are created by your continuous integration system.
+4. `github_api_url` The URL for the GitHub API. Override this for enterprise. **Optional** e.g. `https://enterprise.myorg.com`.
+
+[1]: https://developer.github.com/v3/repos/deployments
+[2]: https://developer.github.com/v3/repos/statuses

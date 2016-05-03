@@ -1,10 +1,20 @@
-class Service::CodeClimate < Service
-  string :token
+class Service::CodeClimate < Service::HttpPost
+  password :token
 
-  def receive_push
-    http.ssl[:verify] = false
+  default_events :push, :pull_request
+
+  url "http://codeclimate.com"
+
+  maintained_by :github => "mrb"
+
+  supported_by :web => "https://codeclimate.com/contact",
+    :email => "hello@codeclimate.com",
+    :twitter => "@codeclimate"
+
+  def receive_event
+    token = required_config_value('token')
     http.basic_auth "github", token
-    http_post "https://codeclimate.com/github_pushes", :payload => payload.to_json
+    deliver "https://codeclimate.com/github_events", insecure_ssl: true
   end
 
   def token
