@@ -135,7 +135,7 @@ class Service::AutoDeploy < Service::HttpPost
     if config_value("github_api_url").empty?
       "https://api.github.com"
     else
-      config_value("github_api_url")
+      config_value("github_api_url").chomp("/")
     end
   end
 
