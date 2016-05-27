@@ -3,7 +3,7 @@ GitHub Services
 
 This repository contains code to integrate GitHub.com with third party services.
 
-See the [Contributing Guidelines](https://github.com/github/github-services/blob/master/CONTRIBUTING.md) for instructions on contributing a service.
+See the [Contributing Guidelines](https://github.com/github/github-services/blob/master/.github/CONTRIBUTING.md) for instructions on contributing a service.
 
 Current Status
 ==============
