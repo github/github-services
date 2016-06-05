@@ -65,6 +65,63 @@ class CampfireTest < Service::TestCase
     assert_match /\[grit\] defunkt opened pull request #5: booya \(master...feature\)/i, svc.campfire.rooms.first.lines.first
   end
 
+  def test_public
+    svc = service(:public, {"token" => "t", "subdomain" => "s", "room" => "r"}, public_payload)
+    svc.receive_public
+    assert_equal 1, svc.campfire.rooms.size
+    assert_equal 's', svc.campfire.subdomain
+    assert_equal 't', svc.campfire.token
+    assert_equal 'r', svc.campfire.rooms.first.name
+    assert_equal 1, svc.campfire.rooms.first.lines.size # 3 + summary
+    assert_match /\[grit\] defunkt made the repository public/i, svc.campfire.rooms.first.lines.first
+  end
+
+  def test_gollum
+    svc = service(:gollum, {"token" => "t", "subdomain" => "s", "room" => "r"}, gollum_payload)
+    svc.receive_public
+    assert_equal 1, svc.campfire.rooms.size
+    assert_equal 's', svc.campfire.subdomain
+    assert_equal 't', svc.campfire.token
+    assert_equal 'r', svc.campfire.rooms.first.name
+    assert_equal 1, svc.campfire.rooms.first.lines.size # 3 + summary
+    assert_match /\[grit\] defunkt created wiki page Foo/i, svc.campfire.rooms.first.lines.first
+  end
+
+  def test_gollum_multiple_pages
+    multiple_page_payload = gollum_payload
+    multiple_page_payload['pages'] << multiple_page_payload['pages'][0].merge(
+      'title' => 'Bar',
+      'html_url' => 'https://github.com/mojombo/magik/wiki/Bar',
+    )
+
+    svc = service(:gollum, {"token" => "t", "subdomain" => "s", "room" => "r"}, multiple_page_payload)
+    svc.receive_public
+    assert_equal 1, svc.campfire.rooms.size
+    assert_equal 's', svc.campfire.subdomain
+    assert_equal 't', svc.campfire.token
+    assert_equal 'r', svc.campfire.rooms.first.name
+    assert_equal 1, svc.campfire.rooms.first.lines.size # 3 + summary
+    assert_match /\[grit\] defunkt created 2 wiki pages/i, svc.campfire.rooms.first.lines.first
+  end
+
+  def test_gollum_multiple_actions
+    multiple_action_payload = gollum_payload
+    multiple_action_payload['pages'] << multiple_action_payload['pages'][0].merge(
+      'title' => 'Bar',
+      'html_url' => 'https://github.com/mojombo/magik/wiki/Bar',
+      'action' => 'updated'
+    )
+
+    svc = service(:gollum, {"token" => "t", "subdomain" => "s", "room" => "r"}, multiple_action_payload)
+    svc.receive_public
+    assert_equal 1, svc.campfire.rooms.size
+    assert_equal 's', svc.campfire.subdomain
+    assert_equal 't', svc.campfire.token
+    assert_equal 'r', svc.campfire.rooms.first.name
+    assert_equal 1, svc.campfire.rooms.first.lines.size # 3 + summary
+    assert_match /\[grit\] defunkt created 1 and updated 1 wiki pages/i, svc.campfire.rooms.first.lines.first
+  end
+
   def test_full_domain
     svc = service({"token" => "t", "subdomain" => "s.campfirenow.com", "room" => "r"}, payload)
     svc.receive_push
@@ -123,4 +180,3 @@ class CampfireTest < Service::TestCase
     svc
   end
 end
-

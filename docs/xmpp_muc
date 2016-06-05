@@ -1,0 +1,40 @@
+# XMPP MUC
+
+This service will connect to an XMPP MUC room with the provided details and then post a status update. It then immediately disconnects from the room.
+
+## Configuration
+
+1. **JID** - The JID (Jabber ID) with which to connect to the XMPP server
+2. **Password** - Password
+3. **Room** - The room you'd like to join
+4. **Server** - The server in which the room lives
+5. **Nickname** - The nickname that should be used (defaults to __github__)
+6. **Room password** - The password (if required) to join the MUC room
+7. **Restrict to Branch** - List of branches which will be inspected.
+8. **Host** - If you need to set a custom host enter here, otherwise leave blank for DNS lookup.
+9. **Port** - If ou need to use a custom port (default: 5222) enter value here.
+
+### Options
+
+1. **Active** - Master on/off switch
+2. **Notify wiki** - Get notifications of wiki events
+3. **Notify comments**  - Get notifications of comments
+4. **Notify watch** - Get notifictions of watch events
+5. **Notify issues** - Get notifications on issues
+6. **Notify pull requests** - Get notifications of pull requests
+
+If you would like to only receive messages for a specific branch, add the name (or partial name) to 
+the "Restrict to Branch" option. Otherwise, leave the field blank to receive messages for all branches.
+
+## Notes
+
+You may wish to reserve the nickname for the user in question so that it will 
+always be able to connect to the room.
+
+Note: This service currently enables all of the available hook events including
+commit comments, downloads, forks, fork applies, wiki updates, issues, issue
+comments, member adds, pull requests, pushes, and watches. However, not all 
+events are posted to the MUC room. If you would like these events supported 
+please raise an issue, or make a pull request!
+
+A full list of events with descriptions can be found here: https://developer.github.com/v3/repos/hooks/.

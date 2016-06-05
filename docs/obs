@@ -1,0 +1,45 @@
+# Open Build Service
+
+[Open Build Service (OBS)][obs] is a Web service for building packages for various Linux distributions. It's run by OpenSUSE project but available for any open-source community.
+
+This hook enables you to trigger your OBS build once new commits are pushed into the repository. It is configured to use *api.opensuse.org* host by default, but you may use it for your own OBS instance as well. It must be version 2.5 or higher, though. 
+
+[obs]: http://build.opensuse.org
+
+## Prerequisites
+
+1.  Configure your OBS project to fetch sources from Git. You would have to add a *Source Service* for this to work, check OBS manual for more information.
+
+2.  Create an authentification token for your account using `osc` command line tool.
+    For a generic token not tied to the specific package:
+
+         # osc token --create
+
+    For a token which can be used only for specific package
+
+         # osc token --create PROJECT PACKAGE
+
+    In the former case you may use single token in multiple Web hooks, to trigger multiple projects, but you would have to specify those OBS project and repository names. If the latter case you have to use different tokens for different projects, but you may leave "Project" and "Package" fields blank here, simply using the token only is enough.
+
+    To see all your already-created tokens, run
+
+        # osc token
+
+    You may also use a comma-separated list of tokens to trigger several OBS builds in order.
+
+## Parameters
+
+  - `Url`
+    This is the URL where OBS instance resides. You should alter this parameter only if you're using a dedicated OBS instance, leave it empty if you just use OpenSUSE's server. 
+
+  - `Project`
+    The package fully-qualified name on the instance. This should be something like `devel:languages:haskell`, where `devel:languages` is a namespace part of name. You may leave this field blank if your token is project-specific.
+
+  - `Package`
+    The package name within the project. This should be something like `ghc` for the example above. You may also leave this field blank if your token is project-specific.
+
+  - `Token`
+    The comma-separated list of tokens to be used for triggering builds. This is the only required field here. See the "Prerequisites" section for more information on token creation.
+
+  - `Refs`
+    The filter expression for pushed referenced. This field lists colon-separated patterns, build is triggered only if at least one of them satisfies. You may leave it blank, then no filtering is done by default. But you should consider setting this field to something like `refs/heads/master` or `refs/tags/version-*` in order not to rebuild your packages on each commit.

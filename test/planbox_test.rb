@@ -7,7 +7,7 @@ class PlanboxTest < Service::TestCase
 
   def test_push
     @stubs.post "/api/github_commits" do |env|
-      assert_equal 'www.planbox.com', env[:url].host
+      assert_equal 'work.planbox.com', env[:url].host
       assert_match 'payload=%7B%22a%22%3A1%7D', env[:body]
       [200, {}, '']
     end

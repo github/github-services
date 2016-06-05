@@ -1,0 +1,11 @@
+#!/bin/sh
+# Usage: script/test
+# Runs the library's CI suite.
+
+test -d "/usr/share/rbenv/shims" && {
+  export PATH=/usr/share/rbenv/shims:$PATH
+  export RBENV_VERSION="2.1.7-github"
+}
+
+script/bootstrap
+bundle exec rake test

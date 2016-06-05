@@ -1,34 +1,7 @@
-require 'addressable/uri'
-require 'faraday'
-require 'ostruct'
-require File.expand_path("../service/structs", __FILE__)
-
-class Addressable::URI
-  attr_accessor :validation_deferred
-end
-
-module Faraday
-  def Connection.URI(url)
-    uri = if url.respond_to?(:host)
-      url
-    elsif url =~ /^https?\:\/\/?$/
-      ::Addressable::URI.new
-    elsif url.respond_to?(:to_str)
-      ::Addressable::URI.parse(url)
-    else
-      raise ArgumentError, "bad argument (expected URI object or URI string)"
-    end
-  ensure
-    if uri.respond_to?(:validation_deferred)
-      uri.validation_deferred = true
-      uri.port ||= uri.inferred_port
-    end
-  end
-end
-
 # Represents a single triggered Service call.  Each Service tracks the event
 # type, the configuration data, and the payload for the current call.
 class Service
+  UTF8 = "UTF-8".freeze
   class Contributor < Struct.new(:value)
     def self.contributor_types
       @contributor_types ||= []
@@ -106,7 +79,7 @@ class Service
   ALL_EVENTS = %w[
     commit_comment create delete download follow fork fork_apply gist gollum
     issue_comment issues member public pull_request push team_add watch
-    pull_request_review_comment status
+    pull_request_review_comment status release deployment deployment_status
   ].sort
 
   class << self
@@ -117,24 +90,6 @@ class Service
         env == m
       end
     end
-
-    # Gets a StatsD client.
-    def stats
-      @stats ||= begin
-        if (hash = secrets['statsd']) && url = hash[env]
-          uri   = Addressable::URI.parse(url)
-          stats = Statsd.new uri.host, uri.port 
-          stats.namespace = 'services'
-          stats
-        else
-          stats = Statsd.new '127.0.0.1', 8127
-          stats.namespace = 'services'
-          stats
-        end
-      end
-    end
-
-    attr_writer :stats
 
     # The SHA1 of the commit that was HEAD when the process started. This is
     # used in production to determine which version of the app is deployed.
@@ -148,39 +103,15 @@ class Service
 
     attr_writer :current_sha
 
-    # Public: Processes an incoming Service event.
-    #
-    # event   - A symbol identifying the event type.  Example: :push
-    # data    - A Hash with the configuration data for the Service.
-    # payload - A Hash with the unique payload data for this Service instance.
-    #
     # Returns the Service instance if it responds to this event, or nil.
     def receive(event, data, payload = nil)
-      svc = new(event, data, payload)
+      new(event, data, payload).receive
+    end
 
-      methods = ["receive_#{event}", "receive_event"]
-      if event_method = methods.detect { |m| svc.respond_to?(m) }
-        Service::Timeout.timeout(20, TimeoutError) do
-          Service.stats.time "hook.time.#{hook_name}" do
-            svc.send(event_method)
-            Service.stats.increment "event.count.#{event}"
-          end
-        end
-
-        svc
-      end
-    rescue Service::ConfigurationError, Errno::EHOSTUNREACH, Errno::ECONNRESET, SocketError, Net::ProtocolError => err
-      Service.stats.increment "hook.fail.config.#{hook_name}"
-      if !err.is_a?(Service::Error)
-        err = ConfigurationError.new(err)
-      end
-      raise err
-    rescue Service::TimeoutError
-      Service.stats.increment "hook.fail.timeout.#{hook_name}"
-      raise
-    rescue
-      Service.stats.increment "hook.fail.exception.#{hook_name}"
-      raise
+    def load_services
+      require File.expand_path("../services/http_post", __FILE__)
+      path = File.expand_path("../services/**/*.rb", __FILE__)
+      Dir[path].each { |lib| require(lib) }
     end
 
     # Tracks the defined services.
@@ -199,7 +130,7 @@ class Service
       if events.empty?
         @default_events ||= [:push]
       else
-        @default_events = events
+        @default_events = events.flatten
       end
     end
 
@@ -402,8 +333,16 @@ class Service
     #
     # Returns a Hash.
     def secrets
-      @secrets ||=
-        (File.exist?(secret_file) && YAML.load_file(secret_file)) || {}
+      @secrets ||= begin
+        jabber = ENV['SERVICES_JABBER'].to_s.split("::")
+        twitter = ENV['SERVICES_TWITTER'].to_s.split("::")
+
+        { 'jabber' => {'user' => jabber[0], 'password' => jabber[1] },
+          'boxcar' => {'apikey' => ENV['SERVICES_BOXCAR'].to_s},
+          'twitter' => {'key' => twitter[0], 'secret' => twitter[1]},
+          'bitly' => {'key' => ENV['SERVICES_BITLY'].to_s}
+        }
+      end
     end
 
     # Public: Gets the Hash of email configuration options.  These are set on
@@ -411,9 +350,21 @@ class Service
     #
     # Returns a Hash.
     def email_config
-      @email_config ||=
-        (File.exist?(email_config_file) && YAML.load_file(email_config_file)) || {}
+      @email_config ||= begin
+        hash = (File.exist?(email_config_file) && YAML.load_file(email_config_file)) || {}
+        EMAIL_KEYS.each do |key|
+          env_key = "EMAIL_SMTP_#{key.upcase}"
+          value = ENV[env_key]
+          if value && value != ''
+            hash[key] = value
+          end
+        end
+        hash
+      end
     end
+    EMAIL_KEYS = %w(address port domain authentication user_name password
+                    enable_starttls_auto openssl_verify_mode enable_logging
+                    noreply_address)
 
     # Gets the path to the secret configuration file.
     #
@@ -430,10 +381,11 @@ class Service
     end
 
     def objectify(hash)
+      struct = OpenStruct.new
       hash.each do |key, value|
-        hash[key] = objectify(value) if value.is_a?(Hash)
+        struct.send("#{key}=", value.is_a?(Hash) ? objectify(value) : value)
       end
-      OpenStruct.new hash
+      struct
     end
 
     # Sets the path to the secrets configuration file.
@@ -471,10 +423,6 @@ class Service
       Service.services << svc
       super
     end
-
-    def setup_for(app)
-      app.service(self)
-    end
   end
 
   # Determine #root from this file's location
@@ -498,6 +446,9 @@ class Service
   #
   # Returns a Symbol.
   attr_reader :event
+
+  # Optional String unique identifier for this exact event.
+  attr_accessor :delivery_guid
 
   # Sets the Faraday::Connection for this Service instance.
   #
@@ -527,6 +478,12 @@ class Service
   # Returns nothing.
   attr_writer :ca_file
 
+  attr_reader :event_method
+
+  attr_reader :http_calls
+
+  attr_reader :remote_calls
+
   def initialize(event = :push, data = {}, payload = nil)
     helper_name = "#{event.to_s.classify}Helpers"
     if Service.const_defined?(helper_name)
@@ -537,7 +494,25 @@ class Service
     @event = event.to_sym
     @data = data || {}
     @payload = payload || sample_payload
+    @event_method = ["receive_#{event}", "receive_event"].detect do |method|
+      respond_to?(method)
+    end
     @http = @secrets = @email_config = nil
+    @http_calls = []
+    @remote_calls = []
+  end
+
+  # Boolean fields as either nil, "0", or "1".
+  def config_boolean_true?(boolean_field)
+    data[boolean_field].to_i == 1
+  end
+
+  def config_boolean_false?(boolean_field)
+    !config_boolean_true?(boolean_field)
+  end
+
+  def respond_to_event?
+    !@event_method.nil?
   end
 
   # Public: Shortens the given URL with git.io.
@@ -546,7 +521,7 @@ class Service
   #
   # Returns the String URL response from git.io.
   def shorten_url(url)
-    res = http_post("http://git.io", :url => url)
+    res = http_post("https://git.io", :url => url)
     if res.status == 201
       res.headers['location']
     else
@@ -614,7 +589,7 @@ class Service
   #     req.basic_auth("username", "password")
   #     req.params[:page] = 1 # http://github.com/create?page=1
   #     req.headers['Content-Type'] = 'application/json'
-  #     req.body = {:foo => :bar}.to_json
+  #     req.body = generate_json(:foo => :bar)
   #   end
   #   # => <Faraday::Response>
   #
@@ -646,7 +621,7 @@ class Service
   #     req.basic_auth("username", "password")
   #     req.params[:page] = 1 # http://github.com/create?page=1
   #     req.headers['Content-Type'] = 'application/json'
-  #     req.body = {:foo => :bar}.to_json
+  #     req.body = generate_json(:foo => :bar)
   #   end
   #   # => <Faraday::Response>
   #
@@ -673,17 +648,86 @@ class Service
   # Returns a Faraday::Connection instance.
   def http(options = {})
     @http ||= begin
-      req = options[:request] ||= {}
-      req[:open_timeout] ||= 3
-      req[:timeout] ||= 10
-      ssl = options[:ssl] ||= {}
-      ssl[:ca_file] ||= ca_file
-      ssl[:verify_depth] ||= 5
-
-      Faraday.new(options) do |b|
-        b.request :url_encoded
-        b.adapter :net_http
+      config = self.class.default_http_options
+      config.each do |key, sub_options|
+        next if key == :adapter
+        sub_hash = options[key] ||= {}
+        sub_options.each do |sub_key, sub_value|
+          sub_hash[sub_key] ||= sub_value
+        end
       end
+      options[:ssl][:ca_file] ||= ca_file
+
+      adapter = Array(options.delete(:adapter) || config[:adapter])
+      Faraday.new(options) do |b|
+        b.request(:url_encoded)
+        b.adapter *adapter
+        b.use(HttpReporter, self)
+      end
+    end
+  end
+
+  def self.default_http_options
+    @@default_http_options ||= {
+      :adapter => :net_http,
+      :request => {:timeout => 10, :open_timeout => 5},
+      :ssl => {:verify_depth => 5},
+      :headers => {}
+    }
+  end
+
+  # Passes HTTP response debug data to the HTTP callbacks.
+  def receive_http(env)
+    @http_calls << env
+  end
+
+  # Passes raw debug data to remote call callbacks.
+  def receive_remote_call(text)
+    @remote_calls << text
+  end
+
+  def receive(timeout = nil)
+    return unless respond_to_event?
+    timeout_sec = (timeout || 20).to_i
+    Service::Timeout.timeout(timeout_sec, TimeoutError) do
+      send(event_method)
+    end
+
+    self
+  rescue Service::ConfigurationError, Errno::EHOSTUNREACH, Errno::ECONNRESET, SocketError, Net::ProtocolError => err
+    if !err.is_a?(Service::Error)
+      err = ConfigurationError.new(err)
+    end
+    raise err
+  end
+
+  def generate_json(body)
+    JSON.generate(clean_for_json(body))
+  end
+
+  def clean_hash_for_json(hash)
+    new_hash = {}
+    hash.keys.each do |key|
+      new_hash[key] = clean_for_json(hash[key])
+    end
+    new_hash
+  end
+
+  def clean_array_for_json(array)
+    array.map { |value| clean_for_json(value) }
+  end
+
+  # overridden in Hookshot for proper UTF-8 transcoding with CharlockHolmes
+  def clean_string_for_json(str)
+    str.to_s.force_encoding(Service::UTF8)
+  end
+
+  def clean_for_json(value)
+    case value
+    when Hash then clean_hash_for_json(value)
+    when Array then clean_array_for_json(value)
+    when String then clean_string_for_json(value)
+    else value
     end
   end
 
@@ -702,7 +746,7 @@ class Service
   # Returns a String.
   def log_message(status = 0)
     "[%s] %03d %s/%s %s" % [Time.now.utc.to_s(:db), status,
-      self.class.hook_name, @event, JSON.generate(log_data)]
+      self.class.hook_name, @event, generate_json(log_data)]
   end
 
   # Public: Builds a sanitized Hash of the Data hash without passwords.
@@ -728,7 +772,7 @@ class Service
     string.strip!
     if string =~ /^[a-z]+\:\/\//
       uri = Addressable::URI.parse(string)
-      uri.password = "*" * uri.password.size if uri.password
+      uri.password = "*" * 8 if uri.password
       uri.to_s
     else
       string
@@ -780,6 +824,21 @@ class Service
     @helper ? @helper.sample_payload : {}
   end
 
+  def reportable_http_env(env, time)
+    {
+      :request => {
+        :url => env[:url].to_s,
+        :headers => env[:request_headers]
+      }, :response => {
+        :status => env[:status],
+        :headers => env[:response_headers],
+        :body => env[:body].to_s,
+        :duration => "%.02fs" % [Time.now - time]
+      },
+      :adapter => env[:adapter]
+    }
+  end
+
   # Raised when an unexpected error occurs during service hook execution.
   class Error < StandardError
     attr_reader :original_exception
@@ -800,6 +859,18 @@ class Service
 
   class MissingError < Error
   end
+
+  class HttpReporter < Faraday::Response::Middleware
+    def initialize(app, service = nil)
+      super(app)
+      @service = service
+      @time = Time.now
+    end
+
+    def on_complete(env)
+      @service.receive_http(@service.reportable_http_env(env, @time))
+    end
+  end
 end
 
 require 'timeout'
@@ -809,4 +880,3 @@ begin
 rescue LoadError
   Service::Timeout = Timeout
 end
-

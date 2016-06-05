@@ -1,10 +1,16 @@
 Broadcast this project's commits, pull requests, issues, and their
 respective comments to Flowdock.
 
-
 Install Notes
 -------------
 
   API Token is a flow-specific token. You can find it either in the flow, or in Flowdock's Integrations help page at https://www.flowdock.com/help/integrations.
 
   Multiple flows may be specified with multiple comma-separated tokens.
+
+  To include certain tags with every message, you can add tags to the tokens. Use + to separate tags. For example, "65f80e994031fcd80f57d1a9e294c1d1d+frontend+web,af8629b07978d1223c9d48d05ff1356+fyi" would add `frontend` and `web` tags to the messages posted to the first flow, and `fyi` to the messages posted to the second flow.
+
+Configure From Flowdock
+-----------------------
+
+  You can also configure hooks from within Flowdock. Those hooks will appear in the `Web Hooks` category of the service hooks. This can be done from the flow’s inbox settings.
