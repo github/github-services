@@ -14,6 +14,7 @@ class Service::GoCD < Service
 
     http.ssl[:verify] = verify_ssl
     http.url_prefix = base_url
+    http.headers['confirm'] = true
 
     http.basic_auth username, password if username.present? and password.present?
 
