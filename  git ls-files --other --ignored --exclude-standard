@@ -1,0 +1,1 @@
+ git ls-files --other --ignored --exclude-standard -> Lists all ignored files in this project  shared via :  https://goo.gl/mDwpGh
