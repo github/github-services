@@ -10,9 +10,9 @@ For example:
 Install Notes
 -------------
 
-The IBM Bluemix DevOps Services hook needs to be configured with your IBM login info:
+The IBM Bluemix DevOps Services hook needs to be configured with your DevOps Services login info:
 
-1. IBM id - This is the IBM id of the user used to access DevOps Services.
-2. IBM password - This is the password of the user used to access DevOps Services.
+1. Ibm - The user ID that is used to access DevOps Services.
+2. Ibm password - The password for the user ID that is used to access DevOps Services. If your organization uses federated authentication, you must use a personal access token. See [Setting up the GitHub hook](https://hub.jazz.net/docs/githubhooks/#github_hook) for details.
 3. Project membership - The configured user needs to be a member of the DevOps Services project.
 4. Override server url - The DevOps Services server url (for IBM internal testing only).
