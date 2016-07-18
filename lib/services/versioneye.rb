@@ -3,7 +3,7 @@ class Service::Versioneye < Service::HttpPost
   string :api_key
   string :project_id
 
-  default_events :push
+  default_events :pull_request, :push
 
   url "http://www.VersionEye.com"
   logo_url "https://www.VersionEye.com/images/versioneye_01.jpg"
