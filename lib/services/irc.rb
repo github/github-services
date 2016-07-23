@@ -1,6 +1,6 @@
 class Service::IRC < Service
-  string   :server, :port, :room, :nick, :branches, :nickserv_password
-  password :password
+  string   :server, :port, :room, :nick, :branches
+  password :password, :nickserv_password
   boolean  :ssl, :message_without_join, :no_colors, :long_url, :notice
   white_list :server, :port, :room, :nick
 
