@@ -24,6 +24,6 @@ class Service::Codeship < Service::HttpPost
   end
 
   def codeship_url
-    "https://lighthouse.codeship.io/github/#{project_uuid}"
+    "https://lighthouse.codeship.com/github/#{project_uuid}"
   end
 end
