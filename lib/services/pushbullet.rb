@@ -14,7 +14,7 @@ class Service::Pushbullet < Service::HttpPost
     :email => 'hey@pushbullet.com'
 
   def receive_event
-    unless required_config_value('api_key').match(/^[A-Za-z0-9]+$/)
+    unless required_config_value('api_key').match(/^[A-Za-z0-9\.]+$/)
       raise_config_error "Invalid api key."
     end
     unless config_value('device_iden').match(/^([A-Za-z0-9]+|)$/)
