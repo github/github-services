@@ -3,7 +3,7 @@
 This project adheres to the [Open Code of Conduct][code-of-conduct]. By participating, you are expected to uphold this.
 
 **NOTE**: GitHub no longer accepts new services. If you'd like to integrate
-your application or service with GitHub, you should use [webhooks][webhooks] which will `POST` a payload to your server for each event or request join the [GitHub Integrations Directory](https://github.com/integrations).
+your application or service with GitHub, you should use [webhooks][webhooks] which will `POST` a payload to your server for each event or request to join the [GitHub Integrations Directory](https://github.com/integrations).
 
 ## Updating an existing service
 
