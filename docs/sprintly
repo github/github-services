@@ -1,6 +1,3 @@
-Sprintly
-========
-
 Sprint.ly is a project management aide which is lightweight for developers and provides visibility for external stakeholders.
 
 Integration with sprint.ly powers closing tickets through commit messages, updating ticket status via pull request and much more.

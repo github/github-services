@@ -1,0 +1,5 @@
+#!/bin/sh
+# Usage: script/console
+# Starts an IRB console with this library loaded.
+
+exec bundle exec irb -r ./config/console

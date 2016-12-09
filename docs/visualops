@@ -1,0 +1,13 @@
+Trigger a re-deploy of VisualOps apps when you push to GitHub. You can set a list of app_id with correspond branch.
+
+Install Notes
+-------------
+
+1. You will need to register an account and launch an app in [VisualOps][visualops], and get a token that authorises GitHub to write to the VisualOps API.
+2. Supply a list of apps you want to update when you push to GitHub, and the  apps are separated by commas. You can specify the git branch for every app with a colon suffix (`app_id:branch`), and the default branch for an app is `master`. The following is an example of App List:
+
+       app-11223344, app-1a2b3c4d:develop, app-12345678:master
+ 
+   Then the app `app-11223344` and `app-12345678` will be update when you push to `master` branch, and `app-1a2b3c4d` will you push to `develop` branch. And the you can find your app_id in the property pannel of VisualOps IDE
+
+[visualops]: http://www.visualops.io

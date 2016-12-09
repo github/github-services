@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class JiraTest < Service::TestCase
+class JIRATest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
@@ -20,7 +20,6 @@ class JiraTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::Jira, *args
+    super Service::JIRA, *args
   end
 end
-

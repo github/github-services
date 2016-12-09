@@ -10,5 +10,5 @@ Install Notes
 2. You can find your account_sid and auth_token on your account page at https://www.twilio.com/user/account
 3. from_phone must be a "Twilio phone number enabled for SMS. Only phone numbers or short codes purchased from Twilio work here"
 4. to_phone is the "destination phone number. Format with a '+' and country code e.g., +16175551212 (E.164 format)."
-5. Check master_only if you only want to recieve updates for master.
+5. Check master_only if you only want to receive updates for master.
 

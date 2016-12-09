@@ -8,7 +8,7 @@ class WebTranslateItTest < Service::TestCase
   def test_push
     @stubs.post "/api/projects/a/refresh_files" do |env|
       assert_equal 'webtranslateit.com', env[:url].host
-      data = Rack::Utils.parse_nested_query(env[:body])
+      data = Faraday::Utils.parse_nested_query(env[:body])
       assert_equal 1, JSON.parse(data['payload'])['a']
       [200, {}, '']
     end

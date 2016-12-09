@@ -168,10 +168,6 @@ module Service::PushHelpers
     end)
   end
 
-  def receive
-    receive_push
-  end
-
   def self.sample_payload
     {
       "after"  => "a47fd41f3aa4610ea527dcc1669dfdb9c15c5425",
@@ -182,7 +178,10 @@ module Service::PushHelpers
       "repository" => {
         "name"  => "grit",
         "url"   => "http://github.com/mojombo/grit",
-        "owner" => { "name" => "mojombo", "email" => "tom@mojombo.com" }
+        "owner" => { "name" => "mojombo", "email" => "tom@mojombo.com" },
+        "master_branch"  => "master",
+        "default_branch" => "master",
+        "private" => false
       },
 
       "pusher" => {

@@ -1,0 +1,23 @@
+Chat rooms for your public and private repos with awesome GitHub integration.
+
+https://gitter.im
+
+If you want to see detailed repo activity in your room, follow this steps:
+
+  - Click the **Settings Cog** on the top right
+  - Click on **Integrations**
+  - Select **GitHub**
+  - Click on **configure manually** option
+  - Copy and paste the provided token here
+
+Install Notes
+-------------
+
+1. **Token** - Gitter token for this repo
+
+Options
+
+2. **Mute Fork** - Mute fork notifications.
+3. **Mute Watch** - Mute watch notifications.
+4. **Mute Comments** - Mute issue and pull request comments.
+5. **Mute Wiki** - Mute wiki changes.

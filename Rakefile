@@ -1,14 +1,10 @@
+require 'rubygems'
+require 'bundler/setup'
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/*_test.rb'
   test.verbose = true
-end
-
-task :default => :test
-
-task :console do
-  sh "irb -r ./config/load"
 end
 
 namespace :services do
@@ -21,15 +17,17 @@ namespace :services do
 
   desc "Writes a JSON config to FILE || config/services.json"
   task :config => :load do
+    sha = `git rev-parse HEAD`.chomp
     file = ENV["FILE"] || default_services_config
     services = []
+    Service.load_services
     Service.services.each do |svc|
       services << {:name => svc.hook_name, :events => svc.default_events, :supported_events => svc.supported_events,
         :title => svc.title, :schema => svc.schema}
     end
     services.sort! { |x, y| x[:name] <=> y[:name] }
     data = {
-      :metadata => { :generated_at => Time.now.utc },
+      :metadata => { :generated_at => Time.now.utc, :sha => sha },
       :services => services
     }
     puts "Writing config to #{file}"
@@ -56,11 +54,15 @@ namespace :services do
   require 'set'
   GitHubDocs = Set.new(%w(github_payload payload_data))
 
+  def base_github_path
+    ENV['GH_PATH'] || "#{ENV['HOME']}/github/github"
+  end
+
   def default_services_config
-    "#{ENV['GH_SRC_DIR']}/github/config/services.json"
+    "#{base_github_path}/config/services.json"
   end
 
   def default_docs_dir
-    "#{ENV['GH_SRC_DIR']}/github/app/views/edit_repositories/hooks/_{name}.erb"
+    "#{base_github_path}/app/views/edit_repositories/hooks/_{name}.erb"
   end
 end

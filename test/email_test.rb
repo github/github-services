@@ -67,6 +67,35 @@ class EmailTest < Service::TestCase
     assert_nil svc.messages.shift
   end
 
+  def test_push_from_do_not_reply
+    svc = service(
+      {'address' => 'a', 'send_from_author' => '0'},
+      payload)
+
+    svc.receive_push
+
+    msg, from, to = svc.messages.shift
+    assert_match 'noreply@github.com', from
+    assert_equal 'a', to
+
+    assert_nil svc.messages.shift
+  end
+
+
+  def test_push_from_do_not_reply_with_no_option_set
+    svc = service(
+      {'address' => 'a'},
+      payload)
+
+    svc.receive_push
+
+    msg, from, to = svc.messages.shift
+    assert_match 'noreply@github.com', from
+    assert_equal 'a', to
+
+    assert_nil svc.messages.shift
+  end
+
   def service(*args)
     svc = super Service::Email, *args
     def svc.messages

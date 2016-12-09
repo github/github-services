@@ -1,6 +1,3 @@
-AgileZen
-========
-
 AgileZen is a simple and easy to use project management tool that helps you collaborate with your team and visualize all your work in progress.
 
 Integrating with GitHub will allow you to associate Git commits to specific story cards. If you add a story number to your commit message, AgileZen will associate the commit with the story, making it visible on the board and story focus screen. For example, if you add the text `#123` to your commit message, AgileZen will attach the commit to story card 123.

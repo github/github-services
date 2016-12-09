@@ -1,0 +1,7 @@
+This service hook triggers a deployment on deployer.vc whenever a push is made.
+
+Install Notes
+-------------
+
+  1. **Deployment Address** - URL of the deployment to be triggered whenever a commit/push occurs, normally in the format `https://<account>.deployer.vc/#/deployment/<deployment_id>`
+  2. **API Token** - An API token for your deployer.vc account, which can be created under `https://<account>.deployer.vc/#/account`
