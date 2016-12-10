@@ -1,4 +1,11 @@
 class Service::Travis < Service
+  self.title = "Travis CI"
+  url "https://travis-ci.org"
+
+  maintained_by :github => 'travisci'
+
+  supported_by :email => 'support@travis-ci.com'
+
   default_events :push, :pull_request, :issue_comment, :public, :member
   string :user
   password :token
@@ -9,7 +16,8 @@ class Service::Travis < Service
     http.ssl[:verify] = false
     http.basic_auth user, token
     http.headers['X-GitHub-Event'] = event.to_s
-    http_post travis_url, :payload => payload.to_json
+    http.headers['X-GitHub-GUID'] = delivery_guid.to_s
+    http_post travis_url, :payload => generate_json(payload)
   end
 
   def travis_url
@@ -18,7 +26,7 @@ class Service::Travis < Service
 
   def user
     if data['user'].to_s == ''
-      payload['repository']['owner']['name']
+      owner_payload['login'] || owner_payload['name']
     else
       data['user']
     end.strip
@@ -37,6 +45,10 @@ class Service::Travis < Service
   end
 
   protected
+
+  def owner_payload
+    payload['repository']['owner']
+  end
 
   def full_domain
     if data['domain'].present?

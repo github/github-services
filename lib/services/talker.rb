@@ -1,6 +1,7 @@
 # coding: utf-8
 class Service::Talker < Service
-  string  :url, :token
+  string  :url
+  password :token
   boolean :digest
   white_list :url
 
@@ -12,7 +13,7 @@ class Service::Talker < Service
     prepare_http
 
     say "#{summary_message} – #{summary_url}"
-    if data['digest'].to_i == 0
+    if config_boolean_false?('digest')
       if distinct_commits.size == 1
         commit = distinct_commits.first
         say format_commit_message(commit)
@@ -28,7 +29,7 @@ class Service::Talker < Service
     return unless opened?
 
     prepare_http
-    say summary_message
+    say "#{summary_message}. #{summary_url}"
   end
 
   def receive_issues

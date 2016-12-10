@@ -2,6 +2,7 @@
 .idea
 deploy.rb
 *~
+*.sw[po]
 config/secrets.yml
 config/services.json
 /bin
@@ -15,4 +16,5 @@ docs/payload_data
 log
 tmp
 pkg
+.iml
 Gemfile.lock

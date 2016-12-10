@@ -13,7 +13,8 @@ class Service::JenkinsGitHub < Service
     end
     http.ssl[:verify] = false # :(
     http.url_prefix = url
+    http.headers['X-GitHub-Event'] = "push"
     http_post url,
-      :payload => JSON.generate(payload)
+      :payload => generate_json(payload)
   end
 end

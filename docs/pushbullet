@@ -1,0 +1,18 @@
+[Pushbullet](https://www.pushbullet.com/) makes getting things on and off your phone easy and fast.
+
+Supported events: push, issue and pull request.
+
+Install Notes
+-------------
+
+1. Install the [Android client](https://play.google.com/store/apps/details?id=com.pushbullet.android) from the Android Market or a browser extension.
+
+2. Login to [Pushbullet](https://www.pushbullet.com/account) and copy your api key.
+
+3. Add your api key in the field above.
+
+If you want to send to a specific device, else leave the "Device iden" field blank:
+
+4. Open [Pushbullet API](https://api.pushbullet.com/api/devices) and paste your api key to the username field, leave password empty.
+
+5. Find your desired device from the output and copy it's iden to the field above.

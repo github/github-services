@@ -61,11 +61,11 @@ class Service::CIA < Service
     dt         = DateTime.parse(commit['timestamp']).new_offset
     timestamp  = Time.send(:gm, dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec).to_i
     files      = commit['modified'] + commit['added'] + commit['removed']
-    tiny_url   = data['long_url'].to_i == 1 ? commit['url'] : shorten_url(commit['url'])
+    tiny_url   = config_boolean_true?('long_url') ? commit['url'] : shorten_url(commit['url'])
 
     log << " - #{tiny_url}"
 
-    if data['full_commits'].to_i == 1
+    if config_boolean_true?('full_commits')
       log_lines.each do |log_line|
         log << "\n" << log_line
       end

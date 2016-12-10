@@ -1,8 +1,5 @@
-Bamboo
-=======
-
 Bamboo is a continuous integration server that automates the building and testing of your software.
-The github Bamboo service can be used to trigger builds after code has been pushed to your git repository.
+The GitHub Bamboo service can be used to trigger builds after code has been pushed to your git repository.
 
 Install Notes
 -------------
@@ -17,11 +14,10 @@ Install Notes
 
     A compound build key value can be used to specify multiple builds or associate
     specific branches with a build
-    Example: "master:BAM-TRUNK,3-2-patches:BAM-32PATCH,BAM-TESTS", where BAM-TRUNK 
+    Example: "master:BAM-TRUNK,3-2-patches:BAM-32PATCH,BAM-TESTS", where BAM-TRUNK
     will be triggered only by pushes to the master branch, BAM-32PATCH will only
     be triggered by pushes to the 3-2-patches branch, and BAM-TESTS will be triggered
     for any push.
 
 4.  "username" and "password" - username and password of a Bamboo user that can
     trigger a manual build of the Bamboo plan defined in "build_key"
-

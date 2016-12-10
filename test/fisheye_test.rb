@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class FisheyeTest < Service::TestCase
+class FishEyeTest < Service::TestCase
   def app
     Service::App
   end
@@ -13,16 +13,52 @@ class FisheyeTest < Service::TestCase
     {
         "url_base" => "http://localhost:6060/foo",
         "token" => "515848d216e3baa46e10d92f21f890f67fea1d12",
-        "custom_repository_name" => "myRepo"
+        "repository_name" => "myRepo"
     }
+  end
+
+  def assert_headers_valid(env)
+    assert_equal(data_my_repo["token"], env[:request_headers]["X-Api-Key"])
+    assert_equal("application/json", env[:request_headers]["Content-Type"])
   end
 
   def test_triggers_scanning_custom_repository
     @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/myRepo/scan" do |env|
+      assert_headers_valid(env)
       [200, {}]
     end
 
     svc = service :push, data_my_repo, payload
+    assert_equal("Ok", svc.receive_push)
+
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_triggers_scanning_url_with_slash
+    @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/myRepo/scan" do |env|
+      assert_headers_valid(env)
+      [200, {}]
+    end
+
+    data = data_my_repo
+    data['url_base'] = "http://localhost:6060/foo/"
+
+    svc = service :push, data, payload
+    assert_equal("Ok", svc.receive_push)
+
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_triggers_scanning_url_without_http
+    @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/myRepo/scan" do |env|
+      assert_headers_valid(env)
+      [200, {}]
+    end
+
+    data = data_my_repo
+    data['url_base'] = "localhost:6060/foo"
+
+    svc = service :push, data, payload
     assert_equal("Ok", svc.receive_push)
 
     @stubs.verify_stubbed_calls
@@ -46,13 +82,14 @@ class FisheyeTest < Service::TestCase
 
   def test_triggers_scanning_empty_custom_repository
     @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/grit/scan" do |env|
+      assert_headers_valid(env)
       [200, {}]
     end
 
     data = {
       "url_base" => "http://localhost:6060/foo",
       "token" => "515848d216e3baa46e10d92f21f890f67fea1d12",
-      "custom_repository_name" => "   "
+      "repository_name" => "   "
     }
 
     svc = service :push, data, payload
@@ -68,7 +105,7 @@ class FisheyeTest < Service::TestCase
 
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -82,7 +119,7 @@ class FisheyeTest < Service::TestCase
 
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -92,7 +129,7 @@ class FisheyeTest < Service::TestCase
   def test_triggers_scanning_missing_data
     svc = service :push, {}, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -102,7 +139,7 @@ class FisheyeTest < Service::TestCase
   def test_triggers_scanning_missing_data_and_payload
     svc = service :push, {}, {}
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -111,6 +148,7 @@ class FisheyeTest < Service::TestCase
 
   def test_triggers_scanning_missing_payload
     @stubs.post "/foo/rest-service-fecru/admin/repositories-v1/myRepo/scan" do |env|
+      assert_headers_valid(env)
       [200, {}]
     end
 
@@ -127,7 +165,7 @@ class FisheyeTest < Service::TestCase
 
     svc = service :push, data_my_repo, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -141,7 +179,7 @@ class FisheyeTest < Service::TestCase
 
     svc = service :push, data_my_repo, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -155,7 +193,7 @@ class FisheyeTest < Service::TestCase
 
     svc = service :push, data_my_repo, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive_push
     end
 
@@ -163,7 +201,7 @@ class FisheyeTest < Service::TestCase
   end
 
   def service(*args)
-    super Service::Fisheye, *args
+    super Service::FishEye, *args
   end
 
 end

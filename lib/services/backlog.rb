@@ -1,3 +1,5 @@
+require 'uri'
+
 class Service::Backlog < Service
   string   :api_url, :user_id
   password :password
@@ -33,14 +35,22 @@ class Service::Backlog < Service
   attr_writer :xmlrpc_client
   def xmlrpc_client
     @xmlrpc_client ||= begin
-                         uri = data['api_url'].to_s.sub('https://', "https://#{data['user_id'].to_s}:#{data['password'].to_s}@")
-                         client = XMLRPC::Client.new2(uri)
+                         uri = URI(data['api_url'])
+                         params = {
+                           'host' => uri.host,
+                           'path' => uri.path,
+                           'port' => uri.port,
+                           'user' => data['user_id'],
+                           'password' => data['password'],
+                           'use_ssl' => true
+                         }
+                         client = XMLRPC::Client.new3(params)
                          # call for auth check
                          client.call('backlog.getProjects')
                          client
                        rescue XMLRPC::FaultException
                          raise_config_error "Invalid login details"
-                       rescue SocketError, RuntimeError
+                       rescue SocketError, RuntimeError, Errno::ECONNREFUSED
                          raise_config_error "Invalid server url"
                        end
   end
