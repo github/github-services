@@ -364,7 +364,7 @@ class Service
     end
     EMAIL_KEYS = %w(address port domain authentication user_name password
                     enable_starttls_auto openssl_verify_mode enable_logging
-                    noreply_address)
+                    enable_tls noreply_address)
 
     # Gets the path to the secret configuration file.
     #

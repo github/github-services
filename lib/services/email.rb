@@ -57,6 +57,7 @@ class Service::Email < Service
         :password             => my.smtp_password,
         :authentication       => my.smtp_authentication,
         :enable_starttls_auto => my.smtp_enable_starttls_auto?,
+        :tls                  => my.smtp_enable_tls?,
         :openssl_verify_mode  => my.smtp_openssl_verify_mode
     end
 
@@ -139,7 +140,11 @@ class Service::Email < Service
   end
 
   def smtp_enable_starttls_auto?
-    @smtp_enable_starttls_auto ||= (email_config['enable_starttls_auto'] != 'false' && true)
+    @smtp_enable_starttls_auto ||= (email_config['enable_starttls_auto'] != 'false')
+  end
+
+  def smtp_enable_tls?
+    @smtp_enable_tls ||= (email_config['enable_tls'] == 'true')
   end
 
   def smtp_openssl_verify_mode
