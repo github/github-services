@@ -8,14 +8,14 @@ Install Notes
 This hook will be automatically configured for GitHub repos you've configured
 with a connected Tddium account.
 
-If you don't want to connect your Github account, or you don't want to give
+If you don't want to connect your GitHub account, or you don't want to give
 Tddium `repo` privileges, follow these steps:
 
 1. Go to your Tddium dashboard
 2. Open the Configuration page for this repo and click on the 'CI Setup' section
 3. Copy the hex value listed under 'CI Token'
 4. Paste the token above.
-5. Install Tddium's repo-specific public key into this repo's deploy keys.  
+5. Install Tddium's repo-specific public key into this repo's deploy keys.
 
 You can safely leave the Override URL field blank.
 
@@ -28,5 +28,3 @@ Tddium monitors all events on your repo, but it currently only acts on:
 - create a branch
 - delete a branch
 - open, close, synchronize pull requests
-
-

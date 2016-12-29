@@ -24,7 +24,7 @@ class GitterTest < Service::TestCase
   end
 
   def test_mute_fork
-    data = {'token' => "0123456789abcde", 'mute_fork' => true}
+    data = {'token' => "0123456789abcde", 'mute_fork' => "1"}
 
     svc = service :fork, data, basic_payload
     svc.receive_event
@@ -32,7 +32,7 @@ class GitterTest < Service::TestCase
   end
 
   def test_mute_watch
-    data = {'token' => "0123456789abcde", 'mute_watch' => true}
+    data = {'token' => "0123456789abcde", 'mute_watch' => "1"}
 
     svc = service :watch, data, basic_payload
     svc.receive_event
@@ -40,7 +40,7 @@ class GitterTest < Service::TestCase
   end
 
   def test_mute_comments
-    data = {'token' => "0123456789abcde", 'mute_comments' => true}
+    data = {'token' => "0123456789abcde", 'mute_comments' => "1"}
 
     svc = service :issue_comment, data, issue_comment_payload
     svc.receive_event
@@ -48,7 +48,7 @@ class GitterTest < Service::TestCase
   end
 
   def test_mute_wiki
-    data = {'token' => "0123456789abcde", 'mute_wiki' => true}
+    data = {'token' => "0123456789abcde", 'mute_wiki' => "1"}
 
     svc = service :gollum, data, gollum_payload
     svc.receive_event

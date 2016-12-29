@@ -1,5 +1,6 @@
 class Service::Freckle < Service::HttpPost
-  string :subdomain, :project, :token
+  string :subdomain, :project
+  password :token
   white_list :subdomain, :project
 
   default_events :push

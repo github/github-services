@@ -1,5 +1,6 @@
 class Service::Kanbanery < Service
-  string :project_id, :project_token
+  string :project_id
+  password :project_token
   white_list :project_id
 
   def receive_push

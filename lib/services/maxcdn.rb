@@ -30,7 +30,7 @@ class Service::MaxCDN < Service
 
   def receive_push
     return unless payload["commits"]
-    return if data["static_only"] and !has_static?
+    return if config_boolean_true?("static_only") and !has_static?
 
     begin
       maxcdn.purge data["zone_id"]

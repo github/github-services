@@ -1,5 +1,5 @@
 class Service::Landscape < Service::HttpPost
-  default_events :push
+  default_events Service::ALL_EVENTS
 
   url "https://landscape.io"
   logo_url "https://landscape-io.s3.amazonaws.com/img/landscape_logo.png"

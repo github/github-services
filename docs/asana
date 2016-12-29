@@ -10,11 +10,11 @@ Fixes layout rendering bug. Reported in https://app.asana.com/0/12345678/9012345
 
 will show up as:
 ```<commiter> pushed to branch <branch> of <user>/<repo> 
-(http://github.com/<user>/<repo>/commit/<commit id>)
+(https://github.com/<user>/<repo>/commit/<commit id>)
 -Fixes layout rendering bug. Reported in https://app.asana.com/0/12345678/9012345```
 
 Install Notes
 -------------
-1. **Auth Token** - User API token. User must have access to task, all comments will be attributed to this user. See: http://developer.asana.com/documentation/#Authentication
+1. **Auth Token** - User API token. User must have access to task, all comments will be attributed to this user. See: https://developer.asana.com/documentation/#Authentication
 2. **Restrict to Branch** - Comma-separated list of branches which will be automatically inspected. Leave blank to include all branches.
 3. **Restrict to Last Commit** - Will only inspect the last commit of each push for task IDs.

@@ -8,7 +8,8 @@ require 'rexml/document'
 require 'uri'
 
 class Service::ActiveCollab < Service
-  string  :url, :token, :project_id, :milestone_id, :category_id
+  string  :url, :project_id, :milestone_id, :category_id
+  password :token
   white_list :url, :project_id, :milestone_id, :category_id
 
   def receive_push
@@ -37,7 +38,7 @@ class Service::ActiveCollab < Service
 
     http.url_prefix = data['url']
     http.headers['Accept'] = 'application/xml'
-    
+
     http.post do |req|
       req.params['path_info'] = "projects/#{data['project_id']}/discussions/add"
       req.params['token']     = data['token']

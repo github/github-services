@@ -111,7 +111,7 @@ class Service::Email < Service
   end
 
   def send_from_author?
-    data['send_from_author']
+    config_boolean_true?('send_from_author')
   end
 
   def smtp_address

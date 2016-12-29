@@ -1,12 +1,17 @@
-require 'test/unit'
+require 'minitest/autorun'
+require 'minitest/unit'
 require 'pp'
 require File.expand_path('../../config/load', __FILE__)
 Service.load_services
 
-class Service::TestCase < Test::Unit::TestCase
+class Service::TestCase < Minitest::Test
   ALL_SERVICES = Service.services.dup
 
   def test_default
+  end
+
+  def assert_nothing_raised(*)
+    yield
   end
 
   def service(klass, event_or_data, data, payload=nil)
@@ -37,6 +42,10 @@ class Service::TestCase < Test::Unit::TestCase
   def pull_payload
     Service::PullRequestHelpers.sample_payload
   end
+    
+  def pull_request_payload
+    Service::PullRequestHelpers.sample_payload
+  end
 
   def pull_request_review_comment_payload
     Service::PullRequestReviewCommentHelpers.sample_payload
@@ -64,6 +73,14 @@ class Service::TestCase < Test::Unit::TestCase
 
   def basic_payload
     Service::HelpersWithMeta.sample_payload
+  end
+
+  def deployment_payload
+    Service::DeploymentHelpers.sample_deployment_payload
+  end
+
+  def status_payload
+    Service::StatusHelpers.sample_status_payload
   end
 end
 

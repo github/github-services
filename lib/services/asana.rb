@@ -1,5 +1,6 @@
 class Service::Asana < Service
-  string :auth_token, :restrict_to_branch
+  password :auth_token
+  string :restrict_to_branch
   boolean :restrict_to_last_commit
   white_list :restrict_to_branch, :restrict_to_last_comment
 
@@ -11,7 +12,7 @@ class Service::Asana < Service
     branch = payload['ref'].split('/').last
 
     branch_restriction = data['restrict_to_branch'].to_s
-    commit_restriction = data['restrict_to_last_comment'] == "1"
+    commit_restriction = config_boolean_true?('restrict_to_last_comment')
 
     # check the branch restriction is poplulated and branch is not included
     if branch_restriction.length > 0 && branch_restriction.index(branch) == nil
@@ -51,7 +52,7 @@ class Service::Asana < Service
     http.basic_auth(data['auth_token'], "")
     http.headers['X-GitHub-Event'] = event.to_s
 
-    res = http_post "https://app.asana.com/api/1.0/tasks/#{task_id}/stories", "text=#{text}"
+    res = http_post "https://app.asana.com/api/1.0/tasks/#{task_id}/stories", URI.encode_www_form("text" => text)
     case res.status
     when 200..299
       # Success

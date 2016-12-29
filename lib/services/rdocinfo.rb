@@ -1,7 +1,15 @@
-class Service::RDocInfo < Service
-  self.title = 'Rdocinfo'
+class Service::RDocInfo < Service::HttpPost
 
-  def receive_push
-    http_post 'http://rubydoc.info/checkout', :payload => generate_json(payload)
+  default_events :push
+
+  title 'RubyDoc.info'
+  url 'http://www.rubydoc.info'
+
+  maintained_by :github => 'zapnap'
+
+  supported_by :web => 'http://www.rubydoc.info', :github => 'zapnap'
+
+  def receive_event
+    deliver 'http://www.rubydoc.info/checkout'
   end
 end

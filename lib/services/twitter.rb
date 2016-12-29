@@ -1,20 +1,31 @@
 class Service::Twitter < Service
-  string  :token, :secret
+  password  :token, :secret
+  string :filter_branch
   boolean :digest, :short_format
   TWITTER_SHORT_URL_LENGTH_HTTPS = 23
+
+  white_list :filter_branch
 
   def receive_push
     return unless payload['commits']
 
+    commit_branch = (payload['ref'] || '').split('/').last || ''
+    filter_branch = data['filter_branch'].to_s
+
+    # If filtering by branch then don't make a post
+    if (filter_branch.length > 0) && (commit_branch.index(filter_branch) == nil)
+      return false
+    end
+
     statuses   = []
     repository = payload['repository']['name']
 
-    if data['digest'] == '1'
+    if config_boolean_true?('digest')
       commit = payload['commits'][-1]
       author = commit['author'] || {}
       url = "#{payload['repository']['url']}/commits/#{ref_name}"
       status = "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
-      status = if data['short_format'] == '1'
+      status = if short_format?
         "#{url} - #{payload['commits'].length} commits"
       else
         "[#{repository}] #{url} #{author['name']} - #{payload['commits'].length} commits"
@@ -29,13 +40,21 @@ class Service::Twitter < Service
       payload['commits'].each do |commit|
         author = commit['author'] || {}
         url = commit['url']
-        status = "[#{repository}] #{url} #{author['name']} - #{commit['message']}"
-        status = if data['short_format'] == '1'
-          "#{url} #{commit['message']}"
-        else
-          "[#{repository}] #{url} #{author['name']} - #{commit['message']}"
+        message = commit['message']
+        # Strip out leading @s so that github @ mentions don't become twitter @ mentions
+        # since there's zero reason to believe IDs on one side match IDs on the other
+        message.gsub!(/\B[@＠][[:word:]]/) do |word|
+          "@\u200b#{word[1..word.length]}"
         end
-        length = status.length - url.length + TWITTER_SHORT_URL_LENGTH_HTTPS # The URL is going to be shortened by twitter. It's length will be at most 23 chars (HTTPS).
+        status = if short_format?
+          "#{url} #{message}"
+        else
+          "[#{repository}] #{url} #{author['name']} - #{message}"
+        end
+        # Twitter barfs on asterisks so replace them with a slightly different unicode one.
+        status.gsub!("*", "﹡")
+        # The URL is going to be shortened by twitter. It's length will be at most 23 chars (HTTPS).
+        length = status.length - url.length + TWITTER_SHORT_URL_LENGTH_HTTPS
         # How many chars of the status can we actually use?
         # We can use 140 chars, have to reserve 3 chars for the railing dots (-3)
         # also 23 chars for the t.co-URL (-23) but can fit the whole URL into the tweet (+url.length)
@@ -86,5 +105,9 @@ class Service::Twitter < Service
   def consumer
     @consumer ||= ::OAuth::Consumer.new(consumer_key, consumer_secret,
                                         {:site => "https://api.twitter.com"})
+  end
+
+  def short_format?
+    config_boolean_true?('short_format')
   end
 end

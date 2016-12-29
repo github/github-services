@@ -12,7 +12,7 @@ class DockerTest < Service::TestCase
     @stubs.post "/hooks/github" do |env|
       body = JSON.parse(env[:body])
 
-      assert_equal env[:url].host, "index.docker.io"
+      assert_equal env[:url].host, "registry.hub.docker.com"
       assert_equal 'test', body['payload']['commits'][0]['id']
       assert_match 'guid-', body['guid']
       assert_equal data, body['config']

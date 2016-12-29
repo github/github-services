@@ -1,5 +1,5 @@
 class Service::Pushalot < Service
-  string :authorization_token
+  password :authorization_token
 
   url "https://pushalot.com"
   logo_url "https://pushalot.com/content/images/favicon.png"

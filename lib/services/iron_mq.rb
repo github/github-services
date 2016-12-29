@@ -1,5 +1,5 @@
 class Service::IronMQ < Service
-  string :token
+  password :token
   string :project_id
   string :queue_name
   white_list :project_id, :queue_name
