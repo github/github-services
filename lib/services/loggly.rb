@@ -1,9 +1,9 @@
 class Service::Loggly < Service
-  string :input_token
+  password :input_token
 
   def receive_push
     http.headers['Content-Type'] = 'application/json'
     url = "https://logs.loggly.com/inputs/#{data['input_token']}"
-    payload['commits'].each { |commit| http_post url, commit.to_json }
+    payload['commits'].each { |commit| http_post url, generate_json(commit) }
   end
 end

@@ -1,5 +1,6 @@
 class Service::Lighthouse < Service
-  string  :subdomain, :project_id, :token
+  string  :subdomain, :project_id
+  password :token
   boolean :private, :send_only_ticket_commits
   white_list :subdomain, :project_id
 
@@ -9,7 +10,8 @@ class Service::Lighthouse < Service
 
     payload['commits'].each do |commit|
       next if commit['message'] =~ /^x /
-      next if data['send_only_ticket_commits'] == false && (commit['message'] =~ check_for_lighthouse_flags).nil?
+      next if config_boolean_true?('send_only_ticket_commits') \
+        && (commit['message'] =~ check_for_lighthouse_flags).nil?
 
       commit_id = commit['id']
       added     = commit['added'].map    { |f| ['A', f] }
@@ -17,7 +19,7 @@ class Service::Lighthouse < Service
       modified  = commit['modified'].map { |f| ['M', f] }
       diff      = YAML.dump(added + removed + modified)
 
-      diff = YAML.dump([]) if data['private']
+      diff = YAML.dump([]) if config_boolean_true?('private')
 
       title = "Changeset [%s] by %s" % [commit_id, commit['author']['name']]
       body  = "#{commit['message']}\n#{commit['url']}"
@@ -32,6 +34,8 @@ class Service::Lighthouse < Service
         </changeset>
       XML
 
+      @lighthouse_body = changeset_xml
+
       account = "http://#{data['subdomain']}.lighthouseapp.com"
 
       begin
@@ -44,5 +48,12 @@ class Service::Lighthouse < Service
         raise_config_error "Invalid subdomain: #{data['subdomain']}"
       end
     end
+  end
+
+  def reportable_http_env(env, time)
+    hash = super(env, time)
+    hash[:request][:body] = @lighthouse_body
+    @lighthouse_body = nil
+    hash
   end
 end

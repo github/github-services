@@ -8,7 +8,7 @@ class Service::StatusNet < Service
     repository = payload['repository']['name']
     statuses = Array.new
 
-    if data['digest'] == '1'
+    if config_boolean_true?('digest')
       commit = payload['commits'][-1]
       tiny_url = shorten_url("#{payload['repository']['url']}/commits/#{ref_name}")
       statuses.push "[#{repository}] #{tiny_url} #{commit['author']['name']} - #{payload['commits'].length} commits"

@@ -1,0 +1,25 @@
+When enabled this will let the Docker Hub know when you have made changes to
+your repository. The Docker Hub will then pull down your repository and build
+your Dockerfile to create a Docker repository and push it onto the Docker Hub
+so that it is available for others to download. When you commit changes to your
+git Repo the Docker Hub will keep the Docker Repository up to date.
+
+#### Note:
+
+Docker has two types of repositories, public and private. A public repository
+is able to be downloaded by anyone. The private repository can only be
+downloaded by someone whom the owner has given explicit access too.
+
+When creating an automated build from a private GitHub repo, it is recommended
+that you only use a private Docker repo. If you have a private GitHub
+repository and you are building into a public Docker repository, you might be
+accidentally exposing data you don't intend to expose.
+
+#### Requirements:
+
+In order for this to work correctly, you should have the following:
+
+1. A [Docker Hub](https://hub.docker.com "Docker Hub")
+   Account, that is linked to your GitHub account.
+2. A [Dockerfile](https://docs.docker.com/reference/builder/ "Dockerfile")
+   in your project directory.

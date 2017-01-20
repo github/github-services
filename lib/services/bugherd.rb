@@ -5,7 +5,7 @@ class Service::BugHerd < Service
 
   def receive_push
     url = "http://www.bugherd.com/github_web_hook/#{data['project_key']}"
-    http_post url, :payload => JSON.generate(payload)
+    http_post url, :payload => generate_json(payload)
   end
 
   alias receive_issues receive_push

@@ -1,0 +1,18 @@
+This service replaces the Rational JazzHub service to integrate GitHub with IBM Bluemix DevOps Services (http://hub.jazz.net).  The hook automatically adds change set links in the work item specified by the commit message.
+
+The hook will recognize any of the common work item type names in the commit message and look for a corresponding work item.
+
+For example:
+   - "Fix bug 42"
+   - "Deliver Story 99"
+   - "[work item 999] fixed some stuff"
+
+Install Notes
+-------------
+
+The IBM Bluemix DevOps Services hook needs to be configured with your DevOps Services login info:
+
+1. Ibm - The user ID that is used to access DevOps Services.
+2. Ibm password - The password for the user ID that is used to access DevOps Services. If your organization uses federated authentication, you must use a personal access token. See [Setting up the GitHub hook](https://hub.jazz.net/docs/githubhooks/#github_hook) for details.
+3. Project membership - The configured user needs to be a member of the DevOps Services project.
+4. Override server url - The DevOps Services server url (for IBM internal testing only).

@@ -10,7 +10,7 @@ class JqueryPluginsTest < Service::TestCase
 
     @stubs.post "/postreceive-hook" do |env|
       assert_equal 'plugins.jquery.com', env[:url].host
-      data = Rack::Utils.parse_nested_query(env[:body])
+      data = Faraday::Utils.parse_nested_query(env[:body])
       assert_equal 1, JSON.parse(data['payload'])['a']
       [200, {}, '']
     end
