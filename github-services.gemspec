@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.licenses = ['MIT']
 
   spec.add_dependency "addressable",            "~> 2.3"
-  spec.add_dependency 'yajl-ruby',              '1.1.0'
+  spec.add_dependency 'yajl-ruby',              '>= 1.1.0'
   spec.add_dependency "mash",                   "~> 0.1.1"
   spec.add_dependency "mime-types",             "~> 1.15"
   spec.add_dependency "ruby-hmac",              "0.4.0"
