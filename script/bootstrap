@@ -1,7 +1,12 @@
 #!/bin/sh
 # Usage: script/bootstrap
 # Ensures all gems are in vendor/cache and installed locally.
+set -e
+
+if [ "$(uname -s)" = "Darwin" ]; then
+  HOMEBREW_PREFIX="$(brew --prefix)"
+  bundle config --local build.eventmachine "--with-cppflags=-I$HOMEBREW_PREFIX/opt/openssl/include"
+fi
 
 bundle install --binstubs --local --path=vendor/gems
 bundle package --all
-

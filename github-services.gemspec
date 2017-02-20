@@ -20,24 +20,25 @@ Gem::Specification.new do |spec|
   spec.homepage = 'https://github.com/github/github-services'
   spec.licenses = ['MIT']
 
-  spec.add_dependency "addressable",            "~> 2.2.7"
-  spec.add_dependency 'yajl-ruby',              '1.1.0'
+  spec.add_dependency "addressable",            "~> 2.3"
+  spec.add_dependency 'yajl-ruby',              '>= 1.1.0'
   spec.add_dependency "mash",                   "~> 0.1.1"
   spec.add_dependency "mime-types",             "~> 1.15"
   spec.add_dependency "ruby-hmac",              "0.4.0"
-  spec.add_dependency "faraday",                "0.8.7"
+  spec.add_dependency "faraday",                "0.9.0"
+  spec.add_dependency "xmlrpc",                 "0.2.1"
 
   # Basecamp Classic
-  spec.add_dependency "activeresource",         "~> 3.0.0"
+  spec.add_dependency "activeresource",         "~> 4.0.0"
 
   # Twitter
   spec.add_dependency "oauth",                  "0.4.4"
 
   # MaxCDN
-  spec.add_dependency "maxcdn",                  "~> 0.1.6"
+  spec.add_dependency "maxcdn",                  "~> 0.2.0"
 
   # Campfire
-  spec.add_dependency "tinder",                 "1.8.0.github"
+  spec.add_dependency "tinder",                 "1.10.0"
 
   # Bamboo, Buddycloud
   spec.add_dependency "xml-simple",             "1.0.11"
@@ -57,9 +58,11 @@ Gem::Specification.new do |spec|
   # Softlayer Messaging
   spec.add_dependency "softlayer_messaging", "~> 1.0.2"
 
-  # Amazon SNS, Amazon SQS, AWS OpsWorks
-  spec.add_dependency "aws-sdk", "~> 1.27"
-  spec.add_dependency "httparty", "0.7.4"
+  # Amazon SQS, AWS OpsWorks
+  spec.add_dependency "aws-sdk", "~> 1.64"
+
+  # AWS CodeDeploy, Amazon SNS
+  spec.add_dependency "aws-sdk-core", "~>2.0.8"
 
   spec.files = %w(Gemfile LICENSE README.mkdn CONTRIBUTING.md Rakefile)
   spec.files << "#{lib}.gemspec"

@@ -12,11 +12,11 @@ class DeployHqTest < Service::TestCase
       assert_equal 'https', env[:url].scheme
       post_payload = JSON.parse(Faraday::Utils.parse_query(env[:body])['payload'])
 
-      assert_not_nil payload['after']
+      refute_nil payload['after']
       assert_equal post_payload['after'], post_payload['after']
-      assert_not_nil post_payload['ref']
+      refute_nil post_payload['ref']
       assert_equal payload['ref'], post_payload['ref']
-      assert_not_nil post_payload['repository']['url']
+      refute_nil post_payload['repository']['url']
       assert_equal payload['repository']['url'], post_payload['repository']['url']
       assert_equal payload['pusher']['email'], post_payload['pusher']['email']
 

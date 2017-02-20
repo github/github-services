@@ -19,7 +19,7 @@ class Service::Bamboo < Service
     # Post body is empty but Bamboo REST expects this to be set (in 3.x)
     http.headers['Content-Type'] = 'application/xml'
 
-    commit_branch = ref.split('/').last
+    commit_branch = ref.sub(/\Arefs\/(heads|tags)\//, '')
 
     build_key.split(',').each do |branch_key|
       #See if the split result is just a key or a branch:key
@@ -46,8 +46,14 @@ class Service::Bamboo < Service
       when 404, 301 then raise_config_error("Invalid Bamboo project URL")
       else
         maybe_xml = response.body
-        msg = (XmlSimple.xml_in(maybe_xml) if maybe_xml =~ /<?xml/) || {}
-        raise_config_error msg["message"] if msg["message"]
+        msg = if maybe_xml =~ /<?xml/
+          xml_simple = XmlSimple.new
+          xml_simple.send(:collapse, xml_simple.send(:parse, maybe_xml))
+        end
+        msg ||= {}
+        if msg["status"] && msg["status"]["message"]
+          raise_config_error msg["status"]["message"]
+        end
       end
   end
 

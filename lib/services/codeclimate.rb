@@ -1,5 +1,5 @@
 class Service::CodeClimate < Service::HttpPost
-  string :token
+  password :token
 
   default_events :push, :pull_request
 

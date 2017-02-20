@@ -57,13 +57,33 @@ class YouTrackTest < Service::TestCase
     @stubs.verify_stubbed_calls
   end
 
+  def test_push_no_command
+    valid_process_stubs
+
+    @stubs.post "/abc/rest/issue/case-2/execute" do |env|
+      assert_equal 'yt.com', env[:url].host
+      assert_equal 'sc', env[:request_headers]['Cookie']
+      assert_equal 'comment', env[:params]['command']
+      assert_equal 'mojombo', env[:params]['runAs']
+      [200, {}, '']
+    end
+
+    hash = payload
+    hash['commits'].first['message'].sub! /Case#1/, '#case-2'
+
+    svc = service(@data, hash)
+    svc.receive_push
+
+    @stubs.verify_stubbed_calls
+  end
+
   def test_branch_match
     valid_process_stubs
 
     @stubs.post "/abc/rest/issue/case-2/execute" do |env|
       assert_equal 'yt.com', env[:url].host
       assert_equal 'sc', env[:request_headers]['Cookie']
-      assert_equal 'Fixed', env[:params]['command']
+      assert_equal 'comment', env[:params]['command']
       assert_equal 'mojombo', env[:params]['runAs']
       [200, {}, '']
     end
@@ -97,7 +117,7 @@ class YouTrackTest < Service::TestCase
     }
     hash['commits'].first['message'].sub! /Case#1/, '#case-1 zomg omg'
 
-    svc = service(@data.merge({'process_distinct' => false}), hash)
+    svc = service(@data.merge({'process_distinct' => '0'}), hash)
 
     svc.receive_push
 
@@ -110,7 +130,7 @@ class YouTrackTest < Service::TestCase
     hash = payload
     hash['commits'].first['message'].sub! /Case#1/, '#case-1 zomg omg'
 
-    svc = service(@data.merge({'process_distinct' => true}), hash)
+    svc = service(@data.merge({'process_distinct' => '1'}), hash)
 
     svc.receive_push
 
@@ -125,9 +145,24 @@ class YouTrackTest < Service::TestCase
     }
     hash['commits'].first['message'].sub! /Case#1/, '#case-1 zomg omg'
 
-    svc = service(@data.merge({'process_distinct' => true}), hash)
+    svc = service(@data.merge({'process_distinct' => '1'}), hash)
 
     svc.receive_push
+
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_pull_request_event
+    valid_process_stubs_case_1
+
+    hash = pull_payload
+    hash['action'] = 'closed'
+    hash['sender'] = { 'login' => 'Tom Preston-Werner', 'email' => 'tom@mojombo.com'}
+    hash['pull_request']['body'] = '#case-1 zomg omg'
+
+    svc = service(@data, hash)
+
+    svc.receive_pull_request
 
     @stubs.verify_stubbed_calls
   end

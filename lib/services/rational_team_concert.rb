@@ -26,14 +26,14 @@ class Service::RationalTeamConcert < Service
   end
 
   def prepare
-    if data['no_verify_ssl']
+    if config_boolean_true?('no_verify_ssl')
       http.ssl[:verify] = false
     end
     http.headers['X-com-ibm-team-userid']= data['username']
   end
 
   def authenticate
-    if data['basic_authentication']
+    if config_boolean_true?('basic_authentication')
       http.basic_auth data['username'], data['password']
     else
       form_based_authentification

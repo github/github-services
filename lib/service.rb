@@ -502,6 +502,15 @@ class Service
     @remote_calls = []
   end
 
+  # Boolean fields as either nil, "0", or "1".
+  def config_boolean_true?(boolean_field)
+    data[boolean_field].to_i == 1
+  end
+
+  def config_boolean_false?(boolean_field)
+    !config_boolean_true?(boolean_field)
+  end
+
   def respond_to_event?
     !@event_method.nil?
   end
@@ -512,7 +521,7 @@ class Service
   #
   # Returns the String URL response from git.io.
   def shorten_url(url)
-    res = http_post("http://git.io", :url => url)
+    res = http_post("https://git.io", :url => url)
     if res.status == 201
       res.headers['location']
     else
@@ -649,9 +658,10 @@ class Service
       end
       options[:ssl][:ca_file] ||= ca_file
 
+      adapter = Array(options.delete(:adapter) || config[:adapter])
       Faraday.new(options) do |b|
         b.request(:url_encoded)
-        b.adapter(*Array(options[:adapter] || config[:adapter]))
+        b.adapter *adapter
         b.use(HttpReporter, self)
       end
     end

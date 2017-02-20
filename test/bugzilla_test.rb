@@ -7,7 +7,7 @@ class BugzillaTest < Service::TestCase
 
   def test_push
     modified_payload = modify_payload(payload)
-    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'central_repository' => false}, modified_payload)
+    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'central_repository' => '0'}, modified_payload)
     svc.xmlrpc_client = @server
     svc.receive_push
 
@@ -24,7 +24,7 @@ class BugzillaTest < Service::TestCase
   # Verify pushes will be processed on all commits if no integration branch is specified.
   def test_integration_branch_is_optional
     modified_payload = modify_payload(payload)
-    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'central_repository' => true}, modified_payload)
+    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'central_repository' => '1'}, modified_payload)
     svc.xmlrpc_client = @server
     svc.receive_push
 
@@ -37,7 +37,7 @@ class BugzillaTest < Service::TestCase
     # No commits should be processed for this push because we're only listening for
     # commits landing on the "master" branch.
     modified_payload = modify_payload(payload).merge({'ref' => 'refs/heads/development'})
-    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'integration_branch' => 'master', 'central_repository' => true}, modified_payload)
+    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'integration_branch' => 'master', 'central_repository' => '1'}, modified_payload)
     svc.xmlrpc_client = @server
     svc.receive_push
 
@@ -47,7 +47,7 @@ class BugzillaTest < Service::TestCase
     # This time, we should close a bug and post 4 comments because these commits were
     # pushed to our integration branch.
     modified_payload = modify_payload(payload).merge({'ref' => 'refs/heads/master'})
-    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'integration_branch' => 'master', 'central_repository' => true}, modified_payload)
+    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'integration_branch' => 'master', 'central_repository' => '1'}, modified_payload)
     svc.xmlrpc_client = @server
     svc.receive_push
 
@@ -58,7 +58,7 @@ class BugzillaTest < Service::TestCase
   def test_central_push
     #test pushing to a central repository
     modified_payload = modify_payload(payload)
-    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'central_repository' => true}, modified_payload)
+    svc = service({'server_url' => 'nowhere', 'username' => 'someone', 'password' => '12345', 'central_repository' => '1'}, modified_payload)
     svc.xmlrpc_client = @server
     svc.receive_push
 

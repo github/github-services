@@ -15,6 +15,4 @@ Install Notes
     It is defined in FishEye Administration > Security Settings > Authentication > REST API Token
 
 4. "repository_name" is the repository name (optional)
-    If not set github repository name is used
-
-
+    If not set GitHub repository name is used

@@ -6,12 +6,12 @@ class TrajectoryTest < Service::TestCase
   end
 
   def test_raise_config_error_without_api_key
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc = service({}, payload)
       svc.receive_push
     end
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc = service({}, payload)
       svc.receive_pull_request
     end

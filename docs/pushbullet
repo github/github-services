@@ -11,6 +11,8 @@ Install Notes
 
 3. Add your api key in the field above.
 
+If you want to send to a specific device, else leave the "Device iden" field blank:
+
 4. Open [Pushbullet API](https://api.pushbullet.com/api/devices) and paste your api key to the username field, leave password empty.
 
 5. Find your desired device from the output and copy it's iden to the field above.

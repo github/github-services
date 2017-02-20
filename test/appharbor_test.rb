@@ -40,7 +40,7 @@ private
     assert_equal 1, branches.size
 
     branch = branches[payload['ref'].sub(/\Arefs\/heads\//, '')]
-    assert_not_nil branch
+    refute_nil branch
     assert_equal payload['after'], branch['commit_id']
     assert_equal payload['commits'].select{|c| c['id'] == payload['after']}.first['message'], branch['commit_message']
   end

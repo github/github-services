@@ -1,7 +1,8 @@
 class Service::Obs < Service::HttpPost
-  string :url, :token, :project, :package
+  string :url, :project, :package, :refs
+  password :token
 
-  white_list :url, :project, :package
+  white_list :url, :project, :package, :refs
 
   default_events :push
 
@@ -22,6 +23,15 @@ class Service::Obs < Service::HttpPost
     # optional. The token may set the package container already.
     project = config_value('project')
     package = config_value('package')
+
+    # optional. Do not filter references by default.
+    refs = config_value('refs')
+
+    if refs.present?
+      return unless refs.split(":").any? do |pattern|
+        File::fnmatch(pattern, ref)
+      end
+    end
 
     # multiple tokens? handle each one individually
     token.split(",").each do |t|

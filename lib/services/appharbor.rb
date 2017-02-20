@@ -1,5 +1,6 @@
 class Service::AppHarbor < Service
-  string :application_slug, :token
+  string :application_slug
+  password :token
   white_list :application_slug
 
   def receive_push

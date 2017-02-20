@@ -1,3 +1,6 @@
-rvm: 1.9.3
-install: true
-script: script/cibuild
+language: ruby
+rvm:
+  - 2.4.0
+install: script/bootstrap
+script: bundle exec rake test
+sudo: false

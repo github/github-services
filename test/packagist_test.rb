@@ -54,15 +54,15 @@ class PackagistTest < Service::TestCase
   def test_handles_blank_strings_without_errors
     data = {
       'user' => '',
-      'token' => '5gieo7lwcd8gww800scs',
+      'token' => '',
       'domain' => ''
     }
 
     svc = service(data, payload)
     assert_equal 'mojombo', svc.user
-    assert_equal '5gieo7lwcd8gww800scs', svc.token
+    assert_equal '', svc.token
     assert_equal 'packagist.org', svc.domain
-    assert_equal 'http', svc.scheme
+    assert_equal 'https', svc.scheme
   end
 
   def test_detects_http_url
@@ -115,6 +115,15 @@ class PackagistTest < Service::TestCase
   def test_defaults_to_packagist_domain
     svc = service(data.reject{|key,v| key == 'domain'}, payload)
     assert_equal "packagist.org", svc.domain
+  end
+
+  def test_packagist_forced_to_tls
+    data = {
+      'domain' => 'http://packagist.org'
+    }
+    svc = service(data, payload)
+    assert_equal 'packagist.org', svc.domain
+    assert_equal 'https', svc.scheme
   end
 
   def service(*args)
@@ -182,4 +191,3 @@ class PackagistTest < Service::TestCase
     }
   end
 end
-

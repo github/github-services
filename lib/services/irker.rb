@@ -58,10 +58,10 @@ class Service::Irker < Service
     log_lines = commit['message'].split("\n")
 
     files      = commit['modified'] + commit['added'] + commit['removed']
-    tiny_url   = data['long_url'].to_i == 1 ? commit['url'] : shorten_url(commit['url'])
+    tiny_url   = config_boolean_true?('long_url') ? commit['url'] : shorten_url(commit['url'])
     channels   = data['channels'].split(";")
 
-    if data['color'].to_i == 1 then
+    if config_boolean_true?('color') then
       bold = "\x02"
       green = "\x0303"
       yellow = "\x0307"
@@ -82,7 +82,7 @@ class Service::Irker < Service
     end
 
     messages = []
-    if data['full_commits'].to_i == 1
+    if config_boolean_true?('full_commits')
       privmsg = <<-PRIVMSG
 #{bold}#{repository}:#{reset} #{green}#{commit['author']['name']}#{reset} #{module_name}:#{yellow}#{branch}#{reset} * #{bold}#{sha1[0..6]}#{reset} / #{bold}#{file_string}#{reset}: #{brown}#{tiny_url}#{reset}
       PRIVMSG

@@ -1,6 +1,6 @@
 class Service
   module HttpHelper
-    HMAC_DIGEST = OpenSSL::Digest::Digest.new('sha1')
+    HMAC_DIGEST = OpenSSL::Digest.new('sha1')
 
     def deliver(url_value, options = {})
       insecure = options[:insecure_ssl]

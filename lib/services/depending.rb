@@ -1,5 +1,5 @@
 class Service::Depending < Service
-  string :token
+  password :token
 
   url "http://depending.in/"
 

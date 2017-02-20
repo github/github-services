@@ -1,5 +1,5 @@
 class Service::Loggly < Service
-  string :input_token
+  password :input_token
 
   def receive_push
     http.headers['Content-Type'] = 'application/json'

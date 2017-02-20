@@ -16,5 +16,5 @@ docs/payload_data
 log
 tmp
 pkg
-.ruby-version
 .iml
+Gemfile.lock

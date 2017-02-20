@@ -1,5 +1,6 @@
 class Service::Cube < Service
-  string :domain, :project, :token
+  string :domain, :project
+  password :token
   white_list :domain, :project
 
   def receive_push

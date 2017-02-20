@@ -27,7 +27,7 @@ class Service::Humbug < Service
   white_list :exclude_issues
   white_list :exclude_commits
 
-  # events handled by this github hook
+  # events handled by this GitHub hook
   default_events :commit_comment, :create, :delete, :download, :follow, :fork,
     :fork_apply, :gist, :gollum, :issue_comment, :issues, :member, :public,
     :pull_request, :push, :team_add, :watch, :pull_request_review_comment,
@@ -61,7 +61,7 @@ class Service::Humbug < Service
 
           :event => event,
           :payload => generate_json(payload),
-          # The Github payload version. Unspecified means an implicit version 1
+          # The GitHub payload version. Unspecified means an implicit version 1
           :version => '2',
           :client => 'ZulipGitHubWebhook'
 

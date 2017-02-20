@@ -1,6 +1,7 @@
 class Service::FishEye < Service
 
-  string  :url_base, :token, :repository_name
+  string  :url_base, :repository_name
+  password :token
   white_list :url_base, :repository_name
 
   def receive_push
@@ -52,7 +53,7 @@ class Service::FishEye < Service
         url_base = url_base.gsub(/\/+$/, '')
       end
       url_base
-    end	
+    end
   end
 
   def token

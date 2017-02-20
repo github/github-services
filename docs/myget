@@ -14,6 +14,6 @@ Install Notes
 2. Navigate to the feed's build services setup for which you want to
    automatically trigger builds when changes have been pushed to GitHub.
    
-3. For the build, copy the Hook (HTTP POST) URL into the Hook URL field above.
+3. For the build, copy the Hook (HTTP POST) URL into the Hook URL field.
 
 4. Show your love for MyGet and include the Status badge in your README.md
