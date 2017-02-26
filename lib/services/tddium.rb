@@ -18,6 +18,7 @@ class Service::Tddium < Service::HttpPost
 
     url_base = override_url.present? ? override_url : "https://hooks.tddium.com:443/1/github"
     tddium_url = "#{url_base}/#{token}"
+    http.headers['X-GitHub-Event'] = event.to_s
     deliver tddium_url
   end
 end
