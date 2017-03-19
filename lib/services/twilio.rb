@@ -15,7 +15,7 @@ class Service::Twilio < Service
 
   def send_notification?(data)
     notify_user = true
-    if data['master_only'].to_i == 1 && branch_name != 'master'
+    if config_boolean_true?('master_only') && branch_name != 'master'
       notify_user = false
     end
     notify_user

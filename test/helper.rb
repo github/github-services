@@ -1,12 +1,17 @@
-require 'test/unit'
+require 'minitest/autorun'
+require 'minitest/unit'
 require 'pp'
 require File.expand_path('../../config/load', __FILE__)
 Service.load_services
 
-class Service::TestCase < Test::Unit::TestCase
+class Service::TestCase < Minitest::Test
   ALL_SERVICES = Service.services.dup
 
   def test_default
+  end
+
+  def assert_nothing_raised(*)
+    yield
   end
 
   def service(klass, event_or_data, data, payload=nil)
@@ -21,6 +26,7 @@ class Service::TestCase < Test::Unit::TestCase
 
     service = klass.new(event, data, payload)
     service.http :adapter => [:test, @stubs]
+    service.delivery_guid = "guid-#{rand}"
     service
   end
 
@@ -36,13 +42,60 @@ class Service::TestCase < Test::Unit::TestCase
   def pull_payload
     Service::PullRequestHelpers.sample_payload
   end
+    
+  def pull_request_payload
+    Service::PullRequestHelpers.sample_payload
+  end
+
+  def pull_request_review_comment_payload
+    Service::PullRequestReviewCommentHelpers.sample_payload
+  end
 
   def issues_payload
     Service::IssueHelpers.sample_payload
   end
 
+  def issue_comment_payload
+    Service::IssueCommentHelpers.sample_payload
+  end
+
+  def commit_comment_payload
+    Service::CommitCommentHelpers.sample_payload
+  end
+
+  def public_payload
+    Service::PublicHelpers.sample_payload
+  end
+
+  def gollum_payload
+    Service::GollumHelpers.sample_payload
+  end
+
   def basic_payload
     Service::HelpersWithMeta.sample_payload
+  end
+
+  def deployment_payload
+    Service::DeploymentHelpers.sample_deployment_payload
+  end
+
+  def status_payload
+    Service::StatusHelpers.sample_status_payload
+  end
+end
+
+module Service::HttpTestMethods
+  def setup
+    @stubs = Faraday::Adapter::Test::Stubs.new
+  end
+
+
+  def service(event_or_data, data, payload = nil)
+    super(service_class, event_or_data, data, payload)
+  end
+
+  def service_class
+    raise NotImplementedError
   end
 end
 

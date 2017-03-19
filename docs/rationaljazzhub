@@ -1,0 +1,18 @@
+**NOTE: This service has been deprecated by the IBM DevOps Service. Please use the IBM DevOps Service for all new integrations.
+
+This service integrates GitHub with Rational's JazzHub service (http://hub.jazz.net). The hook automatically adds change set links into the work item specified by the commit message.
+
+The hook will recognize any of the common work item type names in the commit message and look for a corresponding work item.
+
+For example:
+   - "Fix bug 42"
+   - "Deliver Story 99"
+   - "[work item 999] fixed some stuff"
+
+Install Notes
+-------------
+
+The JazzHub hook needs to be configured with your JazzHub login info:
+
+1. Username - This is the username of the user used to access JazzHub.
+2. Password - This is the password of the user used to access JazzHub.

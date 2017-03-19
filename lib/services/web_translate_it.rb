@@ -3,6 +3,6 @@ class Service::WebTranslateIt < Service
 
   def receive_push
     http_post "https://webtranslateit.com/api/projects/#{data['api_key']}/refresh_files",
-      :payload => JSON.generate(payload)
+      :payload => generate_json(payload)
   end
 end

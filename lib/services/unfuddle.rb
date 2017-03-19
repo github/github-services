@@ -10,7 +10,7 @@ class Service::Unfuddle < Service
     branch      = branch_name
     before      = payload['before']
     # use https by default since most accounts support SSL
-    protocol    = data['httponly'].to_i == 1 ? 'http' : 'https'
+    protocol    = config_boolean_true?('httponly') ? 'http' : 'https'
 
     http.url_prefix = "#{protocol}://#{data['subdomain']}.unfuddle.com"
     http.basic_auth data['username'], data['password']

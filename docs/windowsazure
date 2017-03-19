@@ -1,0 +1,14 @@
+This service posts a payload for GitHub 'push' event to a Windows Azure WebSites (WAWS).
+This enables continuous integration and deployment with WAWS.
+
+More Info: http://www.windowsazure.com/en-us/develop/net/common-tasks/publishing-with-git/
+
+Supported events are currently: 'push'
+
+Config:
+  'hostname' - The Azure WebSites SCM endpoint hostname.
+  'username' - Username basic cred for SCM endpoint.
+  'password' - Password basic cred for SCM endpoint.  
+ 
+Data:
+  'payload' - Standard GitHub event payload by event type.

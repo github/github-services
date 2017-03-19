@@ -1,0 +1,9 @@
+DiveCloud integrates Application Performance Testing into the Continuous Integration Cycle by allowing you to run a performance test after each successful deployment.
+
+When Github receives notice that you have successfully deployed your application, it will initiate a performance test based on the test plan you created at https://divecloud.nouvola.com. 
+
+Please enter your API Key and the Plan ID for the plan that you would like to run on successful deployment of your application. 
+
+If you would like to add 'Think Time' to you test, select the 'Think Time' checkbox. 
+
+If your test plan includes credentials, include your credential password in the field below. 

@@ -1,0 +1,15 @@
+Landscape is a continuous code quality inspector for Python projects.
+
+By enabling this hook, Landscape will listen for pushes and on each push, instigate a new code check.
+
+Install Notes
+-------------
+
+Landscape will automatically install this hook, there is no need to do it manually.
+
+To install:
+
+1.  Create an account at https://landscape.io (you can sign in with GitHub)
+2.  Enable checking on a repository. The hook will be automatically installed.
+
+For more information about Landscape, see https://docs.landscape.io/

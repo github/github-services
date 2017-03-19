@@ -45,11 +45,24 @@ class BambooTest < Service::TestCase
 
   def test_passes_build_error
     @stubs.post "/rest/api/latest/queue/ABC" do |env|
+      error_response(500, "Configuration Error")
+    end
+
+    svc = service :push, data, payload
+    assert_raises Service::ConfigurationError do
+      svc.receive
+    end
+
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_passes_error_with_xml_parsing
+    @stubs.post "/rest/api/latest/queue/ABC" do |env|
       error_response(404, "Plan ABC not found")
     end
 
     svc = service :push, data, payload
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
 
@@ -60,7 +73,7 @@ class BambooTest < Service::TestCase
     data = self.data.update('base_url' => '')
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -69,7 +82,7 @@ class BambooTest < Service::TestCase
     data = self.data.update('build_key' => '')
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -78,7 +91,7 @@ class BambooTest < Service::TestCase
     data = self.data.update('username' => '')
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -87,7 +100,7 @@ class BambooTest < Service::TestCase
     data = self.data.update('password' => '')
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -98,7 +111,7 @@ class BambooTest < Service::TestCase
       raise SocketError, "getaddrinfo: Name or service not known"
     end
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
   end
@@ -110,9 +123,22 @@ class BambooTest < Service::TestCase
 
     svc = service :push, data, payload
 
-    assert_raise Service::ConfigurationError do
+    assert_raises Service::ConfigurationError do
       svc.receive
     end
+  end
+
+  def test_branch_with_slash
+    data = self.data.update('build_key' => 'test/test:ABC')
+    payload = self.payload.update('ref' => 'test/test')
+    @stubs.post "/rest/api/latest/queue/ABC" do |env|
+      valid_response("ABC")
+    end
+
+    svc = service :push, data, payload
+    svc.receive
+
+    @stubs.verify_stubbed_calls
   end
 
   def data
@@ -141,7 +167,7 @@ class BambooTest < Service::TestCase
   # Raises Test::Unit::AssertionFailedError if the assertion doesn't match.
   # Returns nothing.
   def assert_params(body, expected)
-    params = Rack::Utils.parse_query(body)
+    params = Faraday::Utils.parse_query(body)
     expected.each do |key, expected_value|
       assert value = params.delete(key.to_s), "#{key} not in #{params.inspect}"
       assert_equal expected_value, value, "#{key} = #{value.inspect}, not #{expected_value.inspect}"

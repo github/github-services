@@ -1,6 +1,6 @@
 class Service::Basecamp < Service
   SERVICE_NAME = 'GitHub'
-  LOGO_URL     = 'https://assets.github.com/images/modules/about_page/octocat.png'
+  LOGO_URL     = 'https://asset1.37img.com/global/github/original.png'
 
   string          :project_url, :email_address
   password        :password
@@ -48,7 +48,7 @@ class Service::Basecamp < Service
     http.headers['Content-Type']  = 'application/json'
     http.headers['Accept']        = 'application/json'
 
-    response = http_post(events_api_url, params.to_json)
+    response = http_post(events_api_url, generate_json(params))
 
     case response.status
     when 401; raise_config_error "Invalid email + password: #{response.body.inspect}"

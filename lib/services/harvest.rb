@@ -22,7 +22,8 @@ class Service::Harvest < Service
     http.basic_auth(data['username'], data['password'])
     http.headers['Content-Type'] = 'application/xml'
     http.headers['Accept'] = 'application/xml'
-    http.url_prefix = "http#{:s if data['ssl']}://#{data['subdomain']}.harvestapp.com/"
+    protocol = config_boolean_true?('ssl') ? 'https' : 'http'
+    http.url_prefix = "#{protocol}://#{data['subdomain']}.harvestapp.com/"
 
     statuses   = []
     repository = payload['repository']['name']

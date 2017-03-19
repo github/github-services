@@ -58,10 +58,10 @@ class Service::Irker < Service
     log_lines = commit['message'].split("\n")
 
     files      = commit['modified'] + commit['added'] + commit['removed']
-    tiny_url   = data['long_url'].to_i == 1 ? commit['url'] : shorten_url(commit['url'])
+    tiny_url   = config_boolean_true?('long_url') ? commit['url'] : shorten_url(commit['url'])
     channels   = data['channels'].split(";")
 
-    if data['color'].to_i == 1 then
+    if config_boolean_true?('color') then
       bold = "\x02"
       green = "\x0303"
       yellow = "\x0307"
@@ -76,30 +76,27 @@ class Service::Irker < Service
     if file_string.size > 80 and files.size > 1
       prefix = files[0]
       files.each do |file|
-        while not file.match prefix
-          prefix = prefix.rpartition("/")[0]
-        end
+        prefix = prefix.rpartition("/")[0] until file.match prefix
       end
       file_string = "#{prefix}/ (#{files.size} files)"
     end
 
     messages = []
-    if data['full_commits'].to_i == 1
+    if config_boolean_true?('full_commits')
       privmsg = <<-PRIVMSG
-        #{bold}#{repository}:#{reset} #{green}#{commit['author']['name']}#{reset} #{module_name}:#{yellow}#{branch}#{reset} * #{bold}#{sha1[0..6]}#{reset} / #{bold}#{file_string}#{reset}: #{brown}#{tiny_url}#{reset}
+#{bold}#{repository}:#{reset} #{green}#{commit['author']['name']}#{reset} #{module_name}:#{yellow}#{branch}#{reset} * #{bold}#{sha1[0..6]}#{reset} / #{bold}#{file_string}#{reset}: #{brown}#{tiny_url}#{reset}
       PRIVMSG
-      messages.push JSON.generate({'to' => channels, 'privmsg' => privmsg.strip})
       log_lines[0..4].each do |log_line|
-        privmsg = <<-PRIVMSG
-          #{bold}#{repository}:#{reset} #{log_line[0..400]}
+        privmsg << <<-PRIVMSG
+#{bold}#{repository}:#{reset} #{log_line[0..400]}
         PRIVMSG
-        messages.push JSON.generate({'to' => channels, 'privmsg' => privmsg.strip})
       end
+      messages.push generate_json({'to' => channels, 'privmsg' => privmsg.strip})
     else
       privmsg = <<-PRIVMSG
-        #{bold}#{repository}:#{reset} #{green}#{commit['author']['name']}#{reset} #{module_name}:#{yellow}#{branch}#{reset} * #{bold}#{sha1[0..6]}#{reset} / #{bold}#{file_string}#{reset}: #{log_lines[0][0..300]} #{brown}#{tiny_url}#{reset}
+#{bold}#{repository}:#{reset} #{green}#{commit['author']['name']}#{reset} #{module_name}:#{yellow}#{branch}#{reset} * #{bold}#{sha1[0..6]}#{reset} / #{bold}#{file_string}#{reset}: #{log_lines[0][0..300]} #{brown}#{tiny_url}#{reset}
       PRIVMSG
-      messages.push JSON.generate({'to' => channels, 'privmsg' => privmsg.strip})
+      messages.push generate_json({'to' => channels, 'privmsg' => privmsg.strip})
     end
     return messages
   end

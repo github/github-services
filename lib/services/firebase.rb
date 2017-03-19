@@ -29,7 +29,7 @@ class Service::Firebase < Service
     end
 
     payload['commits'].each do |commit|
-      http_post url, JSON.generate(commit)
+      http_post url, generate_json(commit)
     end
   rescue Addressable::URI::InvalidURIError, Errno::EHOSTUNREACH
     raise_missing_error $!.to_s

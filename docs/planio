@@ -1,6 +1,3 @@
-Planio
-======
-
 Planio &hearts; GitHub! This service hook notifies Planio to fetch new commits from your repository at GitHub whenever you push to it.
 
 Install Notes

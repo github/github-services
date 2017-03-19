@@ -116,13 +116,13 @@ class IRCTest < Service::TestCase
     end
   end
 
-  def test_push_with_empty_branch_regex
-    svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => ''}, payload)
+  def test_push_with_empty_branches
+    svc = service({'room' => 'r', 'nick' => 'n', 'branches' => ''}, payload)
 
     svc.receive_push
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
@@ -133,13 +133,13 @@ class IRCTest < Service::TestCase
     assert_nil msgs.shift
   end
 
-  def test_push_with_single_matching_branch_regex
-    svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => 'mast*'}, payload)
+  def test_push_with_single_matching_branches
+    svc = service({'room' => 'r', 'nick' => 'n', 'branches' => 'master'}, payload)
 
     svc.receive_push
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
@@ -150,21 +150,13 @@ class IRCTest < Service::TestCase
     assert_nil msgs.shift
   end
 
-  def test_push_with_single_mismatching_branch_regex
-    svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => '^ticket*'}, payload)
-
-    svc.receive_push
-    msgs = svc.writable_irc.string.split("\n")
-    assert_nil msgs.shift
-  end
-
-  def test_push_with_multiple_branch_regexes_where_all_match
-    svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => 'mast*,^ticket*'}, payload)
+  def test_push_with_multiple_branches
+    svc = service({'room' => 'r', 'nick' => 'n', 'branches' => 'master,ticket'}, payload)
 
     svc.receive_push
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
@@ -175,28 +167,17 @@ class IRCTest < Service::TestCase
     assert_nil msgs.shift
   end
 
-  def test_push_with_multiple_branch_regexes_where_one_matches
-    svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => 'mast*,^ticket*'}, payload)
+  def test_commit_comment
+    svc = service(:commit_comment, {'room' => 'r', 'nick' => 'n'}, commit_comment_payload)
 
-    svc.receive_push
+    svc.receive_commit_comment
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
-    assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
     assert_equal "QUIT", msgs.shift.strip
-    assert_nil msgs.shift
-  end
-
-  def test_push_with_multiple_branch_regexes_where_none_match
-    svc = service({'room' => 'r', 'nick' => 'n', 'branch_regexes' => '^feature*,^ticket*'}, payload)
-
-    svc.receive_push
-    msgs = svc.writable_irc.string.split("\n")
     assert_nil msgs.shift
   end
 
@@ -206,7 +187,7 @@ class IRCTest < Service::TestCase
     svc.receive_pull_request
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
@@ -220,7 +201,7 @@ class IRCTest < Service::TestCase
     svc.receive_issues
     msgs = svc.writable_irc.string.split("\n")
     assert_equal "NICK n", msgs.shift
-    assert_match "USER n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
@@ -228,16 +209,63 @@ class IRCTest < Service::TestCase
     assert_nil msgs.shift
   end
 
+  def test_issue_comment
+    svc = service(:issue_comment, {'room' => 'r', 'nick' => 'n'}, issue_comment_payload)
+
+    svc.receive_issue_comment
+    msgs = svc.writable_irc.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+
+  def test_pull_request_review_comment
+    svc = service(:pull_request_review_comment, {'room' => 'r', 'nick' => 'n'}, pull_request_review_comment_payload)
+
+    svc.receive_pull_request_review_comment
+    msgs = svc.writable_irc.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*grit.*pull request #5 /, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+
+  def test_gollum
+    svc = service(:gollum, {'room' => 'r', 'nick' => 'n'}, gollum_payload)
+
+    svc.receive_gollum
+    msgs = svc.writable_irc.string.split("\n")
+    assert_equal "NICK n", msgs.shift
+    assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
+    assert_equal "JOIN #r", msgs.shift.strip
+    assert_match /PRIVMSG #r.*\[grit\] defunkt created wiki page Foo/, msgs.shift
+    assert_equal "PART #r", msgs.shift.strip
+    assert_equal "QUIT", msgs.shift.strip
+    assert_nil msgs.shift
+  end
+
   def test_default_port_with_ssl
     svc = service({'ssl' => '1'}, payload)
-    assert_equal 9999, svc.port
+    assert_equal 6697, svc.port
   end
 
   def test_default_port_no_ssl
     svc = service({'ssl' => '0'}, payload)
     assert_equal 6667, svc.port
   end
-  
+
+  def test_default_port_with_empty_string
+    svc = service({'port' => ''}, payload)
+    assert_equal 6667, svc.port
+  end
+
   def test_overridden_port
     svc = service({'port' => '1234'}, payload)
     assert_equal 1234, svc.port
@@ -260,7 +288,38 @@ class IRCTest < Service::TestCase
     msgs = svc.writable_irc.string.split("\n")
     privmsg = msgs[3]  # skip NICK, USER, JOIN
     assert_match /PRIVMSG #r.*grit/, privmsg
-    assert_no_match /\003/, privmsg
+    refute_match /\003/, privmsg
+  end
+
+  def test_public_repo_format_in_irc_realname
+    svc = service({'room' => 'r', 'nick' => 'n'}, payload)
+
+    svc.receive_push
+    msgs = svc.writable_irc.string.split("\n")
+
+    assert_includes msgs, "USER n 8 * :GitHub IRCBot - mojombo/grit"
+  end
+
+  def test_private_repo_format_in_irc_realname
+    payload_copy = payload
+    payload_copy["repository"]["private"] = true
+    svc = service({'room' => 'r', 'nick' => 'n'}, payload_copy)
+
+    svc.receive_push
+    msgs = svc.writable_irc.string.split("\n")
+
+    assert_includes msgs, "USER n 8 * :GitHub IRCBot - mojombo"
+  end
+
+  def test_nil_private_repo_format_in_irc_realname
+    payload_copy = payload
+    payload_copy["repository"]["private"] = nil
+    svc = service({'room' => 'r', 'nick' => 'n'}, payload_copy)
+
+    svc.receive_push
+    msgs = svc.writable_irc.string.split("\n")
+
+    assert_includes msgs, "USER n 8 * :GitHub IRCBot - mojombo"
   end
 
   def service(*args)
@@ -283,4 +342,3 @@ class IRCTest < Service::TestCase
     [incoming.join("\n"), outgoing.join("\n")]
   end
 end
-
