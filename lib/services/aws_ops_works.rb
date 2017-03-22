@@ -6,6 +6,7 @@ class Service::AwsOpsWorks < Service::HttpPost
   string     :app_id,               # see AppId at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_App.html
              :stack_id,             # see StackId at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_Stack.html
              :branch_name,          # see Revision at http://docs.aws.amazon.com/opsworks/latest/APIReference/API_Source.html
+             :endpoint_region,      # see AWS Opsworks Stacks at http://docs.aws.amazon.com/general/latest/gr/rande.html#opsworks_region
              :github_api_url,       # The GitHub API endpoint to post DeploymentStatus callbacks to
              :aws_access_key_id     # see AWSAccessKeyID at http://docs.aws.amazon.com/opsworks/latest/APIReference/CommonParameters.html
   password   :aws_secret_access_key, :github_token
@@ -13,6 +14,7 @@ class Service::AwsOpsWorks < Service::HttpPost
   white_list :app_id,
              :stack_id,
              :branch_name,
+             :endpoint_region,
              :github_api_url,
              :aws_access_key_id
 
@@ -140,7 +142,8 @@ class Service::AwsOpsWorks < Service::HttpPost
 
   def ops_works_client
     AWS::OpsWorks::Client.new access_key_id:     required_config_value('aws_access_key_id'),
-                              secret_access_key: required_config_value('aws_secret_access_key')
+                              secret_access_key: required_config_value('aws_secret_access_key'),
+                              region:            config_value('endpoint_region')
   end
 
   def github_api_url
