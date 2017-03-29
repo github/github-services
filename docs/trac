@@ -1,19 +1,7 @@
-Install the following plugin on your Trac server before proceeding: http://github.com/davglass/github-trac/
+This service is deprecated. To integrate GitHub with Trac, follow the
+instructions at: http://github.com/aaugustin/trac-github
 
-  1. **Url** is your Trac install's url
-  2. **Token** (this needs to be the same token you put in your trac.ini installed via the plugin)
+If you're currently relying on this service, please consider upgrading to
+trac-github. It uses a standard webhook to provide the same features and it's
+more actively maintained.
 
-
-The plugin searches commit messages for text in the form of:
-
-  * command #1
-  * command #1, #2
-  * command #1 & #2
-  * command #1 and #2
-
-Instead of the short-hand syntax "#1", "ticket:1" can be used as well, e.g.:
-
-  * command ticket:1
-  * command ticket:1, ticket:2
-  * command ticket:1 & ticket:2
-  * command ticket:1 and ticket:2

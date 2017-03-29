@@ -1,5 +1,6 @@
 class Service::GetLocalization < Service
-  string :project_name, :project_token
+  string :project_name
+  password :project_token
   white_list :project_name
 
   def receive_push
@@ -7,7 +8,7 @@ class Service::GetLocalization < Service
     project_token = data['project_token']
 
     res = http_post "https://www.getlocalization.com/services/github/notify/#{project_name}/#{project_token}/",
-      :payload => payload.to_json
+      :payload => generate_json(payload)
 
     if res.status < 200 || res.status > 299
       raise_config_error

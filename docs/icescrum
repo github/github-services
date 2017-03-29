@@ -1,6 +1,3 @@
-iceScrum
-========
-
 iceScrum is a an open source web application for using Scrum while keeping the spirit of a collaborative workspace. It also offers virtual boards with post-its for sprint backlog, product backlog and others. You can use iceScrum on your own server or in the cloud (SaaS) with Kagilum.
 
 Integrating with GitHub will allow you to associate Git commits to specific tasks. If you add a task number (ID) to your commit message, iceScrum Pro will associate the commit with the task. 

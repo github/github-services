@@ -1,6 +1,3 @@
-AWS SqsQueue
-========
-
 Install Notes
 -------------
 
@@ -9,3 +6,7 @@ SqsQueue allows GitHub to send a notification to a queue inside your Amazon AWS 
 1. Configure your Amazon AWS account with an appropriately set up access-key/secret-key (Either parent account or IAM)
    that has permissions to perform 'SendMessage' operations. (https://console.aws.amazon.com/sqs/)
 
+2. Aws SQS ARN is the unique code SQS references your queue with. It can be copied from the console
+   or fetched through the API. It takes the form of arn:aws:sqs:us-(region)-(dc):(id):(name). Copy and
+   paste the entire string. This hook parses the necessary details from the arn.
+   You may also specify a SQS Queue URL instead of an ARN if you want to use IAM or a Queue that was created using a different account.

@@ -1,0 +1,5 @@
+Install Notes
+-------------
+  1. **API Key** is from within the Conductor project.
+  2. This service will post back all pushes, regardless of whether or not they contain ticket annotations.
+  3. Annotations will be parsed for [#xxx] content, where xxx denotes a valid ticket number in the relevant Conductor project

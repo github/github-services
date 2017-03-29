@@ -29,7 +29,7 @@ class FirebaseTest < Service::TestCase
 
   def test_push_with_secret
     @stubs.post '/commits.json' do |env|
-      params = Rack::Utils.parse_nested_query(env[:url].query)
+      params = Faraday::Utils.parse_nested_query(env[:url].query)
       assert_equal({'auth' => '12345678abcdefgh'}, params)
     end
 
@@ -43,7 +43,7 @@ class FirebaseTest < Service::TestCase
    def test_push_with_suffix
     @stubs.post '/commits.json' do |env|
       assert_equal 'test.firebaseio.com', env[:url].host
-      params = Rack::Utils.parse_nested_query(env[:url].query)
+      params = Faraday::Utils.parse_nested_query(env[:url].query)
       assert_equal({'auth' => '12345678abcdefgh'}, params)
       [200, {}, '']
     end

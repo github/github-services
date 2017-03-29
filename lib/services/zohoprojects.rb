@@ -1,5 +1,6 @@
 class Service::ZohoProjects < Service
-  string :project_id, :token
+  string :project_id
+  password :token
   white_list :project_id
 
   def receive_push
@@ -7,7 +8,7 @@ class Service::ZohoProjects < Service
       :pId       => data['project_id'],
       :authtoken => data['token'],
       :scope     => "projectsapi",
-      :payload   => JSON.generate(payload)
+      :payload   => generate_json(payload)
     if res.status != 200
       raise_config_error
     end

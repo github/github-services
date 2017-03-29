@@ -1,6 +1,3 @@
-Redmine
-==========
-
 Redmine Service has the following modules:
 
 1. Fetch GitHub Commits
@@ -13,7 +10,7 @@ Install Notes
 
 1. Download and install Redmine from http://redmine.org
 2. Activate "Enable WS for repository management" in the global settings. While there, generate an API key (if neccessary) and copy it.
-3. Set your github repository as git repository for a project.
+3. Set your GitHub repository as git repository for a project.
 4. Enter the full URL to your Redmine instance as well as the project's identifier and the API key.
 5. Check the "Fetch GitHub Commits" option to enable the module.
 6. We will then notify your Redmine whenever you do a "git push".
@@ -53,4 +50,3 @@ Example of the update issue post on Redmine (the output):
   * basayel
 
   http://www.espace.com.eg
-

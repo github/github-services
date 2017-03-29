@@ -1,13 +1,34 @@
-Amazon Simple Notification Service
-==================================
+This service lets you publish event messages to Amazon's Simple Notification Service. Please note that SNS Topics are region specific.
 
-This service lets you publish event messages to Amazon's Simple Notification Service.  Optionally, you can set up an Amazon SQS subscriber if 'sqs_queue' is specified.
+The AWS Key and Secret you proide can either be from your master account (not recommended) or from an IAM Resource. 
 
-Install Notes
--------------
+If using IAM, be sure to check that the user has the correct policies for publishing to the specified SNS Topic. A policy similar to the one below will provide your IAM Resource with the correct permission level.
 
-1. 'aws_key' (REQUIRED) is the Amazon Access Key ID of an account with permission to publish SNS notifications.
-2. 'aws_secret' (REQUIRED) is the Amazon Secret Access Key associated with the aws_key
-3. 'sns_topic' (REQUIRED) is the name of the Amazon SNS topic.  If no topic exists by this name, one will be created.
-4. 'sqs_queue' (OPTIONAL) is the name of an Amazon SQS Queue to be subscribed to the sns_topic.  If no queue exists by this name, one will be created.
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "sns:Publish"
+      ],
+      "Sid": "Stmt0000000000000",
+      "Resource": [
+        "arn:aws:sns:us-east-1:718656560584:app-deploy"
+      ],
+      "Effect": "Allow"
+    }
+  ]
+}
+``` 
+
+This service will attempt to provide you with meaningful errors if your configuration is incorrect.
+
+1. 'aws_key' (Required) The access key to an Amazon Account or IAM User.
+
+2. 'aws_secret' (Required) The Amazon secret access key associated with the AWS Key.
+
+3. 'sns_topic' (Required) Full ARN path to the SNS Topic, ie. `arn:aws:sns:eu-west-1:718656560584:sns_topic_name`
+
+4. 'sns_region' (Optional) the identifier for the AWS Region that the SNS Topic is located in. This defaults to `us-east-1`.
 

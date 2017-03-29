@@ -1,24 +1,25 @@
 require File.expand_path('../helper', __FILE__)
 
 class CoffeeDocInfoTest < Service::TestCase
-  def setup
-    @stubs = Faraday::Adapter::Test::Stubs.new
-  end
+  include Service::HttpTestMethods
 
   def test_push
     @stubs.post "/checkout" do |env|
       assert_equal 'coffeedoc.info', env[:url].host
-      data = Rack::Utils.parse_query(env[:body])
-      assert_equal 1, JSON.parse(data['payload'])['a']
+      body = JSON.parse(env[:body])
+      assert_equal 'push', body['event']
+      assert_equal 'test', body['payload']['commits'][0]['id']
       [200, {}, '']
     end
 
-    svc = service({}, :a => 1)
-    svc.receive_push
+    payload = {'commits'=>[{'id'=>'test'}]}
+    svc = service({}, payload)
+    svc.receive_event
+    @stubs.verify_stubbed_calls
   end
 
-  def service(*args)
-    super Service::CoffeeDocInfo, *args
+  def service_class
+    Service::CoffeeDocInfo
   end
 end
 

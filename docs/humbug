@@ -1,5 +1,23 @@
 Install Notes
 -------------
 
-1. **Email** - The username to authenticate as
-2. **Api Key** - The API key associated with the provided user
+Zulip is a group communication tool.
+
+https://zulip.com/hello
+
+Configuration Fields
+--------------------
+
+1. **Email** - The user to authenticate as.
+2. **Api Key** - The API key associated with the provided user. See: https://zulip.com/#settings
+3. **Stream** - The default Zulip stream where event notifications will be sent. Defaults to "commits" if left empty. The stream (or the "commits" stream if empty) must exist in Zulip.
+4. **Commit Stream** - Overrides **Stream** for Git commit notifications. The stream must exist in Zulip.
+5. **Issue Stream** - Overrides **Stream** for GitHub issues notifications. The stream must exist in Zulip.
+6. **Branches** - A comma-delimited whitelist of branches to receive event notifications about. If empty, event notifications will be sent about all branches. Example: "master,staging,prod"
+
+Checkboxes
+----------
+
+1. **Exclude Pull Requests** - Don't send GitHub pull request notifications to Zulip.
+2. **Exclude Issues** - Don't send GitHub issues notifications to Zulip.
+3. **Exclude Commits** - Don't send Git commit notifcations to Zulip.

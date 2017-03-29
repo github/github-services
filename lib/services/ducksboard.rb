@@ -13,7 +13,7 @@ class Service::Ducksboard < Service
 
     http.headers['content-type'] = 'application/x-www-form-urlencoded'
     body = http.params.merge(
-      :content => JSON.generate(:event => event, :payload => payload))
+      :content => generate_json(:event => event, :payload => payload))
 
     parse_webhook_key(data).each do |key|
       url = "https://webhooks.ducksboard.com/#{key}"

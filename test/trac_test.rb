@@ -9,7 +9,7 @@ class TracTest < Service::TestCase
     @stubs.post "/s/github/t" do |env|
       assert_equal 's.trac.com', env[:url].host
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
-      data = Rack::Utils.parse_nested_query(env[:body])
+      data = Faraday::Utils.parse_nested_query(env[:body])
       assert_equal 1, JSON.parse(data['payload'])['a']
       [200, {}, '']
     end

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require File.expand_path('../helper', __FILE__)
 
 class ServiceTest < Service::TestCase
@@ -54,7 +56,7 @@ class ServiceTest < Service::TestCase
     url = "http://github.com"
     @stubs.post "/" do |env|
       assert_equal 'git.io', env[:url].host
-      data = Rack::Utils.parse_query(env[:body])
+      data = Faraday::Utils.parse_query(env[:body])
       assert_equal url, data['url']
       [201, {'Location' => 'short'}, '']
     end
@@ -75,6 +77,29 @@ class ServiceTest < Service::TestCase
     assert_raises Service::ConfigurationError do
       @service.http_post 'http://abc'
     end
+  end
+
+  def test_json_encoding
+    payload = {'unicodez' => "rtiaü\n\n€ý5:q"}
+    json = @service.generate_json(payload)
+    assert_equal payload, JSON.parse(json)
+  end
+
+  def test_config_boolean_true_helper
+    svc = service(:push, "is_checked" => nil)
+    refute svc.config_boolean_true?("is_checked")
+
+    svc = service(:push, "is_checked" => 0)
+    refute svc.config_boolean_true?("is_checked")
+
+    svc = service(:push, "is_checked" => "0")
+    refute svc.config_boolean_true?("is_checked")
+
+    svc = service(:push, "is_checked" => 1)
+    assert svc.config_boolean_true?("is_checked")
+
+    svc = service(:push, "is_checked" => "1")
+    assert svc.config_boolean_true?("is_checked")
   end
 
   def service(*args)

@@ -25,14 +25,8 @@ class Service::Buddycloud < Service
     @url                 = data['buddycloud_base_api'] + '/' + data['channel'] + '/content/'
     @username            = data['username']
     @password            = data['password']
-    @show_commit_summary = false
-    @show_commit_detail  = false
-    if data.has_key?('show_commit_summary') && data['show_commit_summary'].to_i == 1
-      @show_commit_summary = true
-    end
-    if data.has_key?('show_commit_detail') && data['show_commit_detail'].to_i == 1
-      @show_commit_detail  = true 
-    end
+    @show_commit_summary = config_boolean_true?('show_commit_summary')
+    @show_commit_detail  = config_boolean_true?('show_commit_detail')
   end
 
   def make_request(entry, node)

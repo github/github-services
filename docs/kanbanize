@@ -1,0 +1,9 @@
+Install Notes
+-------------
+
+1. **Kanbanize domain name** - Your project Kanbanize domain name Ex: **mycompany.kanbanize.com**
+2. **Kanbanize api key** - A special API key provided by Kanbanize
+3. **Branch Filter** - A Comma-separated list of branches which will be automatically inspected. Leave blank to include all branches.
+4. **Restrict to Last Commit** - Only the last commit of each push will be inspected for task IDs.
+5. **Track Project Issues In Kanbanize** - Open/Move to Done a card when a project issue is Open/Closed
+6. **Project Issues Board Id** - The ID of the board that must keep the project issue cards. You can see the board ID on the Kanbanize dashboard screen, next to the board name.

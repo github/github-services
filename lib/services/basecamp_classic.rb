@@ -4,7 +4,6 @@ class Service::BasecampClassic < Service
   boolean     :ssl
   white_list  :url, :project, :category, :username
 
-
   self.hook_name = 'basecamp'
 
   def receive_push
@@ -18,7 +17,7 @@ class Service::BasecampClassic < Service
     return if commits.empty?
 
     ::Basecamp.establish_connection! basecamp_domain,
-      data['username'], data['password'], data['ssl'].to_i == 1
+      data['username'], data['password'], config_boolean_true?('ssl')
 
     commits.each do |commit|
       gitsha        = commit['id']

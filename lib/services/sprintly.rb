@@ -15,7 +15,7 @@ class Service::Sprintly < Service
     http.headers['Content-Type'] = 'application/json'
     http.basic_auth(data['email'], data['api_key'])
 
-    http_post "#{host_name}/integration/github/#{data['product_id']}/#{event}/", payload.to_json
+    http_post "#{host_name}/integration/github/#{data['product_id']}/#{event}/", generate_json(payload)
   end
 end
 

@@ -1,5 +1,6 @@
 class Service::Gemnasium < Service
-  string :user, :token
+  string :user
+  password :token
   white_list :user
 
   def receive_push
@@ -28,7 +29,7 @@ class Service::Gemnasium < Service
   end
 
   def body
-    payload.to_json
+    generate_json(payload)
   end
 
   def url
