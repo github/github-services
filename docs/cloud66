@@ -1,0 +1,26 @@
+[Cloud 66](https://www.cloud66.com) will add these hooks automatically to projects which you deploy using Cloud 66.
+This integration triggers a deployment every time you push your code into your Github repository.
+To sign up, go to https://www.cloud66.com, sign in, and start deploying!
+
+Installation Notes
+------------------
+
+To trigger a deployment after each git push:
+
+1. Click on Stack Information under your Stack details page.
+2. Here you can find the **Redeployment Key** for your stack. Copy and paste it below.
+3. You're done!
+
+Note: Only pushes into the same git branch as your stack will trigger the deployment.
+
+Getting Started with Cloud 66
+-----------------------------
+
+Cloud 66 is the easiest way to build, deploy and manage your apps on your own server on any cloud.
+
+Here is how to get started:
+
+1.  Sign up at https://www.cloud66.com with your email or github credentials
+2.  Follow the [Getting Started] section to deploy your first stack with Cloud 66.
+
+For more details about Cloud 66 go to https://www.cloud66.com
