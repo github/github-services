@@ -1,0 +1,11 @@
+ReviewNinja is a code review tool for GitHub that lets you merge pull requests with confidence.
+
+By enabling this hook, ReviewNinja will listen for new pull requests, issues, and statuses 
+in order to update the status of pull requests.
+
+For more information please see our [docs](http://docs.review.ninja).
+
+## Install Notes
+
+These parameters will be automatically configured when a project is set up 
+in ReviewNinja. 
