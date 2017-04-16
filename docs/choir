@@ -1,0 +1,9 @@
+[Choir](http://choir.io) is a notification center for teams. To get events from your Github project, just copy and paste your Choir API key below. If you don’t already have one, log in to Choir and add the Github integration in your stream settings.
+
+
+Install Notes
+-------------
+
+1. API Key - Add a new GitHub integration to your stream, copy and paste the API Key. 
+2. Don't forget to check "Active"
+
