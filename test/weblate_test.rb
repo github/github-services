@@ -18,6 +18,19 @@ class WeblateTest < Service::TestCase
     svc.receive_push
   end
 
+  def test_push_full
+    @stubs.post "/hooks/github/" do |env|
+      assert_equal 'weblate.example.org', env[:url].host
+      assert_equal 'application/x-www-form-urlencoded',
+        env[:request_headers]['content-type']
+      [200, {}, '']
+    end
+
+    svc = service :push,
+      {'url' => 'http://weblate.example.org/hooks/github/'}, payload
+    svc.receive_push
+  end
+
   def service(*args)
     super Service::Weblate, *args
   end

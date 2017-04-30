@@ -18,7 +18,11 @@ class Service::Weblate < Service
       url = "http://#{url}"
     end
 
-    res = http_post "#{url}/hooks/github/",
+    if url !~ /\/hooks\/github\/$/
+      url = "#{url}/hooks/github/"
+    end
+
+    res = http_post url,
       :payload => generate_json(payload)
 
     if res.status < 200 || res.status > 299
