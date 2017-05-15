@@ -4,7 +4,9 @@ class Service::Packagist < Service
   string :domain
   white_list :domain, :user
 
-  def receive_push
+  default_events :push, :create
+
+  def receive_events
     http_post packagist_url, :payload => generate_json(payload), :username => user, :apiToken => token
   end
 

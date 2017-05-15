@@ -35,7 +35,7 @@ class PackagistTest < Service::TestCase
       assert_equal '5gieo7lwcd8gww800scs', Faraday::Utils.parse_query(env[:body])['apiToken']
       assert_equal payload, JSON.parse(Faraday::Utils.parse_query(env[:body])['payload'])
     end
-    @svc.receive_push
+    @svc.receive_events
   end
 
   def test_strips_whitespace_from_form_values
