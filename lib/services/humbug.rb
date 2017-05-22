@@ -18,6 +18,7 @@ class Service::Humbug < Service
   boolean :exclude_pull_requests
   boolean :exclude_issues
   boolean :exclude_commits
+  boolean :emphasize_branch_in_topic
 
   # list of things approved for github's logging. See service.rb for more.
   white_list :email
@@ -26,6 +27,7 @@ class Service::Humbug < Service
   white_list :exclude_pull_requests
   white_list :exclude_issues
   white_list :exclude_commits
+  white_list :emphasize_branch_in_topic
 
   # events handled by this GitHub hook
   default_events :commit_comment, :create, :delete, :download, :follow, :fork,
@@ -58,6 +60,7 @@ class Service::Humbug < Service
           :exclude_pull_requests => data['exclude_pull_requests'],
           :exclude_issues => data['exclude_issues'],
           :exclude_commits => data['exclude_commits'],
+          :emphasize_branch_in_topic => data['emphasize_branch_in_topic'],
 
           :event => event,
           :payload => generate_json(payload),
