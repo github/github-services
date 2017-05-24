@@ -26,7 +26,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mime-types",             "~> 1.15"
   spec.add_dependency "ruby-hmac",              "0.4.0"
   spec.add_dependency "faraday",                "0.9.0"
-  spec.add_dependency "xmlrpc",                 "0.2.1"
+  if RUBY_VERSION >= '2.4'
+    spec.add_dependency "xmlrpc",                 "0.2.1"
+  end
 
   # Basecamp Classic
   spec.add_dependency "activeresource",         "~> 4.0.0"
