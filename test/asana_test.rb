@@ -56,7 +56,7 @@ class AsanaTest < Service::TestCase
     end
 
     svc = service(
-      {'auth_token' => '0000',"restrict_to_last_comment" => "1"},
+      {'auth_token' => '0000',"restrict_to_last_commit" => "1"},
       modified_payload)
     svc.receive_push
   end

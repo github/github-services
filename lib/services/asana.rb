@@ -2,7 +2,7 @@ class Service::Asana < Service
   password :auth_token
   string :restrict_to_branch
   boolean :restrict_to_last_commit
-  white_list :restrict_to_branch, :restrict_to_last_comment
+  white_list :restrict_to_branch, :restrict_to_last_commit
 
   def receive_push
     # make sure we have what we need
@@ -12,7 +12,7 @@ class Service::Asana < Service
     branch = payload['ref'].split('/').last
 
     branch_restriction = data['restrict_to_branch'].to_s
-    commit_restriction = config_boolean_true?('restrict_to_last_comment')
+    commit_restriction = config_boolean_true?('restrict_to_last_commit')
 
     # check the branch restriction is poplulated and branch is not included
     if branch_restriction.length > 0 && branch_restriction.index(branch) == nil
