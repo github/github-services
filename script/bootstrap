@@ -3,10 +3,17 @@
 # Ensures all gems are in vendor/cache and installed locally.
 set -e
 
+# github/strap related bootstrapping
 if [ "$(uname -s)" = "Darwin" ]; then
-  HOMEBREW_PREFIX="$(brew --prefix)"
-  bundle config --local build.eventmachine "--with-cppflags=-I$HOMEBREW_PREFIX/opt/openssl/include"
+  brew update >/dev/null
+  brew bundle check &>/dev/null || brew bundle
+
+  brew bootstrap-rbenv-ruby
+
+  BUNDLE="brew bundle exec -- bundle"
+else
+  BUNDLE="bundle"
 fi
 
-bundle install --binstubs --local --path=vendor/gems
+$BUNDLE install --binstubs --local --path=vendor/gems
 bundle package --all
