@@ -7,7 +7,7 @@ class TeamCityTest < Service::TestCase
 
   def test_push
     url = "/abc/httpAuth/action.html"
-    @stubs.get url do |env|
+    @stubs.post url do |env|
       assert_equal 'teamcity.com', env[:url].host
       assert_equal 'btid', env[:params]['add2Queue']
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
@@ -26,7 +26,7 @@ class TeamCityTest < Service::TestCase
 
   def test_push_deleted_branch
     url = "/abc/httpAuth/action.html"
-    @stubs.get url do |env|
+    @stubs.post url do |env|
       assert false, "service should not be called for deleted branches"
     end
 
@@ -42,7 +42,7 @@ class TeamCityTest < Service::TestCase
 
   def test_push_with_branch_name
     url = "/abc/httpAuth/action.html"
-    @stubs.get url do |env|
+    @stubs.post url do |env|
       assert_equal 'branch-name', env[:params]['branchName']
       [200, {}, '']
     end
@@ -58,7 +58,7 @@ class TeamCityTest < Service::TestCase
 
   def test_push_with_branch_name_incl_slashes
     url = "/abc/httpAuth/action.html"
-    @stubs.get url do |env|
+    @stubs.post url do |env|
       assert_equal 'branch/name', env[:params]['branchName']
       [200, {}, '']
     end
@@ -74,7 +74,7 @@ class TeamCityTest < Service::TestCase
 
   def test_push_with_branch_full_ref
     url = "/abc/httpAuth/action.html"
-    @stubs.get url do |env|
+    @stubs.post url do |env|
       assert_equal 'refs/heads/branch/name', env[:params]['branchName']
       [200, {}, '']
     end
@@ -91,7 +91,7 @@ class TeamCityTest < Service::TestCase
 
   def test_push_when_check_for_changes_is_true
     url = "/abc/httpAuth/action.html"
-    @stubs.get url do |env|
+    @stubs.post url do |env|
       assert_equal 'teamcity.com', env[:url].host
       assert_equal 'btid', env[:params]['checkForChangesBuildType']
       [200, {}, '']

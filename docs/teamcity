@@ -1,7 +1,7 @@
 [TeamCity](https://www.jetbrains.com/teamcity/) is a continuous integration server that automates building and testing of your software.
 
 <aside class="notice">
-Note that since TeamCity 10.0 using the [TeamCity Commit Hooks] (https://plugins.jetbrains.com/plugin/9179?pr=teamcity) plugin is recommended. 
+Note that since TeamCity 10.0 using the [TeamCity Commit Hooks](https://plugins.jetbrains.com/plugin/9179?pr=teamcity) plugin is recommended. 
 </aside>
 The GitHub TeamCity service can be used in two ways:
 * to trigger builds after code has been pushed to your git repository; (Default)
