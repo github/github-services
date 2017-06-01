@@ -36,9 +36,9 @@ class Service::TeamCity < Service
 
       if check_for_changes_only
         # This is undocumented call. TODO: migrate to REST API (TC at least 8.0)
-        res = http_get "httpAuth/action.html", :checkForChangesBuildType => build_type_id
+        res = http_post "httpAuth/app/rest/vcs-root-instances/checkingForChangesQueue?locator=buildType:#{build_type_id}"
       else
-        res = http_get "httpAuth/action.html", :add2Queue => build_type_id, :branchName => branch
+        res = http_post "httpAuth/app/rest/buildQueue", "<build branchName=\"#{branch}\"><buildType id=\"#{build_type_id}\"></build>"
       end
 
       case res.status
