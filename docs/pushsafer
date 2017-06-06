@@ -1,0 +1,13 @@
+[Pushsafer](https://www.pushsafer.com) is a cross-platform push notification service with a [simple API](https://www.pushsafer.com/en/pushapi).
+
+Pushsafer make it easy and safe to send & receive push-notifications in real time on your iPhone, iPad, Android, Windows Phone or Desktop device and also to your Browser (Chrome or Firefox)!
+
+Install Notes
+-------------
+
+1. Install a [Client App](https://www.pushsafer.com/en/apps) from the App Store, Windows Store or the Android Market.
+
+2. Login to [Pushsafer](https://www.pushsafer.com/) and copy your private or alias key.
+
+3. Add your private or alias key in the field above. Optionally enter a device or device group id to have notifications go to specified devices, or leave blank to send to all active devices on your account. All other params are also optionally, take a look at our [API description](https://www.pushsafer.com/en/pushapi).
+
