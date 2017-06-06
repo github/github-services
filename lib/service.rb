@@ -672,7 +672,7 @@ class Service
       :adapter => :net_http,
       :request => {:timeout => 10, :open_timeout => 5},
       :ssl => {:verify_depth => 5},
-      :headers => {}
+      :headers => {"X-GitHub-Services-Version" => current_sha[0..7]}
     }
   end
 
