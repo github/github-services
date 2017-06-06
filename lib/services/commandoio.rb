@@ -28,16 +28,22 @@ class Service::Commandoio < Service::HttpPost
 
   boolean       :halt_on_stderr
 
+  # filter_branch field at the end of the form
+  string        :filter_branch
+
   # Only include these in the debug logs
   white_list    :account_alias,
                 :recipe,
                 :server,
                 :groups,
-                :halt_on_stderr
+                :halt_on_stderr,
+                :filter_branch
 
   def receive_event
     validate_config
     validate_server_groups
+
+    return false unless filter_branch?
 
     url = "recipes/#{data['recipe']}/execute"
 
@@ -56,6 +62,17 @@ class Service::Commandoio < Service::HttpPost
     params.merge!(:notes           => CGI.escape(data['notes']))  if data['notes']
 
     http_post url, params
+  end
+
+  # Checks if branch filtering is enabled and if the payload's ref matches
+  #
+  # Returns true or false
+  def filter_branch?
+    commit_branch = (payload['ref'] || '').split('/').last || ''
+    filter_branch = data['filter_branch'].to_s
+
+    # If filtering by branch then don't make a post
+    ((filter_branch.length > 0) && (commit_branch.index(filter_branch) == nil)) ? false : true
   end
 
   # Validates the required config values
