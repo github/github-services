@@ -52,6 +52,11 @@ class AwsOpsWorksTest < Service::TestCase
     assert_equal sample_data['aws_access_key_id'], config.access_key_id
   end
 
+  def test_region_configured
+    config = service.ops_works_client.config
+    assert_equal sample_data['region'], config.ops_works_region
+  end
+
   def test_aws_access_key_id_missing
     svc = service(sample_data.except('aws_access_key_id'))
     assert_raises Service::ConfigurationError do
@@ -71,6 +76,12 @@ class AwsOpsWorksTest < Service::TestCase
     end
   end
 
+  def test_region_blank
+    svc = service(sample_data.merge('region' => ""))
+    config = service.ops_works_client.config
+    assert_equal sample_data['region'], config.ops_works_region
+  end
+
   def service(data = sample_data, payload = sample_payload)
     Service::AwsOpsWorks.new(:push, data, payload)
   end
@@ -81,6 +92,7 @@ class AwsOpsWorksTest < Service::TestCase
       'aws_secret_access_key' => '0123456789+0123456789+0123456789+0123456',
       'stack_id'              => '12345678-1234-1234-1234-123456789012',
       'app_id'                => '01234567-0123-0123-0123-012345678901',
+      'region'                => "us-east-1",
       'branch_name'           => 'default-branch'
     }
   end

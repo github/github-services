@@ -141,9 +141,13 @@ class Service::AwsOpsWorks < Service::HttpPost
   end
 
   def ops_works_client
+    region = config_value('endpoint_region')
+    # The AWS library requires you pass `nil`, and not an empty string, if you
+    # want to connect to a legitimate default AWS host name.
+    region = nil if region.empty?
     AWS::OpsWorks::Client.new access_key_id:     required_config_value('aws_access_key_id'),
                               secret_access_key: required_config_value('aws_secret_access_key'),
-                              region:            config_value('endpoint_region')
+                              region:            region
   end
 
   def github_api_url
