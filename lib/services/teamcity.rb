@@ -34,11 +34,11 @@ class Service::TeamCity < Service
     build_type_ids = data['build_type_id'].to_s
     build_type_ids.split(",").each do |build_type_id|
 
-      if check_for_changes_only
-        # This is undocumented call. TODO: migrate to REST API (TC at least 8.0)
-        res = http_post "httpAuth/app/rest/vcs-root-instances/checkingForChangesQueue?locator=buildType:#{build_type_id}"
-      else
-        res = http_post "httpAuth/app/rest/buildQueue", "<build branchName=\"#{branch}\"><buildType id=\"#{build_type_id}\"></build>"
+      res = perform_post_request(build_type_id, check_for_changes_only, branch: branch)
+
+      # Hotfix for older TeamCity versions (older than 2017.1.1) where a GET is needed
+      if res.status == 415
+        res = perform_get_request(build_type_id, check_for_changes_only, branch: branch)
       end
 
       case res.status
@@ -52,5 +52,23 @@ class Service::TeamCity < Service
   rescue SocketError => e
     raise_config_error "Invalid TeamCity host name" if e.to_s =~ /getaddrinfo: Name or service not known/
     raise
+  end
+
+  # This is undocumented call. TODO: migrate to REST API (TC at least 8.0)
+  def perform_post_request(build_type_id, check_for_changes_only, branch: nil)
+    if check_for_changes_only
+      http_post "httpAuth/app/rest/vcs-root-instances/checkingForChangesQueue?locator=buildType:#{build_type_id}"
+    else
+      http_post "httpAuth/app/rest/buildQueue", "<build branchName=\"#{branch}\"><buildType id=\"#{build_type_id}\"></build>"
+    end
+  end
+
+  # This is undocumented call. TODO: migrate to REST API (TC at least 8.0)
+  def perform_get_request(build_type_id, check_for_changes_only, branch: nil)
+    if check_for_changes_only
+      http_get "httpAuth/action.html", :checkForChangesBuildType => build_type_id
+    else
+      http_get "httpAuth/action.html", :add2Queue => build_type_id, :branchName => branch
+    end
   end
 end
