@@ -1,19 +1,8 @@
-# Jabber::Simple does some insane kind of queueing if it thinks
-# we are not in their buddy list (which is always) so messages
-# never get sent before we disconnect. This forces the library
-# to assume the recipient is a buddy.
-class ::Jabber::Simple
-  def subscribed_to?(x); true; end
-end
-
 class Service::Jabber < Service
   string :user
   white_list :user
 
   def receive_push
-    # Accept any friend request
-    im.accept_subscriptions = true
-
     #Split multiple addresses into array, removing duplicates
     recipients  = data.has_key?('user') ? data['user'].split(',').each(&:strip!).uniq : []
     messages = []
@@ -25,26 +14,43 @@ class Service::Jabber < Service
   end
 
   def deliver_messages(message, recipients)
+    m = ::Jabber::Message.new(nil, message).set_type(:chat)
     recipients.each do |recipient|
-      im.deliver_deferred recipient, message, :chat
+      m.set_to(recipient)
+      client.send(m)
+    end
+    disconnect
+  end
+
+  def client
+    @client ||= begin
+      user = secrets['jabber']['user'].to_s
+      pass = secrets['jabber']['password'].to_s
+
+      if user.empty? || pass.empty?
+        raise_config_error("Missing Jabber user/pass: #{user.inspect}")
+      end
+
+      jid = ::Jabber::JID.new(user)
+      client = ::Jabber::Client.new(jid)
+      client.connect
+      client.auth(pass)
+
+      roster = ::Jabber::Roster::Helper.new(client, false)
+      roster.add_subscription_request_callback do |roster_item, presence|
+        roster.accept_subscription(presence.from)
+      end
+
+      presence = ::Jabber::Presence.new(nil, "Available")
+      client.send(presence)
+      client.send_with_id(::Jabber::Iq.new_rosterget)
+      client
     end
   end
 
-  attr_writer :im
-  def im
-    @im || @@im ||= build_jabber_connection
+  def disconnect
+    client.close
+    @client = nil
   end
 
-  def build_jabber_connection
-    user = secrets['jabber']['user'].to_s
-    pass = secrets['jabber']['password'].to_s
-
-    if user.empty? || pass.empty?
-      raise_config_error("Missing Jabber user/pass: #{user.inspect}")
-    end
-
-    ::Jabber::Simple.new(secrets['jabber']['user'], secrets['jabber']['password'])
-  rescue
-    raise_config_error("Troubles connecting to Jabber: #{user.inspect}")
-  end
 end
