@@ -47,7 +47,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mail",                   "~>2.3"
 
   # Jabber
-  spec.add_dependency "xmpp4r-simple-19",       "~> 1.0.0"
+  spec.add_dependency "xmpp4r",                 "~> 0.5"
 
   # Twilio
   spec.add_dependency "twilio-ruby",            "~> 3.9.0"
