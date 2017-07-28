@@ -563,6 +563,7 @@ class Service
   # Yields a Faraday::Request instance.
   # Returns a Faraday::Response instance.
   def http_get(url = nil, params = nil, headers = nil)
+    raise_config_error("Invalid scheme") unless permitted_transport?(url)
     http.get do |req|
       req.url(url)                if url
       req.params.update(params)   if params

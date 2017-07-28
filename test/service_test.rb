@@ -87,6 +87,9 @@ class ServiceTest < Service::TestCase
       assert_raises Service::ConfigurationError do
         @service.http_post "/this/is/a/url"
       end
+      assert_raises Service::ConfigurationError do
+        @service.http_get "/this/is/a/url"
+      end
     end
   end
 
@@ -96,6 +99,9 @@ class ServiceTest < Service::TestCase
 
       assert_raises Service::ConfigurationError do
         @service.http_post url
+      end
+      assert_raises Service::ConfigurationError do
+        @service.http_get url
       end
     end
   end
@@ -107,6 +113,9 @@ class ServiceTest < Service::TestCase
 
       assert_raises Service::ConfigurationError do
         @service.http_post "ftp:///this/is/a/url"
+      end
+      assert_raises Service::ConfigurationError do
+        @service.http_get "ftp:///this/is/a/url"
       end
     end
   end
