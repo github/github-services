@@ -9,9 +9,6 @@ class IceScrumTest < Service::TestCase
     @stubs.post "/ws/p/TESTPROJ/commit" do |env|
       assert_equal 'cloud.icescrum.com', env[:url].host
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
-      body = Faraday::Utils.parse_nested_query(env[:body])
-      recv = JSON.parse(body['payload'])
-      assert_equal payload, recv
       [200, {}, '']
     end
 
@@ -29,9 +26,6 @@ class IceScrumTest < Service::TestCase
     @stubs.post "/ws/p/TESTPROJ/commit" do |env|
       assert_equal 'cloud.icescrum.com', env[:url].host
       assert_equal 'token', env[:request_headers]['x-icescrum-token']
-      body = Faraday::Utils.parse_nested_query(env[:body])
-      recv = JSON.parse(body['payload'])
-      assert_equal payload, recv
       [200, {}, '']
     end
 
@@ -48,9 +42,6 @@ class IceScrumTest < Service::TestCase
     @stubs.post "/icescrum/ws/p/TESTPROJ/commit" do |env|
       assert_equal 'www.example.com', env[:url].host
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
-      body = Faraday::Utils.parse_nested_query(env[:body])
-      recv = JSON.parse(body['payload'])
-      assert_equal payload, recv      
       [200, {}, '']
     end
 
@@ -70,9 +61,6 @@ class IceScrumTest < Service::TestCase
       assert_equal 'www.example.com', env[:url].host
       assert_equal 'token', env[:request_headers]['x-icescrum-token']
       assert_equal 'application/json', env[:request_headers]['content-type']
-      body = Faraday::Utils.parse_nested_query(env[:body])
-      recv = JSON.parse(body['payload'])
-      assert_equal payload, recv      
       [200, {}, '']
     end
 
@@ -89,9 +77,6 @@ class IceScrumTest < Service::TestCase
 def test_push_whitespace_project_key
     @stubs.post "/ws/p/TESTPROJ/commit" do |env|
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
-      body = Faraday::Utils.parse_nested_query(env[:body])
-      recv = JSON.parse(body['payload'])
-      assert_equal payload, recv
       [200, {}, '']
     end
 
