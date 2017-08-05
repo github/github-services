@@ -172,7 +172,3 @@ def test_push_whitespace_project_key
     super Service::IceScrum, *args
   end
 end
-
-
-
-
