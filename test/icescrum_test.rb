@@ -4,10 +4,10 @@ class IceScrumTest < Service::TestCase
   def setup
     @stubs = Faraday::Adapter::Test::Stubs.new
   end
-
+  
   def test_push_valid
-    @stubs.post "/a/ws/p/TESTPROJ/commit" do |env|
-      assert_equal 'www.kagilum.com', env[:url].host
+    @stubs.post "/ws/p/TESTPROJ/commit" do |env|
+      assert_equal 'cloud.icescrum.com', env[:url].host
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
       body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
@@ -16,8 +16,27 @@ class IceScrumTest < Service::TestCase
     end
 
     svc = service({
-      'username' => 'u',
-      'password' => 'p',
+      'username'   => 'u',
+      'password'   => 'p',
+      'project_key' => 'TESTPROJ'
+    }, payload)
+
+    svc.receive_push
+    @stubs.verify_stubbed_calls
+  end
+
+  def test_push_valid_token
+    @stubs.post "/ws/p/TESTPROJ/commit" do |env|
+      assert_equal 'cloud.icescrum.com', env[:url].host
+      assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
+      body = Faraday::Utils.parse_nested_query(env[:body])
+      recv = JSON.parse(body['payload'])
+      assert_equal payload, recv
+      [200, {}, '']
+    end
+
+    svc = service({
+      'access_token' => 'token',
       'project_key' => 'TESTPROJ'
     }, payload)
 
@@ -27,7 +46,7 @@ class IceScrumTest < Service::TestCase
 
   def test_push_valid_custom_url
     @stubs.post "/icescrum/ws/p/TESTPROJ/commit" do |env|
-      assert_equal 'www.example.com', env[:url].host
+      assert_equal 'www.icescrum.com', env[:url].host
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
       body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
@@ -38,6 +57,28 @@ class IceScrumTest < Service::TestCase
     svc = service({
       'username'   => 'u',
       'password'   => 'p',
+      'project_key' => 'TESTPROJ',
+      'base_url'   => 'http://www.example.com/icescrum'
+    }, payload)
+
+    svc.receive_push
+    @stubs.verify_stubbed_calls
+  end
+  
+  def test_push_valid_custom_url_token
+    @stubs.post "/icescrum/ws/p/TESTPROJ/commit" do |env|
+      assert_equal 'www.icescrum.com', env[:url].host
+      assert_equal 'token', env[:request_headers]['x-icescrum-token']
+      assert_equal 'application/json', env[:request_headers]['content-type']
+      assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
+      body = Faraday::Utils.parse_nested_query(env[:body])
+      recv = JSON.parse(body['payload'])
+      assert_equal payload, recv      
+      [200, {}, '']
+    end
+
+    svc = service({
+      'access_token'   => 'token',
       'project_key' => 'TESTPROJ',
       'base_url'   => 'http://www.example.com/icescrum'
     }, payload)
@@ -66,7 +107,7 @@ class IceScrumTest < Service::TestCase
   end
 
 def test_push_whitespace_project_key
-    @stubs.post "/a/ws/p/TESTPROJ/commit" do |env|
+    @stubs.post "/ws/p/TESTPROJ/commit" do |env|
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
       body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
@@ -87,6 +128,16 @@ def test_push_whitespace_project_key
   def test_push_missing_username
     svc = service({
       'password' => 'p',
+      'project_key' => 'TESTPROJ'
+    }, payload)
+
+    assert_raises Service::ConfigurationError do
+      svc.receive_push
+    end
+  end
+  
+  def test_push_missing_access_token_or_username_password
+    svc = service({
       'project_key' => 'TESTPROJ'
     }, payload)
 
