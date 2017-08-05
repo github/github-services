@@ -28,7 +28,7 @@ class IceScrumTest < Service::TestCase
   def test_push_valid_token
     @stubs.post "/ws/p/TESTPROJ/commit" do |env|
       assert_equal 'cloud.icescrum.com', env[:url].host
-      assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
+      assert_equal 'token', env[:request_headers]['x-icescrum-token']
       body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
       assert_equal payload, recv
@@ -70,7 +70,6 @@ class IceScrumTest < Service::TestCase
       assert_equal 'www.example.com', env[:url].host
       assert_equal 'token', env[:request_headers]['x-icescrum-token']
       assert_equal 'application/json', env[:request_headers]['content-type']
-      assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
       body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
       assert_equal payload, recv      
@@ -81,25 +80,6 @@ class IceScrumTest < Service::TestCase
       'access_token'   => 'token',
       'project_key' => 'TESTPROJ',
       'base_url'   => 'http://www.example.com/icescrum'
-    }, payload)
-
-    svc.receive_push
-    @stubs.verify_stubbed_calls
-  end
-
-  def test_push_lowcase_project_key
-    @stubs.post "/a/ws/p/TESTPROJ/commit" do |env|
-      assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
-      body = Faraday::Utils.parse_nested_query(env[:body])
-      recv = JSON.parse(body['payload'])
-      assert_equal payload, recv      
-      [200, {}, '']
-    end
-
-    svc = service({
-      'username' => 'u',
-      'password' => 'p',
-      'project_key' => 'testProj'
     }, payload)
 
     svc.receive_push
