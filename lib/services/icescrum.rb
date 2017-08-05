@@ -15,20 +15,24 @@ class Service::IceScrum < Service
 	# setup base url
 	if data['base_url'].present?
     		url = "#{data['base_url']}/ws/p/#{project_key}/commit"
+		#we are not sure if https or not or even valid https
+		http.ssl[:verify] = false
         else
 		url = "https://cloud.icescrum.com/ws/p/#{project_key}/commit"
+		#we do pay a lot to get a green light on the browser address bar :D
+		http.ssl[:verify] = true
         end
 
 	# do old basic authentication
 	if data['access_token'].to_s.empty?
 		username = data['username'].to_s.gsub(/\s+/, "")
 		password = data['password'].to_s.gsub(/\s+/, "")
-  		http.ssl[:verify] = false
 		http.basic_auth username, password
 	else
 		http.headers['Content-Type'] = 'application/json'
 		http.headers['x-icescrum-token'] = data['access_token'].to_s.gsub(/\s+/, "")
 	end
+        
 	http_post url, { :payload => generate_json(payload) }
   end
 
