@@ -6,15 +6,20 @@ For example, if you add the text 'T76' to your commit message, iceScrum Pro will
 
 This allows your team to stay up to date on the latest development work and view a history of commits for each story / task.
 
-More information on iceScrum : http://www.icescrum.org
-More information on iceScrum : https://www.kagilum.com/icescrum-pro/ 
+More information on iceScrum : https://www.icescrum.com
 More information on Kagilum  : https://www.kagilum.com
 
 Install Notes
 -------------
 
-1. **project_key** - This is your iceScrum Project key.
-2. **username**    - Username of one team member in the project (such as the ScrumMaster).
-3. **password**    - Password of one team member in the project.
-4. **base_url**    - Base_url is the url where your iceScrum is alive (http://www.example.com/icescrum). This input is optional. If not set, "https://www.kagilum.com/a" will be used for iceScrum Cloud customers.
+1. **project_key**  - This is your iceScrum Project key.
+
+2. **authentication** For new iceScrum v7+ only:
+2.1 **access_token** - Access token of one team member in the project (such as the ScrumMaster). Where find it?
+
+3. **authentication** For old iceScrum R6 only:
+3.1 **username**     - Username of one team member in the project (such as the ScrumMaster).
+3.2 **password**     - Password of one team member in the project.
+
+4. **base_url**     - Base_url is the url where your iceScrum is alive (http://www.example.com/icescrum). This input is optional. If not set, "https://cloud.icescrum.com" will be used for iceScrum Cloud customers.
 
