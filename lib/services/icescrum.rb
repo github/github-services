@@ -14,11 +14,15 @@ class Service::IceScrum < Service
 	  
 	# setup base url
 	if data['base_url'].present?
-    		url = "#{data['base_url']}/ws/p/#{project_key}/commit"
+    		if data['access_token'].to_s.empty?
+			url = "#{data['base_url']}/ws/p/#{project_key}/commit"
+		else
+			url = "#{data['base_url']}/ws/project/#{project_key}/commit"
+		end
 		#we are not sure if https or not or even valid https
 		http.ssl[:verify] = false
         else
-		url = "https://cloud.icescrum.com/ws/p/#{project_key}/commit"
+		url = "https://cloud.icescrum.com/ws/project/#{project_key}/commit"
 		#we do pay a lot to get a green light on the browser address bar :D
 		http.ssl[:verify] = true
         end
