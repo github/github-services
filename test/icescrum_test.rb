@@ -46,7 +46,7 @@ class IceScrumTest < Service::TestCase
 
   def test_push_valid_custom_url
     @stubs.post "/icescrum/ws/p/TESTPROJ/commit" do |env|
-      assert_equal 'www.icescrum.com', env[:url].host
+      assert_equal 'www.example.com', env[:url].host
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
       body = Faraday::Utils.parse_nested_query(env[:body])
       recv = JSON.parse(body['payload'])
@@ -67,7 +67,7 @@ class IceScrumTest < Service::TestCase
   
   def test_push_valid_custom_url_token
     @stubs.post "/icescrum/ws/p/TESTPROJ/commit" do |env|
-      assert_equal 'www.icescrum.com', env[:url].host
+      assert_equal 'www.example.com', env[:url].host
       assert_equal 'token', env[:request_headers]['x-icescrum-token']
       assert_equal 'application/json', env[:request_headers]['content-type']
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
