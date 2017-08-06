@@ -17,7 +17,7 @@ class Service::IceScrum < Service
     		if data['access_token'].to_s.empty?
 			url = "#{data['base_url']}/ws/p/#{project_key}/commit"
 		else
-			url = "#{data['base_url']}/ws/project/#{project_key}/github"
+			url = "#{data['base_url']}/ws/project/#{project_key}/commit/github"
 		end
 		#we are not sure if https or not or even valid https
 		http.ssl[:verify] = false
