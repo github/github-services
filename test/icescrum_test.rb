@@ -23,7 +23,7 @@ class IceScrumTest < Service::TestCase
   end
 
   def test_push_valid_token
-    @stubs.post "/ws/project/TESTPROJ/github" do |env|
+    @stubs.post "/ws/project/TESTPROJ/commit/github" do |env|
       assert_equal 'cloud.icescrum.com', env[:url].host
       assert_equal 'token', env[:request_headers]['x-icescrum-token']
       [200, {}, '']
@@ -57,7 +57,7 @@ class IceScrumTest < Service::TestCase
   end
   
   def test_push_valid_custom_url_token
-    @stubs.post "/icescrum/ws/project/TESTPROJ/github" do |env|
+    @stubs.post "/icescrum/ws/project/TESTPROJ/commit/github" do |env|
       assert_equal 'www.example.com', env[:url].host
       assert_equal 'token', env[:request_headers]['x-icescrum-token']
       assert_equal 'application/json', env[:request_headers]['content-type']
