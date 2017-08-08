@@ -3,7 +3,7 @@ class Service::IceScrum < Service
   password :password
   def receive_push
 	# Cloud only support access token
-	if data['base_url'].to_s.empty? && 
+	if data['base_url'].to_s.empty?
 		raise_config_error "Access token mandatory for cloud" if data['access_token'].to_s.empty?
 	end
 
