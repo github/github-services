@@ -2,8 +2,13 @@ class Service::IceScrum < Service
   string   :base_url, :access_token, :project_key, :username
   password :password
   def receive_push
-	# Support old authentification for R6
-	if data['access_token'].to_s.empty?
+	# Cloud only support access token
+	if data['base_url'].to_s.empty? && 
+		raise_config_error "Access token mandatory for cloud" if data['access_token'].to_s.empty?
+	end
+
+	 # Support old authentification for R6
+	if data['access_token'].to_s.empty? 
 		raise_config_error "Invalid username" if data['username'].to_s.empty?
 		raise_config_error "Invalid password" if data['password'].to_s.empty?
 	end
