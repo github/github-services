@@ -531,6 +531,8 @@ class Service
     url
   end
 
+  ENABLED_TRANSPORTS = [nil, "http", "https"]
+
   # Public: Makes an HTTP GET call.
   #
   # url     - Optional String URL to request.
@@ -561,6 +563,7 @@ class Service
   # Yields a Faraday::Request instance.
   # Returns a Faraday::Response instance.
   def http_get(url = nil, params = nil, headers = nil)
+    raise_config_error("Invalid scheme") unless permitted_transport?(url)
     http.get do |req|
       req.url(url)                if url
       req.params.update(params)   if params
@@ -630,6 +633,8 @@ class Service
   def http_method(method, url = nil, body = nil, headers = nil)
     block = Proc.new if block_given?
 
+    raise_config_error("Invalid scheme") unless permitted_transport?(url)
+
     check_ssl do
       http.send(method) do |req|
         req.url(url)                if url
@@ -638,6 +643,11 @@ class Service
         block.call req if block
       end
     end
+  end
+
+  def permitted_transport?(url = nil)
+    ENABLED_TRANSPORTS.include?(http.url_prefix.scheme&.downcase) &&
+    ENABLED_TRANSPORTS.include?(Addressable::URI.parse(url).scheme&.downcase)
   end
 
   # Public: Lazily loads the Faraday::Connection for the current Service

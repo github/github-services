@@ -79,6 +79,48 @@ class ServiceTest < Service::TestCase
     end
   end
 
+  def test_http_only_with_prefix
+    ["ftp://1.1.1.1", "file:///etc/passwd"].each do |url|
+      http = @service.http
+      http.url_prefix = URI::parse(url)
+
+      assert_raises Service::ConfigurationError do
+        @service.http_post "/this/is/a/url"
+      end
+      assert_raises Service::ConfigurationError do
+        @service.http_get "/this/is/a/url"
+      end
+    end
+  end
+
+  def test_http_only_with_full_url
+    ["ftp://1.1.1.1", "file:///etc/passwd"].each do |url|
+      http = @service.http
+
+      assert_raises Service::ConfigurationError do
+        @service.http_post url
+      end
+      assert_raises Service::ConfigurationError do
+        @service.http_get url
+      end
+    end
+  end
+
+  def test_http_only_with_prefix_and_fqdn
+    ["ftp://1.1.1.1", "file:///etc/passwd"].each do |url|
+      http = @service.http
+      http.url_prefix = URI::parse(url)
+
+      assert_raises Service::ConfigurationError do
+        @service.http_post "ftp:///this/is/a/url"
+      end
+      assert_raises Service::ConfigurationError do
+        @service.http_get "ftp:///this/is/a/url"
+      end
+    end
+  end
+
+
   def test_json_encoding
     payload = {'unicodez' => "rtiaü\n\n€ý5:q"}
     json = @service.generate_json(payload)
