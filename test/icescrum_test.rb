@@ -27,7 +27,7 @@ class IceScrumTest < Service::TestCase
     svc = service({
       'username'   => 'u',
       'password'   => 'p',
-      'project_key' => 'TESTPROJ'
+      'project_key' => 'TESTPROJ',
       'base_url'   => 'http://www.example.com/icescrum'
     }, payload)
 
@@ -90,7 +90,7 @@ def test_push_whitespace_project_key
   def test_push_missing_username
     svc = service({
       'password' => 'p',
-      'project_key' => 'TESTPROJ'
+      'project_key' => 'TESTPROJ',
       'base_url'   => 'http://www.example.com/icescrum'
     }, payload)
 
@@ -112,7 +112,7 @@ def test_push_whitespace_project_key
   def test_push_missing_password
     svc = service({
       'username' => 'u',
-      'project_key' => 'TESTPROJ'
+      'project_key' => 'TESTPROJ',
       'base_url'   => 'http://www.example.com/icescrum'
     }, payload)
 
