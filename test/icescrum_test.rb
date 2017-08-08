@@ -44,7 +44,7 @@ class IceScrumTest < Service::TestCase
     end
 
     svc = service({
-      'token'   => 'token',
+      'access_token'   => 'token',
       'project_key' => 'TESTPROJ',
       'base_url'   => 'http://www.example.com/icescrum'
     }, payload)
