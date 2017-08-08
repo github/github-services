@@ -27,7 +27,7 @@ class Service::IceScrum < Service
 		#we are not sure if https or not or even valid https
 		http.ssl[:verify] = false
         else
-		url = "https://cloud.icescrum.com/ws/project/#{project_key}/commit"
+		url = "https://cloud.icescrum.com/ws/project/#{project_key}/commit/github"
 		#we do pay a lot to get a green light on the browser address bar :D
 		http.ssl[:verify] = true
         end
