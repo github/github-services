@@ -1,17 +1,19 @@
-Codeship offers continuous integration and deployment for Ruby, PHP, Python, Go and Java applications.
+Codeship offers continuous integration and deployment for a variety of applications including Ruby, Node, PHP, Python, Java and Go.
 
-This service hook will inform Codeship every time you push to GitHub. On every push Codeship tests the current version of your application. If all tests succeed, Codeship deploys your application, otherwise it informs you about the failures.
+This service hook will inform Codeship every time you push to GitHub. On every push Codeship tests the current version of your application. If all tests succeed, Codeship can also deploy your application, otherwise it informs you about the failures.
 
 Install Notes
 -------------
 
 Codeship will install this hook automatically on sign up. However, if creating the service didn't succeed or you accidentally deleted it, you can also install it manually.
 
-1.  Sign up at https://www.codeship.io/ (you can sign in with GitHub)
-2.  If the service wasn't set: Go to your project's settings and copy the project uuid.
-3.  Paste the  project uuid into the text field below.
-4.  Make sure the "Active" checkbox is ticked, and click "Update service".
-5.  Click on the "Codeship" service name and then click the "Test service" link.
-6.  Now there should be a running build on your Codeship dashboard.
+1.  Sign up at [codeship.com](https://codeship.com)
+2.  Go to your project's settings, find the General section and copy the project UUID
+3.  Paste the project UUID into the text field below
+4.  Make sure the "Active" checkbox is ticked and click "Update service"
+5.  Click on the "Codeship" service name and then click "Test service"
+6.  Now there should be a running build on your Codeship dashboard
 
-Check out more details on Codeship at https://www.codeship.io/.
+Learn more by visiting [codeship.com](https://codeship.com) and our [documentation](https://documentation.codeship.com).
+
+[Contact us](https://helpdesk.codeship.com) if you need further assistance.
