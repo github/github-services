@@ -531,7 +531,7 @@ class Service
     url
   end
 
-  ENABLED_TRANSPORTS = [nil, "http", "https"]
+  ENABLED_TRANSPORTS = ["", "http", "https"]
 
   # Public: Makes an HTTP GET call.
   #
@@ -646,8 +646,8 @@ class Service
   end
 
   def permitted_transport?(url = nil)
-    ENABLED_TRANSPORTS.include?(http.url_prefix.scheme&.downcase) &&
-    ENABLED_TRANSPORTS.include?(Addressable::URI.parse(url).scheme&.downcase)
+    ENABLED_TRANSPORTS.include?(http.url_prefix.scheme.to_s.downcase) &&
+    ENABLED_TRANSPORTS.include?(Addressable::URI.parse(url).scheme.to_s.downcase)
   end
 
   # Public: Lazily loads the Faraday::Connection for the current Service
