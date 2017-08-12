@@ -9,7 +9,7 @@ This allows your team to stay up to date on the latest development work and view
 More information on iceScrum : https://www.icescrum.com
 More information on Kagilum  : https://www.kagilum.com
 
-Don't forget to enable Github app in iceScrum: https://www.icescrum.com/apps/github/
+Don't forget to enable the Github app in iceScrum: https://www.icescrum.com/apps/github/
 
 Install Notes
 -------------
@@ -17,7 +17,7 @@ Install Notes
 1. **project_key**  - This is your iceScrum Project key.
 
 2. **authentication** For new iceScrum v7+ only:
-2.1 **access_token** - Access token of one team member in the project (such as the ScrumMaster). Where find it?
+2.1 **access_token** - Access token of one team member in the project (such as the ScrumMaster). Where find it? On iceScrum, as the intended team member, go on your profil and click on the API Token tab. You will be able to generate an access token.
 
 3. **authentication** For old iceScrum R6 only:
 3.1 **username**     - Username of one team member in the project (such as the ScrumMaster).
