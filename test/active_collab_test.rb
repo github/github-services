@@ -38,6 +38,3 @@ class ActiveCollabTest < Service::TestCase
     super Service::ActiveCollab, *args
   end
 end
-
-
-
