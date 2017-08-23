@@ -36,14 +36,15 @@ class Service::ActiveCollab < Service
 
     build_message = statuses * "\n"
 
-    http.url_prefix = data['url']
-    http.headers['Accept'] = 'application/xml'
+    url = data['url']
+    body = params(push_message, build_message)
+    headers = {:Accept => 'application/xml'}
+    params = {
+      :path_info => "projects/#{data['project_id']}/discussions/add",
+      :token => data['token']
+    }
 
-    http.post do |req|
-      req.params['path_info'] = "projects/#{data['project_id']}/discussions/add"
-      req.params['token']     = data['token']
-      req.body = params(push_message, build_message)
-    end
+    http_post url, body, headers, params
   end
 
   def params(name, message)

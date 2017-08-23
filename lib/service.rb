@@ -598,9 +598,9 @@ class Service
   #
   # Yields a Faraday::Request instance.
   # Returns a Faraday::Response instance.
-  def http_post(url = nil, body = nil, headers = nil)
+  def http_post(url = nil, body = nil, headers = nil, params = nil)
     block = Proc.new if block_given?
-    http_method :post, url, body, headers, &block
+    http_method :post, url, body, headers, params, &block
   end
 
   # Public: Makes an HTTP call.
@@ -630,7 +630,7 @@ class Service
   #
   # Yields a Faraday::Request instance.
   # Returns a Faraday::Response instance.
-  def http_method(method, url = nil, body = nil, headers = nil)
+  def http_method(method, url = nil, body = nil, headers = nil, params = nil)
     block = Proc.new if block_given?
 
     raise_config_error("Invalid scheme") unless permitted_transport?(url)
@@ -640,6 +640,7 @@ class Service
         req.url(url)                if url
         req.headers.update(headers) if headers
         req.body = body             if body
+        req.params = params         if params
         block.call req if block
       end
     end

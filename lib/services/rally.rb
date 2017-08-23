@@ -120,7 +120,7 @@ class Service::Rally < Service
   end
 
   def rallyWorkspaces()
-    response = @http.get('Subscription.js?fetch=Name,Workspaces,Workspace&pretty=true')
+    response = http_get('Subscription.js?fetch=Name,Workspaces,Workspace&pretty=true')
     raise_config_error('Config error: credentials not valid for Rally endpoint') if response.status == 401
     raise_config_error('Config error: unable to obtain your Rally subscription info') unless response.success?
     qr =  JSON.parse(response.body)
@@ -137,7 +137,7 @@ class Service::Rally < Service
     target_url = '%s.js?fetch=%s' % [entity.downcase, fields]
     target_url += '&query=(%s)' % [criteria] if criteria.length > 0
     target_url += '&workspace=%s' % [@wksp_ref]
-    res = @http.get(target_url)
+    res = http_get(target_url)
     raise StandardError("Config Error: #{entity} query failed") unless res.success?
     qr = JSON.parse(res.body)['QueryResult']
     item = qr['TotalResultCount'] > 0 ? qr['Results'][0] : nil
@@ -148,7 +148,7 @@ class Service::Rally < Service
   def rallyCreate(entity, data)
     create_url = "%s/create.js?workspace=%s" % [entity, @wksp_ref]
     payload = {"#{entity}" => data}
-    res = @http.post(create_url, generate_json(payload))
+    res = http_post(create_url,generate_json(payload))
     raise_config_error("Unable to create the Rally #{entity} for #{data['Name']}") unless res.success?
     cr = JSON.parse(res.body)['CreateResult']
     item = cr['Object']
