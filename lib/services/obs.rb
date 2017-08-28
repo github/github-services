@@ -17,8 +17,8 @@ class Service::Obs < Service::HttpPost
   def receive_push
     # required
     token = required_config_value('token').to_s
-    url = config_value('url')
-    url = "https://api.opensuse.org:443" if url.blank?
+    apiurl = config_value('url')
+    apiurl = "https://api.opensuse.org:443" if apiurl.blank?
 
     # optional. The token may set the package container already.
     project = config_value('project')
@@ -43,7 +43,7 @@ class Service::Obs < Service::HttpPost
       http.ssl[:verify] = false
       http.headers['Authorization'] = "Token #{t.strip}"
 
-      url = "#{url}/trigger/runservice"
+      url = "#{apiurl}/trigger/runservice"
       unless project.blank? or package.blank?
         url << "?project=#{CGI.escape(project)}&package=#{CGI.escape(package)}"
       end
