@@ -120,6 +120,33 @@ class ServiceTest < Service::TestCase
     end
   end
 
+  def test_http_get_url_strip
+    stubs = Faraday::Adapter::Test::Stubs.new
+    stubs.get("/") { |env| [200, {}, "ok"] }
+    stubs.get("/   ") { |env| [200, {}, "nope"] }
+
+    service = TestService.new(:push, "data", "payload")
+    service.http :adapter => [:test, stubs]
+
+    service.http_get "https://example.com/   "
+    http_call = service.http_calls[0]
+    assert_equal "https://example.com/", http_call[:request][:url]
+    assert_equal "ok", http_call[:response][:body]
+  end
+
+  def test_http_post_url_strip
+    stubs = Faraday::Adapter::Test::Stubs.new
+    stubs.post("/") { |env| [200, {}, "ok"] }
+    stubs.post("/   ") { |env| [200, {}, "nope"] }
+
+    service = TestService.new(:push, "data", "payload")
+    service.http :adapter => [:test, stubs]
+
+    service.http_post "https://example.com/   "
+    http_call = service.http_calls[0]
+    assert_equal "https://example.com/", http_call[:request][:url]
+    assert_equal "ok", http_call[:response][:body]
+  end
 
   def test_json_encoding
     payload = {'unicodez' => "rtiaü\n\n€ý5:q"}
