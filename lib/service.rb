@@ -564,6 +564,7 @@ class Service
   # Returns a Faraday::Response instance.
   def http_get(url = nil, params = nil, headers = nil)
     raise_config_error("Invalid scheme") unless permitted_transport?(url)
+    url = url.strip if url
     http.get do |req|
       req.url(url)                if url
       req.params.update(params)   if params
@@ -633,6 +634,7 @@ class Service
   def http_method(method, url = nil, body = nil, headers = nil, params = nil)
     block = Proc.new if block_given?
 
+    url = url.strip if url
     raise_config_error("Invalid scheme") unless permitted_transport?(url)
 
     check_ssl do
