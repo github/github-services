@@ -4,6 +4,6 @@ Required values are:
 
 api_key: Your Leanpub api_key, which you can find at https://leanpub.com/author_dashboard/settings.
 
-slug: The slug for your book. This is the part of the URL for your book after https://leanpub.com/. For example, for https://leanpub.com/thes3cookbook, the slug is thes3cookbook.
+slug: The slug for your book. This is the part of the URL for your book after https://leanpub.com/. For example, for https://leanpub.com/lean, the slug is lean.
 
 See https://leanpub.com/help/api for more information on the Leanpub API.
