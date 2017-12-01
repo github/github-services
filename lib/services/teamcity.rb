@@ -38,7 +38,7 @@ class Service::TeamCity < Service
       res = perform_post_request(build_type_id, check_for_changes_only, branch: branch)
 
       # Hotfix for older TeamCity versions (older than 2017.1.1) where a GET is needed
-      if res.status == 415 | res.status == 405
+      if res.status == 415 || res.status == 405
         res = perform_get_request(build_type_id, check_for_changes_only, branch: branch)
       end
 
