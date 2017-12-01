@@ -9,7 +9,7 @@ class TeamCityTest < Service::TestCase
     url = "/abc/httpAuth/app/rest/buildQueue"
     @stubs.post url do |env|
       assert_equal 'teamcity.com', env[:url].host
-      assert_equal '<build branchName=""><buildType id="btid"></build>', env[:body]
+      assert_equal '<build branchName=""><buildType id="btid"/></build>', env[:body]
       assert_equal basic_auth(:u, :p), env[:request_headers]['authorization']
       [200, {}, '']
     end
@@ -51,7 +51,7 @@ class TeamCityTest < Service::TestCase
   def test_push_with_branch_name
     url = "/abc/httpAuth/app/rest/buildQueue"
     @stubs.post url do |env|
-      assert_equal '<build branchName="branch-name"><buildType id="btid"></build>', env[:body]
+      assert_equal '<build branchName="branch-name"><buildType id="btid"/></build>', env[:body]
       [200, {}, '']
     end
 
@@ -67,7 +67,7 @@ class TeamCityTest < Service::TestCase
   def test_push_with_branch_name_incl_slashes
     url = "/abc/httpAuth/app/rest/buildQueue"
     @stubs.post url do |env|
-      assert_equal '<build branchName="branch/name"><buildType id="btid"></build>', env[:body]
+      assert_equal '<build branchName="branch/name"><buildType id="btid"/></build>', env[:body]
       [200, {}, '']
     end
 
@@ -83,7 +83,7 @@ class TeamCityTest < Service::TestCase
   def test_push_with_branch_full_ref
     url = "/abc/httpAuth/app/rest/buildQueue"
     @stubs.post url do |env|
-      assert_equal '<build branchName="refs/heads/branch/name"><buildType id="btid"></build>', env[:body]
+      assert_equal '<build branchName="refs/heads/branch/name"><buildType id="btid"/></build>', env[:body]
       [200, {}, '']
     end
 
