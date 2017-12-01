@@ -29,6 +29,7 @@ class Service::TeamCity < Service
       raise_config_error "No base url: #{base_url.inspect}"
     end
 
+    http.headers['Content-Type'] = 'application/xml'
     http.url_prefix = base_url
     http.basic_auth data['username'].to_s, data['password'].to_s
     build_type_ids = data['build_type_id'].to_s
@@ -37,7 +38,7 @@ class Service::TeamCity < Service
       res = perform_post_request(build_type_id, check_for_changes_only, branch: branch)
 
       # Hotfix for older TeamCity versions (older than 2017.1.1) where a GET is needed
-      if res.status == 415
+      if res.status == 415 | res.status == 405
         res = perform_get_request(build_type_id, check_for_changes_only, branch: branch)
       end
 
@@ -59,7 +60,7 @@ class Service::TeamCity < Service
     if check_for_changes_only
       http_post "httpAuth/app/rest/vcs-root-instances/checkingForChangesQueue?locator=buildType:#{build_type_id}"
     else
-      http_post "httpAuth/app/rest/buildQueue", "<build branchName=\"#{branch}\"><buildType id=\"#{build_type_id}\"></build>"
+      http_post "httpAuth/app/rest/buildQueue", "<build branchName=\"#{branch}\"><buildType id=\"#{build_type_id}\"/></build>"
     end
   end
 
