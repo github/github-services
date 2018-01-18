@@ -8,7 +8,7 @@ class PiwikPluginsTest < Service::TestCase
 
     @stubs.post "/postreceive-hook" do |env|
       body = JSON.parse(env[:body])
-      assert_equal 'plugins.piwik.org', env[:url].host
+      assert_equal 'plugins.matomo.org', env[:url].host
       assert_equal 1, body['payload']['a']
       [200, {}, '']
     end
