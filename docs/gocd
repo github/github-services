@@ -3,19 +3,21 @@
 The GitHub GoCD service can be used to trigger builds when changes are pushed to the corresponding GitHub repository.
 This is a replacement for the polling method, where the Go server periodically polls the repositories for changes.
 
+This integration completely repeats the webhook API. Read the official instructions on setting up
+webhook push [here](https://api.gocd.org/current/#hosting-your-repository-on-github-or-github-enterprise).
+
+**Note:** Polling must be turned off for the pipeline associated with this material.
+
 Install Notes
 -------------
 
 1. Your Go server must be accessible from the internet.
 
 2. "base_url" (mandatory) is the URL to your Go server
-   Example: https://go.example.com/ or http://go.example.com:8153
+   Example: https://gocd.example.com:8154/go/api/webhooks/github/notify
 
-3. "repository_url" (mandatory) is the URL that is configured in the Materials section of the concerned pipelines.
-   Example: git@github.com:gocd/gocd.git or git://github.com/gocd/gocd
+3. "webhook_secret" - to secure the http endpoint you should specify the same
+    value the webhookSecret attribute on the <server/> element has in the file cruise-config.xml.
 
-4. "username" and "password" - username and password of a Go admin user that can
-   trigger the Materials API endpoint. Can be left empty if the Go server has no authentication configured (not recommended.)
-
-5. "verify_ssl" is used to enable (recommended) or disable certificate checking when using ssl.
+4. "verify_ssl" is used to enable (recommended) or disable certificate checking when using ssl.
    Disabling this can make the ssl connection insecure.
