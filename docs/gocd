@@ -13,11 +13,11 @@ Install Notes
 
 1. Your Go server must be accessible from the internet.
 
-2. "base_url" (mandatory) is the URL to your Go server
-   Example: https://gocd.example.com:8154/go/api/webhooks/github/notify
+2. "base_url" (mandatory) is the domain (and port) of your Go server (don't specify the url part `/go/api/webhooks/github/notify`)
+   Example: https://gocd.example.com:8154
 
 3. "webhook_secret" - to secure the http endpoint you should specify the same
-    value the webhookSecret attribute on the <server/> element has in the file cruise-config.xml.
+    value the webhookSecret attribute on the <server/> element has in the file `cruise-config.xml`.
 
 4. "verify_ssl" is used to enable (recommended) or disable certificate checking when using ssl.
    Disabling this can make the ssl connection insecure.
