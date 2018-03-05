@@ -9,7 +9,7 @@ class GoCDTest < Service::TestCase
   end
 
   def test_push_deleted_branch
-    @stubs.post "go/api/material/notify/git" do
+    @stubs.post "go/api/webhooks/github/notify" do
       assert false, "service should not be called for deleted branches"
     end
 
@@ -47,7 +47,7 @@ class GoCDTest < Service::TestCase
   end
 
   def test_invalid_go_url
-    @stubs.post "go/api/material/notify/git" do
+    @stubs.post "go/api/webhooks/github/notify" do
       [404, {}, ""]
     end
 
@@ -59,7 +59,7 @@ class GoCDTest < Service::TestCase
   end
 
   def test_authorization_passed
-    @stubs.post "go/api/material/notify/git" do |env|
+    @stubs.post "go/api/webhooks/github/notify" do |env|
       assert_equal basic_auth(:admin, :badger), env[:request_headers]['authorization']
       [200, {}, ""]
     end
@@ -70,7 +70,7 @@ class GoCDTest < Service::TestCase
   end
 
   def test_triggers_build
-    @stubs.post "go/api/material/notify/git" do |env|
+    @stubs.post "go/api/webhooks/github/notify" do |env|
       assert_equal "localhost", env[:url].host
       assert_equal 8153, env[:url].port
       [200, {}, ""]
@@ -86,8 +86,7 @@ class GoCDTest < Service::TestCase
     {
       "base_url" => "http://localhost:8153",
       "repository_url" => "git://github.com/gocd/gocd",
-      "username" => "admin",
-      "password" => "badger"
+      "webhook_secret" => "admin"
     }
   end
 
@@ -95,4 +94,3 @@ class GoCDTest < Service::TestCase
     super Service::GoCD, *args
   end
 end
-

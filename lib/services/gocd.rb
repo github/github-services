@@ -1,8 +1,8 @@
 class Service::GoCD < Service
-  string   :base_url, :repository_url, :username
-  password :password
+  string   :base_url
+  password :webhook_secret
   boolean :verify_ssl
-  white_list :base_url, :repository_url, :username
+  white_list :base_url
 
   url "http://www.go.cd/"
   logo_url "http://www.go.cd/images/logo-go-home_2014.png"
@@ -16,9 +16,9 @@ class Service::GoCD < Service
     http.url_prefix = base_url
     http.headers['confirm'] = true
 
-    http.basic_auth username, password if username.present? and password.present?
+    # http.basic_auth username, password if username.present? and password.present?
 
-    res = http_post "go/api/material/notify/git", repository_url: repository_url
+    res = http_post "go/api/webhooks/github/notify", repository_url: repository_url
     case res.status
       when 200..299
       when 403, 401, 422 then raise_config_error("Invalid credentials")
@@ -40,16 +40,8 @@ class Service::GoCD < Service
     @base_url ||= data['base_url']
   end
 
-  def repository_url
-    @build_key ||= data['repository_url']
-  end
-
-  def username
-    @username ||= data['username']
-  end
-
-  def password
-    @password ||= data['password']
+  def webhook_secret
+    @webhook_secret ||= data['webhook_secret']
   end
 
   def verify_ssl
