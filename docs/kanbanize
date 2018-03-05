@@ -2,7 +2,7 @@ Install Notes
 -------------
 
 1. **Kanbanize domain name** - Your project Kanbanize domain name Ex: **mycompany.kanbanize.com**
-2. **Kanbanize api key** - The API key of a Kanbanize user account. We recomend using a dedicated Administrator user or a standard user (e.g. GitHub_user) with permissions to access, comment and modify cards on the desired boards.
+2. **Kanbanize api key** - The API key of a Kanbanize user account. We recommend using a dedicated Administrator user or a standard user (e.g. GitHub_user) with permissions to access, comment and modify cards on the desired boards.
 3. **Branch Filter** - A Comma-separated list of branches which will be automatically inspected. Leave blank to include all branches.
 4. **Restrict to Last Commit** - Only the last commit of each push will be inspected for task IDs.
 5. **Track Project Issues In Kanbanize** - Open/Move to Done a card when a project issue is Open/Closed
