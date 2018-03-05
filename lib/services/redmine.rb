@@ -24,13 +24,13 @@ class Service::Redmine < Service
           message = commit['message'].clone
 
           #Extract issue IDs and send update to the related issues
-          while !(id= message[/#(\d)+/]).nil? do 
+          while !(id= message[/#(\d)+/]).nil? do
             message.gsub!(id,'')
             issue_no = id.gsub('#','')
 
             # Send the commit information to the related issue on redmine
             http.url_prefix = data['address']
-            
+
             http_method :put, "issues/#{issue_no}.json" do |req|
               req.headers['Content-Type'] = 'application/json'
               req.headers['X-Redmine-API-Key'] = data['api_key']
@@ -38,12 +38,12 @@ class Service::Redmine < Service
             end
           end
         end
-        return true   
+        return true
       rescue SocketError => se
-        puts "SocketError has occured: #{se.inspect}"
+        puts "SocketError has occurred: #{se.inspect}"
         return false
       rescue Exception => e
-        puts "Other Exception has occured: #{e.inspect}"
+        puts "Other Exception has occurred: #{e.inspect}"
         return false
       end
     end
@@ -52,7 +52,7 @@ class Service::Redmine < Service
   private
   def check_configuration_options(data)
     raise_config_error 'Redmine url must be set' if data['address'].blank?
-    raise_config_error 'API key is required' if data['api_key'].blank?   
+    raise_config_error 'API key is required' if data['api_key'].blank?
   end
 
   def fetch_github_commits_enabled?
@@ -64,7 +64,7 @@ class Service::Redmine < Service
   end
 
   #Extract and buffer the needed commit information into one string
-  def commit_text(commit) 
+  def commit_text(commit)
     gitsha   = commit['id']
     added    = commit['added'].map    { |f| ['A', f] }
     removed  = commit['removed'].map  { |f| ['R', f] }
