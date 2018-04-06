@@ -484,6 +484,8 @@ class Service
 
   attr_reader :remote_calls
 
+  attr_accessor :needs_public_key_signature, :public_key
+
   def initialize(event = :push, data = {}, payload = nil)
     helper_name = "#{event.to_s.classify}Helpers"
     if Service.const_defined?(helper_name)
