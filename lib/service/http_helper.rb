@@ -79,8 +79,8 @@ class Service
     end
 
     def set_public_key_signature(body)
-      public_key_signature  = public_key.sign(message: body).signature
-      encoded_signature     = Base64.strict_encode64(public_key_signature)
+      public_key_signature = public_key.sign(message: body, raw: true).signature
+      encoded_signature = Base64.strict_encode64(public_key_signature)
       http.headers['GITHUB-PUBLIC-KEY-SIGNATURE'] = encoded_signature
     end
 
