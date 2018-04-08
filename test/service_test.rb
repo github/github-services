@@ -184,7 +184,7 @@ class ServiceTest < Service::TestCase
       [200, {'X-Test' => 'success'}, 'OK']
     end
 
-    @service.http_post('/', "desrever")
+    @service.http_post('/', payload.to_s)
 
     @service.http_calls.each do |env|
       assert_equal 200, env[:response][:status]
