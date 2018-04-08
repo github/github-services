@@ -485,6 +485,7 @@ class Service
   attr_reader :remote_calls
 
   attr_accessor :needs_public_key_signature, :public_key
+  attr_reader :pre_delivery_callbacks
 
   def initialize(event = :push, data = {}, payload = nil)
     helper_name = "#{event.to_s.classify}Helpers"
@@ -502,6 +503,7 @@ class Service
     @http = @secrets = @email_config = nil
     @http_calls = []
     @remote_calls = []
+    @pre_delivery_callbacks = []
   end
 
   # Boolean fields as either nil, "0", or "1".
@@ -601,7 +603,7 @@ class Service
   #
   # Yields a Faraday::Request instance.
   # Returns a Faraday::Response instance.
-  def http_post(url = nil, body = nil, headers = nil, params = nil)
+  def http_post(url = nil, body = nil, headers = {}, params = {})
     block = Proc.new if block_given?
     http_method :post, url, body, headers, params, &block
   end
@@ -633,18 +635,22 @@ class Service
   #
   # Yields a Faraday::Request instance.
   # Returns a Faraday::Response instance.
-  def http_method(method, url = nil, body = nil, headers = nil, params = nil)
+  def http_method(method, url = nil, body = nil, headers = {}, params = {})
     block = Proc.new if block_given?
 
     url = url.strip if url
     raise_config_error("Invalid scheme") unless permitted_transport?(url)
 
+    if pre_delivery_callbacks.any?
+      pre_delivery_callbacks.each { |c| c.call(url, body, headers, params) }
+    end
+
     check_ssl do
       http.send(method) do |req|
         req.url(url)                if url
-        req.headers.update(headers) if headers
+        req.headers.update(headers) if headers.present?
         req.body = body             if body
-        req.params = params         if params
+        req.params = params         if params.present?
         block.call req if block
       end
     end
@@ -852,6 +858,10 @@ class Service
       },
       :adapter => env[:adapter]
     }
+  end
+
+  def before_delivery(&block)
+    @pre_delivery_callbacks << block
   end
 
   # Raised when an unexpected error occurs during service hook execution.
