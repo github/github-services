@@ -171,6 +171,30 @@ class ServiceTest < Service::TestCase
     assert svc.config_boolean_true?("is_checked")
   end
 
+  def test_before_delivery
+    @service.before_delivery do |url, payload, headers, params|
+      headers['EDITED-IN-BEFORE-DELIVERY'] = true
+      payload.replace("EDITED")
+    end
+
+    @stubs.post '/' do |env|
+      assert_equal '/', env.url.to_s
+      assert_equal 'EDITED', env[:body]
+      assert_equal true, env[:request_headers]['Edited-In-Before-Delivery']
+      [200, {'X-Test' => 'success'}, 'OK']
+    end
+
+    @service.http_post('/', "desrever")
+
+    @service.http_calls.each do |env|
+      assert_equal 200, env[:response][:status]
+      assert_equal 'success', env[:response][:headers]['X-Test']
+      assert_equal 'OK', env[:response][:body]
+    end
+
+    assert_equal 1, @service.http_calls.size
+  end
+
   def service(*args)
     super TestService, *args
   end
