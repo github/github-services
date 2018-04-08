@@ -484,7 +484,6 @@ class Service
 
   attr_reader :remote_calls
 
-  attr_accessor :needs_public_key_signature, :public_key
   attr_reader :pre_delivery_callbacks
 
   def initialize(event = :push, data = {}, payload = nil)

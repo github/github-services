@@ -17,7 +17,6 @@ class Service
         body = encode_body(ctype)
 
         set_body_signature(body, secret)
-        set_public_key_signature(body) if needs_public_key_signature
 
         http_post url, body
       end
@@ -76,12 +75,6 @@ class Service
       return if (secret = secret.to_s).empty?
       http.headers['X-Hub-Signature'] =
         'sha1='+OpenSSL::HMAC.hexdigest(HMAC_DIGEST, secret, body)
-    end
-
-    def set_public_key_signature(body)
-      public_key_signature = public_key.sign(message: body, raw: true).signature
-      encoded_signature = Base64.strict_encode64(public_key_signature)
-      http.headers['GITHUB-PUBLIC-KEY-SIGNATURE'] = encoded_signature
     end
 
     def original_body
