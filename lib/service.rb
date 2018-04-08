@@ -575,8 +575,8 @@ class Service
 
     http.get do |req|
       req.url(url)                if url
-      req.params.update(params)   if params
-      req.headers.update(headers) if headers
+      req.params.update(params)   if params.present?
+      req.headers.update(headers) if headers.present?
       yield req if block_given?
     end
   end
