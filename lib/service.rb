@@ -565,7 +565,7 @@ class Service
   #
   # Yields a Faraday::Request instance.
   # Returns a Faraday::Response instance.
-  def http_get(url = nil, params = nil, headers = nil)
+  def http_get(url = nil, params = {}, headers = {})
     raise_config_error("Invalid scheme") unless permitted_transport?(url)
     url = url.strip if url
     http.get do |req|
@@ -861,6 +861,10 @@ class Service
 
   def before_delivery(&block)
     @pre_delivery_callbacks << block
+  end
+
+  def reset_pre_delivery_callbacks!
+    @pre_delivery_callbacks = []
   end
 
   # Raised when an unexpected error occurs during service hook execution.
