@@ -188,8 +188,6 @@ class ServiceTest < Service::TestCase
 
     @service.http_calls.each do |env|
       assert_equal 200, env[:response][:status]
-      assert_equal 'success', env[:response][:headers]['X-Test']
-      assert_equal 'OK', env[:response][:body]
     end
 
     assert_equal 1, @service.http_calls.size
