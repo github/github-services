@@ -202,13 +202,13 @@ class ServiceTest < Service::TestCase
       headers['EDITED-IN-BEFORE-DELIVERY-2'] = true
     end
 
-    @stubs.post '/' do |env|
+    @stubs.get '/' do |env|
       assert_equal true, env[:request_headers]['Edited-In-Before-Delivery-1']
       assert_equal true, env[:request_headers]['Edited-In-Before-Delivery-2']
       [200, {'X-Test' => 'success'}, 'OK']
     end
 
-    @service.http_post('/', payload)
+    @service.http_get('/')
 
     @service.http_calls.each do |env|
       assert_equal 200, env[:response][:status]

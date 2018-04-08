@@ -568,6 +568,11 @@ class Service
   def http_get(url = nil, params = {}, headers = {})
     raise_config_error("Invalid scheme") unless permitted_transport?(url)
     url = url.strip if url
+
+    if pre_delivery_callbacks.any?
+      pre_delivery_callbacks.each { |c| c.call(url, nil, headers, params) }
+    end
+
     http.get do |req|
       req.url(url)                if url
       req.params.update(params)   if params
