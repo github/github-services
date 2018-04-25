@@ -192,7 +192,12 @@ class Service::Email < Service
 
       body << compare_text unless single_commit?
 
-      body
+      body << <<-NOTE
+
+      **NOTE:** GitHub Services have been marked for deprecation: https://developer.github.com/changes/2018-04-25-github-services-deprecation/).
+
+      Functionality will be removed from GitHub.com on October 1, 2018.
+      NOTE
     end
 
     # Public
