@@ -1,7 +1,7 @@
 GitHub Services
 ===============
 
-**NOTE:** GitHub Services have been [marked for deprecation](https://developer.github.com/changes/2018-04-25-github-services-deprecation/). Functionality will be removed from GitHub.com on October 1, 2018.
+**NOTE:** GitHub Services have been [marked for deprecation](https://developer.github.com/changes/2018-04-25-github-services-deprecation/). Functionality will be removed from GitHub.com on January 31st, 2019.
 
 This repository contains code to integrate GitHub.com with third party services.
 
