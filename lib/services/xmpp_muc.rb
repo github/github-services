@@ -1,10 +1,10 @@
 require_relative 'xmpp_base'
 
 class Service::XmppMuc < XmppHelper
-    
+
   self.title = 'XMPP MUC'
   self.hook_name = 'xmpp_muc'
-    
+
   string :JID, :room, :server, :nickname, :host, :port
   password :password, :room_password
   boolean :notify_fork, :notify_wiki, :notify_comments,
@@ -15,9 +15,11 @@ class Service::XmppMuc < XmppHelper
   default_events :push, :commit_comment, :issue_comment,
     :issues, :pull_request, :pull_request_review_comment,
     :gollum
-    
+
   def send_messages(messages)
     messages = Array(messages)
+    messages << Service::DEPRECATION_NOTE
+
     setup_muc_connection()
     messages.each do |message|
         @muc.send ::Jabber::Message::new(::Jabber::JID.new(@data['muc_room']), message)
@@ -26,7 +28,7 @@ class Service::XmppMuc < XmppHelper
     ensure
       @client.close if @client
   end
-    
+
   def setup_muc_connection
       if (@muc.nil?)
         begin
@@ -48,11 +50,11 @@ class Service::XmppMuc < XmppHelper
       end
       @muc
   end
-    
+
   def set_muc_connection(muc)
       @muc = muc
   end
-          
+
   def check_config(data)
     raise_config_error 'JID is required' if data['JID'].to_s.empty?
     raise_config_error 'Password is required' if data['password'].to_s.empty?
