@@ -15,9 +15,11 @@ class Service::XmppIm < XmppHelper
   default_events :push, :commit_comment, :issue_comment,
     :issues, :pull_request, :pull_request_review_comment,
     :gollum
- 
+
   def send_messages(messages)
     messages = Array(messages)
+    messages << Service::DEPRECATION_NOTE
+
     setup_connection()
     @receivers.each do |receiver|
       messages.each do |message|

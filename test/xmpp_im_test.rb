@@ -198,7 +198,7 @@ class XmppImTest < Service::TestCase
       message = ''
       service(:push, config, payload).receive_event
       assert_equal(
-          8,
+          10,
           @mock.get_messages().length,
           'Expected 8 messages'
       )
@@ -233,25 +233,25 @@ class XmppImTest < Service::TestCase
   def test_sends_messages_to_expected_jids
     service(:commit_comment, @config, commit_comment_payload).receive_event
       assert_equal(
-          2,
+          4,
           @mock.get_messages().length,
-          'Expected 2 messages'
+          'Expected 4 messages'
       )
       assert_equal(
           ::Jabber::JID.new('full@server/resource'),
-          @mock.get_messages()[1].to
+          @mock.get_messages()[3].to
       )
       assert_equal(
           ::Jabber::JID.new('bare@server'),
           @mock.get_messages()[0].to
       )
   end
-    
+
   def test_generates_expected_commit_comment_message
       message = '[grit] @defunkt commented on commit 441e568: this... https://github.com/mojombo/magik/commit/441e5686a726b79bcdace639e2591a60718c9719#commitcomment-3332777'
       service(:commit_comment, @config, commit_comment_payload).receive_event
       assert_equal(
-          2,
+          4,
           @mock.get_messages().length,
           'Expected 2 messages'
       )
@@ -261,18 +261,18 @@ class XmppImTest < Service::TestCase
           'Expected commit comment message not received'
       )
   end
-    
-  def test_generates_error_if_commit_comment_message_cant_be_generated 
+
+  def test_generates_error_if_commit_comment_message_cant_be_generated
     assert_raises(Service::ConfigurationError, /Unable to build message/) do
       service(:commit_comment, @config, {}).receive_event
     end
   end
-    
+
   def test_generates_expected_issue_comment_message
       message = '[grit] @defunkt commented on issue #5: this... '
       service(:issue_comment, @config, issue_comment_payload).receive_event
       assert_equal(
-          2,
+          4,
           @mock.get_messages().length,
           'Expected 2 messages'
       )
@@ -283,19 +283,19 @@ class XmppImTest < Service::TestCase
       )
   end
 
-  def test_generates_error_if_issue_comment_message_cant_be_generated 
+  def test_generates_error_if_issue_comment_message_cant_be_generated
     assert_raises(Service::ConfigurationError, /Unable to build message/) do
       service(:issue_comment, @config, {}).receive_event
     end
   end
-    
+
   def test_generates_expected_issues_message
       message = '[grit] @defunkt opened issue #5: booya '
       service(:issues, @config, issues_payload).receive_event
       assert_equal(
-          2,
+          4,
           @mock.get_messages().length,
-          'Expected 2 messages'
+          'Expected 4 messages'
       )
       assert_equal(
           message,
@@ -304,17 +304,17 @@ class XmppImTest < Service::TestCase
       )
   end
 
-  def test_generates_error_if_issues_message_cant_be_generated 
+  def test_generates_error_if_issues_message_cant_be_generated
     assert_raises(Service::ConfigurationError, /Unable to build message/) do
       service(:issues, @config, {}).receive_event
     end
   end
-    
+
   def test_generates_expected_pull_request_message
       message = '[grit] @defunkt opened pull request #5: booya (master...feature) https://github.com/mojombo/magik/pulls/5'
       service(:pull_request, @config, pull_request_payload).receive_event
       assert_equal(
-          2,
+          4,
           @mock.get_messages().length,
           'Expected 2 messages'
       )
@@ -325,19 +325,19 @@ class XmppImTest < Service::TestCase
       )
   end
 
-  def test_generates_error_if_pull_request_message_cant_be_generated 
+  def test_generates_error_if_pull_request_message_cant_be_generated
     assert_raises(Service::ConfigurationError, /Unable to build message/) do
       payload = pull_request_payload
       payload['pull_request']['base'] = {}
       service(:pull_request, @config, payload).receive_event
     end
   end
-    
+
   def test_generates_expected_pull_request_review_comment_message
       message = '[grit] @defunkt commented on pull request #5 03af7b9: very... https://github.com/mojombo/magik/pull/5#discussion_r18785396'
       service(:pull_request_review_comment, @config, pull_request_review_comment_payload).receive_event
       assert_equal(
-          2,
+          4,
           @mock.get_messages().length,
           'Expected 2 messages'
       )
@@ -348,17 +348,17 @@ class XmppImTest < Service::TestCase
       )
   end
 
-  def test_generates_error_if_pull_request_review_comment_message_cant_be_generated 
+  def test_generates_error_if_pull_request_review_comment_message_cant_be_generated
     assert_raises(Service::ConfigurationError, /Unable to build message/) do
       service(:pull_request_review_comment, @config, {}).receive_event
     end
   end
-    
+
   def test_generates_expected_gollum_message
       message = '[grit] @defunkt modified 1 page https://github.com/mojombo/magik/wiki/Foo'
       service(:gollum, @config, gollum_payload).receive_event
       assert_equal(
-          4,
+          6,
           @mock.get_messages().length,
           'Expected 4 messages'
       )
