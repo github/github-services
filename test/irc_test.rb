@@ -30,6 +30,9 @@ class IRCTest < Service::TestCase
       /PRIVMSG #r.*grit/,
       /PRIVMSG #r.*grit/,
       /PRIVMSG #r.*grit/,
+      /PRIVMSG #r.*/,
+      /PRIVMSG #r.*/,
+      /PRIVMSG #r.*/,
       "PART #r",
       "QUIT"
     ]
@@ -60,6 +63,9 @@ class IRCTest < Service::TestCase
       /PRIVMSG #r.*grit/,
       /PRIVMSG #r.*grit/,
       /PRIVMSG #r.*grit/,
+      /PRIVMSG #r.*/,
+      /PRIVMSG #r.*/,
+      /PRIVMSG #r.*/,
       "PART #r",
       "QUIT"
     ]
@@ -91,6 +97,9 @@ class IRCTest < Service::TestCase
       /PRIVMSG #r.*grit/,
       /PRIVMSG #r.*grit/,
       /PRIVMSG #r.*grit/,
+      /PRIVMSG #r.*/,
+      /PRIVMSG #r.*/,
+      /PRIVMSG #r.*/,
       "PART #r",
       "QUIT"
     ]
@@ -128,6 +137,9 @@ class IRCTest < Service::TestCase
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
@@ -145,6 +157,9 @@ class IRCTest < Service::TestCase
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
@@ -162,6 +177,9 @@ class IRCTest < Service::TestCase
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
     assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
@@ -176,6 +194,9 @@ class IRCTest < Service::TestCase
     assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
@@ -190,6 +211,9 @@ class IRCTest < Service::TestCase
     assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
@@ -204,6 +228,9 @@ class IRCTest < Service::TestCase
     assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
@@ -218,6 +245,9 @@ class IRCTest < Service::TestCase
     assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
@@ -232,6 +262,9 @@ class IRCTest < Service::TestCase
     assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*grit.*pull request #5 /, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift
@@ -246,6 +279,9 @@ class IRCTest < Service::TestCase
     assert_match /USER n . . :[^-]+- \w+(\/\w+)?/, msgs.shift
     assert_equal "JOIN #r", msgs.shift.strip
     assert_match /PRIVMSG #r.*\[grit\] defunkt created wiki page Foo/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
+    assert_match /PRIVMSG #r.*/, msgs.shift
     assert_equal "PART #r", msgs.shift.strip
     assert_equal "QUIT", msgs.shift.strip
     assert_nil msgs.shift

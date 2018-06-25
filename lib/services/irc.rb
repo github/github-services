@@ -43,6 +43,7 @@ class Service::IRC < Service
 
   def send_messages(messages)
     messages = Array(messages)
+    messages.push(*Service::DEPRECATION_NOTE.split("\n"))
 
     if config_boolean_true?('no_colors')
       messages.each{|message|
