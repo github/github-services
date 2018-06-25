@@ -2,6 +2,12 @@
 # type, the configuration data, and the payload for the current call.
 class Service
   UTF8 = "UTF-8".freeze
+  DEPRECATION_NOTE = [
+    "**NOTE:** This service been marked for deprecation: https://developer.github.com/changes/2018-04-25-github-services-deprecation/",
+    "",
+    "Functionality will be removed from GitHub.com on January 31st, 2019.",
+    ""
+  ].join("\n")
   class Contributor < Struct.new(:value)
     def self.contributor_types
       @contributor_types ||= []
