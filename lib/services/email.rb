@@ -194,7 +194,7 @@ class Service::Email < Service
 
       body << <<-NOTE
 
-      **NOTE:** This service been marked for deprecation: https://developer.github.com/changes/2018-04-25-github-services-deprecation/
+      **NOTE:** This service has been marked for deprecation: https://developer.github.com/changes/2018-04-25-github-services-deprecation/
 
       Functionality will be removed from GitHub.com on January 31st, 2019.
       NOTE
