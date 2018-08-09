@@ -1,13 +1,34 @@
+For the most up-to-date instructions, please see the documentation for Code Climate's PR integration [here](https://docs.codeclimate.com/docs/github).
+
 Install Notes
 -------------
 
-To set up this service hook, follow these steps:
+To install the Code Climate PR integration, follow these steps:
 
 1. Browse to your Code Climate [Dashboard](https://codeclimate.com/dashboard).
-2. Click **Organization** in the top-right corner of the page. If this link isn't visible, see below.
+2. Select your Organization.
+3. Select the repo for which you'd like to setup the integration.
+2. Click **Settings** in the top-right corner of the page. If this link isn't visible, see below.
 3. Select the **Integrations** tab.
-4. Copy the **GitHub Service Token** to your clipboard. Note that you do not want to copy the **API Token**.
-5. Back in GitHub, paste the token into the text box below.
+4. Next to GitHub Pull Requests, click **Edit**.
+5. In a separate browser window, head to GitHub.  
+6. Install Code Climate's webhook. This hook is what notifies Code Climate to automatically run a new analysis whenever you perform various operations in GitHub, such as push a new commit to your default branch or open a pull request.
+7. In GitHub, go to your repo's Settings > Webhooks.
+8. Add a webhook to send an event to Code Climate each time you open a PR. The webhook URL will be https://codeclimate.com/webhooks. Note: make sure **Send me everything** is selected.
+9. Next, in order for Code Climate to have the appropriate permissions to interact with your pull requests, a GitHub OAuth token must be generated. Start by browsing to: https://github.com/settings/tokens
+10. In GitHub, click **Generate new token**.
+11. Name the token (anything you like, as long as no other GitHub token currently shares this name). Ensure that the repo:status scope is checked. Click **Generate token**.
+12. Click the "copy to clipboard" button.
+13. Return to the Code Climate page you browsed to in Step 4. Paste the token into the OAuth Token text box. Ensure the page's other checkboxes are enabled.
+14. Click **Save**.
+15. To verify the GitHub data is valid, click Test Service (this will post a test issue to your repository). If a green message appears at the top of the screen, all is well. If a red error message is displayed, see Troubleshooting below.
+16. Once the PR integration is enabled, Code CLimate's [test coverage statuses](doc:configuring-your-analysis#section-test-coverage) will be enabled by default. However, you'll need to [configure test coverage](doc:configuring-test-coverage) in order to see those statuses populate.
+
+### Troubleshooting
+If you are seeing a red error message after clicking **Test Service**:
+
+* Ensure there are no leading or trailing spaces around the token that you provided to Code Climate.
+* Ensure you generated the token as a GitHub user that has access to the repository. If you have multiple GitHub users, double-check that you're logged into GitHub as the appropriate user.
 
 ### Why don't I see the Organization link in Code Climate?
 
@@ -16,5 +37,3 @@ Few possible reasons:
 * You're trying to set up a service hook for a repository that lives in the **Open Source** section of your **Dashboard**. Unfortunately we don't yet support service hooks for these repositories.
 * Your Code Climate user is not a member of any organizations.
 * You're in an organization but not in its **Owners** group. In this case, you unfortunately won't have administrative-rights to view this token.
-
-For more detailed info, see our [help article](http://docs.codeclimate.com/article/222-how-do-i-install-code-climates-github-service-hook). 
