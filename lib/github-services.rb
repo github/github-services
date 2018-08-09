@@ -24,7 +24,6 @@ require 'xmpp4r/muc'
 require 'xmpp4r/roster'
 require 'rubyforge'
 require 'oauth'
-require 'yammer4r'
 require 'twilio-ruby'
 
 # vendor
