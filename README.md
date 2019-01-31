@@ -1,7 +1,12 @@
+
+🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+
+**_GitHub Services has been deprecated_. No more contributions will be accepted. Please see our [blog post](https://developer.github.com/changes/2018-04-25-github-services-deprecation/) for more information.**
+
+🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+
 GitHub Services
 ===============
-
-**NOTE:** GitHub Services has been [marked for deprecation](https://developer.github.com/changes/2018-04-25-github-services-deprecation/). Functionality will be removed from GitHub.com on January 31st, 2019.
 
 This repository contains code to integrate GitHub.com with third party services.
 
