@@ -22,14 +22,11 @@ require 'xmpp4r/jid'
 require 'xmpp4r/presence'
 require 'xmpp4r/muc'
 require 'xmpp4r/roster'
-require 'rubyforge'
 require 'oauth'
-require 'yammer4r'
 require 'twilio-ruby'
 
 # vendor
 require 'basecamp'
-require 'rubyforge'
 require 'softlayer/messaging'
 
 require 'faraday'

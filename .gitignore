@@ -18,3 +18,5 @@ tmp
 pkg
 .iml
 Gemfile.lock
+
+github-services*.gem
