@@ -171,6 +171,72 @@ class ServiceTest < Service::TestCase
     assert svc.config_boolean_true?("is_checked")
   end
 
+  def test_before_delivery
+    @service.before_delivery do |url, payload, headers, params|
+      headers['EDITED-IN-BEFORE-DELIVERY'] = true
+      payload.replace("EDITED")
+    end
+
+    @stubs.post '/' do |env|
+      assert_equal '/', env.url.to_s
+      assert_equal 'EDITED', env[:body]
+      assert_equal true, env[:request_headers]['Edited-In-Before-Delivery']
+      [200, {'X-Test' => 'success'}, 'OK']
+    end
+
+    @service.http_post('/', payload.to_s)
+
+    @service.http_calls.each do |env|
+      assert_equal 200, env[:response][:status]
+    end
+
+    assert_equal 1, @service.http_calls.size
+  end
+
+  def test_multiple_before_delivery_callbacks
+    @service.before_delivery do |url, payload, headers, params|
+      headers['EDITED-IN-BEFORE-DELIVERY-1'] = true
+    end
+
+    @service.before_delivery do |url, payload, headers, params|
+      headers['EDITED-IN-BEFORE-DELIVERY-2'] = true
+    end
+
+    @stubs.get '/' do |env|
+      assert_equal true, env[:request_headers]['Edited-In-Before-Delivery-1']
+      assert_equal true, env[:request_headers]['Edited-In-Before-Delivery-2']
+      [200, {'X-Test' => 'success'}, 'OK']
+    end
+
+    @service.http_get('/')
+
+    @service.http_calls.each do |env|
+      assert_equal 200, env[:response][:status]
+    end
+  end
+
+  def test_reset_pre_delivery_callbacks!
+    @service.before_delivery do |url, payload, headers, params|
+      headers['EDITED-IN-BEFORE-DELIVERY'] = true
+      payload.replace("EDITED")
+    end
+
+    @stubs.post '/' do |env|
+      assert_equal 'EDITED', env[:body]
+      assert_equal true, env[:request_headers]['Edited-In-Before-Delivery']
+      [200, {'X-Test' => 'success'}, 'OK']
+    end
+
+    @service.http_post('/', "desrever")
+    @service.reset_pre_delivery_callbacks!
+
+    @stubs.post '/' do |env|
+      refute_equal 'EDITED', env[:body]
+      refute_equal true, env[:request_headers]['Edited-In-Before-Delivery']
+      [200, {'X-Test' => 'success'}, 'OK']
+    end
+  end
+
   def service(*args)
     super TestService, *args
   end

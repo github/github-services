@@ -192,7 +192,12 @@ class Service::Email < Service
 
       body << compare_text unless single_commit?
 
-      body
+      body << <<-NOTE
+
+      **NOTE:** GitHub Services has been marked for deprecation: https://developer.github.com/changes/2018-04-25-github-services-deprecation/
+
+      We will provide an alternative path for the email notifications by January 31st, 2019.
+      NOTE
     end
 
     # Public

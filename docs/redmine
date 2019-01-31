@@ -9,7 +9,7 @@ Install Notes
 -------------
 
 1. Download and install Redmine from http://redmine.org
-2. Activate "Enable WS for repository management" in the global settings. While there, generate an API key (if neccessary) and copy it.
+2. Activate "Enable WS for repository management" in the global settings. While there, generate an API key (if necessary) and copy it.
 3. Set your GitHub repository as git repository for a project.
 4. Enter the full URL to your Redmine instance as well as the project's identifier and the API key.
 5. Check the "Fetch GitHub Commits" option to enable the module.
